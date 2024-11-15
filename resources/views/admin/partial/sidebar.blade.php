@@ -96,8 +96,7 @@
                         </a>
                     </li><!--end nav-item-->
                     <li class="nav-item">
-                        <a class="nav-link" href="#sidebarEcommerce" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false" aria-controls="sidebarEcommerce">
+                        <a class="nav-link" href="{{ route('admin.faq.index')}}" >
                             <i class="ti ti-shopping-cart menu-icon"></i>
                             <span>FAQs</span>
                         </a>
@@ -117,7 +116,7 @@
                                 </li><!--end nav-item--> 
                                 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="ui-videos.html">Contents</a>
+                                    <a class="nav-link" href="{{route('admin.settings.index')}}">Contents</a>
                                 </li><!--end nav-item--> 
                             </ul><!--end nav-->
                         </div><!--end sidebarElements-->

@@ -134,7 +134,7 @@
                     </div> 
                     <div class="main__logo">
                         <h1 class="main__logo--title"><a class="main__logo--link" href="{{ url('/') }}">
-                            <img class="main__logo--img" src="assets/img/logo/nav-log.png" alt="logo-img" style="object-fit: cover; width: 171px; height: 38px;">
+                            <img class="main__logo--img" src="{{ $contactDetials->site_logo }}" alt="logo-img" style="object-fit: cover; width: 171px; height: 38px;">
                         </a></h1>
                     </div>
                     <div class="main__menu d-none d-lg-block">

@@ -75,7 +75,7 @@
                         <div class="footer__widget--inner">
                             <div class="footer__logo" >
                                 <a class="footer__logo--link display-block" href="{{ url('/') }}" style="background-color: #fff; padding:8px; margin-right:50%; object-fit: cover;">
-                                    <img class="footer__logo--img" src="assets/img/logo/nav-log.png" alt="logo-img" style="object-fit: cover; width: 171px; height: 30px;">
+                                    <img class="footer__logo--img" src="{{ $contactDetials->site_logo }}" alt="l{{ $contactDetials->company_name }}" style="object-fit: cover; width: 171px; height: 30px;">
                                 </a>
                             </div>
                             <p class="footer__widget--desc">The world’s first and largest digital market 

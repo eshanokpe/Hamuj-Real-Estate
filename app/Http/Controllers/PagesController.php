@@ -22,7 +22,7 @@ class PagesController extends Controller
             'home' => 'home.index',
             'about' => 'home.pages.about.about',
             'properties' => 'home.pages.properties.properties',
-            'contact-us' => 'home.pages.contact-us',
+            'contact' => 'home.pages.contact',
             'blog' => 'home.pages.blog.blog',
             'faqs' => 'home.pages.faqs',
             'terms-conditions' => 'home.pages.terms-conditions',

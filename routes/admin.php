@@ -52,28 +52,32 @@ Route::prefix('admin')->group(function () {
         Route::get('/settings/content', [SettingsController::class, 'WhyChooseUs'])->name('admin.settings.content');
         Route::post('/settings/store/why-choose-us', [SettingsController::class, 'storeWhyChooseUs'])->name('admin.settings.store_why_choose_us');
         Route::put('/settings/update/why-choose-us/{id}', [SettingsController::class, 'updateWhyChooseUs'])->name('admin.settings.update_why_choose_us');
+        
+        Route::get('/settings/index', [SettingsController::class, 'index'])->name('admin.settings.index');
+        
         //About us
         Route::get('/settings/about-us', [SettingsController::class, 'getAboutUs'])->name('admin.settings.aboutUs');
         Route::post('/settings/store/about-us', [SettingsController::class, 'storeAboutUs'])->name('admin.settings.storeAboutus');
         Route::put('/settings/update/about-us/{id}', [SettingsController::class, 'updateAboutUs'])->name('admin.settings.updateAboutus');
+
         //Core Value 
         Route::get('/settings/core-value', [CoreValueController::class, 'index'])->name('admin.coreValue.index');
         Route::post('/settings/store/core-value', [CoreValueController::class, 'store'])->name('admin.coreValue.store');
         Route::put('/settings/update/core-value/{id}', [CoreValueController::class, 'update'])->name('admin.coreValue.update');
         //visionMission
-        Route::get('/settings/vision-mission', [VisionMissionController::class, 'index'])->name('admin.visionMission.index');
-        Route::post('/settings/vision-mission/store', [VisionMissionController::class, 'store'])->name('admin.visionMission.store');
-        Route::put('/settings/vision-mission/update/{id}', [VisionMissionController::class, 'update'])->name('admin.visionMission.update');
+        Route::get('/settings/vision-mission', [SettingsController::class, 'indexVisionMission'])->name('admin.visionMission.index');
+        Route::post('/settings/vision-mission/store', [SettingsController::class, 'storeVisionMission'])->name('admin.visionMission.store');
+        Route::put('/settings/vision-mission/update/{id}', [SettingsController::class, 'updateVisionMission'])->name('admin.visionMission.update');
         
         //Office Hours 
-        Route::get('/settings/office/hours/index', [SettingsController::class, 'indexOfficeHours'])->name('admin.officeHours.index');
         Route::post('/settings/store/office-hours', [SettingsController::class, 'storeOfficeHours'])->name('admin.office-hours.store');
         Route::put('/settings/update/office-hours/{id}', [SettingsController::class, 'updatestoreOfficeHours'])->name('admin.office-hours.update');
+        Route::post('/settings/store/office-hours', [SettingsController::class, 'storeOfficeHours'])->name('admin.office-hours.store');
          
         //Contact Us 
-        Route::get('/settings/contact-us', [SettingsController::class, 'getcontactUs'])->name('admin.settings.contactUs');
-        Route::post('/settings/store/contact-us', [SettingsController::class, 'storeContactUs'])->name('admin.settings.storeContactUs');
-        Route::put('/settings/update/contact-us/{id}', [SettingsController::class, 'updateContactUs'])->name('admin.settings.updateContactUs');
+        Route::get('/settings/contact', [SettingsController::class, 'indexContact'])->name('admin.contact.index');
+        Route::post('/settings/store/contact', [SettingsController::class, 'storeContact'])->name('admin.contact.store');
+        Route::put('/settings/update/contact/{id}', [SettingsController::class, 'updateContact'])->name('admin.contact.update');
         //Social Links 
         Route::get('/sociallinks/index', [SociallinkController::class, 'index'])->name('admin.socialLink.index');
         Route::post('/settings/store/social-links', [SociallinkController::class, 'storeSocialLinks'])->name('admin.settings.storeSocialLinks');
@@ -174,10 +178,7 @@ Route::prefix('admin')->group(function () {
         Route::get('faq/{id}/edit', [FAQController::class, 'edit'])->name('admin.faq.edit');
         Route::put('faq/{id}', [FAQController::class, 'update'])->name('admin.faq.update');
         Route::get('faq/{id}', [FAQController::class, 'destroy'])->name('admin.faq.destroy');
-        Route::get('faq/submt/form', [FAQController::class, 'submtFormView'])->name('admin.faq.submtForm');
-        Route::get('/faq/form/view/{id}', [FAQController::class, 'submitFormShow'])->name('admin.faq.submitForm.show');
-        Route::get('/faq/form/destroy/{id}', [FAQController::class, 'submitFormDestroy'])->name('admin.faq.submitForm.destroy');
-
+       
         //Book Inspection
         Route::get('/inspection/index', [BookInspection::class, 'index'])->name('admin.inspection.index');
         Route::get('/inspection/show/{id}', [BookInspection::class, 'show'])->name('admin.inspection.show');
@@ -193,4 +194,4 @@ Route::prefix('admin')->group(function () {
     
         
     });  
-});
+}); 

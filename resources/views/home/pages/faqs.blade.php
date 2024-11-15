@@ -20,43 +20,27 @@
 <section class="contact__section section--padding">
     <div class="container">
         <div class="contact__inner">
-            <div class="contact__wrapper mb-80 d-flex justify-content-center">
-                
-                <div class="contact__us--map aos-init aos-animate" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="150">
-                    <div class="accordion accordion-flush" id="accordionFlushExample">
+          <div class="contact__wrapper mb-80 d-flex justify-content-center">
+            <div class="contact__us--map aos-init aos-animate" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="150">
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    @foreach ($faqs as $index => $faq)
                         <div class="accordion-item">
-                          <h2 class="accordion-header">
-                            <button  aria-expanded="true"  class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                              <span class="contact__us--info__text"> Accordion Item #1</span>
-                            </button>
-                          </h2>
-                          <div id="flush-collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
-                          </div>
+                            <h2 class="accordion-header" id="heading{{ $index }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ $index }}" aria-expanded="false" aria-controls="flush-collapse{{ $index }}">
+                                    <span class="contact__us--info__text">{{ $faq->question }}</span>
+                                </button>
+                            </h2>
+                            <div id="flush-collapse{{ $index }}" class="accordion-collapse collapse @if($index == 0) show @endif" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    {{ $faq->answer }}
+                                </div>
+                            </div>
                         </div>
-                        <div class="accordion-item">
-                          <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                <span class="contact__us--info__text">Accordion Item #2</span>
-                            </button>
-                          </h2>
-                          <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
-                          </div>
-                        </div>
-                        <div class="accordion-item">
-                          <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                <span class="contact__us--info__text">Accordion Item #3</span>
-                            </button>
-                          </h2>
-                          <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
-                          </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
+        </div>
+        
            
         </div>
     </div>

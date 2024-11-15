@@ -15,7 +15,7 @@
             </ul>
         </div>
     </div>
-</section>
+</section> 
 
 <section class="contact__section section--padding">
     <div class="container">
@@ -35,8 +35,9 @@
                         <div class="contact__us--info__content">
                             <h3 class="contact__us--info__title">Mail address</h3>
                             <p class="contact__us--info__text">
-                                <a href="mailto:info@example.com">info@example.com</a> <br>
-                                <a href="tel:+998757478492">+998757478492</a>
+                                <a href="{{$contactDetials->first_email}}">
+                                    {{ $contactDetials->first_email }}</a> <br>
+                                <a href="{{$contactDetials->second_email}}"> {{ $contactDetials->second_email }}</a>
                               </p>
                         </div>
                     </div>
@@ -51,8 +52,7 @@
                         <div class="contact__us--info__content">
                             <h3 class="contact__us--info__title">Office address</h3>
                             <p class="contact__us--info__text desc">
-                                Digital Agency Network 2021
-                                Eastbourne Terrace
+                                {{$contactDetials->first_address}}
                               </p>
                         </div>
                     </div>
@@ -67,8 +67,8 @@
                         <div class="contact__us--info__content">
                             <h3 class="contact__us--info__title">Phone Number</h3>
                             <p class="contact__us--info__text">
-                                <a href="tel:+998757478492">+880 123 456 789 , 9987574</a> <br>
-                                <a href="tel:+998757478492">+880 123 456 789 </a>
+                                <a href="tel:+998757478492">{{$contactDetials->first_phone}}</a> <br>
+                                <a href="tel:+998757478492">{{$contactDetials->second_phone}}  </a>
                               </p>
                         </div>
                     </div>

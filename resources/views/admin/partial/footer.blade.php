@@ -18,6 +18,8 @@
     <!-- Javascript  -->
     <script src="{{ asset('admin/plugins/datatables/simple-datatables.js')}}"></script>
     <script src="{{ asset('admin/pages/datatable.init.js')}}"></script>
+    <script src="{{ asset('admin/plugins/tinymce/tinymce.min.js')}}"></script>
+    <script src="{{ asset('admin/pages/form-editor.init.js')}}"></script>
 
  <!-- App js -->
  <script src="{{ asset('admin/js/app.js')}}"></script>

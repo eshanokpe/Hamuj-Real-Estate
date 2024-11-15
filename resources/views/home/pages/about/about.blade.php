@@ -47,14 +47,11 @@
                         <div class="about__content" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="150">
                             <div class="section__heading" style="text-align: justify">
                                 <h3 class="section__heading--subtitle h5">
-                                   About Us
+                                   {{$about->title}}
                                 </h3>
                                 {{-- <h2 class="section__heading--title">Dream living Spaces Setting New Build</h2> --}}
                                 <p class="section__heading--desc">
-                                    Hamuj Real Estate is a cutting-edge platform dedicated to making property investment accessible, transparent, and secure for everyone. We believe that property ownership shouldn't be limited to a select few, which is why we focus on fractional land ownership, allowing investors to purchase smaller, affordable land segments that still hold immense potential. Leveraging blockchain-inspired technology, our platform provides real-time, dynamic valuation updates, ensuring that our users always have a clear view of their investments’ growth and market value.
-                                </p>
-                                <p class="section__heading--desc">
-                                    With a deep commitment to transparency, security, and user empowerment, Hamuj Real Estate is changing the way people invest in and manage property assets. Our comprehensive approach integrates secure transactions, real-time valuation tracking, and a user-friendly interface, enabling users to make informed decisions confidently. Whether you're looking to buy, sell, or manage land assets, Hamuj Real Estate offers the tools you need to thrive in today’s property market.
+                                    {!! $about->content !!}
                                 </p>
                             </div>
                            
@@ -106,7 +103,7 @@
                                 <div class="categories__content text-center">
                                     <h3 class="categories__title">Vision</h3>
                                     <p class="categories__desc">
-                                        To be a transformative force in real estate, empowering people from all walks of life to invest in, own, and manage property assets with transparency, security, and ease. Our vision is a world where property ownership is inclusive, digital, and accessible to everyone, driven by cutting-edge technology and a commitment to integrity.
+                                        {{$visionMission->vision}}
                                     </p>
                                 </div>
                             </div>
@@ -116,10 +113,7 @@
                                 <div class="categories__content text-center">
                                     <h3 class="categories__title">Mission</h3>
                                     <p class="categories__desc">
-                                        Our mission is to democratize property ownership by building a transparent, technology-driven 
-                                        platform where anyone can confidently invest in real estate. We strive to make property investment 
-                                        accessible through fractional ownership, reducing traditional barriers to entry. By ensuring security,
-                                        real-time valuation updates, and a user-friendly experience.
+                                        {{$visionMission->mission}}
                                     </p>
                                  
                                 </div>
