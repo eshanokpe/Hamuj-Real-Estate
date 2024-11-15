@@ -89,10 +89,9 @@
                     </li><!--end nav-item-->
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#sidebarEcommerce" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false" aria-controls="sidebarEcommerce">
+                        <a class="nav-link" href="{{ route('admin.post.index')}}" >
                             <i class="ti ti-shopping-cart menu-icon"></i>
-                            <span>Ecommerce</span>
+                            <span>Blog</span>
                         </a>
                     </li><!--end nav-item-->
                     <li class="nav-item">

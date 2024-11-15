@@ -6,14 +6,13 @@
 
     <!-- CSRF Token --> 
     <meta name="csrf-token" content="{{ csrf_token() }}">
- 
     <title>{{  $contactDetials->company_name }}</title>
-
+    <!-- App favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ $contactDetials->favicon }}">
+    
     <!-- Scripts -->
     @viteReactRefresh
     @vite(['resources/js/app.js'])
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ $contactDetials->favicon }}">
     <!-- App css -->
     <link href="{{ asset('admin/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admin/css/icons.min.css')}}" rel="stylesheet" type="text/css" />

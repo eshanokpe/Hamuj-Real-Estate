@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Models\Faqs;
+use App\Models\Post;
 use App\Models\About;
 use App\Models\MenuItem;
 use App\Models\VisionMission;
@@ -32,8 +33,9 @@ class AppServiceProvider extends ServiceProvider
     {   
         View::share('menuItems', MenuItem::with('dropdownItems')->get()); 
         View::share('faqs', Faqs::all()); 
+        View::share('posts', Post::latest()->paginate(20)); 
         View::share('about', About::first()); 
-        View::share('visionMission', VisionMission::first()); 
+        View::share('visionMission', VisionMission::first());  
         View::share('contactDetials', ContactDetials::first()); 
     }
 }

@@ -23,7 +23,7 @@
             </div> 
             <div class="mb-3 row">
                 <label for="" required class="col-sm-2 col-form-label text-end">Image</label>
-                <div class="col-sm-10">
+                <div class="col-sm-10"> 
                     <input onchange="previewImage(event)" class="form-control @error('image') is-invalid @enderror" type="file" value="" name="image" required>
            
                     @error('image')

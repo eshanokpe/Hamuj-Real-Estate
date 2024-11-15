@@ -4,20 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\GoogleCalendarController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\SolutionsController; 
-use App\Http\Controllers\Admin\ConsultantController;
-use App\Http\Controllers\Admin\AppointmentsController;
-use App\Http\Controllers\Admin\IndustriesController; 
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\CoreValueController;
 use App\Http\Controllers\Admin\VisionMissionController;
 use App\Http\Controllers\Admin\SociallinkController;
 use App\Http\Controllers\Admin\FAQController;
-use App\Http\Controllers\Admin\CareerController;
 use App\Http\Controllers\Admin\ContactFormController;
-use App\Http\Controllers\Admin\SocialImpactController;
-use App\Http\Controllers\Admin\SystemCalendarController;
 
 
 Route::redirect('/admin/dashboard', '/admin');
@@ -68,7 +62,17 @@ Route::prefix('admin')->group(function () {
         Route::get('/settings/vision-mission', [SettingsController::class, 'indexVisionMission'])->name('admin.visionMission.index');
         Route::post('/settings/vision-mission/store', [SettingsController::class, 'storeVisionMission'])->name('admin.visionMission.store');
         Route::put('/settings/vision-mission/update/{id}', [SettingsController::class, 'updateVisionMission'])->name('admin.visionMission.update');
-        
+        //Blog 
+        // Blog Routes
+        Route::prefix('post')->group(function () {
+            Route::get('index', [BlogController::class, 'index'])->name('admin.post.index');
+            Route::get('create', [BlogController::class, 'create'])->name('admin.post.create');
+            Route::post('store', [BlogController::class, 'store'])->name('admin.post.store');
+            Route::get('{id}/edit', [BlogController::class, 'edit'])->name('admin.post.edit');
+            Route::put('{id}', [BlogController::class, 'update'])->name('admin.post.update');
+            Route::get('{id}', [BlogController::class, 'destroy'])->name('admin.post.destroy');
+        });
+
         //Office Hours 
         Route::post('/settings/store/office-hours', [SettingsController::class, 'storeOfficeHours'])->name('admin.office-hours.store');
         Route::put('/settings/update/office-hours/{id}', [SettingsController::class, 'updatestoreOfficeHours'])->name('admin.office-hours.update');
@@ -88,7 +92,6 @@ Route::prefix('admin')->group(function () {
         Route::post('career/store/', [CareerController::class, 'store'])->name('admin.career.store');
         Route::put('career/update/{id}', [CareerController::class, 'update'])->name('admin.career.update');
        
-
         //Teams 
         Route::get('/team/index', [TeamController::class, 'getTeam'])->name('admin.team.getTeam');
         Route::get('/team/create', [TeamController::class, 'create'])->name('admin.team.create');
@@ -138,39 +141,7 @@ Route::prefix('admin')->group(function () {
         Route::get('solutions/{id}/edit', [SolutionsController::class, 'edit'])->name('admin.solution.edit');
         Route::put('solutions/{id}', [SolutionsController::class, 'update'])->name('admin.solution.update');
         Route::get('solutions/{id}', [SolutionsController::class, 'destroy'])->name('admin.solution.destroy');
-       
-        //consultants
-        Route::get('consultants/index', [ConsultantController::class, 'index'])->name('admin.consultant.index');
-        Route::get('consultants/create', [ConsultantController::class, 'create'])->name('admin.consultant.create');
-        Route::post('consultants/post', [ConsultantController::class, 'store'])->name('admin.consultant.post');
-        Route::get('/consultant/show/{id}', [ConsultantController::class, 'show'])->name('admin.consultant.show');
-        Route::get('/consultant/destroy/{id}', [ConsultantController::class, 'destroy'])->name('admin.consultant.destroy');
-       
-        //Appointments
-        Route::get('appointments/index', [AppointmentsController::class, 'index'])->name('admin.appointments.index');
-        Route::get('appointments/create', [AppointmentsController::class, 'create'])->name('admin.appointments.create');
-        Route::post('appointments/post', [AppointmentsController::class, 'store'])->name('admin.appointments.post');
-        Route::get('/appointments/show/{id}', [AppointmentsController::class, 'show'])->name('admin.appointments.show');
-        Route::get('/appointments/edit/{id}', [AppointmentsController::class, 'show'])->name('admin.appointments.edit');
-        Route::get('/appointments/destroy/{id}', [AppointmentsController::class, 'destroy'])->name('admin.appointments.destroy');
-        
-        // Google OAuth Routes
-        Route::get('/auth/google', [GoogleCalendarController::class, 'redirectToGoogle'])->name('google.redirect');
-        Route::get('auth/google/callback', [GoogleCalendarController::class, 'handleGoogleCallback'])->name('google.callback');
-        Route::get('/google-calendar/events', [GoogleCalendarController::class, 'listGoogleCalendarEvents']);
-
-       //Industries
-        Route::get('industries/index', [IndustriesController::class, 'index'])->name('admin.industries.index');
-        Route::get('industries/create', [IndustriesController::class, 'create'])->name('admin.industries.create');
-        Route::post('industries/store', [IndustriesController::class, 'store'])->name('admin.industries.store');
-        Route::get('industries/{id}/edit', [IndustriesController::class, 'edit'])->name('admin.industries.edit');
-        Route::put('industries/{id}', [IndustriesController::class, 'update'])->name('admin.industries.update');
-        Route::get('industries/{id}', [IndustriesController::class, 'destroy'])->name('admin.industries.destroy');
-        //social-impact
-        Route::get('social-impact/index', [SocialImpactController::class, 'index'])->name('admin.socialimpact.index');
-        Route::put('social-impact/{id}', [SocialImpactController::class, 'update'])->name('admin.socialiimpact.update');
-        Route::post('social-impact/store', [SocialImpactController::class, 'store'])->name('admin.socialiimpact.store');
-
+      
         //Faqs
         Route::get('faq/index', [FAQController::class, 'index'])->name('admin.faq.index');
         Route::get('faq/create', [FAQController::class, 'create'])->name('admin.faq.create');
@@ -178,11 +149,6 @@ Route::prefix('admin')->group(function () {
         Route::get('faq/{id}/edit', [FAQController::class, 'edit'])->name('admin.faq.edit');
         Route::put('faq/{id}', [FAQController::class, 'update'])->name('admin.faq.update');
         Route::get('faq/{id}', [FAQController::class, 'destroy'])->name('admin.faq.destroy');
-       
-        //Book Inspection
-        Route::get('/inspection/index', [BookInspection::class, 'index'])->name('admin.inspection.index');
-        Route::get('/inspection/show/{id}', [BookInspection::class, 'show'])->name('admin.inspection.show');
-        Route::get('/inspection/destroy/{id}', [BookInspection::class, 'destroy'])->name('admin.inspection.destroy');
         //Contact
         Route::get('/contact-form/index', [ContactFormController::class, 'index'])->name('admin.contactForm.index');
         Route::get('/contact-form/show/{id}', [ContactFormController::class, 'show'])->name('admin.contactForm.show');
