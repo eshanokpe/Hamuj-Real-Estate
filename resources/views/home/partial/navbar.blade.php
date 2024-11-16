@@ -181,7 +181,7 @@
                                 
                                 <ul class="sub__menu">
                                     <li class="sub__menu--items">
-                                        <a href="#" class="sub__menu--link">Dashboard</a>
+                                        <a href="{{ route('user.dashboard') }}" class="sub__menu--link">Dashboard</a>
                                         <a class="sub__menu--link" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                             document.getElementById('logout-form').submit();">

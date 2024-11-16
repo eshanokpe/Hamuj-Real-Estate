@@ -9,7 +9,6 @@
             <div class="breadcrumb__content text-center" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100">
                 <h1 class="breadcrumb__title h2">
                     <span>Blog </span>
-                    Page
                 </h1>
                 <ul class="breadcrumb__menu d-flex justify-content-center">
                     <li class="breadcrumb__menu--items">

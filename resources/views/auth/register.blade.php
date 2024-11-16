@@ -50,7 +50,7 @@
                     & become our partner</p>
                 </div>
                 <div class="account__form">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('post.register') }}">
                         @csrf
 
                         <div class="account__form--input mb-20">

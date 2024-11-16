@@ -9,7 +9,7 @@
             <div class="hero__section--inner">
                 <div class="hero__section--wrapper">
                     <div class="hero__content text-center">
-                        <p class="hero__content--desc" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="50">More than <span class="color-hover">1000+</span> house avaiable for sell & rent in country</p>
+                        <p class="hero__content--desc " data-aos="fade-up" data-aos-duration="1200" data-aos-delay="50">More than <span class="color-hover">1000+</span> house avaiable for sell & rent in country</p>
                         <h2 class="hero__content--title h1" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100">Find Your <span class="color-hover">Dream</span> Home</h2>
                     </div>
                     <!-- Advance search filter -->

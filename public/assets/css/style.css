@@ -2350,13 +2350,13 @@ body.overlay__active::before,
    3. Hero css
 */
 .hero__section--bg {
-  background: url(../img/hero/hero-section-bg.png);
+  /* background: url(../img/hero/hero-section-bg.png); */
   background-position: center center;
   background-size: cover;
 }
 
 .hero__section--inner {
-  padding: 6rem 0 7rem;
+  padding: 2rem 0 7rem;
 }
 @media only screen and (min-width: 480px) {
   .hero__section--inner {
@@ -2398,10 +2398,10 @@ body.overlay__active::before,
   }
 }
 .hero__content--desc {
-  color: var(--color-white);
+  color: var(--color-hover);
 }
 .hero__content--title {
-  color: var(--color-white);
+  color: var(--color-hover);
 }
 
 .advance__search--inner {

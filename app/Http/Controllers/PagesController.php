@@ -36,10 +36,6 @@ class PagesController extends Controller
             return redirect()->route('events.all');
         }
 
-        
-    
-        
-    
         return view('home.errors.404');
     }
     

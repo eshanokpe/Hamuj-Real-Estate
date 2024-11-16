@@ -139,9 +139,8 @@
                             </svg>
                         </h2>
                         <ul class="footer__widget--menu footer__widget--inner">
-                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="./admin/create-listing.html">Help/FAQ</a></li>
-                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="./listing.html">Propert owners</a></li>
-                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="./admin/create-listing.html">Contact Support</a></li>
+                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="{{ route('home.pages','faqs') }}">Help/FAQ</a></li>
+                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="{{ route('home.pages','contact') }}">Contact</a></li>
                         </ul>
                     </div>
                 </div>
@@ -153,9 +152,9 @@
                             </svg>
                         </h2>
                         <ul class="footer__widget--menu footer__widget--inner">
-                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="{{ route('home.pages','about')}}">About Us</a></li>
-                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="./contact.html">Contact</a></li>
-                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="./admin/my-properties.html">Property</a></li>
+                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="{{ route('home.pages','about')}}">About</a></li>
+                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="{{ route('home.pages','blog') }}">Blog</a></li>
+                            <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="{{ route('home.pages','properties') }}">Properties</a></li>
                         </ul>
                     </div>
                 </div>
@@ -479,6 +478,10 @@
 
         @if(session('success'))
             toastr.success("{{ session('success') }}");
+        @endif
+        
+        @if(session('status'))
+            toastr.success("{{ session('status') }}");
         @endif
 
         @if($errors->any()) 
