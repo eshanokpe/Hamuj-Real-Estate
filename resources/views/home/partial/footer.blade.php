@@ -75,7 +75,7 @@
                         <div class="footer__widget--inner">
                             <div class="footer__logo" >
                                 <a class="footer__logo--link display-block" href="{{ url('/') }}" style="background-color: #fff; padding:8px; margin-right:50%; object-fit: cover;">
-                                    <img class="footer__logo--img" src="{{ $contactDetials->site_logo }}" alt="l{{ $contactDetials->company_name }}" style="object-fit: cover; width: 171px; height: 30px;">
+                                    <img class="footer__logo--img" src="{{ asset($contactDetials->site_logo) }}" alt="l{{ $contactDetials->company_name }}" style="object-fit: cover; width: 171px; height: 30px;">
                                 </a>
                             </div>
                             <p class="footer__widget--desc">The world’s first and largest digital market 
@@ -452,15 +452,15 @@
 <button id="scroll__top"><svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round"  stroke-width="48" d="M112 244l144-144 144 144M256 120v292"/></svg></button>
 
 <!-- All Script JS Plugins here  -->
-<script src="assets/js/vendor/popper.js" defer="defer"></script>
-<script src="assets/js/vendor/bootstrap.min.js" defer="defer"></script>
-<script src="assets/js/plugins/swiper-bundle.min.js"></script>
-<script src="assets/js/plugins/glightbox.min.js"></script>
-<script src="assets/js/plugins/aos.js"></script>
+<script src="{{ asset('assets/js/vendor/popper.js')}}" defer="defer"></script>
+<script src="{{ asset('assets/js/vendor/bootstrap.min.js')}}" defer="defer"></script>
+<script src="{{ asset('assets/js/plugins/swiper-bundle.min.js')}}"></script>
+<script src="{{ asset('assets/js/plugins/glightbox.min.js')}}"></script>
+<script src="{{ asset('assets/js/plugins/aos.js')}}"></script>
 
 
 <!-- Customscript js -->
-<script src="assets/js/script.js"></script>
+<script src="{{ asset('assets/js/script.js')}}"></script>
 <style>
     /* Increase font size of Toastr */
     #toast-container > .toast {
@@ -489,4 +489,5 @@
     });
 </script>
 {{-- https://risingtheme.com/html/demo-newvilla/newvilla/contact.html --}}
+
 

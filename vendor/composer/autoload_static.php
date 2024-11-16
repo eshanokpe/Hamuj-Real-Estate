@@ -583,6 +583,7 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'App\\Http\\Traits\\SettingsTrait' => __DIR__ . '/../..' . '/app/Http/Traits/SettingsTrait.php',
         'App\\Models\\About' => __DIR__ . '/../..' . '/app/Models/About.php',
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
+        'App\\Models\\Comment' => __DIR__ . '/../..' . '/app/Models/Comment.php',
         'App\\Models\\ContactDetials' => __DIR__ . '/../..' . '/app/Models/ContactDetials.php',
         'App\\Models\\DropdownItem' => __DIR__ . '/../..' . '/app/Models/DropdownItem.php',
         'App\\Models\\Faqs' => __DIR__ . '/../..' . '/app/Models/Faqs.php',

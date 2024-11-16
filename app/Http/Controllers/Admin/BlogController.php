@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Models\Post; 
+use App\Models\Comment; 
 
 class BlogController extends Controller
 {
@@ -64,12 +65,39 @@ class BlogController extends Controller
         return redirect()->route('admin.post.index')->with('success', 'Post Updated successfully.');
     }
 
+    public function show($id){
+        $decryptedId = decrypt($id);
+        $post = Post::with(['comments' => function($query) {
+            $query->whereNull('parent_id')->with('replies');
+        }])->findOrFail($decryptedId);
+        $wordCount = str_word_count(strip_tags($post->content));
+        $readingTime = ceil($wordCount / 200);
+
+        return view('home.pages.blog.show', compact('post','readingTime'));
+    }
+
+    public function storeComment(Request $request){
+        // Validate incoming request
+        $request->validate([
+            'author_name' => 'required|string|max:255',
+            'author_email' => 'required|email|max:255',
+            'content' => 'required|string',
+            'post_id' => 'required|exists:posts,id',
+            'parent_id' => 'nullable|exists:comments,id'
+        ]);
+    
+        Comment::create($request->all());
+        return response()->json(['message' => 'Comment submitted successfully']);
+    }
+
     public function destroy($id)
     {
         $post = Post::findOrFail(decrypt($id));
         $post->delete();
         return redirect()->route('admin.post.index')->with('success', 'Post deleted successfully.');
     }
+
+
 
     
 

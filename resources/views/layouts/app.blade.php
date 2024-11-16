@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link rel="shortcut icon" type="image/x-icon" href="{{ $contactDetials->favicon }}">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ asset($contactDetials->favicon) }}">
     
    <!-- ======= All CSS Plugins here ======== -->
   <link rel="stylesheet" href="assets/css/plugins/swiper-bundle.min.css">
@@ -15,14 +15,14 @@
 
   
   <!-- Plugin css -->
-  <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/plugins/swiper-bundle.min.css">
-  <link rel="stylesheet" href="assets/css/plugins/glightbox.min.css">
-  <link rel="stylesheet" href="assets/css/plugins/aos.css">
+  <link rel="stylesheet" href="{{ asset('assets/css/vendor/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{ asset('assets/css/plugins/swiper-bundle.min.css')}}">
+  <link rel="stylesheet" href="{{ asset('assets/css/plugins/glightbox.min.css')}}">
+  <link rel="stylesheet" href="{{ asset('assets/css/plugins/aos.css')}}">
 
   <!-- Custom Style CSS -->
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/rtl.css">
+  <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">
+  <link rel="stylesheet" href="{{ asset('assets/css/rtl.css')}}">
 
    <!-- Scripts -->
     @viteReactRefresh

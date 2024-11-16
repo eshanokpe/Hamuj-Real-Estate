@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{  $contactDetials->company_name }}</title>
     <!-- App favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ $contactDetials->favicon }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset($contactDetials->favicon) }}">
     
     <!-- Scripts -->
     @viteReactRefresh

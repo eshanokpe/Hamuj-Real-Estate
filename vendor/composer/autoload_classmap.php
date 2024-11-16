@@ -39,6 +39,7 @@ return array(
     'App\\Http\\Traits\\SettingsTrait' => $baseDir . '/app/Http/Traits/SettingsTrait.php',
     'App\\Models\\About' => $baseDir . '/app/Models/About.php',
     'App\\Models\\Admin' => $baseDir . '/app/Models/Admin.php',
+    'App\\Models\\Comment' => $baseDir . '/app/Models/Comment.php',
     'App\\Models\\ContactDetials' => $baseDir . '/app/Models/ContactDetials.php',
     'App\\Models\\DropdownItem' => $baseDir . '/app/Models/DropdownItem.php',
     'App\\Models\\Faqs' => $baseDir . '/app/Models/Faqs.php',

@@ -54,7 +54,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/settings/store/about-us', [SettingsController::class, 'storeAboutUs'])->name('admin.settings.storeAboutus');
         Route::put('/settings/update/about-us/{id}', [SettingsController::class, 'updateAboutUs'])->name('admin.settings.updateAboutus');
 
-        //Core Value 
+        //Core Value  
         Route::get('/settings/core-value', [CoreValueController::class, 'index'])->name('admin.coreValue.index');
         Route::post('/settings/store/core-value', [CoreValueController::class, 'store'])->name('admin.coreValue.store');
         Route::put('/settings/update/core-value/{id}', [CoreValueController::class, 'update'])->name('admin.coreValue.update');

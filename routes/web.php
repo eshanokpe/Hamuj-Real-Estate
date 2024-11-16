@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\Admin\BlogController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,11 +17,15 @@ use App\Http\Controllers\HomeController;
 */
 require __DIR__.'/admin.php';
 
-
+ 
 Route::get('/', [FrontendController::class, 'index'])->name('index');
 Route::get('/{page}', [PagesController::class, 'index'])->name('home.pages');
 
 Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
+
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
+Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.details');
+Route::post('/post/comment', [BlogController::class, 'storeComment'])->name('comments.store');
 
 
 
