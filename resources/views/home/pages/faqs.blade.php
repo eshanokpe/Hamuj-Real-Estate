@@ -27,7 +27,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading{{ $index }}">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ $index }}" aria-expanded="false" aria-controls="flush-collapse{{ $index }}">
-                                    <span class="contact__us--info__text">{{ $faq->question }}</span>
+                                    <span class="contact__us--info__text" style="color: #47008E">{{ $faq->question }}</span>
                                 </button>
                             </h2>
                             <div id="flush-collapse{{ $index }}" class="accordion-collapse collapse @if($index == 0) show @endif" data-bs-parent="#accordionFlushExample">
