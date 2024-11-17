@@ -7,6 +7,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,7 +28,7 @@ Route::get('/{page}', [PagesController::class, 'index'])->name('home.pages');
 Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
 
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
-Route::get('/blogs/{id}', [BlogController::class, 'show'])->name('blog.details');
+Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blog.details');
 Route::post('/post/comment', [BlogController::class, 'storeComment'])->name('comments.store');
 
 
@@ -39,3 +40,8 @@ Route::get('user/login', [LoginController::class, 'showLoginForm'])->name('login
 Route::post('post/login', [LoginController::class, 'login'])->name('post.login');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix('home')->name('home.')->group(function () {
+    Route::get('/properties/{slug}', [HomeController::class, 'showProperties'])->name('properties.show');
+
+});

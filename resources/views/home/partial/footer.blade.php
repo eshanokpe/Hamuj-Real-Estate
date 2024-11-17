@@ -78,8 +78,12 @@
                                     <img class="footer__logo--img" src="{{ asset($contactDetials->site_logo) }}" alt="l{{ $contactDetials->company_name }}" style="object-fit: cover; width: 171px; height: 30px;">
                                 </a>
                             </div>
-                            <p class="footer__widget--desc">The world’s first and largest digital market 
-                                for crypto collectibles and non-fungible (NFTs). Buy</p>
+                            <p class="footer__widget--desc" style="color: #fff">
+                                {!! Str::limit($about->content, 160 )!!}
+                            </p>
+                            <a class="blog__link--btn" href="{{ route('home.pages','about') }}">
+                                Read More 
+                            </a>
                             <ul class="footer__widget--info">
                                 <li class="footer__widget--info_list">
                                     <svg class="footer__widget--info__icon" width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -104,14 +108,15 @@
                                     </a>
                                 </li>
                                 <li class="footer__widget--info_list">
-                                    <svg class="footer__widget--info__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill="#fff" d="M13.31 1.52371L18.6133 2.11296C18.6133 2.11296 19.2026 7.41627 13.31 13.3088C7.41748 19.2014 2.11303 18.6133 2.11303 18.6133L1.52377 13.31L5.64971 10.9529L7.71153 13.0148C7.71153 13.0148 9.18467 12.7201 10.9524 10.9524C12.7202 9.18461 13.0148 7.71147 13.0148 7.71147L10.953 5.64965L13.31 1.52371Z" stroke="currentColor" stroke-width="2"></path>
+                                    <svg class="footer__widget--info__icon" width="20" height="20" viewBox="0 0 20 20" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill="#fff" d="M13.31 1.52371L18.6133 2.11296C18.6133 2.11296 19.2026 7.41627 13.31 13.3088C7.41748 19.2014 2.11303 18.6133 2.11303 18.6133L1.52377 13.31L5.64971 10.9529L7.71153 13.0148C7.71153 13.0148 9.18467 12.7201 10.9524 10.9524C12.7202 9.18461 13.0148 7.71147 13.0148 7.71147L10.953 5.64965L13.31 1.52371Z" stroke="" stroke-width="2"></path>
                                     </svg>
                                     <a class="footer__widget--info__text" href="#">
                                           {{$contactDetials->first_phone}}  
                                          @if( $contactDetials->second_phone == null)
                                         , {{$contactDetials->second_phone}}
-                                        @endif</a>
+                                        @endif
+                                    </a>
                                 </li>
                             </ul>
                         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Property;
 
 class HomeController extends Controller
 {
@@ -25,4 +26,19 @@ class HomeController extends Controller
     {
         return view('home'); 
     } 
+
+    public function showProperties($slug)
+    {
+        try {
+            $property = Property::firstWhere('slug', $slug);
+            if (!$property) {
+                return redirect()->route('home')->with('error', 'Property not found.');
+            }
+            return view('home.pages.properties.show', compact('property'));
+
+        } catch (\Exception $e) {
+            \Log::error('Error fetching property: ' . $e->getMessage());
+            return redirect()->route('home')->with('error', 'An unexpected error occurred.');
+        }
+    }
 }

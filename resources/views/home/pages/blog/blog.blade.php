@@ -58,7 +58,7 @@
                                 <div>
                                     <article class="blog__items">
                                         <div class="blog__thumbnail position-relative">
-                                            <a href="{{ route('blog.details', encrypt($post->id)) }}">
+                                            <a href="{{ route('blog.details', $post->slug) }}">
                                                 <img class="blog__thumbnail--media" src="{{ asset($post->image) }}" alt="{{ $post->title }}" style=" width: 500px; height: 400px; object-fit: cover; ">
                                             </a>
                                             <span class="blog__badge">
@@ -88,7 +88,7 @@
                                                 </li>
                                             </ul>
                                             <h3 class="blog__title">
-                                                <a href="{{ route('blog.details',  encrypt($post->id)) }}">{{ $post->title }}</a>
+                                                <a href="{{ route('blog.details',  $post->slug) }}">{{ $post->title }}</a>
                                             </h3> 
                                             <p class="blog__desc">{!! Str::limit($post->content, 80) !!}</p>
                                             <a class="blog__link--btn" href="{{ route('blog.details', encrypt($post->id)) }}">

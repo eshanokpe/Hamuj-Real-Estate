@@ -6,32 +6,36 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Post extends Model
+class Property extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title',
+        'name',
         'slug',
-        'content',
-        'image',
+        'description',
+        'location',
+        'price',
+        'size',
+        'property_images',
+        'payment_plan',
+        'brochure',
+        'land_survey',
+        'video_link',
+        'status',
     ];
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
 
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($model) {
-            $model->slug = Str::slug($model->title); 
+            $model->slug = Str::slug($model->name); 
         });
-
+ 
         static::updating(function ($model) {
-            $model->slug = Str::slug($model->title); 
+            $model->slug = Str::slug($model->name); 
         });
     }
 }
+ 
