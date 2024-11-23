@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Http\Traits\SettingsTrait;
+use App\Models\Terms;
 use App\Models\About;
 use App\Models\VisionMission;
 use App\Models\ContactDetials;
@@ -188,14 +189,49 @@ class SettingsController extends Controller
         return view('admin.home.settings.terms.index');
     }
 
-    public function storeeTerms(Request $request){
+    public function storeTerms(Request $request){
         $validated = $request->validate([
-            'vision' => 'required',
-            'mission' => 'required',
+            'content' => 'required',
         ]);
-        VisionMission::create($validated);
+        Terms::create($validated);
         return redirect()->back()->with([
-            'success' => 'Vision/Mission created successfully.',
+            'success' => 'Terms created successfully.',
         ]);
+    }
+
+    public function updateTerms(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'content' => 'required|string',
+        ]); 
+        $terms = Terms::findOrFail($id);
+        $terms->content = $validated['content'];
+        $terms->save();
+        return redirect()->back()->with('success', 'Terms updated successfully.');
+    }
+
+    public function indexPrivacyPolicy(){
+        return view('admin.home.settings.privacyPolicy.index');
+    }
+
+    public function storeTerms(Request $request){
+        $validated = $request->validate([
+            'content' => 'required',
+        ]);
+        Terms::create($validated);
+        return redirect()->back()->with([
+            'success' => 'Privacy Policy created successfully.',
+        ]);
+    }
+
+    public function updateTerms(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'content' => 'required|string',
+        ]); 
+        $terms = Terms::findOrFail($id);
+        $terms->content = $validated['content'];
+        $terms->save();
+        return redirect()->back()->with('success', 'Privacy Policy updated successfully.');
     }
 }

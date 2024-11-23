@@ -36,6 +36,8 @@
                                     <a class="nav-link waves-effect waves-light mb-3 "  href="{{ route('admin.settings.index')}}">About</a>
                                     <a class="nav-link waves-effect waves-light mb-3"  href="{{ route('admin.visionMission.index')}}">Vision / Mission</a>
                                     <a class="nav-link waves-effect waves-light active"  href="{{ route('admin.contact.index')}}">Contact </a>
+                                    <a class="nav-link waves-effect waves-light "  href="{{ route('admin.terms.index')}}">Terms </a>
+
                                 </div>
                             </div>
                             <!--end card-body-->

@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
-/*
+/* 
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -40,8 +40,11 @@ Route::get('user/login', [LoginController::class, 'showLoginForm'])->name('login
 Route::post('post/login', [LoginController::class, 'login'])->name('post.login');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
+
 
 Route::prefix('home')->name('home.')->group(function () {
     Route::get('/properties/{slug}', [HomeController::class, 'showProperties'])->name('properties.show');
+
 
 });

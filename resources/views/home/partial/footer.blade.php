@@ -230,8 +230,8 @@
                 <p class="copyright__content mb-0"><span class="text__secondary">© {{ date('Y') }}</span> Powered By <a class="copyright__content--link" target="_blank" href="#">Dohmayn</a> .  All Rights Reserved.</p>
                 
                 <ul class="footer__bottom--menu d-flex">
-                    <li><a href="#">Terms of Use</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="{{ route('home.pages','terms-of-use') }}">Terms of Use</a></li>
+                    <li><a href="{{ route('home.pages', 'privacy-policy') }}">Privacy Policy</a></li>
                 </ul>
             </div>
         </div>

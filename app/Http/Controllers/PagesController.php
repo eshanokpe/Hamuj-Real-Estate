@@ -25,7 +25,7 @@ class PagesController extends Controller
             'contact' => 'home.pages.contact',
             'blog' => 'home.pages.blog.blog',
             'faqs' => 'home.pages.faqs',
-            'terms-conditions' => 'home.pages.terms-conditions',
+            'terms-of-use' => 'home.pages.terms',
             'privacy-policy' => 'home.pages.privacy-policy',
         ];
     

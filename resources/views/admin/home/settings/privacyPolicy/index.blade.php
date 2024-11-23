@@ -33,12 +33,10 @@
 
                                 <div class="nav flex-column nav-pills text-center" id="v-pills-tab" role="tablist"
                                     aria-orientation="vertical">
-                                    <a class="nav-link waves-effect waves-light mb-3 active"  href="{{ route('admin.settings.index')}}">About</a>
-                                    <a class="nav-link waves-effect waves-light "  href="{{ route('admin.visionMission.index')}}">Vision / Mission</a>
+                                    <a class="nav-link waves-effect waves-light mb-3 "  href="{{ route('admin.settings.index')}}">About</a>
+                                    <a class="nav-link waves-effect waves-light mb-3"  href="{{ route('admin.visionMission.index')}}">Vision / Mission</a>
                                     <a class="nav-link waves-effect waves-light "  href="{{ route('admin.contact.index')}}">Contact </a>
-                                    <a class="nav-link waves-effect waves-light "  href="{{ route('admin.terms.index')}}">Terms </a>
-                                    <a class="nav-link waves-effect waves-light "  href="{{ route('admin.privacyPolicy.index')}}">Privacy Policy </a>
-                                    
+                                    <a class="nav-link waves-effect waves-light active"  href="{{ route('admin.terms.index')}}">Terms </a>
                                 </div>
                             </div>
                             <!--end card-body-->
@@ -50,7 +48,7 @@
                         <div class="card">
                             
                             <div class="card-body">  
-                                @include('admin.home.settings.about.add')
+                                @include('admin.home.settings.terms.add')
                                                                                                    
                             </div><!--end card-body-->
                         </div>
@@ -61,8 +59,8 @@
 
             </div><!-- container -->
 
-          
- 
+           
+
         </div>
         <!-- end page content -->
     </div>

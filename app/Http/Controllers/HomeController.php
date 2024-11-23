@@ -41,4 +41,6 @@ class HomeController extends Controller
             return redirect()->route('home')->with('error', 'An unexpected error occurred.');
         }
     }
+
+    
 }

@@ -79,12 +79,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/settings/terms', [SettingsController::class, 'indexTerms'])->name('admin.terms.index');
         Route::post('/settings/store/terms', [SettingsController::class, 'storeTerms'])->name('admin.terms.store');
         Route::put('/settings/update/terms/{id}', [SettingsController::class, 'updateTerms'])->name('admin.terms.update');
-        
-       
-         //Privacy
-        // Route::get('/index/privacypolicy', [PrivacyController::class, 'index'])->name('admin.privacyPolicy.index');
-        // Route::post('/store/privacypolicy', [PrivacyController::class, 'store'])->name('admin.privacy.store');
-        // Route::put('/update/privacypolicy/{id}', [PrivacyController::class, 'update'])->name('admin.privacy.update');
+        //Privacy
+        Route::get('/settings/privacypolicy', [SettingsController::class, 'indexPrivacyPolicy'])->name('admin.privacyPolicy.index');
+        Route::post('/settings/store/privacypolicy', [SettingsController::class, 'storePrivacyPolicy'])->name('admin.privacyPolicy.store');
+        Route::put('/settings/update/privacypolicy/{id}', [SettingsController::class, 'updatePrivacyPolicy'])->name('admin.privacyPolicy.update');
         
         //Terms Conditions
         // Route::get('/terms/conditions', [TermsConditionController::class, 'index'])->name('admin.termsCondition.index');

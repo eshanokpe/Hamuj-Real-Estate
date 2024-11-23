@@ -9,6 +9,6 @@ class Terms extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'content'
-    ]
+        'content',
+    ];
 }
