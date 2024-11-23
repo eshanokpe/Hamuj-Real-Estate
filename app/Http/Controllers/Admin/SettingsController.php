@@ -183,4 +183,19 @@ class SettingsController extends Controller
 
         return redirect()->back()->with('success', 'Contact us updated successfully.');
     }
+
+    public function indexTerms(){
+        return view('admin.home.settings.terms.index');
+    }
+
+    public function storeeTerms(Request $request){
+        $validated = $request->validate([
+            'vision' => 'required',
+            'mission' => 'required',
+        ]);
+        VisionMission::create($validated);
+        return redirect()->back()->with([
+            'success' => 'Vision/Mission created successfully.',
+        ]);
+    }
 }

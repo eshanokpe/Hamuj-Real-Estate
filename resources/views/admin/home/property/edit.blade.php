@@ -67,14 +67,74 @@
                                         @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <label for="exampleInputEmail1">Price</label>
-                                        <input type="number" class="form-control" name="price" placeholder="Enter Price" value="{{ $property->price}}"  required>
+                                        <label for="launchPrice">Launch Price</label>
+                                        <input type="number" class="form-control" id="launchPrice" name="lunch_price" placeholder="Enter Launch Price" value="{{ $property->lunch_price ?? '' }}" required>
+                                        @error('lunch_price')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="currentPrice">Current Price</label>
+                                        <input type="number" class="form-control" id="currentPrice" name="price" placeholder="Enter Current Price" value="{{ $property->price ?? '' }}" required>
                                         @error('price')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
                                         @enderror
                                     </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="priceIncrease">Price Increase (%)</label>
+                                        <input type="text" class="form-control" name="price_increase" id="priceIncrease" placeholder="Price Increase" readonly>
+                                    </div>
+                                    
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const launchPriceInput = document.getElementById('launchPrice');
+                                            const currentPriceInput = document.getElementById('currentPrice');
+                                            const priceIncreaseInput = document.getElementById('priceIncrease');
+                                    
+                                            function calculateIncrease() {
+                                                const launchPrice = parseFloat(launchPriceInput.value) || 0;
+                                                const currentPrice = parseFloat(currentPriceInput.value) || 0;
+                                                if (launchPrice > 0 && currentPrice > 0) {
+                                                    const increasePercentage = ((currentPrice - launchPrice) / launchPrice) * 100;
+                                                    priceIncreaseInput.value = increasePercentage.toFixed(2) + '%';
+                                                } else {
+                                                    priceIncreaseInput.value = 'N/A';
+                                                }
+                                            }
+                                    
+                                            launchPriceInput.addEventListener('input', calculateIncrease);
+                                            currentPriceInput.addEventListener('input', calculateIncrease);
+                                    
+                                            // Trigger calculation on page load
+                                            calculateIncrease();
+                                        });
+                                    </script>
+
+                                    <div class="mb-3">
+                                        <label for="currentPrice">Gazette Number</label>
+                                        <input type="text" class="form-control" id="gazetteNumber" name="gazette_number" placeholder="Enter Gazette Number" value="{{ $property->gazette_number ?? '' }}" required>
+                                        @error('gazette_number')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="currentPrice">Tenure Free</label>
+                                        <input type="text" class="form-control" id="tenureFree" name="tenure_free" placeholder="Enter Tenure Free" value="{{ $property->tenure_free ?? '' }}" required>
+                                        @error('tenure_free')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    
                                     <div class="mb-3">
                                         <label for="exampleInputEmail1">Size (sq. ft.)</label>
                                         <input type="text" class="form-control" name="size" placeholder="Enter Land Size" value="{{ $property->size}}" required>

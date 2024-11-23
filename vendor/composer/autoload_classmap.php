@@ -48,6 +48,7 @@ return array(
     'App\\Models\\MenuItem' => $baseDir . '/app/Models/MenuItem.php',
     'App\\Models\\Post' => $baseDir . '/app/Models/Post.php',
     'App\\Models\\Property' => $baseDir . '/app/Models/Property.php',
+    'App\\Models\\Terms' => $baseDir . '/app/Models/Terms.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Models\\VisionMission' => $baseDir . '/app/Models/VisionMission.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',

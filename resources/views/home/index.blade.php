@@ -155,12 +155,7 @@
                                    
                                 </div>
                                 <div class="featured__card--list__content">
-                                    <div class="featured__content--list__top d-flex justify-content-between">
-                                        <h3 class="featured__card--title"><a href="{{ route('home.properties.show',  $recentProperty->slug ) }}">{{$recentProperty->name}}</a></h3>
-                                        <a class="featured__list--wishlist__btn style2" href="{{ route('home.properties.show',  $recentProperty->slug ) }}">
-                                            Sell
-                                        </a>
-                                    </div>
+                                    
                                     <div class="featured__content--list__top d-flex justify-content-between">
                                         <span class="featured__card--price">₦{{ number_format($recentProperty->price) }}</span>
                                         <a class="featured__list--wishlist__btn style2" style=" background-color: #008000; color:#fff"  href="{{ route('home.properties.show',  $recentProperty->slug ) }}">
@@ -204,7 +199,7 @@
     <!-- featured section .\ -->
 
     <!-- Blog section -->
-    <section class="blog__section section--padding pt-5">
+    {{-- <section class="blog__section section--padding pt-5">
         <div class="container">
             <div class="section__heading text-center mb-50" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="100">
                 
@@ -224,12 +219,7 @@
                                             style="max-width: 100%; max-height: 100%; object-fit: cover; width: 500px; height: 400px;">
                                     </a>
                                     
-                                    {{-- <span class="blog__badge"><svg width="17" height="13" viewBox="0 0 17 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M13.7001 1.64453L13.6996 6.08165C13.6996 6.30139 13.6111 6.51254 13.4528 6.66793L8.0918 11.9473L8.17408 12.0283C8.5521 12.4006 9.16487 12.4006 9.54288 12.0283L14.384 7.26184C14.566 7.08309 14.6682 6.84048 14.6682 6.58785V2.59783C14.6682 2.07113 14.235 1.64453 13.7001 1.64453Z" fill="currentColor"/>
-                                        <path d="M11.7634 0.691406H7.71027C7.45374 0.691406 7.20738 0.791979 7.02587 0.970722L1.75007 6.16524C1.37205 6.53751 1.37205 7.14094 1.75007 7.51368L5.80324 11.5051C6.18126 11.8774 6.79403 11.8774 7.17205 11.5051L12.4479 6.31062C12.6294 6.1314 12.7315 5.88879 12.7315 5.63569V1.6447C12.7315 1.11801 12.2983 0.691406 11.7634 0.691406ZM10.0694 4.02795C9.66862 4.02795 9.34335 3.70764 9.34335 3.31298C9.34335 2.91831 9.66862 2.598 10.0694 2.598C10.4701 2.598 10.7954 2.91831 10.7954 3.31298C10.7954 3.70764 10.4701 4.02795 10.0694 4.02795Z" fill="currentColor"/>
-                                        </svg>
-                                        Business
-                                    </span> --}}
+                                    
                                 </div>
                                 <div class="blog__content">
                                     <ul class="blog__meta d-flex">
@@ -288,7 +278,7 @@
                     </a>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- Blog section .\ -->
 
     

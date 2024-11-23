@@ -1,7 +1,7 @@
 <?php 
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\GoogleCalendarController;
+use App\Http\Controllers\Admin\TermsController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BlogController;
@@ -64,6 +64,7 @@ Route::prefix('admin')->group(function () {
         Route::name('admin.')->group(function () {
             Route::resource('properties', AdminPropertyController::class);
         });
+       
 
         //Office Hours 
         Route::post('/settings/store/office-hours', [SettingsController::class, 'storeOfficeHours'])->name('admin.office-hours.store');
@@ -74,11 +75,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/settings/contact', [SettingsController::class, 'indexContact'])->name('admin.contact.index');
         Route::post('/settings/store/contact', [SettingsController::class, 'storeContact'])->name('admin.contact.store');
         Route::put('/settings/update/contact/{id}', [SettingsController::class, 'updateContact'])->name('admin.contact.update');
-        //Social Links 
-        // Route::get('/sociallinks/index', [SociallinkController::class, 'index'])->name('admin.socialLink.index');
-        // Route::post('/settings/store/social-links', [SociallinkController::class, 'storeSocialLinks'])->name('admin.settings.storeSocialLinks');
-        // Route::put('/settings/update/social-links/{id}', [SociallinkController::class, 'updateSocialLinks'])->name('admin.settings.updateSocialLinks');
-       
+        //Terms
+        Route::get('/settings/terms', [SettingsController::class, 'indexTerms'])->name('admin.terms.index');
+        Route::post('/settings/store/terms', [SettingsController::class, 'storeTerms'])->name('admin.terms.store');
+        Route::put('/settings/update/terms/{id}', [SettingsController::class, 'updateTerms'])->name('admin.terms.update');
+        
        
          //Privacy
         // Route::get('/index/privacypolicy', [PrivacyController::class, 'index'])->name('admin.privacyPolicy.index');

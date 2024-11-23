@@ -40,8 +40,12 @@ class PropertyController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'location' => 'required|string|max:255',
+            'lunch_price' => 'required|numeric',
             'price' => 'required|numeric',
+            'price_increase' => 'required|numeric',
             'size' => 'required|string|max:255',
+            'gazette_number' => 'required|string|max:50',
+            'tenure_free' => 'required|string|max:50',
             'property_images' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
             'payment_plan' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
             'brochure' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
@@ -54,11 +58,20 @@ class PropertyController extends Controller
         $paymentPlanPath = $request->file('payment_plan')->move(public_path('assets/images/property'), time().'_'.$request->file('payment_plan')->getClientOriginalName());
         $brochurePath = $request->file('brochure')->move(public_path('assets/images/property'), time().'_'.$request->file('brochure')->getClientOriginalName());
         $landSurveyPath = $request->file('land_survey')->move(public_path('assets/images/property'), time().'_'.$request->file('land_survey')->getClientOriginalName());
+        $lunchPrice = $request->input('lunch_price');
+        $currentPrice = $request->input('price');
+
+        $priceIncrease = $lunchPrice > 0 ? (($currentPrice - $lunchPrice) / $lunchPrice) * 100 : 0;
+
         Property::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'location' => $request->input('location'),
+            'lunch_price' => $request->input('lunch_price'),
             'price' => $request->input('price'),
+            'price_increase' => $priceIncrease,
+            'gazette_number' => $request->input('gazette_number'),
+            'tenure_free' => $request->input('tenure_free'),
             'size' => $request->input('size'),
             'property_images' => 'assets/images/property/' . basename($propertyImagePath),
             'payment_plan' => 'assets/images/property/' . basename($paymentPlanPath),
@@ -111,8 +124,11 @@ class PropertyController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'location' => 'required|string|max:255',
+            'lunch_price' => 'required|numeric',
             'price' => 'required|numeric',
             'size' => 'required|string|max:255',
+            'gazette_number' => 'required|string|max:50',
+            'tenure_free'=> 'required|string|max:50',
             'property_images' => 'nullable|image|mimes:jpeg,png,jpg|max:5048',
             'payment_plan' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',
             'brochure' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',
@@ -120,21 +136,28 @@ class PropertyController extends Controller
             'video_link' => 'required|url|max:255',
             'status' => 'required|in:available,sold',
         ]);
+        $lunchPrice = $request->input('lunch_price');
+        $currentPrice = $request->input('price');
+
+        $priceIncrease = $lunchPrice > 0 ? (($currentPrice - $lunchPrice) / $lunchPrice) * 100 : 0;
+
         $property->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'location' => $request->input('location'),
+            'lunch_price' => $request->input('lunch_price'),
             'price' => $request->input('price'),
+            'price_increase' => $priceIncrease,
+            'gazette_number' => $request->input('gazette_number'),
+            'tenure_free' => $request->input('tenure_free'),
             'size' => $request->input('size'),
             'video_link' => $request->input('video_link'),
             'status' => $request->input('status'),
         ]);
         if ($request->hasFile('property_images')) {
-            // Delete old file if exists
             if ($property->property_images && file_exists(public_path($property->property_images))) {
                 unlink(public_path($property->property_images));
             }
-            // Save new file
             $propertyImagePath = $request->file('property_images')->move(public_path('assets/images/property'), time().'_'.$request->file('property_images')->getClientOriginalName());
             $property->property_images = 'assets/images/property/' . basename($propertyImagePath);
         }
@@ -153,7 +176,7 @@ class PropertyController extends Controller
             $brochurePath = $request->file('brochure')->move(public_path('assets/images/property'), time().'_'.$request->file('brochure')->getClientOriginalName());
             $property->brochure = 'assets/images/property/' . basename($brochurePath);
         }
-    
+     
         if ($request->hasFile('land_survey')) {
             if ($property->land_survey && file_exists(public_path($property->land_survey))) {
                 unlink(public_path($property->land_survey));

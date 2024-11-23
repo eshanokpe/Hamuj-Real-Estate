@@ -592,6 +592,7 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'App\\Models\\MenuItem' => __DIR__ . '/../..' . '/app/Models/MenuItem.php',
         'App\\Models\\Post' => __DIR__ . '/../..' . '/app/Models/Post.php',
         'App\\Models\\Property' => __DIR__ . '/../..' . '/app/Models/Property.php',
+        'App\\Models\\Terms' => __DIR__ . '/../..' . '/app/Models/Terms.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\VisionMission' => __DIR__ . '/../..' . '/app/Models/VisionMission.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',

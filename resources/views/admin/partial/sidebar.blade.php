@@ -14,7 +14,7 @@
     </div> 
     <div class="sidebar-user-pro media border-end">                    
         <div class="position-relative mx-auto">
-            <img src="{{ asset('admin/images/users/user-4.jpg')}}" alt="user" class="rounded-circle thumb-md">
+            <img src="{{ asset($contactDetials->favicon) }}" alt="user" class="rounded-circle thumb-md">
             <span class="online-icon position-absolute end-0"><i class="mdi mdi-record text-success"></i></span>
         </div>
         <div class="media-body ms-2 user-detail align-self-center">
@@ -54,12 +54,12 @@
                         </a>
                     </li><!--end nav-item-->
 
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.post.index')}}" >
                             <i class="ti ti-shopping-cart menu-icon"></i>
                             <span>Blog</span>
                         </a>
-                    </li><!--end nav-item-->
+                    </li><!--end nav-item--> --}}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.faq.index')}}" >
                             <i class="ti ti-shopping-cart menu-icon"></i>
@@ -76,9 +76,10 @@
                         </a>
                         <div class="collapse " id="sidebarElements">
                             <ul class="nav flex-column">
+                               
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{route('admin.menu.index')}}">Manage Menu</a>
-                                </li><!--end nav-item--> 
+                                </li>
                                 
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{route('admin.settings.index')}}">Contents</a>
