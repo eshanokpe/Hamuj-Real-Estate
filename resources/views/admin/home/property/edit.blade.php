@@ -66,6 +66,42 @@
                                             </div>
                                         @enderror
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1"> City</label>
+                                                <select name="city" id="state" class="form-control">
+                                                    <option value="">Select a city</option>
+                                                    @foreach ($city as $city)
+                                                        <option value="{{ $city }}" {{ $property->city == $city ? 'selected' : '' }}>
+                                                            {{ $city }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                
+                                                @error('city')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1"> Country</label>
+                                               <select name="country" class="form-select">
+                                                    <option>Nigeria</option>
+                                               </select>
+                                                @error('country')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
                                     <div class="mb-3">
                                         <label for="launchPrice">Launch Price</label>
                                         <input type="number" class="form-control" id="launchPrice" name="lunch_price" placeholder="Enter Launch Price" value="{{ $property->lunch_price ?? '' }}" required>
@@ -121,7 +157,7 @@
                                         <input type="text" class="form-control" id="gazetteNumber" name="gazette_number" placeholder="Enter Gazette Number" value="{{ $property->gazette_number ?? '' }}" required>
                                         @error('gazette_number')
                                             <div class="invalid-feedback">
-                                                {{ $message }}
+                                                {{ $message }} 
                                             </div>
                                         @enderror
                                     </div>
@@ -203,6 +239,19 @@
                             <img id="image-LandSurvey" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
                         </div>
                         <div class="mb-3">
+                            <label for="exampleInputEmail1">Contract deed document</label>
+                            <input onchange="previewContractDeed(event)" type="file" class="form-control" name="contract_deed" >
+                            @error('contract_deed')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            @if(isset($property))
+                                <img src="{{ asset($property->contract_deed) }}" alt="{{ $property->name }}" class="img-thumbnail mt-2" width="200">
+                            @endif
+                            <img id="image-contractDeed" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
+                        </div>
+                        <div class="mb-3">
                             <label for="exampleInputEmail1">Video Link</label>
                             <input type="text" class="form-control" name="video_link" value="{{ $property->video_link }}" placeholder="Video Link" >
                             @error('video_link')
@@ -212,10 +261,20 @@
                             @enderror
                         </div>
                         <div class="mb-3">
+                            <label for="exampleInputEmail1">Google map Link</label>
+                            <input type="text" class="form-control" name="google_map" value="{{ $property->google_map }}" placeholder="Google map Link" >
+                            @error('google_map')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                       
+                        <div class="mb-3">
                             <label for="exampleInputEmail1">Property Status</label>
                             <select class="form-select" id="propertyStatus" name="status" required>
-                                <option value="available" {{ old('status') == 'available' ?'selected':''}}>Available</option>
-                                <option value="sold" {{ old('status') == 'sold' ? 'selected':''}}>Sold</option>
+                                <option value="available" {{ $property->status == 'available' ? 'selected':''}}>Available</option>
+                                <option value="sold" {{ $property->status  == 'sold' ? 'selected': ''}}>Sold</option>
                             </select>
                             @error('status')
                                 <div class="invalid-feedback">
@@ -300,54 +359,27 @@
                         reader.readAsDataURL(input.files[0]);
                     }
                 }
+                function previewContractDeed(event) {
+                    const input = event.target;
+                    const preview = document.getElementById('image-contractDeed');
+                    
+                    if (input.files && input.files[0]) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            preview.src = e.target.result;
+                            preview.style.display = 'block';
+                        };
+                        
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
             </script>    
 
             </div><!--end card-->
            
         </div><!-- container -->
 
-        <!--Start Rightbar-->
-        <!--Start Rightbar/offcanvas-->
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="Appearance" aria-labelledby="AppearanceLabel">
-            <div class="offcanvas-header border-bottom">
-              <h5 class="m-0 font-14" id="AppearanceLabel">Appearance</h5>
-              <button type="button" class="btn-close text-reset p-0 m-0 align-self-center" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">  
-                <h6>Account Settings</h6>
-                <div class="p-2 text-start mt-3">
-                    <div class="form-check form-switch mb-2">
-                        <input class="form-check-input" type="checkbox" id="settings-switch1">
-                        <label class="form-check-label" for="settings-switch1">Auto updates</label>
-                    </div><!--end form-switch-->
-                    <div class="form-check form-switch mb-2">
-                        <input class="form-check-input" type="checkbox" id="settings-switch2" checked>
-                        <label class="form-check-label" for="settings-switch2">Location Permission</label>
-                    </div><!--end form-switch-->
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="settings-switch3">
-                        <label class="form-check-label" for="settings-switch3">Show offline Contacts</label>
-                    </div><!--end form-switch-->
-                </div><!--end /div-->
-                <h6>General Settings</h6>
-                <div class="p-2 text-start mt-3">
-                    <div class="form-check form-switch mb-2">
-                        <input class="form-check-input" type="checkbox" id="settings-switch4">
-                        <label class="form-check-label" for="settings-switch4">Show me Online</label>
-                    </div><!--end form-switch-->
-                    <div class="form-check form-switch mb-2">
-                        <input class="form-check-input" type="checkbox" id="settings-switch5" checked>
-                        <label class="form-check-label" for="settings-switch5">Status visible to all</label>
-                    </div><!--end form-switch-->
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="settings-switch6">
-                        <label class="form-check-label" for="settings-switch6">Notifications Popup</label>
-                    </div><!--end form-switch-->
-                </div><!--end /div-->               
-            </div><!--end offcanvas-body-->
-        </div>
-        <!--end Rightbar/offcanvas-->
-        <!--end Rightbar-->
         
       
     </div>

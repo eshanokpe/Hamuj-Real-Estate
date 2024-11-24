@@ -17,16 +17,16 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '3bd81c9b8fcc150b69d8b63b4d2ccf23' => __DIR__ . '/..' . '/spatie/flare-client-php/src/helpers.php',
         'da91a01b5badbe5394c83814ef5982ea' => __DIR__ . '/..' . '/php-flasher/flasher/helpers.php',
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '09f6b20656683369174dd6fa83b7e5fb' => __DIR__ . '/..' . '/symfony/polyfill-uuid/bootstrap.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '35a6ad97d21e794e7e22a17d806652e4' => __DIR__ . '/..' . '/nunomaduro/termwind/src/Functions.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '265b4faa2b3a9766332744949e83bf97' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Collections/helpers.php',
         'c7a3c339e7e14b60e06a2d7fcce9476b' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Events/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
@@ -35,6 +35,7 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'ce9671a430e4846b44e1c68c7611f9f5' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '320163ac6b93aebe3dc25b60a0533d56' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/helpers.php',
+        'bab4ed692c1fd3872849227e2a85791e' => __DIR__ . '/..' . '/unicodeveloper/laravel-paystack/src/Support/helpers.php',
         '101b35f72e0ccb1b5ef72aa86bba3ef9' => __DIR__ . '/..' . '/yoeunes/toastr/src/helpers.php',
     );
 
@@ -46,11 +47,16 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'Y' => 
         array (
             'Yoeunes\\Toastr\\' => 15,
+            'Yabacon\\' => 8,
         ),
         'W' => 
         array (
             'Whoops\\' => 7,
             'Webmozart\\Assert\\' => 17,
+        ),
+        'U' => 
+        array (
+            'Unicodeveloper\\Paystack\\' => 24,
         ),
         'T' => 
         array (
@@ -193,6 +199,10 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         array (
             0 => __DIR__ . '/..' . '/yoeunes/toastr/src',
         ),
+        'Yabacon\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yabacon/paystack-php/src',
+        ),
         'Whoops\\' => 
         array (
             0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
@@ -200,6 +210,10 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'Unicodeveloper\\Paystack\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/unicodeveloper/laravel-paystack/src',
         ),
         'TijsVerkoyen\\CssToInlineStyles\\' => 
         array (
@@ -570,6 +584,7 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\PagesController' => __DIR__ . '/../..' . '/app/Http/Controllers/PagesController.php',
         'App\\Http\\Controllers\\User\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/DashboardController.php',
+        'App\\Http\\Controllers\\User\\PaymentController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/PaymentController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\AdminAuthenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminAuthenticate.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
@@ -591,8 +606,10 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'App\\Models\\Faqs' => __DIR__ . '/../..' . '/app/Models/Faqs.php',
         'App\\Models\\MenuItem' => __DIR__ . '/../..' . '/app/Models/MenuItem.php',
         'App\\Models\\Post' => __DIR__ . '/../..' . '/app/Models/Post.php',
+        'App\\Models\\Privacy' => __DIR__ . '/../..' . '/app/Models/Privacy.php',
         'App\\Models\\Property' => __DIR__ . '/../..' . '/app/Models/Property.php',
         'App\\Models\\Terms' => __DIR__ . '/../..' . '/app/Models/Terms.php',
+        'App\\Models\\Transaction' => __DIR__ . '/../..' . '/app/Models/Transaction.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\VisionMission' => __DIR__ . '/../..' . '/app/Models/VisionMission.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
@@ -6039,6 +6056,12 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
         'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+        'Unicodeveloper\\Paystack\\Exceptions\\IsNullException' => __DIR__ . '/..' . '/unicodeveloper/laravel-paystack/src/Exceptions/IsNullException.php',
+        'Unicodeveloper\\Paystack\\Exceptions\\PaymentVerificationFailedException' => __DIR__ . '/..' . '/unicodeveloper/laravel-paystack/src/Exceptions/PaymentVerificationFailedException.php',
+        'Unicodeveloper\\Paystack\\Facades\\Paystack' => __DIR__ . '/..' . '/unicodeveloper/laravel-paystack/src/Facades/Paystack.php',
+        'Unicodeveloper\\Paystack\\Paystack' => __DIR__ . '/..' . '/unicodeveloper/laravel-paystack/src/Paystack.php',
+        'Unicodeveloper\\Paystack\\PaystackServiceProvider' => __DIR__ . '/..' . '/unicodeveloper/laravel-paystack/src/PaystackServiceProvider.php',
+        'Unicodeveloper\\Paystack\\TransRef' => __DIR__ . '/..' . '/unicodeveloper/laravel-paystack/src/TransRef.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
@@ -6064,6 +6087,34 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'Whoops\\Util\\Misc' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/Misc.php',
         'Whoops\\Util\\SystemFacade' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
         'Whoops\\Util\\TemplateHelper' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
+        'Yabacon\\Paystack' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack.php',
+        'Yabacon\\Paystack\\Contracts\\RouteInterface' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Contracts/RouteInterface.php',
+        'Yabacon\\Paystack\\Event' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Event.php',
+        'Yabacon\\Paystack\\Exception\\ApiException' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Exception/ApiException.php',
+        'Yabacon\\Paystack\\Exception\\BadMetaNameException' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Exception/BadMetaNameException.php',
+        'Yabacon\\Paystack\\Exception\\PaystackException' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Exception/PaystackException.php',
+        'Yabacon\\Paystack\\Exception\\ValidationException' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Exception/ValidationException.php',
+        'Yabacon\\Paystack\\Fee' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Fee.php',
+        'Yabacon\\Paystack\\Helpers\\Caller' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Helpers/Caller.php',
+        'Yabacon\\Paystack\\Helpers\\Router' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Helpers/Router.php',
+        'Yabacon\\Paystack\\Http\\Request' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Http/Request.php',
+        'Yabacon\\Paystack\\Http\\RequestBuilder' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Http/RequestBuilder.php',
+        'Yabacon\\Paystack\\Http\\Response' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Http/Response.php',
+        'Yabacon\\Paystack\\MetadataBuilder' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/MetadataBuilder.php',
+        'Yabacon\\Paystack\\Routes\\Balance' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Balance.php',
+        'Yabacon\\Paystack\\Routes\\Bank' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Bank.php',
+        'Yabacon\\Paystack\\Routes\\Customer' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Customer.php',
+        'Yabacon\\Paystack\\Routes\\Decision' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Decision.php',
+        'Yabacon\\Paystack\\Routes\\Integration' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Integration.php',
+        'Yabacon\\Paystack\\Routes\\Invoice' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Invoice.php',
+        'Yabacon\\Paystack\\Routes\\Page' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Page.php',
+        'Yabacon\\Paystack\\Routes\\Plan' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Plan.php',
+        'Yabacon\\Paystack\\Routes\\Settlement' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Settlement.php',
+        'Yabacon\\Paystack\\Routes\\Subaccount' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Subaccount.php',
+        'Yabacon\\Paystack\\Routes\\Subscription' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Subscription.php',
+        'Yabacon\\Paystack\\Routes\\Transaction' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Transaction.php',
+        'Yabacon\\Paystack\\Routes\\Transfer' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Transfer.php',
+        'Yabacon\\Paystack\\Routes\\Transferrecipient' => __DIR__ . '/..' . '/yabacon/paystack-php/src/Paystack/Routes/Transferrecipient.php',
         'Yoeunes\\Toastr\\Facades\\Toastr' => __DIR__ . '/..' . '/yoeunes/toastr/src/Facades/Toastr.php',
         'Yoeunes\\Toastr\\Toastr' => __DIR__ . '/..' . '/yoeunes/toastr/src/Toastr.php',
         'Yoeunes\\Toastr\\ToastrBuilder' => __DIR__ . '/..' . '/yoeunes/toastr/src/ToastrBuilder.php',

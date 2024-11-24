@@ -66,6 +66,72 @@
                                         </div>
                                     @enderror
                                 </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1"> City</label>
+                                            <select name="state" class="form-select">
+                                                <option value="">Select a State</option>
+                                                <option value="Abia">Abia</option>
+                                                <option value="Adamawa">Adamawa</option>
+                                                <option value="Akwa Ibom">Akwa Ibom</option>
+                                                <option value="Anambra">Anambra</option>
+                                                <option value="Bauchi">Bauchi</option>
+                                                <option value="Bayelsa">Bayelsa</option>
+                                                <option value="Benue">Benue</option>
+                                                <option value="Borno">Borno</option>
+                                                <option value="Cross River">Cross River</option>
+                                                <option value="Delta">Delta</option>
+                                                <option value="Ebonyi">Ebonyi</option>
+                                                <option value="Edo">Edo</option>
+                                                <option value="Ekiti">Ekiti</option>
+                                                <option value="Enugu">Enugu</option>
+                                                <option value="Gombe">Gombe</option>
+                                                <option value="Imo">Imo</option>
+                                                <option value="Jigawa">Jigawa</option>
+                                                <option value="Kaduna">Kaduna</option>
+                                                <option value="Kano">Kano</option>
+                                                <option value="Katsina">Katsina</option>
+                                                <option value="Kebbi">Kebbi</option>
+                                                <option value="Kogi">Kogi</option>
+                                                <option value="Kwara">Kwara</option>
+                                                <option value="Lagos">Lagos</option>
+                                                <option value="Nasarawa">Nasarawa</option>
+                                                <option value="Niger">Niger</option>
+                                                <option value="Ogun">Ogun</option>
+                                                <option value="Ondo">Ondo</option>
+                                                <option value="Osun">Osun</option>
+                                                <option value="Oyo">Oyo</option>
+                                                <option value="Plateau">Plateau</option>
+                                                <option value="Rivers">Rivers</option>
+                                                <option value="Sokoto">Sokoto</option>
+                                                <option value="Taraba">Taraba</option>
+                                                <option value="Yobe">Yobe</option>
+                                                <option value="Zamfara">Zamfara</option>
+                                                <option value="FCT">Federal Capital Territory (FCT)</option>
+                                            </select>
+                                            
+                                            @error('city')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1"> Country</label>
+                                           <select name="country" class="form-select">
+                                                <option>Nigeria</option>
+                                           </select>
+                                            @error('country')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="mb-3">
                                     <label for="launchPrice">Launch Price</label>
                                     <input type="number" class="form-control" id="launchPrice" name="lunch_price" placeholder="Enter Launch Price" value="" required>
@@ -158,7 +224,7 @@
                                     <img id="image-preview" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputEmail1">Upload Land Payment Plan</label>
+                                    <label for="exampleInputEmail1">Contract deed document</label>
                                     <input onchange="paymentPlan(event)" type="file" class="form-control" name="payment_plan" required>
                                     @error('payment_plan')
                                         <div class="invalid-feedback">
@@ -187,11 +253,31 @@
                                     @enderror
                                     <img id="image-LandSurvey" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
                                 </div>
+
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1">Upload Contract deed document</label>
+                                    <input onchange="previewContractDeed(event)" type="file" class="form-control" name="contract_deed" required>
+                                    @error('contract_deed')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    <img id="image-contractDeed" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
+                                </div>
                                 
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1">Video Link</label>
                                     <input type="text" class="form-control" name="video_link" placeholder="Video Link" required>
                                     @error('video_link')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1">Google map Link</label>
+                                    <input type="text" class="form-control" name="google_map"  placeholder="Google map Link" >
+                                    @error('google_map')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -263,6 +349,21 @@
                                 function previewLandSurvey(event) {
                                     const input = event.target;
                                     const preview = document.getElementById('image-LandSurvey');
+                                    
+                                    if (input.files && input.files[0]) {
+                                        const reader = new FileReader();
+                                        
+                                        reader.onload = function(e) {
+                                            preview.src = e.target.result;
+                                            preview.style.display = 'block';
+                                        };
+                                        
+                                        reader.readAsDataURL(input.files[0]);
+                                    }
+                                }
+                                function previewContractDeed(event) {
+                                    const input = event.target;
+                                    const preview = document.getElementById('image-contractDeed');
                                     
                                     if (input.files && input.files[0]) {
                                         const reader = new FileReader();

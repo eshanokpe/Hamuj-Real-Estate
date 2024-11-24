@@ -81,8 +81,8 @@ Route::prefix('admin')->group(function () {
         Route::put('/settings/update/terms/{id}', [SettingsController::class, 'updateTerms'])->name('admin.terms.update');
         //Privacy
         Route::get('/settings/privacypolicy', [SettingsController::class, 'indexPrivacyPolicy'])->name('admin.privacyPolicy.index');
-        Route::post('/settings/store/privacypolicy', [SettingsController::class, 'storePrivacyPolicy'])->name('admin.privacyPolicy.store');
-        Route::put('/settings/update/privacypolicy/{id}', [SettingsController::class, 'updatePrivacyPolicy'])->name('admin.privacyPolicy.update');
+        Route::post('/settings/store/privacypolicy', [SettingsController::class, 'storePrivacyPolicy'])->name('admin.privacy.store');
+        Route::put('/settings/update/privacypolicy/{id}', [SettingsController::class, 'updatePrivacyPolicy'])->name('admin.privacy.update');
         
         //Terms Conditions
         // Route::get('/terms/conditions', [TermsConditionController::class, 'index'])->name('admin.termsCondition.index');

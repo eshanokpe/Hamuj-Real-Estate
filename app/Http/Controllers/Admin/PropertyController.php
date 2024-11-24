@@ -40,6 +40,8 @@ class PropertyController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'location' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
             'lunch_price' => 'required|numeric',
             'price' => 'required|numeric',
             'price_increase' => 'required|numeric',
@@ -49,8 +51,10 @@ class PropertyController extends Controller
             'property_images' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
             'payment_plan' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
             'brochure' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
+            'contract_deed' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
             'land_survey' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
             'video_link' => 'required|url|max:255',
+            'google_map' => 'required|url',
             'status' => 'required|in:available,sold',
         ]);
         // Handle file uploads to public directory
@@ -58,6 +62,8 @@ class PropertyController extends Controller
         $paymentPlanPath = $request->file('payment_plan')->move(public_path('assets/images/property'), time().'_'.$request->file('payment_plan')->getClientOriginalName());
         $brochurePath = $request->file('brochure')->move(public_path('assets/images/property'), time().'_'.$request->file('brochure')->getClientOriginalName());
         $landSurveyPath = $request->file('land_survey')->move(public_path('assets/images/property'), time().'_'.$request->file('land_survey')->getClientOriginalName());
+        $contractDeedPath = $request->file('contract_deed')->move(public_path('assets/images/property'), time().'_'.$request->file('contract_deed')->getClientOriginalName());
+       
         $lunchPrice = $request->input('lunch_price');
         $currentPrice = $request->input('price');
 
@@ -67,6 +73,8 @@ class PropertyController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'location' => $request->input('location'),
+            'city' => $request->input('city'),
+            'country' => $request->input('country'),
             'lunch_price' => $request->input('lunch_price'),
             'price' => $request->input('price'),
             'price_increase' => $priceIncrease,
@@ -77,7 +85,9 @@ class PropertyController extends Controller
             'payment_plan' => 'assets/images/property/' . basename($paymentPlanPath),
             'brochure' => 'assets/images/property/' . basename($brochurePath),
             'land_survey' => 'assets/images/property/' . basename($landSurveyPath),
+            'contract_deed' => 'assets/images/property/' . basename($contractDeedPath),
             'video_link' => $request->input('video_link'),
+            'google_map' => $request->input('google_map'),
             'status' => $request->input('status'),
         ]);
         return redirect()->route('admin.properties.create')->with('success', 'Property uploaded successfully.');
@@ -103,7 +113,14 @@ class PropertyController extends Controller
     public function edit($id)
     {
         $property = Property::findOrFail( decrypt($id));
-        return view('admin.home.property.edit', compact('property'));
+        $city = [
+            "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", 
+            "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", 
+            "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", 
+            "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", 
+            "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara", "FCT"
+        ];
+        return view('admin.home.property.edit', compact('property', 'city'));
     }
     
 
@@ -124,6 +141,8 @@ class PropertyController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'location' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
             'lunch_price' => 'required|numeric',
             'price' => 'required|numeric',
             'size' => 'required|string|max:255',
@@ -133,7 +152,9 @@ class PropertyController extends Controller
             'payment_plan' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',
             'brochure' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',
             'land_survey' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',
+            'contract_deed' => 'nullable|file|image|mimes:jpeg,pdf,png,jpg|max:5048',
             'video_link' => 'required|url|max:255',
+            'google_map' => 'required|url',
             'status' => 'required|in:available,sold',
         ]);
         $lunchPrice = $request->input('lunch_price');
@@ -145,6 +166,8 @@ class PropertyController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'location' => $request->input('location'),
+            'city' => $request->input('city'),
+            'country' => $request->input('country'),
             'lunch_price' => $request->input('lunch_price'),
             'price' => $request->input('price'),
             'price_increase' => $priceIncrease,
@@ -152,6 +175,7 @@ class PropertyController extends Controller
             'tenure_free' => $request->input('tenure_free'),
             'size' => $request->input('size'),
             'video_link' => $request->input('video_link'),
+            'google_map' => $request->input('google_map'),
             'status' => $request->input('status'),
         ]);
         if ($request->hasFile('property_images')) {
@@ -183,6 +207,13 @@ class PropertyController extends Controller
             }
             $landSurveyPath = $request->file('land_survey')->move(public_path('assets/images/property'), time().'_'.$request->file('land_survey')->getClientOriginalName());
             $property->land_survey = 'assets/images/property/' . basename($landSurveyPath);
+        }
+        if ($request->hasFile('contract_deed')) {
+            if ($property->contract_deed && file_exists(public_path($property->contract_deed))) {
+                unlink(public_path($property->contract_deed));
+            }
+            $contractDeedPath = $request->file('contract_deed')->move(public_path('assets/images/property'), time().'_'.$request->file('contract_deed')->getClientOriginalName());
+            $property->contract_deed = 'assets/images/property/' . basename($contractDeedPath);
         }
         $property->save();
 

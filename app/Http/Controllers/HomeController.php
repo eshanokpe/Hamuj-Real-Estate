@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -23,13 +23,13 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
+    { 
         return view('home'); 
     } 
 
     public function showProperties($slug)
     {
-        try {
+        try {   
             $property = Property::firstWhere('slug', $slug);
             if (!$property) {
                 return redirect()->route('home')->with('error', 'Property not found.');

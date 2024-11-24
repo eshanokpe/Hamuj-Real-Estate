@@ -15,6 +15,8 @@ class Property extends Model
         'slug',
         'description',
         'location',
+        'city',
+        'country',
         'lunch_price',
         'price',
         'price_increase',
@@ -26,6 +28,7 @@ class Property extends Model
         'brochure',
         'land_survey',
         'video_link',
+        'google_map',
         'status',
     ];
 

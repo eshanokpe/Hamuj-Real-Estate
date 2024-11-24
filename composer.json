@@ -11,6 +11,8 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.5",
+        "unicodeveloper/laravel-paystack": "^1.2",
+        "yabacon/paystack-php": "^2.2",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {

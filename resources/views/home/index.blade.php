@@ -145,7 +145,7 @@
                             <article class="featured__card--list d-flex">
                                 <div class="featured__card--list__thumbnail position-relative">
                                     <div class="media">
-                                        <a class="featured__thumbnail--link" href="{{ route('home.properties.show',  $recentProperty->slug ) }}">
+                                        <a class="featured__thumbnail--link" href="{{ route('home.properties.show',  $recentProperty->slug ) }}"> 
                                             <img style="max-width: 100%; max-height: 100%;  width: 450%; height: 438%; object-fit: cover;" class="featured__thumbnail--img" src="{{ asset($recentProperty->property_images) }}" alt="featured-img">
                                         </a>
                                     </div>

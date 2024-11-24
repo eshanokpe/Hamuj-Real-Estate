@@ -20,11 +20,11 @@
 <section class="contact__section section--padding">
     <div class="container">
         <div class="contact__inner">
-          <div class="contact__wrapper mb-80 d-flex justify-content-center">
+          <div class="contact__wrapper  d-flex justify-content-center">
             <div class="contact__us--map aos-init aos-animate" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="150">
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                    <p>
-                    {!! $privacyPolicy->content !!}
+                    {!! $privacy->content !!}
                    </p>
                 </div>
             </div>

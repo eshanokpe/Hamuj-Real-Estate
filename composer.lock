@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b3c267e3b1525ba42370645fbeecc89",
+    "content-hash": "a51ac3d3383a7a6b96194b75e4e03b16",
     "packages": [
         {
             "name": "brick/math",
@@ -5572,6 +5572,84 @@
             "time": "2023-12-08T13:03:43+00:00"
         },
         {
+            "name": "unicodeveloper/laravel-paystack",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/unicodeveloper/laravel-paystack.git",
+                "reference": "4d540e081f63f8ceca42ded5668da8ec93a3a084"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/unicodeveloper/laravel-paystack/zipball/4d540e081f63f8ceca42ded5668da8ec93a3a084",
+                "reference": "4d540e081f63f8ceca42ded5668da8ec93a3a084",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6|~7|~8|~9",
+                "illuminate/support": "~6|~7|~8|~9|^10.0|^11.0",
+                "php": "^7.2|^8.0|^8.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.3",
+                "php-coveralls/php-coveralls": "^2.0",
+                "phpunit/phpunit": "^8.4|^9.0|^10.5",
+                "scrutinizer/ocular": "~1.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Unicodeveloper\\Paystack\\PaystackServiceProvider"
+                    ],
+                    "aliases": {
+                        "Paystack": "Unicodeveloper\\Paystack\\Facades\\Paystack"
+                    }
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/Support/helpers.php"
+                ],
+                "psr-4": {
+                    "Unicodeveloper\\Paystack\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "unicodeveloper",
+                    "email": "prosperotemuyiwa@gmail.com"
+                },
+                {
+                    "name": "iamfunsho",
+                    "email": "info@devfunsho.com"
+                }
+            ],
+            "description": "A Laravel Package for Paystack",
+            "keywords": [
+                "github",
+                "laravel",
+                "laravel 6",
+                "laravel 7",
+                "laravel 8",
+                "open source",
+                "payments",
+                "paystack",
+                "paystack.co",
+                "php",
+                "subscription"
+            ],
+            "support": {
+                "issues": "https://github.com/unicodeveloper/laravel-paystack/issues",
+                "source": "https://github.com/unicodeveloper/laravel-paystack/tree/1.2.0"
+            },
+            "time": "2024-04-08T09:40:49+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.6.1",
             "source": {
@@ -5786,6 +5864,79 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "yabacon/paystack-php",
+            "version": "v2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yabacon/paystack-php.git",
+                "reference": "8097917f304bc40a3eaa5c3eb25c292331f85083"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yabacon/paystack-php/zipball/8097917f304bc40a3eaa5c3eb25c292331f85083",
+                "reference": "8097917f304bc40a3eaa5c3eb25c292331f85083",
+                "shasum": ""
+            },
+            "require-dev": {
+                "guzzlehttp/guzzle": "^6.2",
+                "phpunit/phpunit": "~5.3",
+                "scrutinizer/ocular": "^1.1",
+                "squizlabs/php_codesniffer": "^2.3",
+                "vlucas/phpdotenv": "^2.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yabacon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yabacon",
+                    "email": "yabacon.valley@gmail.com",
+                    "homepage": "https://github.com/yabacon",
+                    "role": "Owner"
+                },
+                {
+                    "name": "Ibrahim Lawal",
+                    "email": "ibrahim@lawal.me",
+                    "homepage": "http://ibrahim.lawal.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Helps make your Paystack API calls giving a stdClass object.",
+            "homepage": "https://github.com/yabacon/paystack-php",
+            "keywords": [
+                "api",
+                "curl",
+                "customer",
+                "disable",
+                "enable",
+                "page",
+                "paystack",
+                "paystack-php",
+                "plan",
+                "subscription",
+                "transaction",
+                "verify",
+                "yabacon"
+            ],
+            "support": {
+                "issues": "https://github.com/yabacon/paystack-php/issues",
+                "source": "https://github.com/yabacon/paystack-php/tree/master"
+            },
+            "time": "2020-08-19T13:24:26+00:00"
         },
         {
             "name": "yoeunes/toastr",
@@ -8442,12 +8593,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.0.2"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

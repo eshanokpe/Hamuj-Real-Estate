@@ -70,10 +70,18 @@
                             </div>
                             <ul class="listing__details--action d-flex">
                                 
-                                <li class="listing__details--action__list">
-                                  <a class="listing__details--wishlist__btn" href="#" style=" background-color: #008000; color:#fff">
-                                      Buy                                            
-                                  </a>
+                                <li class="listing__details--action__list"> 
+                                  
+                                  <form action="{{ route('user.payment.initiate') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="email" value="{{ auth()->user()->email }}">
+                                    <input type="hidden" name="amount" value="{{ $property->price }}">
+                                    <input type="hidden" name="property_name" value="{{ $property->name }}">
+                                    <input type="hidden" name="property_id" value="{{ $property->id }}">
+                                    <button class="listing__details--wishlist__btn" type="submit" style="background-color: #008000; color: #fff; border: none; padding: 10px 20px; cursor: pointer;">
+                                        Buy
+                                    </button>
+                                </form>
                                 </li>
                             </ul>
                         </div>
@@ -110,7 +118,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> 
                         <div class="listing__details--content__step properties__info mb-80">
                             <h3 class="listing__details--content__title mb-40">Properties Details:</h3>
                             <ul class="properties__details--info__wrapper d-flex">

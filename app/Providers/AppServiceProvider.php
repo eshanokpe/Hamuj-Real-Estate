@@ -7,6 +7,7 @@ use App\Models\Faqs;
 use App\Models\Post;
 use App\Models\About;
 use App\Models\Terms;
+use App\Models\Privacy;
 use App\Models\Property;
 use App\Models\MenuItem;
 use App\Models\VisionMission;
@@ -43,5 +44,6 @@ class AppServiceProvider extends ServiceProvider
         View::share('visionMission', VisionMission::first());  
         View::share('contactDetials', ContactDetials::first()); 
         View::share('terms', Terms::first()); 
+        View::share('privacy', Privacy::first()); 
     }
 }
