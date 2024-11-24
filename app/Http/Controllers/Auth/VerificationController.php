@@ -34,11 +34,11 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
-
+  
     public function verify($id, $hash)
     {
         $user = User::findOrFail($id);
@@ -46,6 +46,6 @@ class VerificationController extends Controller
             return redirect('/')->with('error', 'Invalid verification link.');
         }
         $user->markEmailAsVerified();
-        return redirect('/')->with('success', 'Email verified successfully.');
+        return redirect()->route('login')->with('success', 'Email verified successfully.');
     }
 }

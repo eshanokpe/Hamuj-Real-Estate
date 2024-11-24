@@ -72,7 +72,7 @@ class RegisterController extends Controller
 
 
         // Send verification email
-        Mail::to($user->email)->send(new VerificationEmail($user));
+        Mail::to($user->email)->send(new VerificationEmail($user, $referralLink));
 
         // Redirect to the intended page or dashboard
         return redirect()->route('login')->with('success', '🎉 Congratulations, ' . $user->name . '! You have successfully registered. Please check your email for the verification code.');

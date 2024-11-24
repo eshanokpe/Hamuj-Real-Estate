@@ -13,15 +13,17 @@ class VerificationEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+    public $referralLink;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($user, $referralLink)
     {
         $this->user = $user;
+        $this->referralLink = $referralLink;
     }
 
     /**
@@ -29,7 +31,7 @@ class VerificationEmail extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build() 
     {
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
@@ -40,7 +42,7 @@ class VerificationEmail extends Mailable
         ->subject('Verify Your Email - Dohmayn')
         ->markdown('emails.verify-email')->with([
             'name' => $this->user->name, 
-            'referralCode' => $this->user->referral_code, 
+            'referralCode' => $this->referralLink, 
             'verifyUrl' => $verificationUrl,
         ]);
     }

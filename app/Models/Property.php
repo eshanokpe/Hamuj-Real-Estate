@@ -31,11 +31,16 @@ class Property extends Model
         'google_map',
         'status',
         'property_state',
-    ]; 
+    ];  
 
-    public function transaction(){
-        return $this->hasMany(Transaction::class);
+    // public function transaction(){
+    //     return $this->hasMany(Transaction::class);
+    // }
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
     }
+
    
     protected static function boot()
     {

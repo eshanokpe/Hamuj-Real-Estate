@@ -59,8 +59,11 @@ class DashboardController extends Controller
     public function properties()
     {
         $user = Auth::user();
-        $transactions = Transaction::where('user_id', $user->id)->where('email', $user->email)->first();
-        // Use paginate instead of get()
+        $transaction = null;
+        if (Auth::check()) {
+            $transaction = $property->transaction()->where('user_id', Auth::id())->where('email', $user->email)->first();
+        }
+         // Use paginate instead of get()
         $properties = Property::where('id', $transactions->property_id)->latest()->paginate(10); // Adjust '10' as needed
 
         return view('user.pages.properties.index', compact('properties'));

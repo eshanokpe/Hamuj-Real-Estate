@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
+use Auth;
 use App\Models\User;
+use App\Models\Property;
+use App\Models\Transaction;
 use App\Models\Consultant;
-use App\Models\Project;
+use App\Models\Project; 
 use App\Models\DropdownItem;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use App\Models\Service;
-use App\Models\Industries;
 use App\Models\ContactForm;
 
 
@@ -30,12 +32,24 @@ class PagesController extends Controller
         ];
     
         if (array_key_exists($slug, $pages)) {
-            return view($pages[$slug]);
+            $properties = Property::inRandomOrder()->take(6)->get();
+            if ($properties->isEmpty()) {
+                return redirect()->route('home')->with('error', 'Property not found.');
+            }
+
+            foreach ($properties as $property) {
+                $transaction = null;
+                if (Auth::check()) {
+                    $transaction = $property->transaction()->where('user_id', Auth::id())->first();
+                }
+                $property->transaction = $transaction;
+            } 
+            return view($pages[$slug],compact('properties'));
         }
          // Handle referral links
          if (strpos($slug, 'referral/') == 0) {
             $referralCode = explode('/', $slug);
-            $referralDetails = User::where('referralCode', $referralCode)->first();
+            $referralDetails = User::where('referral_code', $referralCode)->first();
             if ($referralDetails) {
                 return view('home.index', compact('referralDetails'));
             } else { 

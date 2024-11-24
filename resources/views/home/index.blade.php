@@ -140,7 +140,7 @@
             </div>
             <div class="featured__inner" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="150">
                 <div class="row mb--n30">
-                    @forelse ($recentProperties as $recentProperty)
+                    @forelse ($properties as $recentProperty)
                         <div class="col-xl-6 offset-xl-0 col-lg-10 offset-lg-1 mb-30">
                             <article class="featured__card--list d-flex">
                                 <div class="featured__card--list__thumbnail position-relative">
@@ -155,26 +155,33 @@
                                    
                                 </div>
                                 <div class="featured__card--list__content">
-                                    
                                     <div class="featured__content--list__top d-flex justify-content-between">
-                                        <span class="featured__card--price">₦{{ number_format($recentProperty->price) }}</span>
-                                        @foreach ($properties as $recentProperty)
-                                        @if($recentProperty->transaction && $recentProperty->transaction->transaction_state != 'Buy')
-                                                <a class="featured__list--wishlist__btn style2" style="background-color: #008000; color:#fff" href="{{ route('home.properties.show', $recentProperty->slug) }}">
-                                                    Buy
-                                                </a>
-                                            @else
+                                        <h3 class="featured__card--title"><a href="./listing-details.html">Luxury Family Home</a></h3>
+                                        @if($recentProperty->transaction == null || $recentProperty->transaction && $recentProperty->transaction->transaction_state != 'Buy') 
+                                            <a class="featured__list--wishlist__btn style2" style="background-color: #008000; color:#fff; border: none; padding: 10px 30px; cursor: pointer;" href="{{ route('home.properties.show', $recentProperty->slug) }}">
+                                                Buy
+                                            </a>
+                                        @else
                                             <div style="display: flex; gap: 5px;">
                                                 <a class="featured__list--wishlist__btn style2" style="background-color: #FF6347; color:#fff; border: none; padding: 10px 20px; cursor: pointer;" href="{{ route('home.properties.show', $recentProperty->slug) }}">
-                                                    Buy
+                                                    Sell
                                                 </a>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="featured__content--list__top d-flex justify-content-between">
+                                        <span class="featured__card--price">₦{{ number_format($recentProperty->price, 2) }}</span>
+                                        
+                                        @if($recentProperty->transaction !== null || $recentProperty->transaction && $recentProperty->transaction->transaction_state == 'Buy') 
+                                            <div style="display: flex; gap: 5px;">
                                                 <a class="featured__list--wishlist__btn style2" style="background-color: #1E90FF; color:#fff; border: none; padding: 10px 40px; cursor: pointer;" href="{{ route('home.properties.show', $recentProperty->slug) }}">
                                                     Transfer
                                                 </a>
                                             </div>
+                                        @else
                                             
-                                            @endif
-                                        @endforeach
+                                        @endif
+                                       
                                     
 
                                     </div> 
