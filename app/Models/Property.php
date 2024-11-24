@@ -30,8 +30,13 @@ class Property extends Model
         'video_link',
         'google_map',
         'status',
-    ];
+        'property_state',
+    ]; 
 
+    public function transaction(){
+        return $this->hasMany(Transaction::class);
+    }
+   
     protected static function boot()
     {
         parent::boot();

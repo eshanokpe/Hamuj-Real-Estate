@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_image',
+        'referral_code',
+        'referred_by',
     ];
 
     /**
@@ -42,3 +45,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 }
+ 

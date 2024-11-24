@@ -69,20 +69,53 @@
                                 </ul>
                             </div>
                             <ul class="listing__details--action d-flex">
-                                
-                                <li class="listing__details--action__list"> 
-                                  
-                                  <form action="{{ route('user.payment.initiate') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="email" value="{{ auth()->user()->email }}">
-                                    <input type="hidden" name="amount" value="{{ $property->price }}">
-                                    <input type="hidden" name="property_name" value="{{ $property->name }}">
-                                    <input type="hidden" name="property_id" value="{{ $property->id }}">
-                                    <button class="listing__details--wishlist__btn" type="submit" style="background-color: #008000; color: #fff; border: none; padding: 10px 20px; cursor: pointer;">
-                                        Buy
-                                    </button>
-                                </form>
-                                </li>
+                               
+                                @if($transaction->transaction_state != 'Buy')
+                                    <li class="listing__details--action__list"> 
+                                        <form action="{{ route('user.payment.initiate') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="property_state" value="Sell">
+                                            <input type="hidden" name="email" value="{{ auth()->user()->email }}">
+                                            <input type="hidden" name="amount" value="{{ $property->price }}">
+                                            <input type="hidden" name="property_name" value="{{ $property->name }}">
+                                            <input type="hidden" name="property_id" value="{{ $property->id }}">
+                                            <button class="listing__details--wishlist__btn" type="submit" style="background-color: #FF6347; color: #fff; border: none; padding: 10px 20px; cursor: pointer;">
+                                                Sell
+                                            </button>
+                                        </form>
+                                    </li> 
+                                   
+                                @else
+                                    <li class="listing__details--action__list"> 
+                                        <form action="{{ route('user.payment.initiate') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="property_state" value="Sell">
+                                            <input type="hidden" name="email" value="{{ auth()->user()->email }}">
+                                            <input type="hidden" name="amount" value="{{ $property->price }}">
+                                            <input type="hidden" name="property_name" value="{{ $property->name }}">
+                                            <input type="hidden" name="property_id" value="{{ $property->id }}">
+                                            <button class="listing__details--wishlist__btn" type="submit" style="background-color: #FF6347; color: #fff; border: none; padding: 10px 20px; cursor: pointer;">
+                                                Sell
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li class="listing__details--action__list"> 
+                                        <form action="{{ route('user.payment.initiate') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="property_state" value="Transfer">
+                                            <input type="hidden" name="email" value="{{ auth()->user()->email }}">
+                                            <input type="hidden" name="amount" value="{{ $property->price }}">
+                                            <input type="hidden" name="property_name" value="{{ $property->name }}">
+                                            <input type="hidden" name="property_id" value="{{ $property->id }}">
+                                            <button class="listing__details--wishlist__btn" type="submit" style="background-color: #1E90FF; color: #fff; border: none; padding: 10px 40px; cursor: pointer;">
+                                                Transfer
+                                            </button>
+                                        </form>
+                                    </li>
+                                @endif
+
+
+                                    
                             </ul>
                         </div>
                         <div class="listing__details--content__step">
@@ -158,7 +191,7 @@
                                 <div class="location__google--maps">
                                     <details>
                                         <summary>Open on Google Maps</summary>
-                                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20227915.86434928!2d1.2189515269861546!3d38.76296158058813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6f73e994d3fb5891%3A0x783ff0a076fdb99!2sCosing%20Connect%20Ltd%2C%20United%20Kingdom!5e0!3m2!1sen!2sbd!4v1699676848803!5m2!1sen!2sbd" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                        <iframe src="{{ $property->google_map}}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                                     </details>
                                 </div>
                             </div>
@@ -166,11 +199,11 @@
                                 <ul class="location__google--maps__info--step">
                                     <li class="location__google--maps__info--list d-flex">
                                         <span class="location__google--maps__info--title">Address:</span>
-                                        <span class="location__google--maps__info--subtitle">289 Foxhall Ave, Kingston</span>
+                                        <span class="location__google--maps__info--subtitle">{{ $property->location}}</span>
                                     </li>
                                     <li class="location__google--maps__info--list d-flex">
                                         <span class="location__google--maps__info--title">Country: </span>
-                                        <span class="location__google--maps__info--subtitle">Nigeria</span>
+                                        <span class="location__google--maps__info--subtitle">{{ $property->country}}</span>
                                     </li>
                                     
                                 </ul>
@@ -181,7 +214,7 @@
                                     </li>
                                     <li class="location__google--maps__info--list d-flex">
                                         <span class="location__google--maps__info--title">Province/State: </span>
-                                        <span class="location__google--maps__info--subtitle">Lagos</span>
+                                        <span class="location__google--maps__info--subtitle">{{ $property->city}}</span>
                                     </li>
                                 </ul>
                             </div>

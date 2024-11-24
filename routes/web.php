@@ -7,6 +7,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\VerificationController;
 
 /* 
 |--------------------------------------------------------------------------
@@ -38,7 +39,8 @@ Route::get('user/register', [RegisterController::class, 'showRegistrationForm'])
 Route::post('post/register', [RegisterController::class, 'register'])->name('post.register');
 Route::get('user/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('post/login', [LoginController::class, 'login'])->name('post.login');
-
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+Route::get('/user/register/referral/{referralCode}', [PagesController::class, 'index']);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 

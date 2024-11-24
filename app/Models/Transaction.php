@@ -18,10 +18,16 @@ class Transaction extends Model
         'property_id',
         'property_name',
         'payment_method',
+        'transaction_state',
         'paid_at',
     ];
 
     public function user(){
-        return $this->belongsTo(USer::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class); 
     }
 }

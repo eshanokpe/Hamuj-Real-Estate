@@ -158,10 +158,26 @@
                                     
                                     <div class="featured__content--list__top d-flex justify-content-between">
                                         <span class="featured__card--price">₦{{ number_format($recentProperty->price) }}</span>
-                                        <a class="featured__list--wishlist__btn style2" style=" background-color: #008000; color:#fff"  href="{{ route('home.properties.show',  $recentProperty->slug ) }}">
-                                            Buy
-                                        </a>
-                                    </div>
+                                        @foreach ($properties as $recentProperty)
+                                        @if($recentProperty->transaction && $recentProperty->transaction->transaction_state != 'Buy')
+                                                <a class="featured__list--wishlist__btn style2" style="background-color: #008000; color:#fff" href="{{ route('home.properties.show', $recentProperty->slug) }}">
+                                                    Buy
+                                                </a>
+                                            @else
+                                            <div style="display: flex; gap: 5px;">
+                                                <a class="featured__list--wishlist__btn style2" style="background-color: #FF6347; color:#fff; border: none; padding: 10px 20px; cursor: pointer;" href="{{ route('home.properties.show', $recentProperty->slug) }}">
+                                                    Buy
+                                                </a>
+                                                <a class="featured__list--wishlist__btn style2" style="background-color: #1E90FF; color:#fff; border: none; padding: 10px 40px; cursor: pointer;" href="{{ route('home.properties.show', $recentProperty->slug) }}">
+                                                    Transfer
+                                                </a>
+                                            </div>
+                                            
+                                            @endif
+                                        @endforeach
+                                    
+
+                                    </div> 
                                     <ul class="featured__info--list__style d-flex">
                                     
                                         <li class="featured__info--items">

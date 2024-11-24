@@ -27,6 +27,7 @@ class PaymentController extends Controller
     {
         // Validate the incoming data
         $request->validate([
+            'property_state' => 'required',
             'property_name' => 'required',
             'property_id' => 'required',
             'email' => 'required|email',
@@ -37,8 +38,8 @@ class PaymentController extends Controller
         $reference = 'PROREF-' . time() . '-' . strtoupper(Str::random(8));
         $propertyId  = $request->input('property_id');
         $propertyName  = $request->input('property_name');
+        $propertyState  = $request->input('property_state');
         $propertyData = Property::where('id', $propertyId)->where('name', $propertyName)->first();
-       
         // Prepare the data to send to Paystack
         $data = [
             'amount' => $request->amount * 100, 
@@ -46,9 +47,9 @@ class PaymentController extends Controller
             'property_id' => $propertyData->id,
             'property_name' => $propertyData->name,
             'reference' => $reference,
+            'property_state' => $propertyState,
             'callback_url' => route('user.payment.callback'),
         ];
-
         $transaction = Transaction::create([
             'property_id' => $propertyData->id,
             'property_name' => $propertyData->name,
@@ -58,6 +59,7 @@ class PaymentController extends Controller
             'status' => 'pending',
             'payment_method' => '',
             'reference' => $reference,
+            'transaction_state' => $propertyState
         ]);
         
         try {
@@ -69,9 +71,7 @@ class PaymentController extends Controller
         }
     }
 
-    /**
-     * Handle payment callback from Paystack
-     */
+   
     public function paymentCallback(Request $request)
     {
         try {
@@ -79,6 +79,7 @@ class PaymentController extends Controller
                 'reference' => $request->get('reference'),
                 'trxref' => $request->get('trxref'),
             ]);
+            // dd($paymentDetails->data);
             $transaction = Transaction::where('reference', $paymentDetails->data->reference)->first();
             $property = Property::where('id', $transaction->property_id)->first();
             if (!$transaction) {
@@ -88,23 +89,28 @@ class PaymentController extends Controller
                 $amount = $paymentDetails->data->amount / 100; 
                 $reference = $paymentDetails->data->reference;
                 $channel = $paymentDetails->data->channel;
-
+ 
                 $transaction->update([
                     'payment_method' => $channel,
                     'status' => 'completed',
+                    'transaction_state' => $transaction->transaction_state
                 ]);
                 $property->update([
                     'status' => 'sold',
                 ]);
                 
-               
-
                 return redirect()->route('user.dashboard')->with('success', 'Payment successful!');
+            }elseif($paymentDetails->data->status !== 'success'){
+                $transaction->update([
+                    'status' => 'failed', 
+                    'property_state' => 'failed'
+                ]);
             }
+            
 
             return redirect()->route('user.dashboard')->with('error', 'Payment verification failed.');
         } catch (\Exception $e) {
-            return redirect()->route('user.dashboard')->with('error', 'An error occurred: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
 use App\Models\Consultant;
 use App\Models\Project;
 use App\Models\DropdownItem;
@@ -32,8 +32,15 @@ class PagesController extends Controller
         if (array_key_exists($slug, $pages)) {
             return view($pages[$slug]);
         }
-        if ($slug === 'events') {
-            return redirect()->route('events.all');
+         // Handle referral links
+         if (strpos($slug, 'referral/') == 0) {
+            $referralCode = explode('/', $slug);
+            $referralDetails = User::where('referralCode', $referralCode)->first();
+            if ($referralDetails) {
+                return view('home.index', compact('referralDetails'));
+            } else { 
+                return view('home.errors.404');
+            }
         }
 
         return view('home.errors.404');

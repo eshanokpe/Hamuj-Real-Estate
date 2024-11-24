@@ -136,11 +136,11 @@
                         <h1 class="main__logo--title"><a class="main__logo--link" href="{{ url('/') }}">
                             <img class="main__logo--img" src="{{ asset( $contactDetials->site_logo )}}" alt="logo-img" style="object-fit: cover; width: 171px; height: 38px;">
                         </a></h1>
-                    </div>
+                    </div> 
                     <div class="main__menu d-none d-lg-block">
                         <nav class="main__menu--navigation">
                             <ul class="main__menu--wrapper d-flex">
-                                @foreach($menuItems as $menuItem)
+                                @forelse ($menuItems as $menuItem)
                                     <li class="main__menu--items">
                                         <a class="main__menu--link" href="{{ url('/' . $menuItem->slug) }}">
                                             <!-- If there’s a home SVG icon for each item, you could conditionally add it here -->
@@ -157,7 +157,17 @@
                                             </ul>
                                         @endif
                                     </li>
-                                @endforeach
+                                @empty
+                                    <p>No Menu items available</p>
+                                @endforelse
+                                @auth
+                                <li class="main__menu--items">
+                                    <a class="main__menu--link" href="{{ route('user.dashboard') }}">
+                                        
+                                        Dashboard
+                                    </a>
+                                </li>
+                                @endauth
                             </ul>
                         </nav>
                         

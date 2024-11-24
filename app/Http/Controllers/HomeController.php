@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Property;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -34,7 +35,10 @@ class HomeController extends Controller
             if (!$property) {
                 return redirect()->route('home')->with('error', 'Property not found.');
             }
-            return view('home.pages.properties.show', compact('property'));
+            // Get the transaction for a specific property and user
+            $transaction = $property->transaction()->where('user_id', Auth::id())->first();
+        
+            return view('home.pages.properties.show', compact('property','transaction'));
 
         } catch (\Exception $e) {
             \Log::error('Error fetching property: ' . $e->getMessage());

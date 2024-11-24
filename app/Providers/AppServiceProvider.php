@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
         View::share('faqs', Faqs::all()); 
         View::share('posts', Post::latest()->paginate(20)); 
         View::share('about', About::first()); 
-        View::share('properties', Property::all()); 
+        // View::share('properties', Property::inRandomOrder()->take(6)->get()); 
         View::share('recentProperties', Property::inRandomOrder()->take(6)->get());
         View::share('recentBlog', Post::inRandomOrder()->take(6)->get());
         View::share('visionMission', VisionMission::first());  
