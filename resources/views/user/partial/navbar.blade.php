@@ -47,31 +47,15 @@
             <div class="main__menu d-none d-xl-block">
                 <nav class="main__menu--navigation">
                     <ul class="main__menu--wrapper d-flex align-items-center">
-               
-                        @forelse ($menuItems as $menuItem)
-                            <li class="main__menu--items">
-                                <a class="main__menu--link" href="{{ url('/' . $menuItem->slug) }}">
-                                    @if( strtolower($menuItem->name) === 'home')
-                                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5.5 0L0 4.125V11H3.72581V8.59381C3.72581 7.64165 4.51713 6.87506 5.5 6.87506C6.48287 6.87506 7.27419 7.64165 7.27419 8.59381V11H11V4.125L5.5 0Z" fill="#16A34A"/>
-                                    </svg>
-                                    @endif
-                                    {{ $menuItem->name }}
-                                </a>
-                            </li>
-                        @empty
-                            <p>No Menu items available</p>
-                        @endforelse
-                        <!-- Add the 'Dashboard' nav item only for authenticated users -->
-                        @auth
                         <li class="main__menu--items">
-                            <a class="main__menu--link" href="{{ route('user.dashboard') }}">
-                                
-                                Dashboard
+                            <a class="main__menu--link" href="{{ route('user.properties')}}">
+                                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.5 0L0 4.125V11H3.72581V8.59381C3.72581 7.64165 4.51713 6.87506 5.5 6.87506C6.48287 6.87506 7.27419 7.64165 7.27419 8.59381V11H11V4.125L5.5 0Z" fill="#16A34A"/>
+                                </svg>
+                               Properties
                             </a>
                         </li>
-                        @endauth
-                        
+                       
                     </ul>
                 </nav>
             </div>

@@ -57,17 +57,31 @@ class DashboardController extends Controller
     }
 
     public function properties()
-    {
+{
+    try {
         $user = Auth::user();
-        $transaction = null;
-        if (Auth::check()) {
-            $transaction = $property->transaction()->where('user_id', Auth::id())->where('email', $user->email)->first();
+
+        // Get all transactions for the logged-in user
+        $transactions = Transaction::where('user_id', $user->id)->pluck('property_id')->toArray();
+
+        // Fetch properties related to the user's transactions and paginate them
+        $properties = Property::whereIn('id', $transactions)->latest()->paginate(10);
+
+        // Attach related transactions to each property for the view
+        foreach ($properties as $property) {
+            $property->transaction = $property->transaction()
+                ->where('user_id', $user->id)
+                ->where('email', $user->email)
+                ->first();
         }
-         // Use paginate instead of get()
-        $properties = Property::where('id', $transactions->property_id)->latest()->paginate(10); // Adjust '10' as needed
 
         return view('user.pages.properties.index', compact('properties'));
+    } catch (\Exception $e) {
+        \Log::error('Error fetching properties: ' . $e->getMessage());
+        return redirect()->route('home')->with('error', 'An unexpected error occurred. Please try again later.');
     }
+}
+
 
     public function propertiesShow($id){
 

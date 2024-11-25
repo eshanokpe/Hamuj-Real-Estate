@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\PropertyController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\DashboardController;
 
@@ -19,11 +20,14 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/transaction', [DashboardController::class, 'transactions'])->name('transactions');
-    Route::get('/buy', [DashboardController::class, 'buy'])->name('buy');
-    Route::get('/sell', [DashboardController::class, 'sell'])->name('sell');
-    Route::get('/transfer', [DashboardController::class, 'transfer'])->name('transfer');
+    
+    Route::get('/buy', [PropertyController::class, 'buy'])->name('buy');
+    Route::get('/sell', [PropertyController::class, 'sell'])->name('sell');
+    Route::get('/transfer', [PropertyController::class, 'transfer'])->name('transfer');
+    
+    Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
 
-    Route::get('/my-properties', [DashboardController::class, 'properties'])->name('properties');
+    Route::get('/my-properties', [DashboardController::class, 'properties'])->name('myProperties');
     Route::get('/my-properties/{id}', [DashboardController::class, 'propertiesShow'])->name('properties.show');
 
     Route::post('/pay', [PaymentController::class, 'initializePayment'])->name('payment.initiate');
