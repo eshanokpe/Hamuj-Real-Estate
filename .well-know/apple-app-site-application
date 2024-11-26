@@ -1,0 +1,23 @@
+{
+    "applinks": {
+        "details": [
+            {
+                "appIDs": ["J23935Q5L9.com.prismcheck.Gaphub"],
+                "components": [
+                    {
+                        "/": "/home",
+                        "comment": "connect to app home without asterik"
+                    },
+                    {
+                        "/": "/home/*",
+                        "comment": "connect to app home asterik"
+                    }
+                ]
+            }
+        ]
+    },
+    
+    "webcredentials": {
+        "apps": [ "J23935Q5L9.com.prismcheck.Gaphub" ]
+    }
+}
