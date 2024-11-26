@@ -146,7 +146,7 @@
                                 <div class="featured__card--list__thumbnail position-relative">
                                     <div class="media">
                                         <a class="featured__thumbnail--link" href="{{ route('home.properties.show',  $recentProperty->slug ) }}"> 
-                                            <img style="max-width: 100%; max-height: 100%;  width: 450%; height: 438%; object-fit: cover;" class="featured__thumbnail--img" src="{{ asset($recentProperty->property_images) }}" alt="featured-img">
+                                            <img style="max-width: 100%; max-height: 100%;  width: 450px; height: 200px; object-fit: cover;" class="featured__thumbnail--img" src="{{ asset($recentProperty->property_images) }}" alt="featured-img">
                                         </a>
                                     </div>
                                     <div class="featured__badge">
@@ -156,8 +156,10 @@
                                 </div>
                                 <div class="featured__card--list__content">
                                     <div class="featured__content--list__top d-flex justify-content-between">
-                                        <h3 class="featured__card--title"><a href="./listing-details.html">Luxury Family Home</a></h3>
-                                        @if($recentProperty->transaction == null || $recentProperty->transaction && $recentProperty->transaction->transaction_state != 'Buy') 
+                                        <h3 class="featured__card--title">
+                                            <a href="{{ route('home.properties.show', $recentProperty->slug) }}">{{ ($recentProperty->name)}}</a>
+                                        </h3>
+                                        @if($recentProperty->transaction == null || $recentProperty->transaction && $recentProperty->transaction->transaction_state == 'Buy') 
                                             <a class="featured__list--wishlist__btn style2" style="background-color: #008000; color:#fff; border: none; padding: 10px 30px; cursor: pointer;" href="{{ route('home.properties.show', $recentProperty->slug) }}">
                                                 Buy
                                             </a>
@@ -172,7 +174,7 @@
                                     <div class="featured__content--list__top d-flex justify-content-between">
                                         <span class="featured__card--price">₦{{ number_format($recentProperty->price, 2) }}</span>
                                         
-                                        @if($recentProperty->transaction !== null || $recentProperty->transaction && $recentProperty->transaction->transaction_state == 'Buy') 
+                                        @if($recentProperty->transaction !== null || $recentProperty->transaction && $recentProperty->transaction->transaction_state != 'Buy') 
                                             <div style="display: flex; gap: 5px;">
                                                 <a class="featured__list--wishlist__btn style2" style="background-color: #1E90FF; color:#fff; border: none; padding: 10px 40px; cursor: pointer;" href="{{ route('home.properties.show', $recentProperty->slug) }}">
                                                     Transfer

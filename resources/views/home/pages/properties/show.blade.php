@@ -70,21 +70,14 @@
                             </div>
                             <ul class="listing__details--action d-flex">
                                
-                                @if($property->transaction == null || $property->$transaction->transaction_state != 'Buy')
+                                @if($property->transaction == null || $property->transaction->transaction_state != 'Buy')
                                     <li class="listing__details--action__list"> 
-                                        <form action="{{ route('user.payment.initiate') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="property_state" value="Sell">
-                                            <input type="hidden" name="email" value="{{ auth()->user()->email ?? '' }}">
-                                            <input type="hidden" name="amount" value="{{ $property->price }}">
-                                            <input type="hidden" name="property_name" value="{{ $property->name }}">
-                                            <input type="hidden" name="property_id" value="{{ $property->id }}">
-                                            <button class="listing__details--wishlist__btn" type="submit" style="background-color: #008000; color: #fff; border: none; padding: 10px 30px; cursor: pointer;">
-                                                Buy
-                                            </button>
-                                        </form>
+                                        <a class="listing__details--wishlist__btn" href="{{ route('home.cart.index', encrypt($property->id)) }}" style="background-color: #008000; color: #fff; border: none; padding: 10px 30px; cursor: pointer;">
+                                            Buy
+                                        </a>
+                                       
                                     </li> 
-                                   
+                                    
                                 @else
                                     <li class="listing__details--action__list"> 
                                         <form action="{{ route('user.payment.initiate') }}" method="POST">

@@ -17,7 +17,7 @@ class Property extends Model
         'location',
         'city',
         'country',
-        'lunch_price',
+        'lunch_price', 
         'price',
         'price_increase',
         'size',
@@ -25,21 +25,21 @@ class Property extends Model
         'tenure_free',
         'property_images',
         'payment_plan',
-        'brochure',
+        'brochure', 
         'land_survey',
         'video_link',
         'google_map',
         'status',
         'property_state',
     ];  
-
-    // public function transaction(){
-    //     return $this->hasMany(Transaction::class);
-    // }
-    public function transaction()
-    {
-        return $this->hasMany(Transaction::class, 'user_id');
+ 
+    public function transaction(){
+        return $this->hasMany(Transaction::class);
     }
+    // public function transaction()
+    // {
+    //     return $this->hasMany(Transaction::class, 'user_id');
+    // }
 
    
     protected static function boot()

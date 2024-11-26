@@ -6,6 +6,8 @@ use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+
+use App\Models\Buy;  
 use Yabacon\Paystack;  
 use App\Models\Property;  
 use App\Models\Transaction;  
@@ -22,28 +24,34 @@ class PaymentController extends Controller
 
     /**
      * Initialize payment with Paystack
-     */
+     */ 
     public function initializePayment(Request $request)
     {
         // Validate the incoming data
         $request->validate([
-            'property_state' => 'required',
-            'property_name' => 'required',
-            'property_id' => 'required',
-            'email' => 'required|email',
-            'amount' => 'required|numeric|min:1',
+            'remaining_size' => 'required',
+            'property_slug' => 'required',
+            'quantity' => 'required',
+            'total_price' => 'required|numeric|min:1',
         ]);
-
+        $user = Auth::user();
+        $propertySlug  = $request->input('property_slug');
+        $properties = Property::where('slug', $propertySlug)->first();
+  
         // Generate a unique transaction reference
         $reference = 'PROREF-' . time() . '-' . strtoupper(Str::random(8));
-        $propertyId  = $request->input('property_id');
-        $propertyName  = $request->input('property_name');
-        $propertyState  = $request->input('property_state');
+        $selectedSizeLand  = $request->input('quantity');
+        $remainingSize  = $request->input('remaining_size');
+        $amount  = $request->input('total_price');
+
+        $propertyId  = $properties->id;
+        $propertyName  =  $properties->name;
+        $propertyState  =  $properties->property_state;
         $propertyData = Property::where('id', $propertyId)->where('name', $propertyName)->first();
         // Prepare the data to send to Paystack
         $data = [
-            'amount' => $request->amount * 100, 
-            'email' => $request->email,
+            'amount' => $amount * 100, 
+            'email' => $user->email,
             'property_id' => $propertyData->id,
             'property_name' => $propertyData->name,
             'reference' => $reference,
@@ -55,11 +63,21 @@ class PaymentController extends Controller
             'property_name' => $propertyData->name,
             'user_id' => Auth::id(),
             'email' => Auth::user()->email,
-            'amount' => $request->amount,
+            'amount' => $amount,
             'status' => 'pending',
             'payment_method' => '',
             'reference' => $reference,
             'transaction_state' => $propertyState
+        ]);
+        $buy = Buy::create([
+            'property_id' => $propertyData->id,
+            'transaction_id' => $transaction->id,
+            'selected_size_land' => $selectedSizeLand,
+            'remaining_size' => $remainingSize,
+            'user_id' => Auth::id(),
+            'email' => Auth::user()->email,
+            'total_price' => $amount,
+            'status' => 'pending',
         ]);
         
         try {
@@ -75,6 +93,7 @@ class PaymentController extends Controller
     public function paymentCallback(Request $request)
     {
         try {
+            $user = Auth::user();
             $paymentDetails = $this->paystack->transaction->verify([
                 'reference' => $request->get('reference'),
                 'trxref' => $request->get('trxref'),
@@ -82,6 +101,8 @@ class PaymentController extends Controller
             // dd($paymentDetails->data);
             $transaction = Transaction::where('reference', $paymentDetails->data->reference)->first();
             $property = Property::where('id', $transaction->property_id)->first();
+            $buy = Buy::where('property_id', $transaction->property_id)
+                            ->where('user_id', $user->id)->first();
             if (!$transaction) {
                 return redirect()->back()->with('error', 'Transaction not found.');
             }
@@ -97,6 +118,9 @@ class PaymentController extends Controller
                 ]);
                 $property->update([
                     'status' => 'sold',
+                ]);
+                $buy->update([
+                    'status' => 'completed',
                 ]);
                 
                 return redirect()->route('user.dashboard')->with('success', 'Payment successful!');

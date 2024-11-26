@@ -17,7 +17,7 @@ use App\Http\Controllers\User\DashboardController;
 */ 
 
 Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
-    
+     
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/transaction', [DashboardController::class, 'transactions'])->name('transactions');
     

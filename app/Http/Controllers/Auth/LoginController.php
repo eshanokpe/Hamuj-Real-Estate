@@ -49,7 +49,7 @@ class LoginController extends Controller
         // Attempt to log in with credentials
         if (Auth::attempt($credentials)) {
             if (Auth::user()->hasVerifiedEmail()) {
-                return redirect()->route('user.dashboard');
+                return redirect()->route('index');
             }
             Auth::logout();
             return $this->sendFailedLoginResponse($request);

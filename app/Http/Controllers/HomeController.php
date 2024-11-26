@@ -49,8 +49,8 @@ class HomeController extends Controller
 
             $transaction = null;
             if (Auth::check()) {
-                $transaction = $property->transaction()->where('user_id', Auth::id())->first();
-            }
+                $transaction = $property->transaction()->where('user_id', Auth::user()->id)->first();
+            } 
 
             // Attach transaction to the property instance for use in the view
             $property->transaction = $transaction;
