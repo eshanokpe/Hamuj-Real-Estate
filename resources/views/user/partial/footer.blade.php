@@ -15,7 +15,7 @@
  <script src="{{ asset('assets/admin/js/plugins/swiper-bundle.min.js')}}"></script>
  <script src="{{ asset('assets/admin/js/plugins/glightbox.min.js')}}"></script>
  
-  <!-- Customscript js --> 
+  <!-- Customscript js -->  
   <script src="{{ asset('assets/admin/js/script.js')}}"></script>
 
   <!-- Dark to light js -->

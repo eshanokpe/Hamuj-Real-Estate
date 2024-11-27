@@ -21,7 +21,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/transaction', [DashboardController::class, 'transactions'])->name('transactions');
     
-    Route::get('/buy', [PropertyController::class, 'buy'])->name('buy');
+    Route::get('/buy', [PropertyController::class, 'buy'])->name('buy'); 
     Route::get('/sell', [PropertyController::class, 'sell'])->name('sell');
     Route::get('/transfer', [PropertyController::class, 'transfer'])->name('transfer');
     

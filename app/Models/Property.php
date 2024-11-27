@@ -29,7 +29,7 @@ class Property extends Model
         'land_survey',
         'video_link',
         'google_map',
-        'status',
+        'status', 
         'property_state',
     ];  
  

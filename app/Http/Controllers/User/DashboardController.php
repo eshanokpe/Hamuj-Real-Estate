@@ -21,7 +21,10 @@ class DashboardController extends Controller
         // $transactions = $query->paginate(10); 
         $user = Auth::user();
         $data['transactions'] = Transaction::where('user_id', $user->id)->where('email', $user->email)->latest()->limit(6)->get();
-        $data['totalAmount'] = Transaction::where('user_id', $user->id)->where('email', $user->email)->sum('amount');
+        $data['totalAmount'] = Transaction::where('user_id', $user->id)
+                                            ->where('email', $user->email)
+                                            ->where('status', 'completed')
+                                            ->sum('amount');
         $data['totalTransactions'] = Transaction::where('user_id', $user->id)->where('email', $user->email)->count();
 
         return view('user.dashboard', $data); 
