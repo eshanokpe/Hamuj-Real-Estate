@@ -103,44 +103,62 @@ class PaymentController extends Controller
                 'reference' => $request->get('reference'),
                 'trxref' => $request->get('trxref'),
             ]);
-            // dd($paymentDetails->data);
+
             $transaction = Transaction::where('reference', $paymentDetails->data->reference)->first();
-            $property = Property::where('id', $transaction->property_id)->first();
-            $buy = Buy::where('property_id', $transaction->property_id)
-                            ->where('user_id', $user->id)->first();
-            if (!$transaction) { 
+
+            if (!$transaction) {
                 return redirect()->back()->with('error', 'Transaction not found.');
             }
+
+            $property = Property::find($transaction->property_id);
+            $buy = Buy::where('property_id', $transaction->property_id)
+                    ->where('user_id', $user->id)
+                    ->first();
+
+            if (!$property) {
+                return redirect()->back()->with('error', 'Property not found.');
+            }
+
+            if (!$buy) {
+                return redirect()->back()->with('error', 'Purchase record not found.');
+            }
+
             if ($paymentDetails->data->status === 'success') {
-                $amount = $paymentDetails->data->amount / 100; 
+                $amount = $paymentDetails->data->amount / 100;
                 $reference = $paymentDetails->data->reference;
                 $channel = $paymentDetails->data->channel;
- 
+
                 $transaction->update([
                     'payment_method' => $channel,
                     'status' => $paymentDetails->data->status,
-                    'transaction_state' => $transaction->transaction_state
+                    'transaction_state' => $transaction->transaction_state,
                 ]);
-                if($property->size == 0)
+
+                if (is_numeric($property->size) && $property->size == 0) {
                     $property->update([
                         'status' => 'sold',
                     ]);
                 }
+
                 $buy->update([
                     'status' => $paymentDetails->data->status,
                 ]);
-                
+
                 return redirect()->route('user.dashboard')->with('success', 'Payment successful!');
-            }else if($paymentDetails->data->status !== 'success'){
-                $transaction->update([
-                    'status' => $paymentDetails->data->status 
-                    'property_state' => 'failed'
-                ]);
             }
 
-            return redirect()->route('user.dashboard')->with('error', 'Payment verification failed.');
+            if ($paymentDetails->data->status !== 'success') {
+                $transaction->update([
+                    'status' => $paymentDetails->data->status,
+                    'property_state' => 'failed',
+                ]);
+
+                return redirect()->route('user.dashboard')->with('error', 'Payment failed. Please try again.');
+            }
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
+
     
 }
