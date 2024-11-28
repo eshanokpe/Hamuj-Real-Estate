@@ -14,9 +14,14 @@ class Buy extends Model
         'user_email',
         'property_id',
         'transaction_id',
-        'selected_size_land',
+        'selected_size_land', 
         'remaining_size',
         'total_price',
         'status',
     ];
+
+    public function property()
+    {
+        return $this->belongsTo(Property::class, 'property_id');
+    }
 }

@@ -21,8 +21,9 @@ class Property extends Model
         'price',
         'price_increase',
         'size',
+        'available_size',
         'gazette_number',
-        'tenure_free',
+        'tenure_free', 
         'property_images',
         'payment_plan',
         'brochure', 
@@ -32,6 +33,11 @@ class Property extends Model
         'status', 
         'property_state',
     ];  
+
+    public function buys()
+    {
+        return $this->hasMany(Buy::class, 'property_id');
+    }
  
     public function transaction(){
         return $this->hasMany(Transaction::class);

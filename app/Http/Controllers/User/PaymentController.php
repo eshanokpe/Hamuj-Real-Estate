@@ -75,10 +75,15 @@ class PaymentController extends Controller
             'selected_size_land' => $selectedSizeLand,
             'remaining_size' => $remainingSize,
             'user_id' => Auth::id(),
-            'email' => Auth::user()->email,
+            'email' => Auth::email(),
             'total_price' => $amount,
             'status' => 'pending',
         ]);
+        $propertyData->update([
+            'available_size' => $remainingSize,
+            'selected_size_land' => $selectedSizeLand,
+        ]);
+
         
         try {
             $response = $this->paystack->transaction->initialize($data);
@@ -103,7 +108,7 @@ class PaymentController extends Controller
             $property = Property::where('id', $transaction->property_id)->first();
             $buy = Buy::where('property_id', $transaction->property_id)
                             ->where('user_id', $user->id)->first();
-            if (!$transaction) {
+            if (!$transaction) { 
                 return redirect()->back()->with('error', 'Transaction not found.');
             }
             if ($paymentDetails->data->status === 'success') {
@@ -113,24 +118,25 @@ class PaymentController extends Controller
  
                 $transaction->update([
                     'payment_method' => $channel,
-                    'status' => 'completed',
+                    'status' => $paymentDetails->data->status,
                     'transaction_state' => $transaction->transaction_state
                 ]);
-                $property->update([
-                    'status' => 'sold',
-                ]);
+                if($property->size == 0)
+                    $property->update([
+                        'status' => 'sold',
+                    ]);
+                }
                 $buy->update([
-                    'status' => 'completed',
+                    'status' => $paymentDetails->data->status,
                 ]);
                 
                 return redirect()->route('user.dashboard')->with('success', 'Payment successful!');
             }elseif($paymentDetails->data->status !== 'success'){
                 $transaction->update([
-                    'status' => 'failed', 
+                    'status' => $paymentDetails->data->status 
                     'property_state' => 'failed'
                 ]);
             }
-            
 
             return redirect()->route('user.dashboard')->with('error', 'Payment verification failed.');
         } catch (\Exception $e) {
