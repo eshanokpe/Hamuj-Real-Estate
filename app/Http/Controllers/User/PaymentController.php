@@ -131,7 +131,7 @@ class PaymentController extends Controller
                 ]);
                 
                 return redirect()->route('user.dashboard')->with('success', 'Payment successful!');
-            }elseif($paymentDetails->data->status !== 'success'){
+            }else if($paymentDetails->data->status !== 'success'){
                 $transaction->update([
                     'status' => $paymentDetails->data->status 
                     'property_state' => 'failed'
