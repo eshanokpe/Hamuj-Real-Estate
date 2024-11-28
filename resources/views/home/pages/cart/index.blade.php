@@ -26,7 +26,7 @@
                     <table class="table table-bordered cart__table">
                         <thead class="thead-light">
                             <tr>
-                                <th>Product Image</th>
+                                <th>Product Image</th> 
                                 <th>Product Name</th>
                                 <th>Current Price</th>
                                 <th>Available Land size</th>

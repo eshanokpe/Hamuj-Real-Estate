@@ -100,7 +100,14 @@
                                         <div class="col-lg-4">
                                             <div class="add__listing--input__box mb-20">
                                                 <label class="add__listing--input__label" for="input7">Size</label>
-                                                <input disabled value="{{ $property->size}}" class="add__listing--input__field" id="input7"  type="text">
+                                                <input disabled 
+                                                value="
+                                                @if($property->size === $property->available_size)
+                                                    {{$property->size}}
+                                                @else
+                                                    {{$property->available_size}}
+                                                @endif" 
+                                                class="add__listing--input__field" id="input7"  type="text">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">

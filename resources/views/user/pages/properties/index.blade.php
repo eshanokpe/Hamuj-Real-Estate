@@ -61,6 +61,15 @@
                                             <span class="sales__report--status pending2"><a href="{{ route('user.properties.show', encrypt($item->id))}}">View</a></span>
 
                                         </td>
+                                        <td>
+                                            <span class="sales__report--status pending2"   style="background-color: #008000;">
+                                                <a 
+                                                style=" color: #fff; border: none;  cursor: pointer;"
+                                                href="{{ route('user.cart.index', encrypt($item->id)) }}"
+                                                >Buy</a>
+                                            </span>
+
+                                        </td>
                                     </tr>
                                 @empty
                                     <p>No data available</p>

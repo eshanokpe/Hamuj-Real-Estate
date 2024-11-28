@@ -70,7 +70,7 @@
                             </div>
                             <ul class="listing__details--action d-flex">
                                
-                                @if($property->transaction == null || $property->transaction->transaction_state != 'Buy')
+                                {{-- @if($property->transaction == null || $property->transaction->transaction_state != 'Buy') --}}
                                     <li class="listing__details--action__list"> 
                                         <a class="listing__details--wishlist__btn" href="{{ route('home.cart.index', encrypt($property->id)) }}" style="background-color: #008000; color: #fff; border: none; padding: 10px 30px; cursor: pointer;">
                                             Buy
@@ -78,7 +78,7 @@
                                        
                                     </li> 
                                     
-                                @else
+                                {{-- @else
                                     <li class="listing__details--action__list"> 
                                         <form action="{{ route('user.payment.initiate') }}" method="POST">
                                             @csrf
@@ -106,7 +106,7 @@
                                             </button>
                                         </form>
                                     </li>
-                                @endif
+                                @endif --}}
 
 
                                     
@@ -140,7 +140,13 @@
                                     <div class="apartment__info--list">
                                         <span class="apartment__info--icon"><img src="{{ asset('assets/img/icon/set-square.png')}}" alt="img"></span>
                                         <p>
-                                            <span class="apartment__info--title">{{ ($property->size) }} Sqft</span>
+                                            <span class="apartment__info--title">
+                                                @if($property->size === $property->available_size)
+                                                    {{$property->size}}
+                                                @else
+                                                    {{$property->available_size}}
+                                                @endif
+                                            </span>
                                         </p>
                                     </div>
                                 </div>
@@ -151,11 +157,17 @@
                             <ul class="properties__details--info__wrapper d-flex">
                                 <li class="properties__details--info__list d-flex justify-content-between">
                                     <span class="properties__details--info__title">Price:</span>
-                                    <span class="properties__details--info__subtitle">₦{{ number_format($property->price) }}</span>
+                                    <span class="properties__details--info__subtitle">₦{{ number_format($property->price, 2) }}</span>
                                 </li>
                                 <li class="properties__details--info__list d-flex justify-content-between">
                                     <span class="properties__details--info__title">Land Area Size:</span>
-                                    <span class="properties__details--info__subtitle">{{ $property->size }} Sq Ft</span>
+                                    <span class="properties__details--info__subtitle">
+                                        @if($property->size === $property->available_size)
+                                            {{$property->size}}
+                                        @else
+                                            {{$property->available_size}}
+                                        @endif
+                                    </span>
                                 </li>
                                 <li class="properties__details--info__list d-flex justify-content-between">
                                     <span class="properties__details--info__title">Tenure Free:</span>
@@ -276,7 +288,7 @@
                                             <a href="./listing-details.html">
                                                 {{$recentProperty->name}}
                                             </a></h3>
-                                        <span class="widget__featured--price">₦{{ number_format($recentProperty->price) }}</span>
+                                        <span class="widget__featured--price">₦{{ number_format($recentProperty->price, 2) }}</span>
                                     </div>
                                 </div>
                             @empty

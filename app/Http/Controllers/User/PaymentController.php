@@ -6,7 +6,6 @@ use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
 use App\Models\Buy;  
 use Yabacon\Paystack;  
 use App\Models\Property;  
@@ -75,7 +74,7 @@ class PaymentController extends Controller
             'selected_size_land' => $selectedSizeLand,
             'remaining_size' => $remainingSize,
             'user_id' => $user->id,
-            'email' => $user->email,
+            'user_email' => $user->email,
             'total_price' => $amount,
             'status' => 'pending',
         ]);

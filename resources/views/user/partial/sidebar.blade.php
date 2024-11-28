@@ -31,7 +31,8 @@
                         </svg>
                     </a>
                 <ul class="sidebar__dropdown--menu accordion-collapse collapse show" id="collapseOne">
-                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.buy') }}"> Buy</a></li>
+                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.properties') }}">Properties</a></li>
+                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.buy') }}">My Buy</a></li>
                     <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.sell') }}">Sell </a></li>
                     <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.transfer') }}">Transfer</a></li>
                 </ul>
@@ -47,7 +48,7 @@
             </li>
             
             <li class="sidebar__menu--items">
-                <a class="sidebar__menu--link" href="./saved-search.html">
+                <a class="sidebar__menu--link" href="#">
                     <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3 9H15C16.1046 9 17 9.89543 17 11V17C17 18.1046 16.1046 19 15 19H3C1.89543 19 1 18.1046 1 17V11C1 9.89543 1.89543 9 3 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M17 13H21C22.1046 13 23 12.1046 23 11V7C23 5.89543 22.1046 5 21 5H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -57,7 +58,7 @@
                 </a>
             </li>
             <li class="sidebar__menu--items">
-                <a class="sidebar__menu--link" href="./referral.html">
+                <a class="sidebar__menu--link" href="#">
                     <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M15 21V19C15 17.3431 13.6569 16 12 16H6C4.34315 16 3 17.3431 3 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -74,14 +75,14 @@
                 <label class="sidebar__menu--title">Manage Account</label>
             </li>
            
-            <li class="sidebar__menu--items"><a class="sidebar__menu--link" href="./profile.html"><svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <li class="sidebar__menu--items"><a class="sidebar__menu--link" href="#"><svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 10.0001C12.3012 10.0001 14.1667 8.1346 14.1667 5.83342C14.1667 3.53223 12.3012 1.66675 10 1.66675C7.69885 1.66675 5.83337 3.53223 5.83337 5.83342C5.83337 8.1346 7.69885 10.0001 10 10.0001Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
                 <path d="M17.1583 18.3333C17.1583 15.1083 13.95 12.5 10 12.5C6.05001 12.5 2.84167 15.1083 2.84167 18.3333" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>                                                                                                
                 <span class="sidebar__menu--text"> My Profile</span>  
             </a>
             </li>
-            <li class="sidebar__menu--items"><a class="sidebar__menu--link" href="./settings.html"><svg class="sidebar__menu--icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>                                                                                               
+            <li class="sidebar__menu--items"><a class="sidebar__menu--link" href="#"><svg class="sidebar__menu--icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>                                                                                               
                 <span class="sidebar__menu--text"> Settings</span>  
             </a>
             </li>
@@ -91,7 +92,15 @@
                 <path d="M4.87504 7.20825L2.08337 9.99992L4.87504 12.7916" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>                                                                                                                       
                 
-                <span class="sidebar__menu--text"> Logout</span> 
+              
+                <form id="logout-form" action="{{ route('user.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+                
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <span class="sidebar__menu--text">Logout</span>
+                </a>
+                
             </a>
             </li>
         </ul>

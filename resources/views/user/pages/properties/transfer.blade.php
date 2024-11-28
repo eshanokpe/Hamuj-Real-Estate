@@ -9,7 +9,7 @@
         <!-- dashboard container -->
         <div class="dashboard__container dashboard__reviews--container">
             <div class="reviews__heading mb-30">
-                <h2 class="reviews__heading--title">My Buy Properties</h2>
+                <h2 class="reviews__heading--title">Transfer Properties</h2>
                 <p class="reviews__heading--desc">We are glad to see you again!</p>
             </div>
             <div class="properties__wrapper">
@@ -60,7 +60,7 @@
                                         </span>
                                     @endif
                                 </td> 
-                                <td> 
+                                <td>
                                     <span class="properties__views">{{ $property->property->size }}</span>
                                 </td>
                                 <td>
@@ -78,7 +78,7 @@
                               
                             </tr>
                             @empty
-                               <tr><td> No Properties available </td></tr>
+                               <tr><td> No Transfer Properties available </td></tr>
                             @endforelse
                            
                             

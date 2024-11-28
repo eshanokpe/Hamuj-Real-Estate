@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Auth\LoginController;
@@ -50,7 +49,6 @@ Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 
 Route::prefix('home')->name('home.')->group(function () {
     Route::get('/properties/{slug}', [HomeController::class, 'showProperties'])->name('properties.show');
-    Route::get('/cart/{id}', [CartController::class, 'index'])->name('cart.index');
 
 
 });

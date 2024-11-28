@@ -13,19 +13,19 @@ class FrontendController extends Controller
     {
         $user = Auth::user();
         $properties = Property::inRandomOrder()->take(6)->get();
-        if ($properties->isEmpty()) {
-            return redirect()->route('home')->with('error', 'Property not found.');
-        }
+        // if ($properties->isEmpty()) {
+        //     return redirect()->route('home')->with('error', 'Property not found.');
+        // }
 
-        foreach ($properties as $property) {
-            $transaction = null;
-            if (Auth::check()) {
-                $transaction = $property->transaction()->where('user_id', $user->id)->first();
-            }
-            // dd( $transaction);
+        // foreach ($properties as $property) {
+        //     $transaction = null;
+        //     if (Auth::check()) {
+        //         $transaction = $property->transaction()->where('user_id', $user->id)->first();
+        //     }
+        //     // dd( $transaction);
 
-            $property->transaction = $transaction;
-        }  
+        //     $property->transaction = $transaction;
+        // }  
 
         return view('home.index', compact('properties'));
     }
