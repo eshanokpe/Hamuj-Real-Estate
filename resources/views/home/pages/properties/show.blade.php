@@ -72,7 +72,7 @@
                                
                                 {{-- @if($property->transaction == null || $property->transaction->transaction_state != 'Buy') --}}
                                     <li class="listing__details--action__list"> 
-                                        <a class="listing__details--wishlist__btn" href="{{ route('home.cart.index', encrypt($property->id)) }}" style="background-color: #008000; color: #fff; border: none; padding: 10px 30px; cursor: pointer;">
+                                        <a class="listing__details--wishlist__btn" href="{{ route('user.cart.index', encrypt($property->id)) }}" style="background-color: #008000; color: #fff; border: none; padding: 10px 30px; cursor: pointer;">
                                             Buy
                                         </a>
                                        
