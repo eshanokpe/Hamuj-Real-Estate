@@ -68,14 +68,14 @@ class RegisterController extends Controller
             'referred_by' => $this->handleReferralCode($request->referral_code),
         ]);
         $referralDetails = User::where('referral_code', $user->referral_code)->first();
-        $referralLink = "https://dohmayn.com/user/register/referral/{$request->referral_code}";
+        $referralLink = "https://dohmayn.com/user/register/referral/$request->referral_code";
 
 
         // Send verification email
         Mail::to($user->email)->send(new VerificationEmail($user, $referralLink));
 
         // Redirect to the intended page or dashboard
-        return redirect()->route('login')->with('success', '🎉 Congratulations, ' . $user->name . '! You have successfully registered. Please check your email for the verification code.');
+        return redirect()->route('login')->with('success', 'Please check your email to verify your account.');
     }
     
     private function generateReferralCode()

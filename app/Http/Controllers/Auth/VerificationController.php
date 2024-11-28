@@ -46,6 +46,6 @@ class VerificationController extends Controller
             return redirect('/')->with('error', 'Invalid verification link.');
         }
         $user->markEmailAsVerified();
-        return redirect()->route('login')->with('success', 'Email verified successfully.');
+        return redirect()->route('login')->with('success', '🎉 Congratulations, ! You have successfully registered.');
     }
 }

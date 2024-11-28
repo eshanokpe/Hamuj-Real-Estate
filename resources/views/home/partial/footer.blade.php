@@ -468,7 +468,7 @@
 <style>
     /* Increase font size of Toastr */
     #toast-container > .toast {
-        font-size: 18px; /* You can change 18px to any size you want */
+        font-size: 22px; /* You can change 18px to any size you want */
     }
 </style>
 
