@@ -61,8 +61,8 @@ class PaymentController extends Controller
         $transaction = Transaction::create([
             'property_id' => $propertyData->id,
             'property_name' => $propertyData->name,
-            'user_id' => Auth::id(),
-            'email' => Auth::user()->email,
+            'user_id' => $user->id,
+            'email' => $user->email,
             'amount' => $amount,
             'status' => 'pending',
             'payment_method' => '',
@@ -74,8 +74,8 @@ class PaymentController extends Controller
             'transaction_id' => $transaction->id,
             'selected_size_land' => $selectedSizeLand,
             'remaining_size' => $remainingSize,
-            'user_id' => Auth::id(),
-            'email' => Auth::email(),
+            'user_id' => $user->id,
+            'email' => $user->email,
             'total_price' => $amount,
             'status' => 'pending',
         ]);
