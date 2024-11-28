@@ -141,6 +141,6 @@ class PaymentController extends Controller
             return redirect()->route('user.dashboard')->with('error', 'Payment verification failed.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
-        }
     }
+    
 }
