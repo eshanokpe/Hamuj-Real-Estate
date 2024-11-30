@@ -25,7 +25,7 @@
                     <path d="M7.51663 2.36664L3.02496 5.86664C2.27496 6.44997 1.66663 7.69164 1.66663 8.63331V14.8083C1.66663 16.7416 3.24163 18.325 5.17496 18.325H14.825C16.7583 18.325 18.3333 16.7416 18.3333 14.8166V8.74997C18.3333 7.74164 17.6583 6.44997 16.8333 5.87497L11.6833 2.26664C10.5166 1.44997 8.64163 1.49164 7.51663 2.36664Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M10 14.9917V12.4917" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>  
-                    <span class="sidebar__menu--text">My Properties</span>                                                  
+                    <span class="sidebar__menu--text"> Properties</span>                                                  
                      <svg class="sidebar__menu--link__arrow" width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5.99999 3.02344L1.87499 7.14844L0.696655 5.9701L5.99999 0.666771L11.3033 5.9701L10.125 7.14844L5.99999 3.02344Z" fill="currentColor"/>
                         </svg>
