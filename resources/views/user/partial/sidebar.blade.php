@@ -33,7 +33,7 @@
                     <ul class="sidebar__dropdown--menu accordion-collapse collapse show" id="collapseOne">
                          <!-- My Properties/Assets Section -->
                          <li class="sidebar__dropdown--menu__items">
-                            <a class="sidebar__dropdown--menu__link" href="{{ route('user.buy') }}">My Properties</a> <!-- Renamed for clarity -->
+                            <a class="sidebar__dropdown--menu__link" href="{{ route('user.buy') }}">My Assets</a> <!-- Renamed for clarity -->
                         </li>
                         <!-- Buy Properties Section -->
                         <li class="sidebar__dropdown--menu__items">

@@ -63,13 +63,7 @@
                                         </td>
                                         <td>
                                             @if($item->status === 'sold out')
-                                                {{-- <center>
-                                                    <a class="solid__btn offer-price-btn" 
-                                                    style="color: #fff; font-size:14px margine:1px; " 
-                                                    href="{{ route('user.offerPrice', encrypt($item->id))}}">
-                                                        Offer Price
-                                                    </a>
-                                                </center> --}}
+                                               
                                                 <span class="status__btn " style="color:#fff; background-color:#47008E ">
                                                     <a href="{{ route('user.offerPrice', encrypt($item->id))}}" 
                                                         style=" color: #fff; border: none;  cursor: pointer;">
