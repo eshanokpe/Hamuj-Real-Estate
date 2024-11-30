@@ -63,14 +63,18 @@
                                         </td>
                                         <td>
                                             @if($item->status === 'sold out')
-                                                <center>
+                                                {{-- <center>
                                                     <a class="solid__btn offer-price-btn" 
                                                     style="color: #fff; font-size:14px margine:1px; " 
                                                     href="{{ route('user.offerPrice', encrypt($item->id))}}">
                                                         Offer Price
                                                     </a>
-                                                </center>
-                                                {{-- <span class="status__btn active" style="color: #008000">{{ ucFirst($item->status)}}</span> --}}
+                                                </center> --}}
+                                                <span class="status__btn " style="color:#fff; background-color:#47008E ">
+                                                    <a href="{{ route('user.offerPrice', encrypt($item->id))}}" >
+                                                        Offer Price
+                                                    </a>
+                                                </span>
                                             @elseif($item->status === 'available')
                                                 <span class="sales__report--status pending2"   style="background-color: #008000;">
                                                     <a 
