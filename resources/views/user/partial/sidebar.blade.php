@@ -31,8 +31,8 @@
                         </svg>
                     </a>
                 <ul class="sidebar__dropdown--menu accordion-collapse collapse show" id="collapseOne">
-                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.properties') }}">Properties</a></li>
-                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.buy') }}">My Buy</a></li>
+                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.properties') }}">Buy Properties</a></li>
+                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.buy') }}">My Asset</a></li>
                     <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.sell') }}">Sell </a></li>
                     <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.transfer') }}">Transfer</a></li>
                 </ul>
