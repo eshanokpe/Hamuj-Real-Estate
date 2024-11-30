@@ -98,7 +98,7 @@
                               
                             </tr>
                             @empty
-                               <tr><td> No Asset available </td></tr>
+                               <tr><td> No Property available </td></tr>
                             @endforelse
                            
                             
