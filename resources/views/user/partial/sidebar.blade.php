@@ -30,12 +30,28 @@
                         <path d="M5.99999 3.02344L1.87499 7.14844L0.696655 5.9701L5.99999 0.666771L11.3033 5.9701L10.125 7.14844L5.99999 3.02344Z" fill="currentColor"/>
                         </svg>
                     </a>
-                <ul class="sidebar__dropdown--menu accordion-collapse collapse show" id="collapseOne">
-                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.properties') }}">Buy Properties</a></li>
-                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.buy') }}">My Asset</a></li>
-                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.sell') }}">Sell </a></li>
-                    <li class="sidebar__dropdown--menu__items"><a class="sidebar__dropdown--menu__link" href="{{ route('user.transfer') }}">Transfer</a></li>
-                </ul>
+                    <ul class="sidebar__dropdown--menu accordion-collapse collapse show" id="collapseOne">
+                        <!-- Buy Properties Section -->
+                        <li class="sidebar__dropdown--menu__items">
+                            <a class="sidebar__dropdown--menu__link" href="{{ route('user.properties') }}">Buy Properties</a>
+                        </li>
+                    
+                        <!-- My Properties/Assets Section -->
+                        <li class="sidebar__dropdown--menu__items">
+                            <a class="sidebar__dropdown--menu__link" href="{{ route('user.buy') }}">My Properties</a> <!-- Renamed for clarity -->
+                        </li>
+                    
+                        <!-- Sell Property Section -->
+                        <li class="sidebar__dropdown--menu__items">
+                            <a class="sidebar__dropdown--menu__link" href="{{ route('user.sell') }}">Sell Property</a> <!-- Updated text -->
+                        </li>
+                    
+                        <!-- Transfer Property Section -->
+                        <li class="sidebar__dropdown--menu__items">
+                            <a class="sidebar__dropdown--menu__link" href="{{ route('user.transfer') }}">Transfer Property</a>
+                        </li>
+                    </ul>
+                    
             </li>
             <li class="sidebar__menu--items">
                 <a class="sidebar__menu--link" href="./my-favorites.html">
