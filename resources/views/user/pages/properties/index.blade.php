@@ -12,7 +12,7 @@
             <!-- dashboard container -->
             <div class="dashboard__container dashboard__reviews--container">
                 <div class="reviews__heading mb-30">
-                    <h2 class="reviews__heading--title">Properties</h2>
+                    <h2 class="reviews__heading--title">Buy Properties</h2>
                     <p class="reviews__heading--desc">We are glad to see you again!</p>
                 </div>
                 <div class="properties__wrapper">
