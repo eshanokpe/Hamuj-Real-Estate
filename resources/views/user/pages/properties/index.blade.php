@@ -71,7 +71,8 @@
                                                     </a>
                                                 </center> --}}
                                                 <span class="status__btn " style="color:#fff; background-color:#47008E ">
-                                                    <a href="{{ route('user.offerPrice', encrypt($item->id))}}" >
+                                                    <a href="{{ route('user.offerPrice', encrypt($item->id))}}" 
+                                                        style=" color: #fff; border: none;  cursor: pointer;">
                                                         Offer Price
                                                     </a>
                                                 </span>
