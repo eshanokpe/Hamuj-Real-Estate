@@ -1,5 +1,20 @@
 @extends('layouts.dashboard')
+<style>
+    .properties__table--wrapper .offer-price-btn {
+        display: inline-block; /* Ensures the button behaves as a single block element */
+        white-space: nowrap; /* Prevents breaking the text into multiple lines */
+        background-color: #47008E; /* Custom button background color */
+        color: #fff; /* Text color */
+        padding: 0px 10px; /* Add padding for spacing */
+        font-size: 14px; /* Font size for readability */
+        text-align: center; /* Center-align text */
+        margin: 0 auto; /* Centers the button in its container */
+        text-decoration: none; /* Removes underline */
+        border-radius: 4px; /* Rounded corners for the button */
+        cursor: pointer; /* Pointer cursor on hover */
+    }
 
+</style>
 
 @section('content')
 
@@ -9,7 +24,7 @@
         <!-- dashboard container -->
         <div class="dashboard__container dashboard__reviews--container">
             <div class="reviews__heading mb-30">
-                <h2 class="reviews__heading--title">My Buy Properties</h2>
+                <h2 class="reviews__heading--title">Buy Properties</h2>
                 <p class="reviews__heading--desc">We are glad to see you again!</p>
             </div>
             <div class="properties__wrapper">
@@ -18,12 +33,11 @@
                         <thead>
                             <tr>
                                 <th>Listing Title</th>
-                                <th>Date published</th>
                                 <th><span class="min-w-100">Status</span></th>
                                 <th>Actual Size</th>
                                 <th>Available Size</th>
                                 <th>Acquired Size</th>
-                                <th>Action</th>
+                                <th colspan="2">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,19 +57,12 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="reviews__date">{{  $property->created_at->format('d F, Y') }} </span>
-                                </td>
-                                <td>
-                                    @if($property->status == 'pending')
+                                    @if($property->status == 'available')
                                         <span class="status__btn pending">
                                             {{  ucFirst($property->status) }}
                                         </span>
-                                    @elseif($property->status == 'completed' || $property->status == 'success')
-                                        <span class="status__btn active">
-                                            {{  ucFirst($property->status) }}
-                                        </span>
-                                    @elseif($property->status == 'failed' || $property->status == 'cancelled')
-                                        <span class="status__btn pending">
+                                    @elseif($property->status == 'sold out')
+                                        <span class="status__btn active" style="color: green">
                                             {{  ucFirst($property->status) }}
                                         </span>
                                     @endif
@@ -64,16 +71,29 @@
                                     <span class="properties__views">{{ $property->property->size }}</span>
                                 </td>
                                 <td>
-                                    <span class="properties__views">{{ $property->remaining_size }}</span>
+                                    <span class="properties__views">
+                                        {{ $property->remaining_size }} per/sqm
+                                    </span>
                                 </td>
                                 <td> 
                                     <span class="properties__views">{{ $property->selected_size_land }} per/sqm</span>
                                 </td>
-                                <td>
-                                    <span class="status__btn pending2">
+                                <td colspan="2">
+                                    <p class="status__btn pending">
                                         <a href="{{ route('user.properties.show', encrypt($property->property->id))}}">
                                         View</a>
-                                    </span>
+                                    </p>
+                                    @if($property->status == 'sold out')
+                                        <center>
+                                            <a class="solid__btn offer-price-btn" 
+                                            style="color: #fff; font-size:14px margine:1px; " 
+                                            href="{{ route('user.offerPrice', encrypt($property->property->id))}}">
+                                                Offer Price
+                                            </a>
+                                        </center>
+                                    @endif
+                                   
+                                   
                                 </td>
                               
                             </tr>

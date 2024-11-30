@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\PropertyController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\User\PaymentController;
-use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\PaymentController;
+use App\Http\Controllers\User\PropertyController;
+use App\Http\Controllers\User\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,9 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
     Route::get('/buy', [PropertyController::class, 'buy'])->name('buy'); 
+    Route::get('/offer/price/{id}', [PropertyController::class, 'offerPrice'])->name('offerPrice'); 
+    Route::post('/offer/price/post', [PropertyController::class, 'offerPricePost'])->name('offerPrice.post'); 
+
     Route::get('/sell', [PropertyController::class, 'sell'])->name('sell');
     Route::get('/transfer', [PropertyController::class, 'transfer'])->name('transfer');
     
@@ -37,6 +41,9 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
 
     Route::get('/cart/{id}', [CartController::class, 'index'])->name('cart.index');
+    
+    Route::resource('profile', ProfileController::class);
+    
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 

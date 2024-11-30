@@ -26,6 +26,7 @@ class PaymentController extends Controller
      */ 
     public function initializePayment(Request $request)
     {
+        // dd($request->all());
         // Validate the incoming data
         $request->validate([
             'remaining_size' => 'required',
@@ -76,7 +77,7 @@ class PaymentController extends Controller
             'user_id' => $user->id,
             'user_email' => $user->email,
             'total_price' => $amount,
-            'status' => 'pending',
+            'status' => 'available',
         ]);
         $propertyData->update([
             'available_size' => $remainingSize,
@@ -133,15 +134,17 @@ class PaymentController extends Controller
                     'transaction_state' => $transaction->transaction_state,
                 ]);
 
-                if (is_numeric($property->size) && $property->size == 0) {
+                if (is_numeric($property->available_size) && is_numeric($property->available_size) == 1) {
                     $property->update([
-                        'status' => 'sold',
+                        'status' => 'sold out',
                     ]);
                 }
-
-                $buy->update([
-                    'status' => $paymentDetails->data->status,
-                ]);
+            
+                if (is_numeric($buy->remaining_size) && ($property->available_size) == 1) {
+                    $buy->update([
+                        'status' => 'sold out',
+                    ]);
+                }
 
                 return redirect()->route('user.dashboard')->with('success', 'Payment successful!');
             }

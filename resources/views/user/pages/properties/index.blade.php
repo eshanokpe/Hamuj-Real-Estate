@@ -21,11 +21,11 @@
                             <thead>
                                 <tr>
                                     <th>Image</th>
-                                    <th>Date published</th>
                                     <th>
                                         <span class="min-w-100">Status</span>
                                     </th>
                                     <th>Size</th>
+                                    <th>Available Size</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -45,36 +45,40 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="reviews__date">{{ $item->created_at->format('d F Y') }}</span>
-                                        </td>
-                                        <td>
                                             @if( $item->status == 'available')
                                                 <span class="status__btn processing">{{ ucFirst($item->status)}}</span>
-                                            @elseif($item->status === 'sold')
-                                                <span class="status__btn active">{{ ucFirst($item->status)}}</span>
+                                            @elseif($item->status === 'sold out')
+                                                <span class="status__btn active" style="color: #008000">{{ ucFirst($item->status)}}</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <span class="properties__views">{{$item->size}}</span>
+                                            <span class="properties__views">{{$item->size}} per/sqm</span>
+                                        </td>
+                                        <td>
+                                            <span class="properties__views">{{$item->available_size}} per/sqm</span>
                                         </td>
                                         <td>
                                             <span class="sales__report--status pending2"><a href="{{ route('user.properties.show', encrypt($item->id))}}">View</a></span>
 
                                         </td>
                                         <td>
-                                            <span class="sales__report--status pending2"   style="background-color: #008000;">
-                                                <a 
-                                                style=" color: #fff; border: none;  cursor: pointer;"
-                                                href="{{ route('user.cart.index', encrypt($item->id)) }}"
-                                                >Buy</a>
-                                            </span>
+                                            @if($item->status === 'sold out')
+                                                <span class="status__btn active" style="color: #008000">{{ ucFirst($item->status)}}</span>
+                                            @elseif($item->status === 'available')
+                                                <span class="sales__report--status pending2"   style="background-color: #008000;">
+                                                    <a 
+                                                    style=" color: #fff; border: none;  cursor: pointer;"
+                                                    href="{{ route('user.cart.index', encrypt($item->id)) }}"
+                                                    >Buy</a>
+                                                </span>
+                                            @endif
 
                                         </td>
                                     </tr>
                                 @empty
                                     <p>No data available</p>
                                 @endforelse
-                               
+                                
                                 
                             </tbody>
                         </table>

@@ -42,10 +42,10 @@
                                         <span class="item-price">₦{{ number_format($property->price, 2) }}</span>
                                     </td>
                                     <td>
-                                        <span>{{ $property->size }} sqm</span>
+                                        <span>{{ $property->size }} per/sqm</span>
                                     </td>
-                                    <td class="available-size" data-initial-size="{{ $property->size }}">
-                                        {{ $property->size }} sqm
+                                    <td class="available-size" data-initial-size="{{ $property->available_size }}">
+                                        {{ $property->available_size }} per/sqm
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
@@ -69,7 +69,7 @@
 
             <div class="dashboard__container dashboard__reviews--container">
                 <div class="cart__footer d-flex justify-content-between align-items-center mt-4">
-                    <a href="{{ route('home.pages', 'properties') }}" class="solid__btn" style="background-color: #CC9933">
+                    <a href="{{ route('user.buy') }}" class="solid__btn" style="background-color: #CC9933">
                         View Properties
                     </a>
                     <div>
@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <!-- Hidden Form to Pass Data for Payment -->
-                <form id="payment-form" action="{{ route('user.payment.initiate') }}" method="POST" style="display: none;">
+                <form id="payment-form" action="{{ route('user.payment.initiate') }}" method="POST" style="display: none">
                     @csrf
                     <input type="hidden" name="remaining_size" id="remaining_size">
                     <input type="hidden" name="property_slug" id="property_slug" value="{{ $property->slug }}">
@@ -91,57 +91,61 @@
 
 <script>
     // Update total price and available size
-    function updateCart(row) {
-        const price = parseFloat(row.querySelector('.item-price').textContent.replace(/₦|,/g, ''));
-        const quantityInput = row.querySelector('.quantity-input');
-        const availableSizeElement = row.querySelector('.available-size');
-        const initialSize = parseFloat(availableSizeElement.dataset.initialSize);
+function updateCart(row) {
+    const price = parseFloat(row.querySelector('.item-price').textContent.replace(/₦|,/g, ''));
+    const quantityInput = row.querySelector('.quantity-input');
+    const availableSizeElement = row.querySelector('.available-size');
+    const initialSize = parseFloat(availableSizeElement.dataset.initialSize);
 
-        const quantity = parseInt(quantityInput.value) || 1;
-        const total = price * quantity;
-        const remainingSize = Math.max(initialSize - quantity, 0); // Prevent negative sizes
+    const quantity = parseInt(quantityInput.value) || 1;
+    const total = price * quantity;
+    const remainingSize = Math.max(initialSize - quantity, 1); // Prevent negative sizes
 
-        row.querySelector('.total-price').textContent = `₦${total.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
-        availableSizeElement.textContent = `${remainingSize} sqm`;
-    }
+    row.querySelector('.total-price').textContent = `₦${total.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
+    availableSizeElement.textContent = `${remainingSize} per/sqm`;
+}
 
-    // Add event listeners for buttons and inputs
-    document.querySelectorAll('.cart__table tbody tr').forEach(row => {
-        const decrementBtn = row.querySelector('.decrement-btn');
-        const incrementBtn = row.querySelector('.increment-btn');
-        const quantityInput = row.querySelector('.quantity-input');
+// Add event listeners for buttons and inputs
+document.querySelectorAll('.cart__table tbody tr').forEach(row => {
+    const decrementBtn = row.querySelector('.decrement-btn');
+    const incrementBtn = row.querySelector('.increment-btn');
+    const quantityInput = row.querySelector('.quantity-input');
 
-        decrementBtn.addEventListener('click', () => {
-            if (quantityInput.value > 1) {
-                quantityInput.value--;
-                updateCart(row);
-            }
-        });
-
-        incrementBtn.addEventListener('click', () => {
-            quantityInput.value++;
+    decrementBtn.addEventListener('click', () => {
+        if (quantityInput.value > 1) {
+            quantityInput.value--;
             updateCart(row);
-        });
-
-        quantityInput.addEventListener('input', () => {
-            if (quantityInput.value < 1) quantityInput.value = 1;
-            updateCart(row);
-        });
+        }
     });
 
-    // Handle "Make Payment" button click
-    document.getElementById('make-payment-btn').addEventListener('click', function(event) {
-        event.preventDefault();
-        const row = document.querySelector('.cart__table tbody tr');
-        const remainingSize = row.querySelector('.available-size').textContent.split(' ')[0];
-        const quantity = row.querySelector('.quantity-input').value;
-        const totalPrice = row.querySelector('.total-price').textContent.replace(/₦|,/g, '');
-
-        document.getElementById('remaining_size').value = remainingSize;
-        document.getElementById('quantity').value = quantity;
-        document.getElementById('total_price').value = totalPrice;
-
-        document.getElementById('payment-form').submit();
+    incrementBtn.addEventListener('click', () => {
+        quantityInput.value++;
+        updateCart(row);
     });
+
+    quantityInput.addEventListener('input', () => {
+        if (quantityInput.value < 1) quantityInput.value = 1;
+        updateCart(row);
+    });
+});
+
+// Handle "Make Payment" button click
+document.getElementById('make-payment-btn').addEventListener('click', function(event) {
+    event.preventDefault();
+    const row = document.querySelector('.cart__table tbody tr');
+    const availableSizeElement = row.querySelector('.available-size');
+    const remainingSize = availableSizeElement.textContent.trim().split(' ')[0]; 
+    const quantity = row.querySelector('.quantity-input').value.trim();
+    const totalPrice = row.querySelector('.total-price').textContent.replace(/₦|,/g, '').trim();
+ 
+    // Update hidden input fields
+    document.getElementById('remaining_size').value = remainingSize;
+    document.getElementById('quantity').value = quantity;
+    document.getElementById('total_price').value = totalPrice;
+
+    // Submit the form
+    document.getElementById('payment-form').submit();
+});
+
 </script>
 @endsection
