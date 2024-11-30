@@ -124,7 +124,7 @@
                                     
                                     <div class="mb-3">
                                         <label for="priceIncrease">Price Increase (%)</label>
-                                        <input type="text" class="form-control" name="price_increase" id="priceIncrease" placeholder="Price Increase" readonly>
+                                        <input type="text" class="form-control" name="percentage_increase" id="priceIncrease" placeholder="Price Increase" readonly>
                                     </div>
                                     
                                     <script>
@@ -192,6 +192,21 @@
                                         <img src="{{ asset($property->property_images) }}" alt="{{ $property->name }}" class="img-thumbnail mt-2" width="200">
                                         @endif
                                         <img id="image-preview" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
+                                    </div>
+                                    @php
+                                        use Carbon\Carbon;
+                                    @endphp
+                                
+                                    <div class="mb-3"> 
+                                        <label for="exampleInputEmail1">Year:</label>
+                                        <input type="text" class="form-control" 
+                                        min="1900" max="{{ Carbon::now()->year }}"
+                                        name="updated_year" placeholder="{{ Carbon::now()->year }}" value="{{ Carbon::now()->year }}" required>
+                                        @error('updated_year')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
                                            
                             </div><!--end card-body-->

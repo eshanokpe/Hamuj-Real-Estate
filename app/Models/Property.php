@@ -19,7 +19,7 @@ class Property extends Model
         'country',
         'lunch_price', 
         'price',
-        'price_increase',
+        'percentage_increase',
         'size',
         'available_size',
         'gazette_number',
@@ -32,6 +32,7 @@ class Property extends Model
         'google_map',
         'status', 
         'property_state',
+        'year',
     ];  
 
     public function buys()
@@ -42,10 +43,11 @@ class Property extends Model
     public function transaction(){
         return $this->hasMany(Transaction::class);
     }
-    // public function transaction()
-    // {
-    //     return $this->hasMany(Transaction::class, 'user_id');
-    // }
+    
+    public function priceUpdates()
+    {
+        return $this->hasMany(PropertyPriceUpdate::class);
+    }
 
    
     protected static function boot()

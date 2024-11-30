@@ -614,6 +614,7 @@ class ComposerStaticInitfe33f98a750b8c5a51b30c78bd3fab21
         'App\\Models\\Post' => __DIR__ . '/../..' . '/app/Models/Post.php',
         'App\\Models\\Privacy' => __DIR__ . '/../..' . '/app/Models/Privacy.php',
         'App\\Models\\Property' => __DIR__ . '/../..' . '/app/Models/Property.php',
+        'App\\Models\\PropertyPriceUpdate' => __DIR__ . '/../..' . '/app/Models/PropertyPriceUpdate.php',
         'App\\Models\\Terms' => __DIR__ . '/../..' . '/app/Models/Terms.php',
         'App\\Models\\Transaction' => __DIR__ . '/../..' . '/app/Models/Transaction.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',

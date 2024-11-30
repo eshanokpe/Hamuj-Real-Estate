@@ -33,8 +33,7 @@
                         <thead>
                             <tr>
                                 <th>Listing Title</th>
-                                <th><span class="min-w-100">Status</span></th>
-                                <th>Actual Size</th>
+                                <th><span class="min-w-100">Percentage</span></th>
                                 <th>Available Size</th>
                                 <th>Acquired Size</th>
                                 <th colspan="2">Action</th>
@@ -52,7 +51,6 @@
                                             <h3 class="reviews__author--title">{{$property->property->name}}</h3>
                                             <p class="reviews__author--subtitle">{{$property->property->location}}</p>
                                             <span class="properties__author--price">₦{{ number_format($property->property->price, 2)}}</span>
-                                            <p class="properties__author--price text-decoration-line-through text-muted">₦{{ number_format($property->property->lunch_price, 2)}}</p>
                                         </div>
                                     </div>
                                 </td>
@@ -67,9 +65,6 @@
                                         </span>
                                     @endif
                                 </td> 
-                                <td> 
-                                    <span class="properties__views">{{ $property->property->size }}</span>
-                                </td>
                                 <td>
                                     <span class="properties__views">
                                         {{ $property->remaining_size }} per/sqm

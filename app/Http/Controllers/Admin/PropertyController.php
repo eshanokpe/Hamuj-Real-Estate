@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Property;
+use App\Models\PropertyPriceUpdate;
 
 class PropertyController extends Controller
 {
@@ -17,7 +18,14 @@ class PropertyController extends Controller
 
     public function create()
     {
-        return view('admin.home.property.create');
+        $city = [
+            "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", 
+            "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", 
+            "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", 
+            "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", 
+            "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara", "FCT"
+        ];
+        return view('admin.home.property.create', compact('city'));
     }
 
     public function store(Request $request)
@@ -30,7 +38,7 @@ class PropertyController extends Controller
             'country' => 'required|string|max:255',
             'lunch_price' => 'required|numeric',
             'price' => 'required|numeric',
-            'price_increase' => 'required|numeric',
+            'percentage_increase' => 'required|numeric',
             'size' => 'required|string|max:255',
             'gazette_number' => 'required|string|max:50',
             'tenure_free' => 'required|string|max:50',
@@ -63,7 +71,7 @@ class PropertyController extends Controller
             'country' => $request->input('country'),
             'lunch_price' => $request->input('lunch_price'),
             'price' => $request->input('price'),
-            'price_increase' => $priceIncrease,
+            'percentage_increase' => $priceIncrease,
             'gazette_number' => $request->input('gazette_number'),
             'tenure_free' => $request->input('tenure_free'),
             'size' => $request->input('size'),
@@ -75,7 +83,9 @@ class PropertyController extends Controller
             'contract_deed' => 'assets/images/property/' . basename($contractDeedPath),
             'video_link' => $request->input('video_link'),
             'google_map' => $request->input('google_map'),
+            'year' => $request->input('year'),
             'status' => $request->input('status'),
+
         ]);
         return redirect()->route('admin.properties.create')->with('success', 'Property uploaded successfully.');
     }
@@ -110,14 +120,6 @@ class PropertyController extends Controller
         return view('admin.home.property.edit', compact('property', 'city'));
     }
     
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         // Find the property by ID
@@ -144,20 +146,35 @@ class PropertyController extends Controller
             'google_map' => 'required|url',
             'status' => 'required|in:available,sold',
         ]);
+        $year = $request->input('updated_year', Carbon::now()->year);
         $lunchPrice = $request->input('lunch_price');
-        $currentPrice = $request->input('price');
+        $newPrice = $request->input('price');
+        $previousPrice = $property->price;
+        $previousPercentageIncrease = $property->percentage_increase;
+        $previousYear = $property->year;
 
-        $priceIncrease = $lunchPrice > 0 ? (($currentPrice - $lunchPrice) / $lunchPrice) * 100 : 0;
+        $percentageIncrease = $lunchPrice > 0 ? (($newPrice - $lunchPrice) / $lunchPrice) * 100 : 0;
+
+        // Log the price update
+        PropertyPriceUpdate::create([
+            'property_id' => $property->id,
+            'previous_price' => $previousPrice,
+            'previous_percentage_increase' => $previousPercentageIncrease,
+            'previous_year' => $previousYear,
+            'updated_price' => $newPrice,
+            'percentage_increase' => $percentageIncrease,
+            'updated_year' => $year,
+        ]);
 
         $property->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'location' => $request->input('location'),
             'city' => $request->input('city'),
-            'country' => $request->input('country'),
+            'country' => $request->input('country'), 
             'lunch_price' => $request->input('lunch_price'),
-            'price' => $request->input('price'),
-            'price_increase' => $priceIncrease,
+            'price' => $newPrice,
+            'percentage_increase' => $percentageIncrease,
             'gazette_number' => $request->input('gazette_number'),
             'tenure_free' => $request->input('tenure_free'),
             'size' => $request->input('size'),
@@ -203,6 +220,7 @@ class PropertyController extends Controller
             $contractDeedPath = $request->file('contract_deed')->move(public_path('assets/images/property'), time().'_'.$request->file('contract_deed')->getClientOriginalName());
             $property->contract_deed = 'assets/images/property/' . basename($contractDeedPath);
         }
+        
         $property->save();
 
         return redirect()->back()->with('success', 'Property updated successfully.');

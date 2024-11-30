@@ -56,6 +56,7 @@ return array(
     'App\\Models\\Post' => $baseDir . '/app/Models/Post.php',
     'App\\Models\\Privacy' => $baseDir . '/app/Models/Privacy.php',
     'App\\Models\\Property' => $baseDir . '/app/Models/Property.php',
+    'App\\Models\\PropertyPriceUpdate' => $baseDir . '/app/Models/PropertyPriceUpdate.php',
     'App\\Models\\Terms' => $baseDir . '/app/Models/Terms.php',
     'App\\Models\\Transaction' => $baseDir . '/app/Models/Transaction.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',

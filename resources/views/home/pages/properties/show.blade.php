@@ -69,7 +69,7 @@
                                 </ul>
                             </div>
                             <ul class="listing__details--action d-flex">
-                               
+                                
                                 {{-- @if($property->transaction == null || $property->transaction->transaction_state != 'Buy') --}}
                                     <li class="listing__details--action__list"> 
                                         <a class="listing__details--wishlist__btn" href="{{ route('user.cart.index', encrypt($property->id)) }}" style="background-color: #008000; color: #fff; border: none; padding: 10px 30px; cursor: pointer;">
@@ -252,7 +252,7 @@
                     
                     
                     <div class="widget__step mb-30">
-                        <h2 class="widget__step--title">Property History</h2>
+                        <h3 class="widget__step--title">Property sale history</h3>
                         <div class="widget__form">
                             <form action="#">
                                 <div class="widget__form--input mb-20">
