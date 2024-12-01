@@ -1,5 +1,45 @@
 @extends('layouts.app')
 
+<style>
+    .timeline {
+      position: relative;
+      padding-left: 1px;
+    }
+    .timeline:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 43%;
+      width: 1.5px;
+      background-color: #47008E;
+    }
+    .timeline-item {
+      position: relative;
+      /* margin-bottom: 70px; */
+    }
+    .timeline-item:before {
+        content: '';
+        position: absolute;
+        left: 43%;
+        top: 110px;
+        z-index: 20;
+        width: 12px;
+        height: 12px;
+        background-color: #CC9933;
+        border-radius: 50%;
+        transform: translateX(-50%);
+    }
+    .percent-change {
+      color: #888;
+      font-size: 0.9rem;
+    }
+    .icon {
+      font-size: 1.5rem;
+      margin-right: 5px;
+    }
+</style>
+
 @section('content')
 
 
@@ -69,47 +109,11 @@
                                 </ul>
                             </div>
                             <ul class="listing__details--action d-flex">
-                                
-                                {{-- @if($property->transaction == null || $property->transaction->transaction_state != 'Buy') --}}
-                                    <li class="listing__details--action__list"> 
-                                        <a class="listing__details--wishlist__btn" href="{{ route('user.cart.index', encrypt($property->id)) }}" style="background-color: #008000; color: #fff; border: none; padding: 10px 30px; cursor: pointer;">
-                                            Buy
-                                        </a>
-                                       
-                                    </li> 
-                                    
-                                {{-- @else
-                                    <li class="listing__details--action__list"> 
-                                        <form action="{{ route('user.payment.initiate') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="property_state" value="Sell">
-                                            <input type="hidden" name="email" value="{{ auth()->check() && auth()->user()->email ? auth()->user()->email : '' }}">
-
-                                            <input type="hidden" name="amount" value="{{ $property->price }}">
-                                            <input type="hidden" name="property_name" value="{{ $property->name  }}">
-                                            <input type="hidden" name="property_id" value="{{ $property->id }}">
-                                            <button class="listing__details--wishlist__btn" type="submit" style="background-color: #FF6347; color: #fff; border: none; padding: 10px 20px; cursor: pointer;">
-                                                Sell
-                                            </button>
-                                        </form>
-                                    </li>
-                                    <li class="listing__details--action__list"> 
-                                        <form action="{{ route('user.payment.initiate') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="property_state" value="Transfer">
-                                            <input type="hidden" name="email" value="{{ auth()->user()->email }}">
-                                            <input type="hidden" name="amount" value="{{ $property->price }}">
-                                            <input type="hidden" name="property_name" value="{{ $property->name }}">
-                                            <input type="hidden" name="property_id" value="{{ $property->id }}">
-                                            <button class="listing__details--wishlist__btn" type="submit" style="background-color: #1E90FF; color: #fff; border: none; padding: 10px 40px; cursor: pointer;">
-                                                Transfer
-                                            </button>
-                                        </form>
-                                    </li>
-                                @endif --}}
-
-
-                                    
+                                 <li class="listing__details--action__list"> 
+                                    <a class="listing__details--wishlist__btn" href="{{ route('user.cart.index', encrypt($property->id)) }}" style="background-color: #008000; color: #fff; border: none; padding: 10px 30px; cursor: pointer;">
+                                        Buy
+                                    </a>
+                                </li>   
                             </ul>
                         </div>
                         <div class="listing__details--content__step">
@@ -254,21 +258,71 @@
                     <div class="widget__step mb-30">
                         <h3 class="widget__step--title">Property sale history</h3>
                         <div class="widget__form">
-                            <form action="#">
-                                <div class="widget__form--input mb-20">
-                                    <input class="widget__form--input__field" placeholder="Full name" type="text">
+                            <div class="container mt-5">
+                                <div class="">
+                                  <div class="">
+                                   
+                                    <!-- Listing Price -->
+                                    <div class="listing__details--content__step properties__info mb-0">
+                                        <ul class="properties__details--info__wrapper d-flex mb-0">
+                                            <li class="location__google--maps__info--list d-flex">
+                                                <span class="location__google--maps__info--subtitle">Lunch Price:</span>
+                                                <span class="location__google--maps__info--title">₦{{ number_format($property->lunch_price, 2) }}</span>
+                                                {{-- <span class="location__google--maps__info--subtitle">Lunch price</span> --}}
+                                            </li>
+                                        </ul>
+                                        <hr>
+                                    </div>
+                            
+                                    <!-- Timeline -->
+                                   
+                                        <div class="table-responsive">
+                                            <table class="table cart__table table-borderless" border="0">
+                                                <thead class="thead-light">
+                                                    <th>Year sold</th>
+                                                    <th style="padding-left: 20px">Sold price</th>
+                                                </thead>
+                                                <tbody class="timeline mt-10" >
+                                                    {{-- @forelse ($property->priceUpdates as $item) --}}
+                                                    @forelse ($property->priceUpdates->sortByDesc('created_at') as $item)
+       
+                                                        <tr class="mt-5" > 
+                                                            <div class="">
+                                                                <td>
+                                                                    <div class="p-2">
+                                                                        <span class="apartment__info--title">{{ $item->updated_year}}</span>
+                                                                     </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div  style="padding-left: 20px">
+                                                                        <span class="properties__details--info__title">
+                                                                            ₦{{ number_format($item->updated_price, 2) }}
+                                                                        </span>
+                                                                        <div class="percent-change text-end">
+                                                                            <span class="apartment__info--count">
+                                                                                + {{ $item->percentage_increase }}%
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </div>
+                                                        </tr>
+                                                    @empty
+                                
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    
+                            
+                                    <!-- Footer -->
+                                    <div class="mt-4">
+                                      <small class="text-muted d-block">Source acknowledgement: Land price data produced by the Land Registry</small>
+                                     
+                                    </div>
+                                  </div>
                                 </div>
-                                <div class="widget__form--input mb-20">
-                                    <input class="widget__form--input__field" placeholder="Phone Number" type="text">
-                                </div>
-                                <div class="widget__form--input mb-20">
-                                    <input class="widget__form--input__field" placeholder="Email Address" type="email">
-                                </div>
-                                <div class="widget__form--input">
-                                    <textarea class="widget__form--textarea__field" placeholder="Write You Messege"></textarea>
-                                </div>
-                                <button class="widget__form--btn solid__btn" type="submit">Send Messege</button>
-                            </form>
+                            </div>
                         </div>
                     </div>
 

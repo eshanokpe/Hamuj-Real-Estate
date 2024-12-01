@@ -14,7 +14,7 @@ class PropertyPriceUpdate extends Model
         'previous_price',
         'previous_percentage_increase',
         'previous_year',
-        'updated_price',
+        'updated_price', 
         'percentage_increase',
         'updated_year',
     ];

@@ -46,8 +46,9 @@ class Property extends Model
     
     public function priceUpdates()
     {
-        return $this->hasMany(PropertyPriceUpdate::class);
+        return $this->hasMany(PropertyPriceUpdate::class, 'property_id', 'id');
     }
+
 
    
     protected static function boot()

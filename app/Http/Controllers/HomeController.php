@@ -34,18 +34,12 @@ class HomeController extends Controller
     public function showProperties($slug)
     {
         try {   
-            $property = Property::where('slug', $slug)->first();
+            $property = Property::with('priceUpdates')->where('slug', $slug)->first();
             if (!$property) {
                 return redirect()->route('home')->with('error', 'Property not found.');
             }
 
-            $transaction = null;
-            if (Auth::check()) {
-                $transaction = $property->transaction()->where('user_id', Auth::user()->id)->first();
-            } 
-
-            // Attach transaction to the property instance for use in the view
-            $property->transaction = $transaction;
+            
 
             return view('home.pages.properties.show', compact('property'));
 

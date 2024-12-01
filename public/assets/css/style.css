@@ -4418,7 +4418,7 @@ body.overlay__active::before,
 }
 
 .apartment__info--count {
-  width: 2.3rem;
+  width: 5.0rem;
   height: 2.3rem;
   text-align: center;
   line-height: 2.1rem;
