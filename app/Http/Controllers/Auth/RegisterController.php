@@ -99,7 +99,9 @@ class RegisterController extends Controller
         }
         // Create a wallet for the user
         $user->wallet()->create([
-            'balance' => 0.00, // Initial balance
+            'user_id' => $user->id,
+            'user_id' =>$user->email,
+            'balance' => 0.00,
             'currency' => $virtualAccountData['currency'] ?? 'NGN',
         ]);
 
