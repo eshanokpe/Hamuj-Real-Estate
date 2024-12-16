@@ -28,7 +28,9 @@ class DashboardController extends Controller
                                             ->where('status', 'success')
                                             ->sum('amount');
         $data['totalTransactions'] = Transaction::where('user_id', $user->id)->where('email', $user->email)->where('status', 'success')->count();
-        $data['user'] = User::where('id', $user->id)->first();
+        $data['user'] = User::where('id', $user->id)
+                            ->where('email', $user->email)
+                            ->first();
          // Fetch referral details
         return view('user.dashboard', $data); 
     }
@@ -81,7 +83,9 @@ class DashboardController extends Controller
                     ->first();
             }
             $users = Auth::user();
-            $user = User::where('id', $users->id)->first();
+            $user = User::where('id', $users->id)
+                        ->where('email', $users->email)
+                        ->first();
 
             return view('user.pages.properties.index', compact('properties','user'));
 
@@ -97,7 +101,9 @@ class DashboardController extends Controller
     {
         $users = Auth::user();
         $property = Property::findOrFail(decrypt($id));
-        $user = User::where('id', $users->id)->first();
+        $user = User::where('id', $users->id)
+                        ->where('email', $users->email)
+                        ->first();
         return view('user.pages.properties.show', compact('property','user'));
     }
 

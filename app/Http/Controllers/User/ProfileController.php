@@ -14,7 +14,9 @@ class ProfileController extends Controller
     }
  
     public function index(){
-        $data['user'] = User::where('id', $user->id)->first();
+        $user = Auth::user();
+        $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
+
         return view('user.pages.profile.index',$data); 
     }
 

@@ -17,7 +17,7 @@ class SellPropertyController extends Controller
     
     public function index(){ 
         $user = Auth::user();
-        $data['user'] = User::where('id', $user->id)->first();
+        $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
 
         $data['buyProperty'] = Buy::with('property') 
         ->where('user_id', $user->id)

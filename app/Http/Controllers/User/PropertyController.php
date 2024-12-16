@@ -21,14 +21,14 @@ class PropertyController extends Controller
  
     public function index(){
         $user = Auth::user();
-        $data['user'] = User::where('id', $user->id)->first();
+        $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
         $data['properties'] = Property::latest()->paginate(10);
         return view('user.pages.properties.index',$data); 
     }
 
     public function buy(){
         $user = Auth::user();
-        $data['user'] = User::where('id', $user->id)->first();
+        $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
         $data['buyProperty'] = Buy::with('property') 
                                 ->where('user_id', $user->id)
                                 ->where('user_email', $user->email)
@@ -40,7 +40,7 @@ class PropertyController extends Controller
 
     public function offerPrice($id){
         $user = Auth::user();
-        $data['user'] = User::where('id', $user->id)->first();
+        $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
         $data['buy'] = Buy::with('property')->where('property_id', decrypt($id))->first();
         return view('user.pages.properties.offer_price', $data); 
     }
