@@ -57,12 +57,10 @@ class PaymentController extends Controller
         $data = [
             'amount' => $amount * 100, 
             'email' => $user->email,
-            'metadata' => [
-                'property_id' => $propertyData->id,
-                'property_name' => $propertyData->name,
-                'remaining_size' => $remainingSize,
-                'selected_size_land' => $selectedSizeLand,
-            ],
+            'property_id' => $propertyData->id,
+            'property_name' => $propertyData->name,
+            'remaining_size' => $remainingSize,
+            'selected_size_land' => $selectedSizeLand,
             'reference' => $reference,
             'property_state' => $property->property_state,
             'callback_url' => route('user.payment.callback'),
@@ -86,7 +84,7 @@ class PaymentController extends Controller
                 'trxref' => $request->get('trxref'),
             ]);
             dd($paymentDetails->data);
-            $property = Property::find($paymentDetails->data->metadata->property_id);
+            $property = Property::find($paymentDetails->data->property_id);
             if (!$property) {
                 return redirect()->back()->with('error', 'Property not found.');
             }
@@ -111,8 +109,8 @@ class PaymentController extends Controller
                 $buy = Buy::create([
                     'property_id' => $property->id,
                     'transaction_id' => $transaction->id,
-                    'selected_size_land' => $paymentDetails->data->metadata->selected_size_land,
-                    'remaining_size' => $paymentDetails->data->metadata->remaining_size,
+                    'selected_size_land' => $paymentDetails->data->selected_size_land,
+                    'remaining_size' => $paymentDetails->data->remaining_size,
                     'user_id' => $user->id,
                     'user_email' => $user->email,
                     'total_price' => $amount,
@@ -129,11 +127,6 @@ class PaymentController extends Controller
                     $buy->update([
                         'status' => 'sold out',
                     ]);
-                }
-                // Deduct from Wallet
-                $wallet = Wallet::where('user_id', $user->id)->first();
-                if ($wallet) {
-                    $wallet->update(['balance' => $wallet->balance - $amount]);
                 }
 
                 return redirect()->route('user.dashboard')->with('success', 'Payment successful!');
