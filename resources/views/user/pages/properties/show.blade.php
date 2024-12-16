@@ -35,7 +35,7 @@
                                         <div class="col-12">
                                             <div class="add__listing--textarea__box mb-15">
                                                 <label class="add__listing--input__label" for="input2">Description</label>
-                                                <textarea disabled class="add__listing--textarea__field" id="input2" placeholder="Description">{!! $property->description !!}<</textarea>
+                                                <p>{!! $property->description !!}</p>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -55,7 +55,7 @@
                                         <div class="col-lg-4">
                                             <div class="add__listing--input__box mb-20">
                                                 <label class="add__listing--input__label" for="input3">Price Increase (%)</label>
-                                                <input disabled value="{{ $property->price_increase }}%" class="add__listing--input__field" id="input3" placeholder="Price" type="text">
+                                                <input disabled value="{{ $property->percentage_increase }}%" class="add__listing--input__field" id="input3" placeholder="Price" type="text">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -66,7 +66,7 @@
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="add__listing--input__box mb-20">
-                                                <label class="add__listing--input__label"> Tenure Free<</label>
+                                                <label class="add__listing--input__label"> Tenure Free</label>
                                                 <input disabled value="{{ $property->tenure_free}}" class="add__listing--input__field" id="input4" placeholder="Description" type="text">
                                             </div>
                                         </div>
@@ -96,7 +96,7 @@
                                                 <label class="add__listing--input__label" for="neighborhood">Neighborhood</label>
                                                 <input class="add__listing--input__field" id="neighborhood" placeholder="Neighborhood" type="text">
                                             </div>
-                                        </div>
+                                        </div> 
                                         <div class="col-lg-4">
                                             <div class="add__listing--input__box mb-20">
                                                 <label class="add__listing--input__label" for="input7">Size</label>

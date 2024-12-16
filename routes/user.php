@@ -43,7 +43,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/my-properties', [DashboardController::class, 'properties'])->name('myProperties');
     Route::get('/my-properties/{id}', [DashboardController::class, 'propertiesShow'])->name('properties.show');
  
-   
+    
     Route::get('/cart/{id}', [CartController::class, 'index'])->name('cart.index');
     Route::get('/cart/{id}', [CartController::class, 'sell'])->name('cart.sell.index');
 
@@ -53,9 +53,6 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/sell', [SellPropertyController::class, 'index'])->name('sell');
     Route::post('/sell/property', [SellPropertyController::class, 'sellProperty'])->name('sell.property');
    
-
-
-
     
     Route::resource('profile', ProfileController::class);
     

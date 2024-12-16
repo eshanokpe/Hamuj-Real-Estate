@@ -80,8 +80,11 @@ class DashboardController extends Controller
                     ->where('email', $user->email)
                     ->first();
             }
+            $users = Auth::user();
+            $user = User::where('id', $users->id)->first();
 
-            return view('user.pages.properties.index', compact('properties'));
+            return view('user.pages.properties.index', compact('properties','user'));
+
         } catch (\Exception $e) {
             \Log::error('Error fetching properties: ' . $e->getMessage());
             return redirect()->route('home')->with('error', 'An unexpected error occurred. Please try again later.');
@@ -90,11 +93,12 @@ class DashboardController extends Controller
 
     
 
-    public function propertiesShow($id){
-
+    public function propertiesShow($id)
+    {
+        $users = Auth::user();
         $property = Property::findOrFail(decrypt($id));
-
-        return view('user.pages.properties.show', compact('property'));
+        $user = User::where('id', $users->id)->first();
+        return view('user.pages.properties.show', compact('property','user'));
     }
 
 
