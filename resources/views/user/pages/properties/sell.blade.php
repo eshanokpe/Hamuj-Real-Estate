@@ -42,7 +42,6 @@
                                 <td>
                                     <span class="reviews__date">{{  $property->created_at->format('d F, Y') }} </span>
                                 </td>
-                                
                                 <td> 
                                     <span class="properties__views">{{ $property->selected_size_land }} per/sqm</span>
                                 </td>

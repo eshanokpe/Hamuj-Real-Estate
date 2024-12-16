@@ -135,7 +135,10 @@ class PaymentController extends Controller
                 $wallet = Wallet::where('user_id', $user->id)->first();
                 if ($wallet) {
                     $wallet->update(['balance' => $wallet->balance - $amount]);
+                } else {
+                    return redirect()->route('user.dashboard')->with('error', 'Wallet not found. Please contact support.');
                 }
+                
 
                 return redirect()->route('user.dashboard')->with('success', 'Payment successful!');
             }

@@ -34,7 +34,6 @@
                             <tr>
                                 <th>Listing Title</th>
                                 <th><span class="min-w-100">Percentage</span></th>
-                                <th>Available Size</th>
                                 <th>Acquired Size</th>
                                 <th colspan="2">Action</th>
                             </tr>
@@ -55,21 +54,9 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @if($property->status == 'available')
-                                        <span class="status__btn pending">
-                                            {{  ucFirst($property->status) }}
-                                        </span>
-                                    @elseif($property->status == 'sold out')
-                                        <span class="status__btn active" style="color: green">
-                                            {{  ucFirst($property->status) }}
-                                        </span>
-                                    @endif
+                                  
                                 </td> 
-                                <td>
-                                    <span class="properties__views">
-                                        {{ $property->remaining_size }} per/sqm
-                                    </span>
-                                </td>
+                                <span class="properties__views">{{ $property->percentage_increase }} %</span>
                                 <td> 
                                     <span class="properties__views">{{ $property->selected_size_land }} per/sqm</span>
                                 </td>
