@@ -85,7 +85,7 @@ class PaymentController extends Controller
                 'reference' => $request->get('reference'),
                 'trxref' => $request->get('trxref'),
             ]);
-            dd($paymentDetails->data);
+            // dd($paymentDetails->data);
             $property = Property::find($paymentDetails->data->metadata->property_id);
             if (!$property) {
                 return redirect()->back()->with('error', 'Property not found.');
