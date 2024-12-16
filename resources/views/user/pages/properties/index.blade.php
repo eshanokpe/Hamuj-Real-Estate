@@ -75,7 +75,7 @@
                                                     <a 
                                                     style=" color: #fff; border: none;  cursor: pointer;"
                                                     href="{{ route('user.cart.index', encrypt($item->id)) }}"
-                                                    >Buy</a>
+                                                    >Buy</a> 
                                                 </span>
                                             @endif
 
