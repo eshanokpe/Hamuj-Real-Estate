@@ -6,11 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.5",
+        "phpseclib/phpseclib": "^3.0",
         "unicodeveloper/laravel-paystack": "^1.2",
         "yabacon/paystack-php": "^2.2",
         "yoeunes/toastr": "^2.3"

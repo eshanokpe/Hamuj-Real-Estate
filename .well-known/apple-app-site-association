@@ -4,7 +4,7 @@
         {
           "appIDs": ["J23935Q5L9.com.prismcheck.Gaphub"],
           "components": [
-            {
+            { 
               "match": "/login",
               "comment": "Direct link to /login"
             },

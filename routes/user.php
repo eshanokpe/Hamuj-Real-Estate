@@ -5,8 +5,11 @@ use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\PaymentController;
+use App\Http\Controllers\User\TransferController;
 use App\Http\Controllers\User\PropertyController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\SellPropertyController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,18 +32,30 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/offer/price/{id}', [PropertyController::class, 'offerPrice'])->name('offerPrice'); 
     Route::post('/offer/price/post', [PropertyController::class, 'offerPricePost'])->name('offerPrice.post'); 
 
-    Route::get('/sell', [PropertyController::class, 'sell'])->name('sell');
     Route::get('/transfer', [PropertyController::class, 'transfer'])->name('transfer');
-    
+    Route::get('/transfer/add', [PropertyController::class, 'add'])->name('transfer.add');
+
+    Route::post('/transfer/initiate', [TransferController::class, 'initiateTransfer'])->name('transfer.initiate');
+    Route::get('/payment/balance', [TransferController::class, 'balance']);
+     
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
 
     Route::get('/my-properties', [DashboardController::class, 'properties'])->name('myProperties');
     Route::get('/my-properties/{id}', [DashboardController::class, 'propertiesShow'])->name('properties.show');
+ 
+   
+    Route::get('/cart/{id}', [CartController::class, 'index'])->name('cart.index');
+    Route::get('/cart/{id}', [CartController::class, 'sell'])->name('cart.sell.index');
 
     Route::post('/pay', [PaymentController::class, 'initializePayment'])->name('payment.initiate');
     Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
 
-    Route::get('/cart/{id}', [CartController::class, 'index'])->name('cart.index');
+    Route::get('/sell', [SellPropertyController::class, 'index'])->name('sell');
+    Route::post('/sell/property', [SellPropertyController::class, 'sellProperty'])->name('sell.property');
+   
+
+
+
     
     Route::resource('profile', ProfileController::class);
     

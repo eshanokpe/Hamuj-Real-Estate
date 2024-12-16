@@ -64,10 +64,10 @@
             <img src="{{ asset('assets/admin/img/logo/nav-log-white.jpg')}}" alt="Dohmayn Logo">
             <h1>Welcome to Dohmayn</h1>
         </div>
-
+ 
         <!-- Content Section -->
         <div class="content">
-            <p>Dear {{ $name }},</p>
+            <p>Dear {{ $first_name}} {{ $last_name }},</p>
             <p>Welcome to Dohmayn, your trusted partner in finding premium landed properties. We are excited to have you on board and look forward to helping you make informed decisions in the real estate market.</p>
             
             <p>To complete your registration and gain access to your exclusive property dashboard, please verify your email address by clicking the button below:</p>
@@ -78,12 +78,24 @@
             
             <p>This link will expire in 24 hours, so please verify your email promptly to continue exploring our available properties and services.</p>
 
-            <!-- Referral Code Section -->
             @if(isset($referralCode))
                 <p>Your referral code is <strong>{{ $referralCode }}</strong>. Share it with your friends and earn rewards when they sign up.</p>
             @endif
             
             <p>If you did not initiate this request, please disregard this email.</p>
+
+            <p>We are also excited to inform you that your virtual account has been successfully created with us! Below are your account details:</p>
+
+            <p><strong>Bank Name:</strong> {{ $bankName }}</p>
+            <p><strong>Account Name:</strong> {{ $accountName }}</p>
+            <p><strong>Account Number:</strong> {{ $accountNumber }}</p>
+            <p><strong>Currency:</strong> {{ $currency }}</p>
+            <p><strong>Customer Code:</strong> {{ $customerCode }}</p>
+            
+            <p>If you have any questions or need further assistance, please don't hesitate to reach out to us.</p>
+
+            <p>Thank you for choosing Dohmayn!</p>
+
             <p>Warm regards,</p>
             <p><strong>The Dohmayn Team</strong></p>
         </div>

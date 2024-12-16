@@ -14,16 +14,18 @@ class VerificationEmail extends Mailable
 
     public $user;
     public $referralLink;
+    public $virtualAccountData;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $referralLink)
+    public function __construct($user, $referralLink,$virtualAccountData )
     {
         $this->user = $user;
         $this->referralLink = $referralLink;
+        $this->virtualAccountData = $virtualAccountData;
     }
 
     /**
@@ -41,9 +43,16 @@ class VerificationEmail extends Mailable
         return $this->from('info@rabmotlicensing.com', 'Dohmayn')
         ->subject('Verify Your Email - Dohmayn')
         ->markdown('emails.verify-email')->with([
-            'name' => $this->user->name, 
+            'first_name' => $this->user->first_name, 
+            'last_name' => $this->user->last_name, 
             'referralCode' => $this->referralLink, 
             'verifyUrl' => $verificationUrl,
+
+            'bankName' => $this->virtualAccountData['bank']['name'],
+            'accountName' => $this->virtualAccountData['account_name'],
+            'accountNumber' => $this->virtualAccountData['account_number'],
+            'currency' => $this->virtualAccountData['currency'],
+            'customerCode' => $this->virtualAccountData['customer']['customer_code'],
         ]);
     }
 }

@@ -87,8 +87,6 @@
                                             </a>
                                         </center>
                                     @endif
-                                   
-                                   
                                 </td>
                               
                             </tr>

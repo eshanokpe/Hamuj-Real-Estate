@@ -72,7 +72,7 @@
                                 
                             </div>
                             
-                            <div class="blog__comment--area">
+                            <div class="blog__comment--area"> 
                                 <div class="blog__review--comment mb-50">
                                     <h3 class="blog__comment--title">({{ $post->comments->count() }}) Comment</h3>
                                     @foreach ($post->comments as $comment)
@@ -322,7 +322,7 @@
             });
             
             const formData = new FormData(this);
-            $.ajax({
+            $.ajax({ 
                 type: 'POST',
                 url: '{{ route("comments.store") }}',
                 data: formData,

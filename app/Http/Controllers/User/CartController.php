@@ -5,7 +5,9 @@ namespace App\Http\Controllers\User;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\Property;
+use Illuminate\Support\Str;
 
 class CartController extends Controller
 {
@@ -15,8 +17,19 @@ class CartController extends Controller
     }
 
     public function index($id){
-        $property = Property::where('id', decrypt($id))->first();
-        return view('user.pages.cart.index', compact('property')); 
+        $user = Auth::user(); 
+        $data['user'] = User::where('id', $user->id)->first();
+        $data['property'] = Property::where('id', decrypt($id))->first();
+        return view('user.pages.cart.index', $data); 
     }
+
+    public function sell($id){
+        $user = Auth::user(); 
+        $data['user'] = User::where('id', $user->id)->first();
+        $data['property'] = Property::where('id', decrypt($id))->first();
+        return view('user.pages.cart.sell_cart', $data); 
+    }
+
+    
 }
  

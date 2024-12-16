@@ -20,6 +20,15 @@
             <li class="sidebar__menu--items">
                 <label class="sidebar__menu--title">Manage Asset</label>
             </li>
+            <li class="sidebar__menu--items">
+                <a class="sidebar__menu--link" href="{{ route('user.buy') }}">
+                    <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 6.5C2 5.11929 3.11929 4 4.5 4H19.5C20.8807 4 22 5.11929 22 6.5V17.5C22 18.8807 20.8807 20 19.5 20H4.5C3.11929 20 2 18.8807 2 17.5V6.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 11H18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="sidebar__menu--text">My Assets</span>
+                </a>
+            </li>
             <li class="sidebar__menu--items dropdown__items">
                 <a class="sidebar__menu--link dropdown__link--active" href="{{ route('user.buy') }}" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.51663 2.36664L3.02496 5.86664C2.27496 6.44997 1.66663 7.69164 1.66663 8.63331V14.8083C1.66663 16.7416 3.24163 18.325 5.17496 18.325H14.825C16.7583 18.325 18.3333 16.7416 18.3333 14.8166V8.74997C18.3333 7.74164 17.6583 6.44997 16.8333 5.87497L11.6833 2.26664C10.5166 1.44997 8.64163 1.49164 7.51663 2.36664Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
@@ -31,10 +40,7 @@
                         </svg>
                     </a>
                     <ul class="sidebar__dropdown--menu accordion-collapse collapse show" id="collapseOne">
-                         <!-- My Properties/Assets Section -->
-                         <li class="sidebar__dropdown--menu__items">
-                            <a class="sidebar__dropdown--menu__link" href="{{ route('user.buy') }}">My Assets</a> <!-- Renamed for clarity -->
-                        </li>
+                         
                         <!-- Buy Properties Section -->
                         <li class="sidebar__dropdown--menu__items">
                             <a class="sidebar__dropdown--menu__link" href="{{ route('user.properties') }}">Buy Properties</a>
@@ -60,7 +66,6 @@
                     <span class="sidebar__menu--text">Wallet</span>
                 </a>
             </li>
-            
             <li class="sidebar__menu--items">
                 <a class="sidebar__menu--link" href="#">
                     <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,6 +74,29 @@
                         <path d="M7 15H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <span class="sidebar__menu--text">Transaction</span>
+                </a>
+            </li>
+
+            <li class="sidebar__menu--items">
+                <a class="sidebar__menu--link" href="#">
+                    <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 9H15C16.1046 9 17 9.89543 17 11V17C17 18.1046 16.1046 19 15 19H3C1.89543 19 1 18.1046 1 17V11C1 9.89543 1.89543 9 3 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 13H21C22.1046 13 23 12.1046 23 11V7C23 5.89543 22.1046 5 21 5H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 15H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="sidebar__menu--text">Notification</span>
+                </a>
+            </li>
+            
+            
+            <li class="sidebar__menu--items">
+                <a class="sidebar__menu--link" href="#">
+                    <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 9H15C16.1046 9 17 9.89543 17 11V17C17 18.1046 16.1046 19 15 19H3C1.89543 19 1 18.1046 1 17V11C1 9.89543 1.89543 9 3 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 13H21C22.1046 13 23 12.1046 23 11V7C23 5.89543 22.1046 5 21 5H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 15H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="sidebar__menu--text">Support</span>
                 </a>
             </li>
             <li class="sidebar__menu--items">

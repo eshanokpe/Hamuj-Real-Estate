@@ -11,7 +11,7 @@
                     </div>
                     <a class="blog__comment--content__reply reply-toggle nir-btn mr-2" href="#">
                         Reply
-                    </a>
+                    </a> 
                 </div>
                 <p class="blog__comment--content__desc">{{ $comment->content }}</p>
             </div>

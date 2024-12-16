@@ -181,7 +181,7 @@
                             </ul>
                         </div>
                         
-                        <div class="listing__details--content__step mb-80">
+                        {{-- <div class="listing__details--content__step mb-80">
                             <div class="properties__floor--plans d-flex">
                                 <div class="properties__floor--plans__content">
                                     <h3 class="listing__details--content__title mb-40">Land Survey</h3>
@@ -191,7 +191,7 @@
                                 </div>
                                 
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="listing__details--content__step mb-80">
                             <div class="listing__details--location__header d-flex justify-content-between mb-40">
@@ -275,50 +275,47 @@
                                     </div>
                             
                                     <!-- Timeline -->
-                                   
-                                        <div class="table-responsive">
-                                            <table class="table cart__table table-borderless" border="0">
-                                                <thead class="thead-light">
-                                                    <th>Year sold</th>
-                                                    <th style="padding-left: 20px">Sold price</th>
-                                                </thead>
-                                                <tbody class="timeline mt-10" >
-                                                    {{-- @forelse ($property->priceUpdates as $item) --}}
-                                                    @forelse ($property->priceUpdates->sortByDesc('created_at') as $item)
-       
-                                                        <tr class="mt-5" > 
-                                                            <div class="">
-                                                                <td>
-                                                                    <div class="p-2">
-                                                                        <span class="apartment__info--title">{{ $item->updated_year}}</span>
-                                                                     </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div  style="padding-left: 20px">
-                                                                        <span class="properties__details--info__title">
-                                                                            ₦{{ number_format($item->updated_price, 2) }}
-                                                                        </span>
-                                                                        <div class="percent-change text-end">
-                                                                            <span class="apartment__info--count">
-                                                                                + {{ $item->percentage_increase }}%
-                                                                            </span>
-                                                                        </div>
+                                    <div class="table-responsive">
+                                        <table class="table cart__table table-borderless" border="0">
+                                            <thead class="thead-light">
+                                                <th>Year sold</th>
+                                                <th style="padding-left: 20px">Sold price</th>
+                                            </thead>
+                                            <tbody class="timeline mt-10" >
+                                                {{-- @forelse ($property->priceUpdates as $item) --}}
+                                                @forelse ($property->priceUpdates->sortByDesc('created_at') as $item)
+                                                    <tr class="mt-5" > 
+                                                        <div class="">
+                                                            <td>
+                                                                <div class="p-2">
+                                                                    <span class="apartment__info--title">{{ $item->updated_year}}</span>
                                                                     </div>
-                                                                </td>
-                                                            </div>
-                                                        </tr>
-                                                    @empty
-                                
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                            </td>
+                                                            <td>
+                                                                <div  style="padding-left: 20px">
+                                                                    <span class="properties__details--info__title">
+                                                                        ₦{{ number_format($item->updated_price, 2) }}
+                                                                    </span>
+                                                                    <div class="percent-change text-end">
+                                                                        <span class="apartment__info--count">
+                                                                            + {{ $item->percentage_increase }}%
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </div>
+                                                    </tr>
+                                                @empty
+                            
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     
                             
                                     <!-- Footer -->
                                     <div class="mt-4">
                                       <small class="text-muted d-block">Source acknowledgement: Land price data produced by the Land Registry</small>
-                                     
                                     </div>
                                   </div>
                                 </div>
@@ -326,7 +323,18 @@
                         </div>
                     </div>
 
+                   
+
                     <div class="widget__step">
+                        <h2 class="widget__step--title">Land Survey</h2>
+                        <div class="widget__featured">
+                            <div class="properties__floor--plans__display">
+                                <img src="{{ asset($property->land_survey) }}" alt="img">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget__step mb-30">
                         <h2 class="widget__step--title">Property Items</h2>
                         <div class="widget__featured">
                             @forelse ($recentProperties as $recentProperty)
@@ -348,10 +356,10 @@
                             @empty
                                 <p>No data available</p>
                             @endforelse
-                           
-                            
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>

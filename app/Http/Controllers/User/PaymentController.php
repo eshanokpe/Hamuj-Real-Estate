@@ -17,17 +17,12 @@ class PaymentController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth'); 
         $this->paystack = new Paystack(env('PAYSTACK_SECRET_KEY')); // Initialize Paystack
     }
 
-    /**
-     * Initialize payment with Paystack
-     */ 
     public function initializePayment(Request $request)
     {
-        // dd($request->all());
-        // Validate the incoming data
         $request->validate([
             'remaining_size' => 'required',
             'property_slug' => 'required',
@@ -36,17 +31,27 @@ class PaymentController extends Controller
         ]);
         $user = Auth::user();
         $propertySlug  = $request->input('property_slug');
-        $properties = Property::where('slug', $propertySlug)->first();
-  
+        $property = Property::where('slug', $propertySlug)->first();
+        // Check if the property exists
+        if (!$property) {
+            return back()->with('error', 'Property not found.');
+        }
+        // Check if the user has enough balance
+        $userBalance = $user->wallet->first()->balance; 
+        $amount = $request->input('total_price');
+        if ($userBalance < $amount) {
+            return back()->with('error', 'Insufficient funds in your wallet. Please add funds to proceed.');
+        }
+
         // Generate a unique transaction reference
         $reference = 'PROREF-' . time() . '-' . strtoupper(Str::random(8));
+
         $selectedSizeLand  = $request->input('quantity');
         $remainingSize  = $request->input('remaining_size');
         $amount  = $request->input('total_price');
 
-        $propertyId  = $properties->id;
-        $propertyName  =  $properties->name;
-        $propertyState  =  $properties->property_state;
+        $propertyId  = $property->id;
+        $propertyName  =  $property->name;
         $propertyData = Property::where('id', $propertyId)->where('name', $propertyName)->first();
         // Prepare the data to send to Paystack
         $data = [
@@ -54,37 +59,13 @@ class PaymentController extends Controller
             'email' => $user->email,
             'property_id' => $propertyData->id,
             'property_name' => $propertyData->name,
+            'remaining_size' => $remainingSize,
+            'selected_size_land' => $selectedSizeLand,
             'reference' => $reference,
-            'property_state' => $propertyState,
+            'property_state' => $property->property_state,
             'callback_url' => route('user.payment.callback'),
         ];
-        $transaction = Transaction::create([
-            'property_id' => $propertyData->id,
-            'property_name' => $propertyData->name,
-            'user_id' => $user->id,
-            'email' => $user->email,
-            'amount' => $amount,
-            'status' => 'pending',
-            'payment_method' => '',
-            'reference' => $reference,
-            'transaction_state' => $propertyState
-        ]);
-        $buy = Buy::create([
-            'property_id' => $propertyData->id,
-            'transaction_id' => $transaction->id,
-            'selected_size_land' => $selectedSizeLand,
-            'remaining_size' => $remainingSize,
-            'user_id' => $user->id,
-            'user_email' => $user->email,
-            'total_price' => $amount,
-            'status' => 'available',
-        ]);
-        $propertyData->update([
-            'available_size' => $remainingSize,
-            'selected_size_land' => $selectedSizeLand,
-        ]);
-
-        
+       
         try {
             $response = $this->paystack->transaction->initialize($data);
 
@@ -93,7 +74,6 @@ class PaymentController extends Controller
             return back()->with('error', 'Unable to initiate payment: ' . $e->getMessage());
         }
     }
-
    
     public function paymentCallback(Request $request)
     {
@@ -104,36 +84,39 @@ class PaymentController extends Controller
                 'trxref' => $request->get('trxref'),
             ]);
 
-            $transaction = Transaction::where('reference', $paymentDetails->data->reference)->first();
-
-            if (!$transaction) {
-                return redirect()->back()->with('error', 'Transaction not found.');
-            }
-
-            $property = Property::find($transaction->property_id);
-            $buy = Buy::where('property_id', $transaction->property_id)
-                    ->where('user_id', $user->id)
-                    ->first();
-
+            $property = Property::find($paymentDetails->data->property_id);
             if (!$property) {
                 return redirect()->back()->with('error', 'Property not found.');
-            }
-
-            if (!$buy) {
-                return redirect()->back()->with('error', 'Purchase record not found.');
             }
 
             if ($paymentDetails->data->status === 'success') {
                 $amount = $paymentDetails->data->amount / 100;
                 $reference = $paymentDetails->data->reference;
                 $channel = $paymentDetails->data->channel;
-
-                $transaction->update([
+                // Create the transaction record
+                $transaction = Transaction::create([
+                    'property_id' => $property->id,
+                    'property_name' => $property->name,
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                    'amount' => $amount,
+                    'status' =>  $paymentDetails->data->status,
                     'payment_method' => $channel,
-                    'status' => $paymentDetails->data->status,
-                    'transaction_state' => $transaction->transaction_state,
+                    'reference' => $reference,
+                    'transaction_state' => $paymentDetails->data->status,
                 ]);
-
+                // Create the buy record
+                $buy = Buy::create([
+                    'property_id' => $property->id,
+                    'transaction_id' => $transaction->id,
+                    'selected_size_land' => $paymentDetails->data->selected_size_land,
+                    'remaining_size' => $paymentDetails->data->remaining_size,
+                    'user_id' => $user->id,
+                    'user_email' => $user->email,
+                    'total_price' => $amount,
+                    'status' => 'sold',
+                ]);
+                
                 if (is_numeric($property->available_size) && is_numeric($property->available_size) == 1) {
                     $property->update([
                         'status' => 'sold out',

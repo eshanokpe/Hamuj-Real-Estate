@@ -54,9 +54,19 @@
                         @csrf
 
                         <div class="account__form--input mb-20">
-                            <label class="account__form--input__label mb-12" for="name">Your Name</label>
-                            <input id="name" type="text" class="account__form--input__field @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Enter your name*" required autocomplete="name" autofocus>
-                            @error('name')
+                            <label class="account__form--input__label mb-12" for="name">First Name</label>
+                            <input id="first_name" type="text" class="account__form--input__field @error('first_name') is-invalid @enderror" name="first_name" value="{{ old('first_name') }}" placeholder="Enter your first name*" required autocomplete="first_name" autofocus>
+                            @error('first_name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="account__form--input mb-20">
+                            <label class="account__form--input__label mb-12" for="name">Last Name</label>
+                            <input id="last_name" type="text" class="account__form--input__field @error('last_name') is-invalid @enderror" name="last_name" value="{{ old('name') }}" placeholder="Enter your last name*" required autocomplete="last_name" autofocus>
+                            @error('last_name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -69,6 +79,16 @@
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="account__form--input mb-20">
+                            <label class="account__form--input__label mb-12" for="email">Phone number</label>
+                            <input id="phone" placeholder="Phone number" type="text" class="account__form--input__field  @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required autocomplete="phone">
+                            @error('phone')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong> 
                                 </span>
                             @enderror
                         </div>

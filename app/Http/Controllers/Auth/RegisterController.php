@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 use Mail;
+use App\Http\Controllers\WalletController;
 use App\Models\User;
+use App\Models\VirtualAccount;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -48,31 +50,62 @@ class RegisterController extends Controller
         ]);
     }
  
-    public function register(Request $request)
+    public function register(Request $request, WalletController $walletController)
     {
         // Validate the input
         $request->validate([
-            'name' => 'required|string|max:50|unique:users',
+            'first_name' => 'required|string|max:50|unique:users',
+            'last_name' => 'required|string|max:50|unique:users',
             'email' => 'required|string|email|max:50|unique:users',
+            'phone' => 'required|string|regex:/^\+?[0-9]{10,15}$/|unique:users',
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
-            // 'password' => 'required|string|min:8|confirmed',
+            'referral_code' => 'nullable|string|exists:users,referral_code',
         ]);
 
         // Create the user
         $user = User::create([
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'profile_image' => null,
             'referral_code' => $this->generateReferralCode(),
-            'referred_by' => $this->handleReferralCode($request->referral_code),
+            'referred_by' => $request->referral_code
+                ? User::where('referral_code', $request->referral_code)->value('id')
+                : null,
         ]);
-        $referralDetails = User::where('referral_code', $user->referral_code)->first();
-        $referralLink = "https://dohmayn.com/user/register/referral/$request->referral_code";
+        // Create a virtual account
+        $customerId = $walletController->createVirtualAccountCustomer($user);
 
+        if ($customerId) {
+           $virtualAccountResponse = $walletController->createDedicatedAccount($customerId);
+           if ($virtualAccountResponse['status'] === true) {
+                $virtualAccountData = $virtualAccountResponse['data'];
+                // Store virtual account details in the new table
+                VirtualAccount::create([
+                    'user_id' => $user->id,
+                    'user_email' => $user->email,
+                    'bank_name' => $virtualAccountData['bank']['name'],
+                    'account_name' => $virtualAccountData['account_name'],
+                    'account_number' => $virtualAccountData['account_number'],
+                    'currency' => $virtualAccountData['currency'],
+                    'customer_code' => $virtualAccountData['customer']['customer_code'],
+                    'is_active' => true,
+                ]);
+            }
+        } else {
+            return redirect()->back()->withErrors('Unable to register with Paystack. Please try again later.');
+        }
+        // Create a wallet for the user
+        $user->wallet()->create([
+            'balance' => 0.00, // Initial balance
+            'currency' => $virtualAccountData['currency'] ?? 'NGN',
+        ]);
 
-        // Send verification email
-        Mail::to($user->email)->send(new VerificationEmail($user, $referralLink));
+         // Send verification email and referral link
+        $referralLink = "https://dohmayn.com/user/register/referral/{$user->referral_code}";
+        Mail::to($user->email)->send(new VerificationEmail($user, $referralLink,  $virtualAccountData));
 
         // Redirect to the intended page or dashboard
         return redirect()->route('login')->with('success', 'Please check your email to verify your account.');

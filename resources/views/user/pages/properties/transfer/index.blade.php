@@ -78,7 +78,10 @@
                               
                             </tr>
                             @empty
-                               <tr><td> No Transfer Property available </td></tr>
+                                <tr>
+                                    <td> No Transfer Property available </td>
+                                    <a href="{{ route('user.transfer.add') }}" class="btn btn-success btn-lg">Transfer</a>
+                                </tr>
                             @endforelse
                            
                             

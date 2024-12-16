@@ -19,9 +19,6 @@
                             <tr>
                                 <th>Listing Title</th>
                                 <th>Date published</th>
-                                <th><span class="min-w-100">Status</span></th>
-                                <th>Actual Size</th>
-                                <th>Available Size</th>
                                 <th>Acquired Size</th>
                                 <th>Action</th>
                             </tr>
@@ -45,27 +42,7 @@
                                 <td>
                                     <span class="reviews__date">{{  $property->created_at->format('d F, Y') }} </span>
                                 </td>
-                                <td>
-                                    @if($property->status == 'pending')
-                                        <span class="status__btn pending">
-                                            {{  ucFirst($property->status) }}
-                                        </span>
-                                    @elseif($property->status == 'completed' || $property->status == 'success')
-                                        <span class="status__btn active">
-                                            {{  ucFirst($property->status) }}
-                                        </span>
-                                    @elseif($property->status == 'failed' || $property->status == 'cancelled')
-                                        <span class="status__btn pending">
-                                            {{  ucFirst($property->status) }}
-                                        </span>
-                                    @endif
-                                </td> 
-                                <td>
-                                    <span class="properties__views">{{ $property->property->size }}</span>
-                                </td>
-                                <td>
-                                    <span class="properties__views">{{ $property->remaining_size }}</span>
-                                </td>
+                                
                                 <td> 
                                     <span class="properties__views">{{ $property->selected_size_land }} per/sqm</span>
                                 </td>
@@ -73,6 +50,13 @@
                                     <span class="status__btn pending2">
                                         <a href="{{ route('user.properties.show', encrypt($property->property->id))}}">
                                         View</a>
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="status__btn pending2 " style="background-color: #47008E; ">
+                                        <a class="text-white" href="{{ route('user.cart.sell.index', encrypt($property->property->id))}}">
+                                        Sell</a>
                                     </span>
                                 </td>
                               

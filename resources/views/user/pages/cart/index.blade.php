@@ -8,7 +8,7 @@
             <!-- Dashboard container -->
             <div class="dashboard__container dashboard__reviews--container">
                 <div class="reviews__heading mb-30">
-                    <h2 class="reviews__heading--title">My Properties</h2>
+                    <h2 class="reviews__heading--title">My Property</h2>
                     <p class="reviews__heading--desc">We are glad to see you again!</p>
                 </div>
                 <div class="properties__wrapper">
@@ -36,7 +36,7 @@
                                                 <h3 class="reviews__author--title">{{ $property->name }}</h3>
                                                 <p class="reviews__author--subtitle">{{ $property->location }}</p>
                                             </div>
-                                        </div>
+                                        </div> 
                                     </td>
                                     <td>
                                         <span class="item-price">₦{{ number_format($property->price, 2) }}</span>

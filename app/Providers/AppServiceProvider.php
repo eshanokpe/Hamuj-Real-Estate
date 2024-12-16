@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Auth;
+use App\Models\User;
 use App\Models\Faqs;
 use App\Models\Post;
 use App\Models\About;
@@ -32,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot() 
     {    
         View::share('menuItems', MenuItem::with('dropdownItems')->get()); 
         View::share('faqs', Faqs::all()); 
@@ -45,5 +47,11 @@ class AppServiceProvider extends ServiceProvider
         View::share('contactDetials', ContactDetials::first()); 
         View::share('terms', Terms::first()); 
         View::share('privacy', Privacy::first()); 
+        if (Auth::check()) {
+            $userid = Auth::user()->id; 
+            $user = User::where('id', $userid)->first();
+            View::share('users', $user); 
+        }
+
     }
 }

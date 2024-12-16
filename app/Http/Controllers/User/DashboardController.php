@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use Auth;
+
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\Property;
 use App\Models\Transaction;
 use App\Http\Controllers\Controller;
@@ -26,7 +28,8 @@ class DashboardController extends Controller
                                             ->where('status', 'success')
                                             ->sum('amount');
         $data['totalTransactions'] = Transaction::where('user_id', $user->id)->where('email', $user->email)->where('status', 'success')->count();
-
+        $data['user'] = User::where('id', $user->id)->first();
+         // Fetch referral details
         return view('user.dashboard', $data); 
     }
 
@@ -60,31 +63,32 @@ class DashboardController extends Controller
     }
 
     public function properties()
-{
-    try {
-        $user = Auth::user();
+    {
+        try {
+            $user = Auth::user();
 
-        // Get all transactions for the logged-in user
-        $transactions = Transaction::where('user_id', $user->id)->pluck('property_id')->toArray();
+            // Get all transactions for the logged-in user
+            $transactions = Transaction::where('user_id', $user->id)->pluck('property_id')->toArray();
 
-        // Fetch properties related to the user's transactions and paginate them
-        $properties = Property::whereIn('id', $transactions)->latest()->paginate(10);
+            // Fetch properties related to the user's transactions and paginate them
+            $properties = Property::whereIn('id', $transactions)->latest()->paginate(10);
 
-        // Attach related transactions to each property for the view
-        foreach ($properties as $property) {
-            $property->transaction = $property->transaction()
-                ->where('user_id', $user->id)
-                ->where('email', $user->email)
-                ->first();
+            // Attach related transactions to each property for the view
+            foreach ($properties as $property) {
+                $property->transaction = $property->transaction()
+                    ->where('user_id', $user->id)
+                    ->where('email', $user->email)
+                    ->first();
+            }
+
+            return view('user.pages.properties.index', compact('properties'));
+        } catch (\Exception $e) {
+            \Log::error('Error fetching properties: ' . $e->getMessage());
+            return redirect()->route('home')->with('error', 'An unexpected error occurred. Please try again later.');
         }
-
-        return view('user.pages.properties.index', compact('properties'));
-    } catch (\Exception $e) {
-        \Log::error('Error fetching properties: ' . $e->getMessage());
-        return redirect()->route('home')->with('error', 'An unexpected error occurred. Please try again later.');
     }
-}
 
+    
 
     public function propertiesShow($id){
 

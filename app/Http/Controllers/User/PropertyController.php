@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Log;
 use App\Models\Buy;
+use App\Models\User;
 use App\Models\Property;
 use App\Models\Offerprice;
 
@@ -19,13 +20,15 @@ class PropertyController extends Controller
     }
  
     public function index(){
+        $user = Auth::user();
+        $data['user'] = User::where('id', $user->id)->first();
         $data['properties'] = Property::latest()->paginate(10);
         return view('user.pages.properties.index',$data); 
     }
 
     public function buy(){
         $user = Auth::user();
-
+        $data['user'] = User::where('id', $user->id)->first();
         $data['buyProperty'] = Buy::with('property') 
                                 ->where('user_id', $user->id)
                                 ->where('user_email', $user->email)
@@ -36,6 +39,8 @@ class PropertyController extends Controller
     } 
 
     public function offerPrice($id){
+        $user = Auth::user();
+        $data['user'] = User::where('id', $user->id)->first();
         $data['buy'] = Buy::with('property')->where('property_id', decrypt($id))->first();
         return view('user.pages.properties.offer_price', $data); 
     }
@@ -75,16 +80,7 @@ class PropertyController extends Controller
     }
 
 
-    public function sell(){ 
-        $user = Auth::user();
-        $data['buyProperty'] = Buy::with('property') 
-        ->where('user_id', $user->id)
-        ->where('user_email', $user->email)
-        ->where('user_email', 'buy')
-        ->latest()
-        ->paginate(10);
-        return view('user.pages.properties.sell', $data); 
-    }
+    
 
     public function transfer(){
         $user = Auth::user();
@@ -94,6 +90,21 @@ class PropertyController extends Controller
         ->where('user_email', 'buy')
         ->latest()
         ->paginate(10);
-        return view('user.pages.properties.transfer, $data'); 
+        $data['user'] = User::where('id', $user->id)->first();
+
+        return view('user.pages.properties.transfer.index',  $data); 
+    }
+
+    public function add(){
+        $user = Auth::user();
+        $data['buyProperty'] = Buy::with('property') 
+        ->where('user_id', $user->id)
+        ->where('user_email', $user->email)
+        ->where('user_email', 'buy')
+        ->latest()
+        ->paginate(10);
+        $data['user'] = User::where('id', $user->id)->first();
+
+        return view('user.pages.properties.transfer.add',  $data); 
     }
 }
