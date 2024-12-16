@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Buy;  
 use Yabacon\Paystack;  
+use App\Models\Wallet;
 use App\Models\Property;  
 use App\Models\Transaction;  
 
