@@ -138,7 +138,7 @@ class PaymentController extends Controller
                 $wallet = $user->wallet; // Access wallet directly via relationship
                 
                 if ($wallet) {
-                    dd($wallet->first()->balance);
+                    // dd($wallet->first()->balance);
                     $userBalance = $wallet->first()->balance;
 
                     // Check if the user has sufficient balance
