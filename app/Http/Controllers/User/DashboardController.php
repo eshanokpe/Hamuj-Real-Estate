@@ -24,7 +24,7 @@ class DashboardController extends Controller
         $user = Auth::user();
         $wallet = Auth::user()->wallet; 
         $balance = $wallet ? $wallet->balance : 0;
-        dd($balance);
+        // dd($balance);
         $data['transactions'] = Transaction::where('user_id', $user->id)->where('email', $user->email)->latest()->limit(6)->get();
         $data['totalAmount'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
