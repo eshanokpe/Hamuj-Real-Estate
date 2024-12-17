@@ -10,7 +10,7 @@
                 <div class="reviews__heading mb-30">
                     <h2 class="reviews__heading--title">Sell Property</h2>
                     <p class="reviews__heading--desc">We are glad to see you again!</p>
-                </div>
+                </div> 
                 <div class="properties__wrapper">
                     <div class="properties__table table-responsive">
                         <table class="properties__table--wrapper cart__table">
@@ -19,7 +19,7 @@
                                     <th>Product Image</th>
                                     <th>Price</th>
                                     <th>Actual Land Size</th>
-                                    <th>Available Land Size</th>
+                                    <th>Acquired Land Size</th>
                                     <th>Select Land Size</th>
                                     <th>Total</th>
                                 </tr>
@@ -45,7 +45,7 @@
                                         <span>{{ $property->size }} per/sqm</span>
                                     </td>
                                     <td class="available-size" data-initial-size="{{ $property->available_size }}">
-                                        {{ $property->available_size }} per/sqm
+                                        {{ $property->selected_size_land }} per/sqm
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
