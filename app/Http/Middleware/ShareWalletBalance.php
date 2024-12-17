@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 
-class WalletBalance
+class ShareWalletBalance
 {
     /**
      * Handle an incoming request.
