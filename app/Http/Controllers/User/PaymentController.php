@@ -131,13 +131,22 @@ class PaymentController extends Controller
                         'status' => 'sold out',
                     ]);
                 }
-                // Deduct from Wallet
-                $wallet = Wallet::where('user_id', $user->id)->first();
+                // Deduct from Wallet 
+                $wallet = $user->wallet; // Access wallet directly via relationship
+
                 if ($wallet) {
-                    $wallet->update(['balance' => $wallet->balance - $amount]);
+                    $userBalance = $wallet->balance;
+
+                    // Check if the user has sufficient balance
+                    if ($userBalance >= $amount) {
+                        $wallet->update(['balance' => $userBalance - $amount]);
+                    } else {
+                        return redirect()->route('user.dashboard')->with('error', 'Insufficient wallet balance.');
+                    }
                 } else {
                     return redirect()->route('user.dashboard')->with('error', 'Wallet not found. Please contact support.');
                 }
+
                 
 
                 return redirect()->route('user.dashboard')->with('success', 'Payment successful!');
