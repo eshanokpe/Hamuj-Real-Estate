@@ -28,7 +28,7 @@ class DashboardController extends Controller
                                             ->where('status', 'success')
                                             ->sum('amount');
         $data['totalTransactions'] = Transaction::where('user_id', $user->id)->where('email', $user->email)->where('status', 'success')->count();
-        $data['user'] = User::where('user_id', $user->id)
+        $data['user'] = User::where('id', $user->id)
                             ->where('email', $user->email)
                             ->first();
          // Fetch referral details
@@ -101,7 +101,7 @@ class DashboardController extends Controller
     {
         $users = Auth::user();
         $property = Property::findOrFail(decrypt($id));
-        $user = User::where('user_id', $users->id)
+        $user = User::where('id', $users->id)
                         ->where('email', $users->email)
                         ->first();
         return view('user.pages.properties.show', compact('property','user'));
