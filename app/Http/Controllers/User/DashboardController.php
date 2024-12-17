@@ -22,6 +22,8 @@ class DashboardController extends Controller
         // $query = Transaction::with('user')->latest();
         // $transactions = $query->paginate(10); 
         $user = Auth::user();
+        $wallet = Auth::user()->wallet; 
+        dd($wallet);
         $data['transactions'] = Transaction::where('user_id', $user->id)->where('email', $user->email)->latest()->limit(6)->get();
         $data['totalAmount'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
@@ -31,7 +33,7 @@ class DashboardController extends Controller
         $data['user'] = User::where('id', $user->id)
                             ->where('email', $user->email)
                             ->first();
-                            
+
         // dd($data);
          // Fetch referral details
         return view('user.dashboard', $data); 
