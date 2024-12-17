@@ -24,27 +24,7 @@ class PaymentController extends Controller
 
     public function initializePayment(Request $request)
     {
-        $user = Auth::user();
-        $wallet = $user->wallet; // Access wallet directly via relationship
-                
-                if ($wallet) {
-                    $userBalance = $wallet->balance; // Directly access balance
-                    // dd($userBalance);
-                    // dd($amount);
-                    // Check if the user has sufficient balance
-                    if ($userBalance >= 2000) { 
-                        $v = $userBalance - 2000;
-                        $wallet->update([
-                            'balance' => $userBalance - 2000
-                        ]); // Update wallet balance
-                        dd($v);
-
-                    } else {
-                        return redirect()->route('user.dashboard')->with('error', 'Insufficient wallet balance.');
-                    }
-                } else {
-                    return redirect()->route('user.dashboard')->with('error', 'Wallet not found. Please contact support.');
-                }
+        
         $request->validate([
             'remaining_size' => 'required',
             'property_slug' => 'required',
