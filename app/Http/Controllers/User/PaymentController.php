@@ -24,6 +24,7 @@ class PaymentController extends Controller
 
     public function initializePayment(Request $request)
     {
+        $user = Auth::user();
         $wallet = $user->wallet; // Access wallet directly via relationship
                 
                 if ($wallet) {
