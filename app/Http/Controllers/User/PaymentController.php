@@ -35,7 +35,7 @@ class PaymentController extends Controller
                     if ($userBalance >= 2000) {
                         $v = $userBalance - 2000;
                         $wallet->update([
-                            'balance' => $userBalance - 2000;
+                            'balance' => $userBalance - 2000
                         ]); // Update wallet balance
                         dd($v);
 
