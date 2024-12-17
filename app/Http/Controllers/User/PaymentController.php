@@ -144,23 +144,23 @@ class PaymentController extends Controller
                     'status' => 'sold',
                 ]);
                 
-                if (is_numeric($property->available_size) && is_numeric($property->available_size) == 1) {
-                    $property->update([
-                        'status' => 'sold out',
-                    ]);
-                }
+                // if (is_numeric($property->available_size) && is_numeric($property->available_size) == 1) {
+                //     $property->update([
+                //         'status' => 'sold out',
+                //     ]);
+                // }
             
-                if (is_numeric($buy->remaining_size) && ($property->available_size) == 1) {
-                    $buy->update([
-                        'status' => 'sold out',
-                    ]);
-                }
+                // if (is_numeric($buy->remaining_size) && ($property->available_size) == 1) {
+                //     $buy->update([
+                //         'status' => 'sold out',
+                //     ]);
+                // }
+                $user = Auth::user();
                 // Deduct from Wallet 
-                $wallet = $user->wallet; // Access wallet directly via relationship
-                
+                $wallet = $user->wallet;
                 if ($wallet) {
                     $userBalance = $wallet->balance; // Directly access balance
-                    dd($userBalance);
+                    // dd($userBalance);
                     dd($amount);
                     // Check if the user has sufficient balance
                     if ($userBalance >= $amount) {
@@ -168,7 +168,7 @@ class PaymentController extends Controller
                         dd($v);
                         $wallet->update([
                             'balance' => $userBalance - $amount
-                        ]); // Update wallet balance
+                        ]); 
                     } else {
                         return redirect()->route('user.dashboard')->with('error', 'Insufficient wallet balance.');
                     }
