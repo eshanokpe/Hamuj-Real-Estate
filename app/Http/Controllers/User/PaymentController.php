@@ -141,7 +141,7 @@ class PaymentController extends Controller
                 if ($wallet) {
                     $userBalance = $wallet->balance; // Directly access balance
                     // dd($userBalance);
-                    dd($amount);
+                    // dd($amount);
                     // Check if the user has sufficient balance
                     if ($userBalance >= $amount) {
                         $v = $userBalance - $amount;
