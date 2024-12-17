@@ -29,7 +29,7 @@ class PaymentController extends Controller
                 
                 if ($wallet) {
                     $userBalance = $wallet->balance; // Directly access balance
-                    dd($userBalance);
+                    // dd($userBalance);
                     dd($amount);
                     // Check if the user has sufficient balance
                     if ($userBalance >= 2000) {
