@@ -18,14 +18,14 @@ class ShareWalletBalance
      */ 
     public function handle($request, Closure $next)
     {
-        if (Auth::check()) {
-            $wallet = Auth::user()->wallet; // Access wallet relationship
-            // dd($wallet);
-            $balance = $wallet ? $wallet->balance : 0;
-            View::share('walletBalance', $balance);
-        } else {
-            View::share('walletBalance', 0);
-        }
+        // if (Auth::check()) {
+        //     $wallet = Auth::user()->wallet; // Access wallet relationship
+        //     dd($wallet);
+        //     $balance = $wallet ? $wallet->balance : 0;
+        //     View::share('walletBalance', $balance);
+        // } else {
+        //     View::share('walletBalance', 0);
+        // }
 
         return $next($request);
     }

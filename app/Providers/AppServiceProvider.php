@@ -47,14 +47,15 @@ class AppServiceProvider extends ServiceProvider
         View::share('contactDetials', ContactDetials::first()); 
         View::share('terms', Terms::first()); 
         View::share('privacy', Privacy::first()); 
-        if (Auth::check()) {
-            $wallet = Auth::user()->wallet; // Access wallet relationship
-            // dd($wallet);
-            $balance = $wallet ? $wallet->balance : 0;
-            View::share('walletBalance', $balance);
-        } else {
-            View::share('walletBalance', 0);
-        }
+        View::composer('*', function ($view) {
+            if (Auth::check()) {
+                $wallet = Auth::user()->wallet;
+                $balance = $wallet ? $wallet->balance : 0;
+                $view->with('walletBalance', $balance);
+            } else {
+                $view->with('walletBalance', 0);
+            }
+        });
         
 
     }
