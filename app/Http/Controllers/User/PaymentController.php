@@ -39,9 +39,12 @@ class PaymentController extends Controller
             return back()->with('error', 'Property not found.');
         }
         // Check if the user has enough balance
-        $userBalance = $user->wallet->first()->balance; 
+        
+        $wallet = $user->wallet; // Access the wallet via relationship
         $amount = $request->input('total_price');
-        if ($userBalance < $amount) {
+
+        // Ensure wallet exists and check the balance
+        if (!$wallet || $wallet->balance < $amount) {
             return back()->with('error', 'Insufficient funds in your wallet. Please add funds to proceed.');
         }
 
@@ -145,7 +148,7 @@ class PaymentController extends Controller
                     // Check if the user has sufficient balance
                     if ($userBalance >= $amount) {
                         $v = $userBalance - $amount;
-                        dd($v);
+                        // dd($v);
                         $wallet->update([
                             'balance' => $userBalance - $amount
                         ]); 
