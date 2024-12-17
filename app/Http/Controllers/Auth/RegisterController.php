@@ -97,10 +97,11 @@ class RegisterController extends Controller
         } else {
             return redirect()->back()->withErrors('Unable to register with Paystack. Please try again later.');
         }
+        // $users = Auth::user();
         // Create a wallet for the user
         $user->wallet()->create([
             'user_id' => $user->id,
-            'user_id' =>$user->email,
+            'user_email' =>$user->email,
             'balance' => 0.00,
             'currency' => $virtualAccountData['currency'] ?? 'NGN',
         ]);
