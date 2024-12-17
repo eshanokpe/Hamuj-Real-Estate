@@ -47,11 +47,7 @@ class AppServiceProvider extends ServiceProvider
         View::share('contactDetials', ContactDetials::first()); 
         View::share('terms', Terms::first()); 
         View::share('privacy', Privacy::first()); 
-        if (Auth::check()) {
-            $userid = Auth::user()->id; 
-            $user = User::where('id', $userid)->first();
-            View::share('users', $user); 
-        }
+        
 
     }
 }
