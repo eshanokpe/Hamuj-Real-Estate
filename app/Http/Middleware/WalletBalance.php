@@ -20,9 +20,9 @@ class WalletBalance
     {
         if (Auth::check()) {
             $wallet = Auth::user()->wallet; // Access wallet relationship
+            dd($wallet);
             $balance = $wallet ? $wallet->balance : 0;
             View::share('walletBalance', $balance);
-            // View::share('walletCurrency', $wallet->currency);
         } else {
             View::share('walletBalance', 0);
         }

@@ -34,7 +34,6 @@
             <div class="main__content--left">
                 <div class="main__content--left__inner">
                     <!-- Welcome section -->
-                    {{ $user}}
                     <div class="dashboard__chart--box mb-30">
                         <h2 class="dashboard__chart--title"> Total Assets</h2>
                         <div class="row">
