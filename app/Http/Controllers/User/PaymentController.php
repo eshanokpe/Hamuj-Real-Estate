@@ -137,19 +137,24 @@ class PaymentController extends Controller
                 // Deduct from Wallet 
                 $wallet = $user->wallet; // Access wallet directly via relationship
                 
+                $wallet = $user->wallet; // Directly access wallet via hasOne relationship
+                
                 if ($wallet) {
-                    // dd($wallet->first()->balance);
-                    $userBalance = $wallet->first()->balance;
+                    $userBalance = $wallet->balance; // Directly access balance
 
                     // Check if the user has sufficient balance
                     if ($userBalance >= $amount) {
-                        $wallet->update(['balance' => $userBalance - $amount]);
+                        $wallet->update([
+                            'balance' => $userBalance - $amount
+                        ]); // Update wallet balance
+                        dd('sucess');
                     } else {
                         return redirect()->route('user.dashboard')->with('error', 'Insufficient wallet balance.');
                     }
                 } else {
                     return redirect()->route('user.dashboard')->with('error', 'Wallet not found. Please contact support.');
                 }
+
 
                 
 
