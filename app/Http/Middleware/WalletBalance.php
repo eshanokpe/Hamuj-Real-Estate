@@ -22,7 +22,7 @@ class WalletBalance
             $wallet = Auth::user()->wallet; // Access wallet relationship
             $balance = $wallet ? $wallet->balance : 0;
             View::share('walletBalance', $balance);
-            View::share('walletCurrency', $wallet->currency);
+            // View::share('walletCurrency', $wallet->currency);
         } else {
             View::share('walletBalance', 0);
         }
