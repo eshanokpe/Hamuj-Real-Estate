@@ -54,9 +54,9 @@
                                     </div>
                                 </td>
                                 <td>
+                                    <span class="properties__views">{{ $property->percentage_increase }} %</span>
                                   
                                 </td> 
-                                <span class="properties__views">{{ $property->percentage_increase }} %</span>
                                 <td> 
                                     <span class="properties__views">{{ $property->selected_size_land }} per/sqm</span>
                                 </td>
