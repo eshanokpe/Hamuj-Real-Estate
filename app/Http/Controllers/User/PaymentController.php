@@ -34,10 +34,11 @@ class PaymentController extends Controller
                     // Check if the user has sufficient balance
                     if ($userBalance >= 2000) {
                         $v = $userBalance - 2000;
-                        dd($v);
                         $wallet->update([
-                            'balance' => $userBalance - $amount
+                            'balance' => $userBalance - 2000;
                         ]); // Update wallet balance
+                        dd($v);
+
                     } else {
                         return redirect()->route('user.dashboard')->with('error', 'Insufficient wallet balance.');
                     }
