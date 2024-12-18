@@ -23,10 +23,17 @@ class CartController extends Controller
         return view('user.pages.cart.index', $data); 
     }
 
-    public function sell($id){
+    public function sell($id){ 
         $user = Auth::user(); 
-        $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
-        $data['property'] = Property::where('id', decrypt($id))->first();
+        $data['property']  = Property::with('buys')
+                                ->where('id', decrypt($id))
+                                ->first();
+        $data['property'] = Property::with(['buys' => function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        }])
+        ->where('id', decrypt($id))
+        ->firstOrFail();
+
         return view('user.pages.cart.sell_cart', $data); 
     }
 

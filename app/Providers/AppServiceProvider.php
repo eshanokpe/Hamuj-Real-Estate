@@ -51,9 +51,9 @@ class AppServiceProvider extends ServiceProvider
             if (Auth::check()) {
                 $wallet = Auth::user()->wallet;
                 $balance = $wallet ? $wallet->balance : 0;
-                $view->with('walletBalance', $balance);
+                $view->with('wallet', $wallet);
             } else {
-                $view->with('walletBalance', 0);
+                $view->with('wallet', 0);
             }
         });
         

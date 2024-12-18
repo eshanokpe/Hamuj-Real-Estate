@@ -64,7 +64,7 @@
                                                 </a>
                                             </span>
                                         </div>
-                                        <br>
+                                     
                                     </div>
                                 </div>
                             </div>
@@ -216,8 +216,6 @@
                     </div>
                 </div>
 
-                
-
                 <div class="dashboard__chart--box mb-30">
                     <h2 class="dashboard__chart--title"> Refer and Earn </h2>
                     <div class="row">
@@ -225,7 +223,6 @@
                             <div class="swiper-slide">
                                 <div class="currency__card">
                                     <h3 class="currency__card--title">
-                                      
                                         Refer Your Friend and Earn to Your Wallet
                                     </h3>
                                     <div class="referral-code">

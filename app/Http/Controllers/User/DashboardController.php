@@ -35,8 +35,6 @@ class DashboardController extends Controller
                             ->where('email', $user->email)
                             ->first();
 
-        // dd($data);
-         // Fetch referral details
         return view('user.dashboard', $data); 
     }
 

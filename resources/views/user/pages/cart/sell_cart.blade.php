@@ -44,9 +44,10 @@
                                     <td>
                                         <span>{{ $property->size }} per/sqm</span>
                                     </td>
-                                    <td class="available-size" data-initial-size="{{ $property->available_size }}">
-                                        {{ $property->selected_size_land }} per/sqm
-                                    </td>
+                                    <td class="available-size" data-initial-size="{{ $property->buys->sum('selected_size_land')}}">
+                                        {{-- {{ $property->selected_size_land }}  --}}
+                                        {{ $property->buys->sum('selected_size_land') }} per/sqm
+                                    </td> 
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <button class="btn btn-outline-secondary btn-sm decrement-btn" 
@@ -100,7 +101,7 @@ function updateCart(row) {
     const remainingSize = Math.max(initialSize - quantity, 1); // Prevent negative sizes
 
     row.querySelector('.total-price').textContent = `₦${total.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
-    availableSizeElement.textContent = `${remainingSize} per/sqm`;
+   
 }
 
 // Add event listeners for buttons and inputs
@@ -108,6 +109,9 @@ document.querySelectorAll('.cart__table tbody tr').forEach(row => {
     const decrementBtn = row.querySelector('.decrement-btn');
     const incrementBtn = row.querySelector('.increment-btn');
     const quantityInput = row.querySelector('.quantity-input');
+    const availableSizeElement = row.querySelector('.available-size');
+    const initialSize = parseFloat(availableSizeElement.dataset.initialSize); // Available size
+
 
     decrementBtn.addEventListener('click', () => {
         if (quantityInput.value > 1) {
@@ -117,8 +121,12 @@ document.querySelectorAll('.cart__table tbody tr').forEach(row => {
     });
 
     incrementBtn.addEventListener('click', () => {
-        quantityInput.value++;
-        updateCart(row);
+        if (parseInt(quantityInput.value) < initialSize) {
+            quantityInput.value++;
+            updateCart(row);
+        } else {
+            alert(`You cannot exceed the available size of ${initialSize} per/sqm.`);
+        }
     });
 
     quantityInput.addEventListener('input', () => {

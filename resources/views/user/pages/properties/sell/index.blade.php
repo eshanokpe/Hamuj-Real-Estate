@@ -40,13 +40,15 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="reviews__date">{{  $property->created_at->format('d F, Y') }} </span>
+                                    <span class="reviews__date">
+                                        {{  \Carbon\Carbon::parse($property->latest_created_at)->format('d F, Y')  }} 
+                                    </span>
                                 </td>
                                 <td> 
-                                    <span class="properties__views">{{ $property->selected_size_land }} per/sqm</span>
+                                    <span class="properties__views">{{ $property->total_selected_size_land }} per/sqm</span>
                                 </td>
                                 <td>
-                                    <span class="status__btn pending2">
+                                    <span class="status__btn pending2"> 
                                         <a href="{{ route('user.properties.show', encrypt($property->property->id))}}">
                                         View</a>
                                     </span>

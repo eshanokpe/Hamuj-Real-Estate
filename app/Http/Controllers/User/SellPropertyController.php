@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use DB;
 use Auth;
 use Log;
 use App\Models\Sell;
@@ -17,15 +18,19 @@ class SellPropertyController extends Controller
     
     public function index(){ 
         $user = Auth::user();
-        $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
-
-        $data['buyProperty'] = Buy::with('property') 
+       
+        $data['buyProperty'] = Buy::select(
+            'property_id', 
+            DB::raw('SUM(selected_size_land) as total_selected_size_land'),
+            DB::raw('MAX(created_at) as latest_created_at') 
+        )
+        ->with('property')
         ->where('user_id', $user->id)
         ->where('user_email', $user->email)
-        // ->where('user_email', 'buy')
-        ->latest()
+        ->groupBy('property_id') 
         ->paginate(10);
-        return view('user.pages.properties.sell', $data); 
+
+        return view('user.pages.properties.sell.index', $data); 
     }
 
     
@@ -76,4 +81,12 @@ class SellPropertyController extends Controller
             return back()->with('error', 'Something went wrong:' . $e->getMessage());
         }
     }
+
+    public function sellPropertyHistory()
+    {
+        $properties = Sell::where('user_id', auth()->id())->paginate(10); 
+        return view('user.pages.transactions.sell_history', compact('properties'));
+    }
+
 }
+ 

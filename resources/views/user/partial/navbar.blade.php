@@ -2,11 +2,7 @@
  <header class="header__section">
     <div class="main__header d-flex justify-content-between align-items-center">
         <div class="header__left d-flex align-items-center">
-            <a class="collaps__menu" href="javascript:void(0)"><svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.5 16.5999L7.0667 11.1666C6.42503 10.5249 6.42503 9.4749 7.0667 8.83324L12.5 3.3999" stroke="currentColor" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M18.5 16.5999L13.0667 11.1666C12.425 10.5249 12.425 9.4749 13.0667 8.83324L18.5 3.3999" stroke="currentColor" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </a>
+          
             <div class="offcanvas__header--menu__open ">
                 <a class="offcanvas__header--menu__open--btn" href="javascript:void(0)" data-offcanvas>
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon offcanvas__header--menu__open--svg" viewBox="0 0 512 512"><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 160h352M80 256h352M80 352h352"/></svg>
@@ -37,9 +33,9 @@
             </div>
             <div class="main__logo logo-desktop-block">
                 <a class="main__logo--link" href="./dashboard.html">
-                    <img class="main__logo--img desktop light__logo" src="assets/img/logo/nav-log.png" alt="logo-img">
-                    <img class="main__logo--img desktop dark__logo" src="assets/img/logo/nav-log-white.png" alt="logo-img">
-                    <img class="main__logo--img mobile" src="assets/img/logo/logo-mobile.png" alt="logo-img">
+                    <img class="main__logo--img desktop light__logo" src="{{ asset( $contactDetials->site_logo )}}" alt="logo-img">
+                    <img class="main__logo--img desktop dark__logo" src="{{ asset('assets/admin/img/logo/nav-log-white.jpg')}}" alt="logo-img">
+                    <img class="main__logo--img mobile" src="{{ asset('assets/admin/img/logo/logo-mobilee.jpg')}}" alt="logo-img">
                 </a>
             </div>
         </div>
@@ -52,7 +48,7 @@
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12.8333 4.66667H11.6667V3.5C11.6667 2.5335 10.8662 1.75 9.91667 1.75H2.33333C1.38383 1.75 0.583333 2.5335 0.583333 3.5V10.5C0.583333 11.4665 1.38383 12.25 2.33333 12.25H12.8333C13.7828 12.25 14.5833 11.4665 14.5833 10.5V6.41667C14.5833 5.45 13.7828 4.66667 12.8333 4.66667ZM2.33333 2.91667H9.91667C10.3993 2.91667 10.8333 3.35067 10.8333 3.83333V4.66667H2.33333C1.85067 4.66667 1.41667 4.23267 1.41667 3.75C1.41667 3.26733 1.85067 2.91667 2.33333 2.91667ZM12.8333 10.5C12.8333 10.983 12.3993 11.4167 11.9167 11.4167H2.33333C1.85067 11.4167 1.41667 10.983 1.41667 10.5V6.41667H12.8333C13.316 6.41667 13.75 6.85067 13.75 7.33333V10.5ZM10.0833 8.16667C9.60067 8.16667 9.16667 8.60067 9.16667 9.08333C9.16667 9.566 9.60067 10 10.0833 10C10.566 10 11 9.566 11 9.08333C11 8.60067 10.566 8.16667 10.0833 8.16667Z" fill="#16A34A"/>
                                 </svg> 
-                                Wallet Balance: <span class="wallet-balance">{{ $user->wallet->first()->currency}}{{ number_format($walletBalance, 2) }}</span>
+                                Wallet Balance: <span class="wallet-balance">{{ $wallet->currency}}{{ number_format($wallet->balance, 2) }}</span>
                             </a>
                         </li>
                         
@@ -141,9 +137,9 @@
 <div class="offcanvas__header">
     <div class="offcanvas__inner">
         <div class="offcanvas__logo">
-            <a class="offcanvas__logo_link" href="./dashboard.html">
-                <img class="light__logo" src="assets/img/logo/nav-log.png" alt="Logo-img" width="158" height="36">
-                <img class="dark__logo" src="assets/img/logo/nav-log-white.png" alt="Logo-img" width="158" height="36">
+            <a class="offcanvas__logo_link" href="{{ route('user.dashboard')}}">
+                <img class="light__logo" src="{{ asset( $contactDetials->site_logo )}}" alt="Logo-img" width="158" height="36">
+                <img class="dark__logo" src="{{ asset('assets/admin/img/logo/nav-log-white.jpg')}}" alt="Logo-img" width="158" height="36">
             </a>
             <button class="offcanvas__close--btn" data-offcanvas>close</button>
         </div>

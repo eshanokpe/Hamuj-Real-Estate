@@ -25,7 +25,7 @@ use App\Http\Controllers\User\SellPropertyController;
 Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
      
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/transaction', [DashboardController::class, 'transactions'])->name('transactions');
+    Route::get('/transaction/report', [DashboardController::class, 'transactionReport'])->name('transactions');
     
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
     Route::get('/buy', [PropertyController::class, 'buy'])->name('buy'); 
@@ -39,7 +39,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/payment/balance', [TransferController::class, 'balance']);
      
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
-
+ 
     Route::get('/my-properties', [DashboardController::class, 'properties'])->name('myProperties');
     Route::get('/my-properties/{id}', [DashboardController::class, 'propertiesShow'])->name('properties.show');
  
@@ -52,6 +52,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
 
     Route::get('/sell', [SellPropertyController::class, 'index'])->name('sell');
     Route::post('/sell/property', [SellPropertyController::class, 'sellProperty'])->name('sell.property');
+    Route::get('/sell/property/history', [SellPropertyController::class, 'sellPropertyHistory'])->name('sell.property.history');
    
     
     Route::resource('profile', ProfileController::class);
