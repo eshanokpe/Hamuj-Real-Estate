@@ -12,22 +12,19 @@
                 <h2 class="reviews__heading--title">Transfer Property</h2>
                 <p class="reviews__heading--desc">We are glad to see you again!</p>
             </div>
-            <div class="properties__wrapper">
+            <div class="properties__wrapper"> 
                 <div class="properties__table table-responsive">
                     <table class="properties__table--wrapper">
                         <thead>
                             <tr>
                                 <th>Listing Title</th>
                                 <th>Date published</th>
-                                <th><span class="min-w-100">Status</span></th>
-                                <th>Actual Size</th>
-                                <th>Available Size</th>
                                 <th>Acquired Size</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($buyProperty as $property)
+                            @forelse ($sellProperty as $property)
                             <tr>
                                 <td>
                                     <div class="properties__author d-flex align-items-center">
@@ -43,36 +40,25 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="reviews__date">{{  $property->created_at->format('d F, Y') }} </span>
+                                    <span class="reviews__date">
+                                        {{  \Carbon\Carbon::parse($property->latest_created_at)->format('d F, Y')  }} 
+                                    </span>
                                 </td>
-                                <td>
-                                    @if($property->status == 'pending')
-                                        <span class="status__btn pending">
-                                            {{  ucFirst($property->status) }}
-                                        </span>
-                                    @elseif($property->status == 'completed' || $property->status == 'success')
-                                        <span class="status__btn active">
-                                            {{  ucFirst($property->status) }}
-                                        </span>
-                                    @elseif($property->status == 'failed' || $property->status == 'cancelled')
-                                        <span class="status__btn pending">
-                                            {{  ucFirst($property->status) }}
-                                        </span>
-                                    @endif
-                                </td> 
-                                <td>
-                                    <span class="properties__views">{{ $property->property->size }}</span>
-                                </td>
-                                <td>
-                                    <span class="properties__views">{{ $property->remaining_size }}</span>
-                                </td>
+                              
                                 <td> 
-                                    <span class="properties__views">{{ $property->selected_size_land }} per/sqm</span>
+                                    <span class="properties__views">{{ $property->total_selected_size_land }} per/sqm</span>
                                 </td>
                                 <td>
                                     <span class="status__btn pending2">
                                         <a href="{{ route('user.properties.show', encrypt($property->property->id))}}">
-                                        View</a>
+                                            View
+                                        </a> 
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="status__btn pending2 " style="background-color: #2b8e00; ">
+                                        <a class="text-white" href="{{ route('user.cart.transfer.index', encrypt($property->property->id))}}">
+                                        Transfer</a>
                                     </span>
                                 </td>
                               
@@ -93,7 +79,7 @@
                     <nav class="pagination justify-content-center">
                         <ul class="pagination__menu d-flex align-items-center justify-content-center">
                             <!-- Render pagination links dynamically -->
-                            @if ($buyProperty->onFirstPage())
+                            @if ($sellProperty->onFirstPage())
                                 <li class="pagination__menu--items pagination__arrow disabled">
                                     <span class="pagination__arrow-icon">
                                         <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -103,7 +89,7 @@
                                 </li>
                             @else
                                 <li class="pagination__menu--items pagination__arrow">
-                                    <a href="{{ $buyProperty->previousPageUrl() }}" class="pagination__arrow-icon link">
+                                    <a href="{{ $sellProperty->previousPageUrl() }}" class="pagination__arrow-icon link">
                                         <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M10.583 20.5832L0.999675 10.9998L10.583 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
@@ -112,17 +98,17 @@
                             @endif
 
                             <!-- Page numbers -->
-                            @foreach ($buyProperty->links()->elements[0] as $page => $url)
+                            @foreach ($sellProperty->links()->elements[0] as $page => $url)
                                 <li class="pagination__menu--items">
-                                    <a href="{{ $url }}" class="pagination__menu--link {{ $page == $buyProperty->currentPage() ? 'active color-accent-1' : '' }}">
+                                    <a href="{{ $url }}" class="pagination__menu--link {{ $page == $sellProperty->currentPage() ? 'active color-accent-1' : '' }}">
                                         {{ $page }}
                                     </a>
                                 </li>
                             @endforeach
 
-                            @if ($buyProperty->hasMorePages())
+                            @if ($sellProperty->hasMorePages())
                                 <li class="pagination__menu--items pagination__arrow">
-                                    <a href="{{ $buyProperty->nextPageUrl() }}" class="pagination__arrow-icon link">
+                                    <a href="{{ $sellProperty->nextPageUrl() }}" class="pagination__arrow-icon link">
                                         <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M1.00098 20.5832L10.5843 10.9998L1.00098 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>

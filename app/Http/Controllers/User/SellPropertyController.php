@@ -75,7 +75,7 @@ class SellPropertyController extends Controller
                 'status' => 'pending',
             ]);
 
-            return redirect()->route('user.dashboard')->with('success', 'We have receive your prompt to sell the Property, your income will be transfer to your account.');
+            return redirect()->route('user.sell.history')->with('success', 'We have receive your prompt to sell the Property, your income will be transfer to your account.');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Something went wrong:' . $e->getMessage());
@@ -84,9 +84,21 @@ class SellPropertyController extends Controller
 
     public function sellPropertyHistory()
     {
-        $properties = Sell::where('user_id', auth()->id())->paginate(10); 
-        return view('user.pages.transactions.sell_history', compact('properties'));
+        $user = Auth::user();
+       
+        $data['sellProperties'] = Sell::select(
+            'property_id', 
+            DB::raw('SUM(selected_size_land) as total_selected_size_land'),
+            DB::raw('MAX(created_at) as latest_created_at') 
+        )
+        ->with('property')
+        ->where('user_id', $user->id)
+        ->where('user_email', $user->email)
+        ->groupBy('property_id') 
+        ->paginate(10);
+ 
+        return view('user.pages.transactions.sell_history', $data);
     }
-
+ 
 }
  

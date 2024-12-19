@@ -39,6 +39,11 @@ class Property extends Model
     {
         return $this->hasMany(Buy::class, 'property_id');
     }
+
+    public function sells()
+    {
+        return $this->hasMany(Buy::class, 'property_id');
+    }
  
     public function transaction(){
         return $this->hasMany(Transaction::class);

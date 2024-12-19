@@ -104,9 +104,29 @@
                     </a>
                     <div class="dropdown__user--profile">
                         <ul class="user__profile--menu">
-                            <li class="user__profile--menu__items"><a class="user__profile--menu__link" href="./profile.html"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" class="lucide lucide-user-2 inline-block size-4 ltr:mr-2 rtl:ml-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> My Profile</a></li>
+                            <li class="user__profile--menu__items">
+                                <a class="user__profile--menu__link" href="{{ route('user.sell.history') }}">
+                                    <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 12L9 18L15 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M3 6L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M19 4H5C3.89543 4 3 4.89543 3 6V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V6C21 4.89543 20.1046 4 19 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg> 
+                                    Sell History
+                                </a>
+                            </li>
+                            <li class="user__profile--menu__items">
+                                <a class="user__profile--menu__link" href="{{ route('user.transfer.history') }}">
+                                    <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 12L9 18L15 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M3 6L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M19 4H5C3.89543 4 3 4.89543 3 6V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V6C21 4.89543 20.1046 4 19 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg> 
+                                    Transfer History
+                                </a>
+                            </li>
+                            <li class="user__profile--menu__items"><a class="user__profile--menu__link" href="{{ route('user.profile.index')}}"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-2" class="lucide lucide-user-2 inline-block size-4 ltr:mr-2 rtl:ml-2"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg> My Profile</a></li>
 
-                            <li class="user__profile--menu__items"><a class="user__profile--menu__link position-relative" href="./chat.html"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="mail" class="lucide lucide-mail inline-block size-4 ltr:mr-2 rtl:ml-2"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg> Inbox <span class="profile__messages--count">12</span> </a></li>
+                            {{-- <li class="user__profile--menu__items"><a class="user__profile--menu__link position-relative" href="./chat.html"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="mail" class="lucide lucide-mail inline-block size-4 ltr:mr-2 rtl:ml-2"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg> Inbox <span class="profile__messages--count">12</span> </a></li> --}}
 
                         </ul>
                         <div class="dropdown__user--profile__footer">
@@ -154,11 +174,7 @@
                     <a class="offcanvas__menu_item" href="../listing.html">Listing</a>
                     <ul class="offcanvas__sub_menu">
                         <li class="offcanvas__sub_menu_li"><a href="../listing.html" class="offcanvas__sub_menu_item">Listing Left Sidebar</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../listing-right-sidebar.html" class="offcanvas__sub_menu_item">Listing Right Sidebar</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../listing.html" class="offcanvas__sub_menu_item">Listing Grig</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../listing-list.html" class="offcanvas__sub_menu_item">Listing List</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../listing-details.html" class="offcanvas__sub_menu_item">Listing Details</a></li>
-                    </ul>
+                      </ul>
                 </li>
                 
                 <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" href="./my-properties.html">Properties</a></li>
@@ -166,30 +182,14 @@
                     <a class="offcanvas__menu_item" href="./dashboard.html">Dashboard</a>
                     <ul class="offcanvas__sub_menu">
                         <li class="offcanvas__sub_menu_li"><a href="./dashboard.html" class="offcanvas__sub_menu_item">Dashboard</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="./create-listing.html" class="offcanvas__sub_menu_item">Creat Listing</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="./chat.html" class="offcanvas__sub_menu_item">Chats</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="./my-favorites.html" class="offcanvas__sub_menu_item">My Favorites</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="./my-properties.html" class="offcanvas__sub_menu_item">My Properties</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="./my-package.html" class="offcanvas__sub_menu_item">My Package</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="./profile.html" class="offcanvas__sub_menu_item">My Profile</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="./reviews.html" class="offcanvas__sub_menu_item">Reviews</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="./saved-search.html" class="offcanvas__sub_menu_item">Saved Search</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="./settings.html" class="offcanvas__sub_menu_item">Setting</a></li>
-                    </ul>
+                   </ul>
                 </li>
                 <li class="offcanvas__menu_li"><a class="offcanvas__menu_item" href="../blog.html">News</a></li>
                 <li class="offcanvas__menu_li">
                     <a class="offcanvas__menu_item" href="#">Pages</a>
                     <ul class="offcanvas__sub_menu">
                         <li class="offcanvas__sub_menu_li"><a href="../about.html" class="offcanvas__sub_menu_item">About Us</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../contact.html" class="offcanvas__sub_menu_item">Contact Us</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../project.html" class="offcanvas__sub_menu_item">Project</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../project-details.html" class="offcanvas__sub_menu_item">Project Details</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../services-details.html" class="offcanvas__sub_menu_item">Services Details</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../login.html" class="offcanvas__sub_menu_item">Login</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../sign-up.html" class="offcanvas__sub_menu_item">Sing Up</a></li>
-                        <li class="offcanvas__sub_menu_li"><a href="../404.html" class="offcanvas__sub_menu_item">Error 404</a></li>
-                    </ul>
+                      </ul>
                 </li>
             </ul>
         </nav>

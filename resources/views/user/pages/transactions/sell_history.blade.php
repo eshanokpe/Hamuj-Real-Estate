@@ -24,7 +24,7 @@
         <!-- dashboard container -->
         <div class="dashboard__container dashboard__reviews--container">
             <div class="reviews__heading mb-30">
-                <h2 class="reviews__heading--title">My Assets</h2>
+                <h2 class="reviews__heading--title">Sell Property History</h2>
                 <p class="reviews__heading--desc">We are glad to see you again!</p>
             </div>
             <div class="properties__wrapper">
@@ -33,13 +33,12 @@
                         <thead>
                             <tr>
                                 <th>Listing Title</th>
-                                <th><span class="min-w-100">Percentage</span></th>
-                                <th>Acquired Size</th>
+                               <th>Acquired Size</th>
                                 <th colspan="2">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($properties as $property)
+                            @forelse ($sellProperties as $property)
                             <tr>
                                 <td>
                                     <div class="properties__author d-flex align-items-center">
@@ -53,12 +52,9 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <span class="properties__views">{{ $property->percentage_increase }} %</span>
-                                  
-                                </td> 
+                                 
                                 <td> 
-                                    <span class="properties__views">{{ $property->selected_size_land }} per/sqm</span>
+                                    <span class="properties__views">{{ $property->total_selected_size_land }} per/sqm</span>
                                 </td>
                                 <td colspan="2">
                                     <p class="status__btn pending">
@@ -90,7 +86,7 @@
                     <nav class="pagination justify-content-center">
                         <ul class="pagination__menu d-flex align-items-center justify-content-center">
                             <!-- Render pagination links dynamically -->
-                            @if ($properties->onFirstPage())
+                            @if ($sellProperties->onFirstPage())
                                 <li class="pagination__menu--items pagination__arrow disabled">
                                     <span class="pagination__arrow-icon">
                                         <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -100,7 +96,7 @@
                                 </li>
                             @else
                                 <li class="pagination__menu--items pagination__arrow">
-                                    <a href="{{ $properties->previousPageUrl() }}" class="pagination__arrow-icon link">
+                                    <a href="{{ $sellProperties->previousPageUrl() }}" class="pagination__arrow-icon link">
                                         <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M10.583 20.5832L0.999675 10.9998L10.583 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
@@ -109,17 +105,17 @@
                             @endif
 
                             <!-- Page numbers -->
-                            @foreach ($properties->links()->elements[0] as $page => $url)
+                            @foreach ($sellProperties->links()->elements[0] as $page => $url)
                                 <li class="pagination__menu--items">
-                                    <a href="{{ $url }}" class="pagination__menu--link {{ $page == $properties->currentPage() ? 'active color-accent-1' : '' }}">
+                                    <a href="{{ $url }}" class="pagination__menu--link {{ $page == $sellProperties->currentPage() ? 'active color-accent-1' : '' }}">
                                         {{ $page }}
                                     </a>
                                 </li>
                             @endforeach
 
-                            @if ($properties->hasMorePages())
+                            @if ($sellProperties->hasMorePages())
                                 <li class="pagination__menu--items pagination__arrow">
-                                    <a href="{{ $properties->nextPageUrl() }}" class="pagination__arrow-icon link">
+                                    <a href="{{ $sellProperties->nextPageUrl() }}" class="pagination__arrow-icon link">
                                         <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M1.00098 20.5832L10.5843 10.9998L1.00098 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>

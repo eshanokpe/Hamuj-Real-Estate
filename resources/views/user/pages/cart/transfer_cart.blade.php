@@ -8,9 +8,9 @@
             <!-- Dashboard container -->
             <div class="dashboard__container dashboard__reviews--container">
                 <div class="reviews__heading mb-30">
-                    <h2 class="reviews__heading--title">Sell Property</h2>
+                    <h2 class="reviews__heading--title">Transfer Property</h2>
                     <p class="reviews__heading--desc">We are glad to see you again!</p>
-                </div> 
+                </div>
                 <div class="properties__wrapper">
                     <div class="properties__table table-responsive">
                         <table class="properties__table--wrapper cart__table">
@@ -18,7 +18,6 @@
                                 <tr>
                                     <th>Product Image</th>
                                     <th>Price</th>
-                                    <th>Actual Land Size</th>
                                     <th>Acquired Land Size</th>
                                     <th>Select Land Size</th>
                                     <th>Total</th>
@@ -40,9 +39,6 @@
                                     </td>
                                     <td>
                                         <span class="item-price">₦{{ number_format($property->price, 2) }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ $property->size }} per/sqm</span>
                                     </td>
                                     <td class="available-size" data-initial-size="{{ $property->buys->sum('selected_size_land')}}">
                                         {{ $property->buys->sum('selected_size_land')}} per/sqm
@@ -68,14 +64,16 @@
             </div>
 
             <div class="dashboard__container dashboard__reviews--container">
-                <div class="cart__footer d-flex justify-content-end align-items-center mt-4">
-                    
+                <div class="cart__footer d-flex justify-content-between align-items-center mt-4">
+                    <a href="{{ route('user.transfer') }}" class="solid__btn" style="background-color: #CC9933">
+                        View Transfer Properties
+                    </a>
                     <div>
                         <a href="#" class="solid__btn" id="make-payment-btn">Continue</a>
                     </div>
                 </div>
                 <!-- Hidden Form to Pass Data for Payment -->
-                <form id="payment-form" action="{{ route('user.sell.property') }}" method="POST" style="display: none">
+                <form id="payment-form" action="{{ route('user.transfer.recipient') }}" method="GET" style="display: none">
                     @csrf
                     <input type="hidden" name="remaining_size" id="remaining_size">
                     <input type="hidden" name="property_slug" id="property_slug" value="{{ $property->slug }}">

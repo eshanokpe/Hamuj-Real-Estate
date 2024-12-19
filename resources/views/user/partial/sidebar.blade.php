@@ -56,17 +56,7 @@
                         </li>
                     </ul>
             </li>
-            <li class="sidebar__menu--items">
-                <a class="sidebar__menu--link" href="{{ route('user.sell.property.history') }}">
-                    <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 12L9 18L15 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M3 6L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M19 4H5C3.89543 4 3 4.89543 3 6V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V6C21 4.89543 20.1046 4 19 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    
-                    <span class="sidebar__menu--text">Sell Property History</span>
-                </a>
-            </li>
+           
             
             <li class="sidebar__menu--items">
                 <a class="sidebar__menu--link" href="./my-favorites.html">

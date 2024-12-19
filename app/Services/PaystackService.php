@@ -34,7 +34,7 @@ class PaystackService
         $data = [
             // "source" => $balance,
             "source" => 'balance',
-            "amount" => $amount, // Amount in kobo for NGN
+            "amount" => $amount, 
             "recipient" => $customerCode,
             "reason" => $reason,
             "currency" => $currency,

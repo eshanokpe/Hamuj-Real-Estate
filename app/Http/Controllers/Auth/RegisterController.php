@@ -61,13 +61,17 @@ class RegisterController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
             'referral_code' => 'nullable|string|exists:users,referral_code',
         ]);
-
+     
+        // Generate the recipient ID
+        $recipientId = $this->createRecipientId();
+        
         // Create the user
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'recipient_id' => $recipientId,
             'password' => Hash::make($request->password),
             'profile_image' => null,
             'referral_code' => $this->generateReferralCode(),
@@ -117,6 +121,16 @@ class RegisterController extends Controller
     private function generateReferralCode()
     {
         return strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
+    }
+
+    public function createRecipientId()
+    {
+        $prefix = "DOHMAYN";
+        $randomNumber = rand(10000, 99999); 
+        $uniqueCode = strtoupper(Str::random(10)); 
+        
+        $recipientId = "{$prefix}-{$randomNumber}-{$uniqueCode}";
+        return $recipientId;
     }
 
     protected function handleReferralCode($referralCode)

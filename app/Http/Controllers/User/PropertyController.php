@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use Log;
+use DB;
 use App\Models\Buy;
 use App\Models\User;
 use App\Models\Property;
@@ -28,12 +29,17 @@ class PropertyController extends Controller
 
     public function buy(){
         $user = Auth::user();
-        $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
-        $data['buyProperty'] = Buy::with('property') 
-                                ->where('user_id', $user->id)
-                                ->where('user_email', $user->email)
-                                // ->latest()
-                                ->paginate(10);
+        
+        $data['buyProperty'] = Buy::select(
+            'property_id', 
+            DB::raw('SUM(selected_size_land) as total_selected_size_land'),
+            DB::raw('MAX(created_at) as latest_created_at') 
+        )
+        ->with('property')
+        ->where('user_id', $user->id)
+        ->where('user_email', $user->email)
+        ->groupBy('property_id') 
+        ->paginate(10);
 
         return view('user.pages.properties.buy', $data); 
     } 
@@ -83,18 +89,7 @@ class PropertyController extends Controller
 
     
 
-    public function transfer(){
-        $user = Auth::user();
-        $data['buyProperty'] = Buy::with('property') 
-        ->where('user_id', $user->id)
-        ->where('user_email', $user->email)
-        ->where('user_email', 'buy')
-        ->latest()
-        ->paginate(10);
-        $data['user'] = User::where('id', $user->id)->first();
-
-        return view('user.pages.properties.transfer.index',  $data); 
-    }
+    
 
     public function add(){
         $user = Auth::user();

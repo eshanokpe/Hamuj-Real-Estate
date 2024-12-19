@@ -202,11 +202,21 @@
                                     <h4 class="currency__card--title">
                                        Account number
                                     </h4>
-                                    <span class="currency__card--amount"> {{ $user->virtualAccounts->first()->account_number}}</span>
+                                    <span class="currency__card--amount" style="margin-top: -15px"> 
+                                        {{ $user->virtualAccounts->first()->account_number}}
+                                    </span>
                                     <h4 class="currency__card--title">
                                         Account Bank
-                                     </h4>
-                                     <span class="currency__card--amount"> {{ $user->virtualAccounts->first()->bank_name}}</span>
+                                    </h4>
+                                     <span class="currency__card--amount"  style="margin-top: -15px"> 
+                                        {{ $user->virtualAccounts->first()->bank_name}}
+                                    </span>
+                                    <h4 class="currency__card--title">
+                                        Recipient ID
+                                    </h4>
+                                     <span class="currency__card--amount"  style="margin-top: -15px;  font-size: 1.6rem;"> 
+                                        {{ $user->first()->recipient_id}}
+                                    </span>
                                     
                                   
                                     <br>
@@ -226,7 +236,7 @@
                                         Refer Your Friend and Earn to Your Wallet
                                     </h3>
                                     <div class="referral-code">
-                                        <span class="currency__weekly referral_code">
+                                        <span class="currency__weekly  referral_code">
                                             {{ url('/user/register/referral/' . $user->referral_code) }}
                                         </span>
                                         <button class="copy-btn btn btn-success btn-lg" onclick="copyReferralLink()">Copy</button>
