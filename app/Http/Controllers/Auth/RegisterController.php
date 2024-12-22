@@ -106,7 +106,8 @@ class RegisterController extends Controller
         $user->wallet()->create([
             'user_id' => $user->id,
             'user_email' =>$user->email,
-            'balance' => 0.00,
+            'balance' => '12000000000',
+            // 'balance' => 0.00,
             'currency' => $virtualAccountData['currency'] ?? 'NGN',
         ]);
 
