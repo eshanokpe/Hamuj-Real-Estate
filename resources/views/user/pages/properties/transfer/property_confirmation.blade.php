@@ -58,7 +58,15 @@
                    <div class="col-lg-6">
                         <div class="setting__profile " style="background-color: #fff"> 
                             <div class="edit__profile--step">
-                                <h4 class="setting__profile--title">Confirm Recipient Information</h4>
+                                <h4 class="setting__profile--title"> Sender Information</h4>
+                                <div class="card mt-3">
+                                   
+                                    <div class="card-body">
+                                        <p><strong>Name:</strong> {{ $sender->last_name }} {{ $sender->first_name }}</p>
+                                        <p><strong>Email:</strong> {{ $sender->email }}</p>
+                                        <p><strong>Phone:</strong> {{ $sender->phone }}</p> <!-- Assuming phone number is stored -->
+                                    </div>
+                                </div>
                                 <form action="{{ route('user.checkRecipient.transfer') }}" method="POST">
                                     @csrf
                                     <div class="setting__profile--inner">

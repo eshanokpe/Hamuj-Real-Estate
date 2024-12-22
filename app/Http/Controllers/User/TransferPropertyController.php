@@ -206,7 +206,7 @@ class TransferPropertyController extends Controller
         ->whereJsonContains('data->property_slug', $slug)->first();
         // dd($sender['data']);
         $data['data'] = $sender['data'];
-        $sender['data']['recipient_id'];
+        $data['sender'] = User::where('id', $sender['data']['sender_id'])->first();
        
 
         return view('user.pages.properties.transfer.property_confirmation', $data); 
