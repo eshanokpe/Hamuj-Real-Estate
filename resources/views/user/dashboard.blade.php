@@ -215,7 +215,7 @@
                                         Recipient ID
                                     </h4>
                                      <span class="currency__card--amount"  style="margin-top: -15px;  font-size: 1.6rem;"> 
-                                        {{ $user->first()->recipient_id}}
+                                        {{ Auth::user()->recipient_id }}
                                     </span>
                                     
                                   

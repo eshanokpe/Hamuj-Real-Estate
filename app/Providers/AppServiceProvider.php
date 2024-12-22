@@ -72,7 +72,7 @@ class AppServiceProvider extends ServiceProvider
                 $user = Auth::user();
                 $userId = (string) $user->id; 
                 $recipientId = $user->recipient_id;
-        
+         
                 $sender = $user->notifications()->whereJsonContains('data->recipient_id', $recipientId)->first();
                 
                 $sender_id = $sender ? $sender->data['sender_id'] : null;

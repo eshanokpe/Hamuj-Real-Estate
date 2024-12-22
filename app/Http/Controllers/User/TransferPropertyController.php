@@ -212,6 +212,20 @@ class TransferPropertyController extends Controller
         return view('user.pages.properties.transfer.property_confirmation', $data); 
     }
 
+    public function submitConfirmation(Request $request, $slug){
+        // Create the buy record
+        $buy = Buy::create([
+            'property_id' => $property->id,
+            'transaction_id' => $transaction->id,
+            'selected_size_land' => $paymentDetails->data->metadata->selected_size_land,
+            'remaining_size' => $paymentDetails->data->metadata->remaining_size,
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'total_price' => $amount,
+            'status' => 'sold',
+        ]);
+    }
+
  
 }
  

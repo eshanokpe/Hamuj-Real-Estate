@@ -64,10 +64,10 @@
                                     <div class="card-body">
                                         <p><strong>Name:</strong> {{ $sender->last_name }} {{ $sender->first_name }}</p>
                                         <p><strong>Email:</strong> {{ $sender->email }}</p>
-                                        <p><strong>Phone:</strong> {{ $sender->phone }}</p> <!-- Assuming phone number is stored -->
+                                        <p><strong>ID:</strong> {{ $sender->recipient_id }}</p> 
                                     </div>
                                 </div>
-                                <form action="{{ route('user.checkRecipient.transfer') }}" method="POST">
+                                <form action="{{ route('user.confirm.transfer.submit', ['slug' => $property->slug]) }}" method="POST">
                                     @csrf
                                     <div class="setting__profile--inner">
                                         <input name="selected_size_land" id="selected_size_land" type="hidden" value="{{$data['land_size'] }}"/>
@@ -78,8 +78,14 @@
                                             <label class="add__listing--input__label" for="email"> Recipient ID</label>
                                             <input disabled required class="add__listing--input__field" id="name" name="recipient_id" placeholder="Recipient ID" type="text" value="{{$data['recipient_id']}}">
                                         </div>
-                                        
-                                        <button type="submit" class="solid__btn add__property--btn">Confirm</button>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="submit" class="solid__btn add__property--btn">Confirm</button>
+                                            </div>
+                                            <div class="col">
+                                                <a href="" class="solid__btn add__property--btn"  style="background-color:  #dc3545; ">Cancel</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
