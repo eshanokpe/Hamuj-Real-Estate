@@ -128,18 +128,18 @@ class TransferPropertyController extends Controller
                 }
             }
         
-            $transfer = Transfer::create([
-                'property_id' => $propertyData->id,
-                'property_name' => $propertyData->name,
-                'land_size' => $landSize,
-                'user_id' => $user->id,
-                'user_email' => $user->email,
-                'reference' => $reference,
-                'recipient_id' => $recipientId,
-                'total_price' => $amount,
-                'status' => 'pending',
-                'confirmation_status' => 'pending',
-            ]);
+            // $transfer = Transfer::create([
+            //     'property_id' => $propertyData->id,
+            //     'property_name' => $propertyData->name,
+            //     'land_size' => $landSize,
+            //     'user_id' => $user->id,
+            //     'user_email' => $user->email,
+            //     'reference' => $reference,
+            //     'recipient_id' => $recipientId,
+            //     'total_price' => $amount,
+            //     'status' => 'pending',
+            //     'confirmation_status' => 'pending',
+            // ]);
             // Update the Sell model, reducing the selected_size_land
            
             $transferDetails = [

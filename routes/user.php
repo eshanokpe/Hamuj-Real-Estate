@@ -7,6 +7,7 @@ use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\TransferController;
 use App\Http\Controllers\User\PropertyController;
+use App\Http\Controllers\User\TransactionController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\SellPropertyController;
 use App\Http\Controllers\User\NotificationController;
@@ -28,6 +29,8 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
      
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/transaction/report', [DashboardController::class, 'transactionReport'])->name('transactions');
+
+    Route::get('/transaction/report', [TransactionController::class, 'index'])->name('transactions.index');
     
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
     Route::get('/buy', [PropertyController::class, 'buy'])->name('buy'); 
@@ -47,6 +50,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties'); 
  
     Route::get('/my-properties', [DashboardController::class, 'properties'])->name('myProperties');
+    
     Route::get('/my-properties/{id}', [DashboardController::class, 'propertiesShow'])->name('properties.show');
  
     
@@ -76,7 +80,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     });
     // In routes/web.php or routes/api.php
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-    Route::get('/property/notification/{id}', [NotificationController::class, 'propertiesShow'])->name('properties.show');
+    // Route::get('/property/notification/{id}', [NotificationController::class, 'propertiesShow'])->name('properties.show');
     Route::get('/{propertyMode}/confirm/{slug}', [TransferPropertyController::class, 'confirmTransfer'])->name('transfer.property.confirm');
     Route::post('/transfer/confirm/{slug}/submit', [TransferPropertyController::class, 'submitConfirmation'])->name('confirm.transfer.submit');
 

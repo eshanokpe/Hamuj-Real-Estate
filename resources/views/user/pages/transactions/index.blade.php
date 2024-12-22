@@ -9,7 +9,7 @@
         <!-- dashboard container -->
         <div class="dashboard__container dashboard__reviews--container">
             <div class="reviews__heading mb-30">
-                <h2 class="reviews__heading--title">Transfer Property</h2>
+                <h2 class="reviews__heading--title">Transaction</h2>
                 <p class="reviews__heading--desc">We are glad to see you again!</p>
             </div>
             <div class="properties__wrapper"> 
@@ -17,57 +17,64 @@
                     <table class="properties__table--wrapper">
                         <thead>
                             <tr>
-                                <th>Listing Title</th>
-                                <th>Date published</th>
-                                <th>Acquired Size</th>
+                                <th>ID</th>
+                                <th>Property name</th>
+                                <th>Payment method</th>
+                                <th>Reference</th>
+                                <th>Status</th>
+                                <th>Date Created</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($sellProperty as $property)
-                            <tr>
-                                <td>
-                                    <div class="properties__author d-flex align-items-center">
-                                        <div class="properties__author--thumb">
-                                            <img src="{{ asset($property->property->property_images) }}" alt="img" style="max-height: 100%; max-width:100%; width:70px; height:70px; object-fit:cover">
-                                        </div>
-                                        <div class="reviews__author--text">
-                                            <h3 class="reviews__author--title">{{$property->property->name}}</h3>
-                                            <p class="reviews__author--subtitle">{{$property->property->location}}</p>
-                                            <span class="properties__author--price">₦{{ number_format($property->property->price, 2)}}</span>
-                                            <p class="properties__author--price text-decoration-line-through text-muted">₦{{ number_format($property->property->lunch_price, 2)}}</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="reviews__date">
-                                        {{  \Carbon\Carbon::parse($property->latest_created_at)->format('d F, Y')  }} 
-                                    </span>
-                                </td>
-                              
-                                <td> 
-                                    <span class="properties__views">{{ $property->total_selected_size_land }} per/sqm</span>
-                                </td>
-                                <td>
-                                    <span class="status__btn pending2">
-                                        <a href="{{ route('user.properties.show', encrypt($property->property->id))}}">
-                                            View
-                                        </a> 
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="status__btn pending2 " style="background-color: #2b8e00; ">
-                                        <a class="text-white" href="{{ route('user.cart.transfer.index', encrypt($property->property->id))}}">
-                                        Transfer</a>
-                                    </span>
-                                </td>
-                              
-                            </tr>
+                            @forelse ($transactions as $index => $transaction)
+                                <tr>
+                                    <td>
+                                        {{ $loop->iteration }} <!-- This will display the row number -->
+                                    </td>
+                                    <td>
+                                        {{ $transaction->property_name }}
+                                    </td>
+                                    <td>
+                                        <span class="properties__views">{{ $transaction->reference }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="properties__views">{{ $transaction->payment_method }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="reviews__date">
+                                            {{ $transaction->created_at->format('d F, Y') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @php
+                                            $statusColors = [
+                                                'pending' => '#f39c12',
+                                                'completed' => '#28a745',
+                                                'success' => '#28a745',
+                                                'failed' => '#dc3545',
+                                                'default' => '#6c757d'
+                                            ];
+                                            $statusColor = $statusColors[$transaction->status] ?? $statusColors['default'];
+                                        @endphp
+                                        <span class="status__btn pending2" style="background-color: {{ $statusColor }};">
+                                            <a class="text-white">{{ ucfirst($transaction->status) }}</a>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="status__btn pending2">
+                                            <a href="{{ route('user.properties.show', encrypt($transaction->property->id)) }}">
+                                                View
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
                             @empty
                                 <tr>
-                                    <td> No Transfer Property available </td>
+                                    <td colspan="7" class="text-center">No transactions available</td>
                                 </tr>
                             @endforelse
+
                            
                             
                         </tbody>
@@ -78,7 +85,7 @@
                     <nav class="pagination justify-content-center">
                         <ul class="pagination__menu d-flex align-items-center justify-content-center">
                             <!-- Render pagination links dynamically -->
-                            @if ($sellProperty->onFirstPage())
+                            @if ($transactions->onFirstPage())
                                 <li class="pagination__menu--items pagination__arrow disabled">
                                     <span class="pagination__arrow-icon">
                                         <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -88,7 +95,7 @@
                                 </li>
                             @else
                                 <li class="pagination__menu--items pagination__arrow">
-                                    <a href="{{ $sellProperty->previousPageUrl() }}" class="pagination__arrow-icon link">
+                                    <a href="{{ $transactions->previousPageUrl() }}" class="pagination__arrow-icon link">
                                         <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M10.583 20.5832L0.999675 10.9998L10.583 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
@@ -97,17 +104,17 @@
                             @endif
 
                             <!-- Page numbers -->
-                            @foreach ($sellProperty->links()->elements[0] as $page => $url)
+                            @foreach ($transactions->links()->elements[0] as $page => $url)
                                 <li class="pagination__menu--items">
-                                    <a href="{{ $url }}" class="pagination__menu--link {{ $page == $sellProperty->currentPage() ? 'active color-accent-1' : '' }}">
+                                    <a href="{{ $url }}" class="pagination__menu--link {{ $page == $transactions->currentPage() ? 'active color-accent-1' : '' }}">
                                         {{ $page }}
                                     </a>
                                 </li>
                             @endforeach
 
-                            @if ($sellProperty->hasMorePages())
+                            @if ($transactions->hasMorePages())
                                 <li class="pagination__menu--items pagination__arrow">
-                                    <a href="{{ $sellProperty->nextPageUrl() }}" class="pagination__arrow-icon link">
+                                    <a href="{{ $transactions->nextPageUrl() }}" class="pagination__arrow-icon link">
                                         <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M1.00098 20.5832L10.5843 10.9998L1.00098 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>

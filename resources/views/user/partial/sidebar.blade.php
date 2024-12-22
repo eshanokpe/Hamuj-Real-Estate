@@ -68,7 +68,7 @@
                 </a>
             </li>
             <li class="sidebar__menu--items">
-                <a class="sidebar__menu--link" href="#">
+                <a class="sidebar__menu--link" href="{{ route('user.transactions.index') }}">
                     <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3 9H15C16.1046 9 17 9.89543 17 11V17C17 18.1046 16.1046 19 15 19H3C1.89543 19 1 18.1046 1 17V11C1 9.89543 1.89543 9 3 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M17 13H21C22.1046 13 23 12.1046 23 11V7C23 5.89543 22.1046 5 21 5H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

@@ -11,7 +11,7 @@ use Yabacon\Paystack;
 use App\Models\Property;  
 use App\Models\Transaction;  
 
-class PaymentController extends Controller
+class TransactionController extends Controller
 {
     protected $paystack;
 
@@ -21,59 +21,15 @@ class PaymentController extends Controller
         $this->paystack = new Paystack(env('PAYSTACK_SECRET_KEY')); // Initialize Paystack
     }
 
-    public function initializePayment(Request $request)
-    {
-        $request->validate([
-            'remaining_size' => 'required',
-            'property_slug' => 'required',
-            'quantity' => 'required',
-            'total_price' => 'required|numeric|min:1',
-        ]);
+    public function index(){ 
         $user = Auth::user();
-        $propertySlug  = $request->input('property_slug');
-        $property = Property::where('slug', $propertySlug)->first();
-        // Check if the property exists
-        if (!$property) {
-            return back()->with('error', 'Property not found.');
-        }
-        // Check if the user has enough balance
-        $userBalance = $user->wallet->first()->balance; 
-        $amount = $request->input('total_price');
-        if ($userBalance < $amount) {
-            return back()->with('error', 'Insufficient funds in your wallet. Please add funds to proceed.');
-        }
-
-        // Generate a unique transaction reference
-        $reference = 'PROREF-' . time() . '-' . strtoupper(Str::random(8));
-
-        $selectedSizeLand  = $request->input('quantity');
-        $remainingSize  = $request->input('remaining_size');
-        $amount  = $request->input('total_price');
-
-        $propertyId  = $property->id;
-        $propertyName  =  $property->name;
-        $propertyData = Property::where('id', $propertyId)->where('name', $propertyName)->first();
-        // Prepare the data to send to Paystack
-        $data = [
-            'amount' => $amount * 100, 
-            'email' => $user->email,
-            'property_id' => $propertyData->id,
-            'property_name' => $propertyData->name,
-            'remaining_size' => $remainingSize,
-            'selected_size_land' => $selectedSizeLand,
-            'reference' => $reference,
-            'property_state' => $property->property_state,
-            'callback_url' => route('user.payment.callback'),
-        ];
        
-        try {
-            $response = $this->paystack->transaction->initialize($data);
+        $data['transactions'] = Transaction::with('user')->latest()
+        ->paginate(10);
 
-            return redirect($response->data->authorization_url);
-        } catch (\Exception $e) {
-            return back()->with('error', 'Unable to initiate payment: ' . $e->getMessage());
-        }
+        return view('user.pages.transactions.index', $data); 
     }
+    
    
     public function paymentCallback(Request $request)
     {
