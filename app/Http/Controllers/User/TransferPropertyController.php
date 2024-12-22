@@ -12,6 +12,7 @@ use App\Models\Sell;
 use App\Models\Buy;
 use App\Models\User;
 use App\Models\Property;
+use App\Models\Wallet;
 use Illuminate\Support\Str;
 use App\Models\VirtualAccount;
 use App\Services\PaystackService;
@@ -140,10 +141,7 @@ class TransferPropertyController extends Controller
                 'confirmation_status' => 'pending',
             ]);
             // Update the Sell model, reducing the selected_size_land
-            foreach ($buy as $item) {
-                $item->selected_size_land -= $landSize;
-                $item->save();
-            }
+           
             $transferDetails = [
                 'property_id' => $propertyData->id,
                 'property_slug' => $propertyData->slug,
@@ -213,17 +211,82 @@ class TransferPropertyController extends Controller
     }
 
     public function submitConfirmation(Request $request, $slug){
-        // Create the buy record
-        $buy = Buy::create([
-            'property_id' => $property->id,
-            'transaction_id' => $transaction->id,
-            'selected_size_land' => $paymentDetails->data->metadata->selected_size_land,
-            'remaining_size' => $paymentDetails->data->metadata->remaining_size,
-            'user_id' => $user->id,
-            'user_email' => $user->email,
-            'total_price' => $amount,
-            'status' => 'sold',
-        ]);
+        // The authenticated user is the recipient
+        $recipient = auth()->user();
+
+        // The sender ID comes from the request
+        $landSize = $request->input('land_size');
+        $senderId = $request->input('recipient_id');
+        $propertyId = $request->input('property_id');
+        $amount = $request->input('amount');
+        // dd($senderId);
+        // Validate sender existence
+        $sender = User::where('recipient_id', $senderId)->first();
+        if (!$sender) {
+            return redirect()->back()->withErrors(['error' => 'Sender not found']);
+        }
+
+        // Validate transfer amount
+        if ($amount <= 0) {
+            return redirect()->back()->withErrors(['error' => 'Invalid transfer amount']);
+        }
+       
+        $sendWallet = Wallet::where('user_id', $sender->id)->first();
+        $recipientWallet = Wallet::where('user_id', $recipient->id)->first();
+        // dd($recipientWallet);
+
+        // Check sender's wallet balance
+        if ($sendWallet->balance < $amount) {
+            return redirect()->back()->with(['error' => 'Sender has insufficient funds']);
+        }
+        // dd($sendWallet);
+
+        // Perform the transfer within a database transaction
+        // DB::transaction(function () use ($sendWallet, $recipientWallet, $amount) {
+            
+           
+
+            // Log the transaction
+            // Transaction::create([
+            //     'sender_id' => $sender->id,
+            //     'recipient_id' => $recipient->id,
+            //     'amount' => $amount,
+            //     'status' => 'completed',
+            // ]);
+            $buy = Buy::select(
+                'property_id', 'status',
+                DB::raw('SUM(selected_size_land) as total_selected_size_land'),
+                DB::raw('MAX(created_at) as latest_created_at') 
+            )
+            ->with('property')
+            ->where('user_id', $sender->id)
+            ->where('user_email', $sender->email)
+            ->groupBy('property_id', 'status') 
+            ->get();
+            foreach ($buy as $item) {
+                $item->selected_size_land -= $landSize;
+                $item->save();
+            }
+            $buy = Buy::create([
+                'property_id' => $propertyId,
+                'transaction_id' => 1,
+                'selected_size_land' => $landSize,
+                'remaining_size' => '',
+                'user_id' => $recipient->id,
+                'user_email' => $recipient->email,
+                'total_price' => $amount,
+                'status' => 'tranfer',
+            ]);
+             // Deduct from sender's wallet
+             $sendWallet->balance -= $amount;
+             $sendWallet->save();
+ 
+             // Credit to recipient's wallet
+             $recipientWallet->balance += $amount;
+             $recipientWallet->save();
+        // });
+
+        return redirect()->route('user.dashboard')->with('success', 'Amount transferred successfully!');
     }
 
  

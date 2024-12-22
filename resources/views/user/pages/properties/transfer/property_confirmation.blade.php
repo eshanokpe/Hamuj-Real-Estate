@@ -70,13 +70,14 @@
                                 <form action="{{ route('user.confirm.transfer.submit', ['slug' => $property->slug]) }}" method="POST">
                                     @csrf
                                     <div class="setting__profile--inner">
-                                        <input name="selected_size_land" id="selected_size_land" type="hidden" value="{{$data['land_size'] }}"/>
+                                        <input name="land_size" id="land_size" type="hidden" value="{{$data['land_size'] }}"/>
                                         <input name="property_slug" id="property_slug" type="hidden" value="{{$data['property_slug'] }}"/>
                                         <input name="property_id" id="property_id" type="hidden" value="{{$data['property_id'] }}"/>
                                         <input name="amount" id="amount" type="hidden" value="{{$data['total_price'] }}"/>
+                                        <input name="recipient_id" id="recipient_id" type="hidden" value="{{$sender->recipient_id}}"/>
                                         <div class="add__listing--input__box mb-20">
                                             <label class="add__listing--input__label" for="email"> Recipient ID</label>
-                                            <input disabled required class="add__listing--input__field" id="name" name="recipient_id" placeholder="Recipient ID" type="text" value="{{$data['recipient_id']}}">
+                                            <input disabled required class="add__listing--input__field" id="name" name="recipient_id" placeholder="Recipient ID" type="text" value="{{$sender->recipient_id}}">
                                         </div>
                                         <div class="row">
                                             <div class="col">
