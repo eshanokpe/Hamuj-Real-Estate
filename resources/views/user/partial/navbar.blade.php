@@ -67,6 +67,124 @@
             <div class="header__nav-bar__wrapper d-flex align-items-center">
                 <ul class="nav-bar__menu d-flex">
                     
+                   
+                    <li class="nav-bar__menu--items header__apps--menu position-relative">
+                        <a class="nav-bar__menu--icon apps__menu--icon active" href="#">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10.0167 2.42505C7.25841 2.42505 5.01674 4.66672 5.01674 7.42505V9.83338C5.01674 10.3417 4.80007 11.1167 4.54174 11.55L3.58341 13.1417C2.99174 14.125 3.40007 15.2167 4.48341 15.5834C8.07507 16.7834 11.9501 16.7834 15.5417 15.5834C16.5501 15.2501 16.9917 14.0584 16.4417 13.1417L15.4834 11.55C15.2334 11.1167 15.0167 10.3417 15.0167 9.83338V7.42505C15.0167 4.67505 12.7667 2.42505 10.0167 2.42505Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round"/>
+                                <path d="M11.5584 2.6667C11.3001 2.5917 11.0334 2.53337 10.7584 2.50003C9.95843 2.40003 9.19176 2.45837 8.4751 2.6667C8.71676 2.05003 9.31676 1.6167 10.0168 1.6167C10.7168 1.6167 11.3168 2.05003 11.5584 2.6667Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12.5166 15.8833C12.5166 17.2583 11.3916 18.3833 10.0166 18.3833C9.33327 18.3833 8.69993 18.1 8.24993 17.65C7.79993 17.2 7.5166 16.5666 7.5166 15.8833" stroke="currentColor" stroke-miterlimit="10"/>
+                            </svg> 
+                            <span class="nav-bar__notification--badge" id="notificationCount">{{ $notificationCount }}</span>
+                            <span class="visually-hidden">Notification</span>                                         
+                        </a>
+                        <script>
+                            // Example JavaScript to update the counter dynamically
+                            document.addEventListener('DOMContentLoaded', function() {
+                                setInterval(function() {
+                                    fetch('/api/notifications/count') // An API route to fetch unread notification count
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            document.getElementById('notificationCount').textContent = data.count; // Update counter
+                                        });
+                                }, 60000); // Update every 60 seconds
+                            });
+
+                        </script>
+                       <div class="dropdown__related--apps">
+                        <h3 class="dropdown__apps--title">Notification</h3>
+                        <ul class="dropdown__apps--menu">
+                            <div class="chat__inbox">
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="chat">
+                                        <div class="chat__inbox--content">
+                                            <div class="chat__inbox--wrapper">
+                                                <ul class="chat__inbox--menu">
+                                                    @forelse ($notificationsBar as $notification)
+                                                        <li class="chat__inbox--menu__list">
+                                                            <snap class="sales__report--status pending2"> {{ $notification->data['message'] }}</snap>
+                                                            <a class="chat__inbox--menu__link active mark-as-read" href="#" 
+                                                               data-notification-id="{{ $notification->id }}" 
+                                                               data-property-mode="{{ $notification->data['property_mode'] }}" 
+                                                               >
+                                                                <div class="chat__inbox--menu__wrapper d-flex justify-content-between">
+                                                                    <div class="chat__inbox--author d-flex align-items-center">
+                                                                        <div class="chat__inbox--author__content">
+                                                                            <h3 class="chat__inbox--author--name">{{ $notification->data['property_name'] }}</h3>
+                                                                            <p class="chat__inbox--author__desc">Land Size: {{ $notification->data['land_size'] }}</p>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <span class="chat__inbox--date-time">{{ $notification->created_at->diffForHumans() }}</span>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                        
+                                                        <script>
+                                                            $(document).on('click', '.mark-as-read', function(e) {
+                                                            
+                                                                e.preventDefault();
+                                                    
+                                                                var notificationId = $(this).data('notification-id');
+                                                                var propertyMode = $(this).data('property-mode');
+
+                                                                var notificationElement = $(this); 
+                                                                $.ajax({
+                                                                    url: 'notifications/' + notificationId + '/read',
+                                                                    method: 'POST',
+                                                                    data: {
+                                                                        _token: '{{ csrf_token() }}',
+                                                                        property_mode:propertyMode,
+                                                                    },
+                                                                    success: function(response) {
+                                                                        if (response.success) {
+                                                                            notificationElement.find('.sales__report--status').removeClass('pending2');
+                                                                            // window.location.href = 'property/' + response.slug ; 
+                                                                            // Redirect based on the property_mode or slug returned
+                                                                            if (response.property_mode === 'transfer') {
+                                                                                window.location.href = response.property_mode + '/confirm/' + response.slug;
+                                                                            } else if (response.property_mode === 'seller') {
+                                                                                window.location.href = 'user/seller/details/' + response.slug;  // Redirect to seller page
+                                                                            } else if (response.property_mode === 'deposit') {
+                                                                                window.location.href = '/deposit/details/' + response.slug;  // Redirect to deposit page
+                                                                            } else {
+                                                                                // Handle case if there is no matching property mode
+                                                                                window.location.href = '/property/' + response.slug;  // Default redirect to property page
+                                                                            }
+                                                                        } else {
+                                                                            // alert('Failed to mark as read');
+                                                                            console.error('Failed to mark as read');
+                                                                        }
+                                                                    },
+                                                                    error: function() {
+                                                                        // Handle errors if necessary
+                                                                        // alert('There was an error with the request');
+                                                                        console.error('There was an error with the request');
+                                                                    }
+                                                                });
+                                                            });
+                                                        </script>
+                                                    @empty
+                                                        <li class="chat__inbox--menu__list">
+                                                            <p class="chat__inbox--author__desc">No Notifications</p>
+                                                        </li>
+                                                    @endforelse
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ul>
+                        <div class="dropdown__apps__footer">
+                            <a class="solid__btn dropdown__apps--view__all" href="{{ route('user.notifications.index') }}">View All Notifications</a>
+                        </div>
+                    
+                    </div>
+                    
+                    </li>
+                    
+                    
                     <li class="nav-bar__menu--items">
                         <a class="nav-bar__menu--icon" href="#" id="light__to--dark">
                             <svg class="light--mode__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,17 +193,6 @@
                             </svg>
                             <svg  class="dark--mode__icon"  xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="20" height="20" viewBox="0 0 512 512"><title>Moon</title><path d="M264 480A232 232 0 0132 248c0-94 54-178.28 137.61-214.67a16 16 0 0121.06 21.06C181.07 76.43 176 104.66 176 136c0 110.28 89.72 200 200 200 31.34 0 59.57-5.07 81.61-14.67a16 16 0 0121.06 21.06C442.28 426 358 480 264 480z"></path></svg>
                             <span class="visually-hidden">Dark Light</span> 
-                        </a>
-                    </li>
-                    
-                    <li class="nav-bar__menu--items">
-                        <a class="nav-bar__menu--icon position-relative" href="#"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10.0167 2.42505C7.25841 2.42505 5.01674 4.66672 5.01674 7.42505V9.83338C5.01674 10.3417 4.80007 11.1167 4.54174 11.55L3.58341 13.1417C2.99174 14.125 3.40007 15.2167 4.48341 15.5834C8.07507 16.7834 11.9501 16.7834 15.5417 15.5834C16.5501 15.2501 16.9917 14.0584 16.4417 13.1417L15.4834 11.55C15.2334 11.1167 15.0167 10.3417 15.0167 9.83338V7.42505C15.0167 4.67505 12.7667 2.42505 10.0167 2.42505Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round"/>
-                            <path d="M11.5584 2.6667C11.3001 2.5917 11.0334 2.53337 10.7584 2.50003C9.95843 2.40003 9.19176 2.45837 8.4751 2.6667C8.71676 2.05003 9.31676 1.6167 10.0168 1.6167C10.7168 1.6167 11.3168 2.05003 11.5584 2.6667Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M12.5166 15.8833C12.5166 17.2583 11.3916 18.3833 10.0166 18.3833C9.33327 18.3833 8.69993 18.1 8.24993 17.65C7.79993 17.2 7.5166 16.5666 7.5166 15.8833" stroke="currentColor" stroke-miterlimit="10"/>
-                            </svg> 
-                            <span class="nav-bar__notification--badge"></span> 
-                            <span class="visually-hidden">Notification</span>                                            
                         </a>
                     </li>
                 </ul> 

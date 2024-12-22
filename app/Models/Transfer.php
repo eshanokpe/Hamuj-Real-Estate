@@ -15,10 +15,14 @@ class Transfer extends Model
         'land_size',
         'user_id',
         'user_email',
-        'reference',
+        'reference', 
         'recipient_id',
         'total_price',
         'status',
+        'confirmation_status',
+        'confirmation_date',
+        'confirmed_by',
+        'rejection_reason'
     ];
     
     public function property()

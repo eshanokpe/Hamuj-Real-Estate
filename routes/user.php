@@ -9,6 +9,7 @@ use App\Http\Controllers\User\TransferController;
 use App\Http\Controllers\User\PropertyController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\SellPropertyController;
+use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\TransferPropertyController;
 
 
@@ -65,6 +66,19 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/count', function() {
+        return response()->json([
+            // 'count' => auth()->user()->unreadNotifications->count()
+            'count' => 2
+        ]);
+    });
+    // In routes/web.php or routes/api.php
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::get('/property/notification/{id}', [NotificationController::class, 'propertiesShow'])->name('properties.show');
+    Route::get('/{propertyMode}/confirm/{slug}', [TransferPropertyController::class, 'confirmTransfer'])->name('transfer.property.confirm');
+
 
 });
 

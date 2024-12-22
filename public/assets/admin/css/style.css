@@ -1742,7 +1742,7 @@ body.overlay__active::before,
   position: absolute;
   width: 0.8rem;
   height: 0.8rem;
-  background: var(--color-hover);
+  /* background: var(--color-hover); */
   display: inline-block;
   right: -1px;
   top: -1px;

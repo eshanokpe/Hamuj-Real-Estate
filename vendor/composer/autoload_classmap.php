@@ -73,6 +73,7 @@ return array(
     'App\\Models\\VisionMission' => $baseDir . '/app/Models/VisionMission.php',
     'App\\Models\\Wallet' => $baseDir . '/app/Models/Wallet.php',
     'App\\Models\\WalletTransaction' => $baseDir . '/app/Models/WalletTransaction.php',
+    'App\\Notifications\\RecipientSubmittedNotification' => $baseDir . '/app/Notifications/RecipientSubmittedNotification.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',

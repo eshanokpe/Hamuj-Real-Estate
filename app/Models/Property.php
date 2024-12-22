@@ -32,7 +32,7 @@ class Property extends Model
         'google_map',
         'status', 
         'property_state',
-        'year',
+        'year', 
     ];  
 
     public function buys()
@@ -52,6 +52,10 @@ class Property extends Model
     public function priceUpdates()
     {
         return $this->hasMany(PropertyPriceUpdate::class, 'property_id', 'id');
+    }
+    public function notifications()
+    {
+        return $this->morphMany(CustomNotification::class, 'notifiable')->orderBy('created_at', 'desc');
     }
 
 

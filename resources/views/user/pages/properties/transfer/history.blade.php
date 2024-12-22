@@ -46,7 +46,7 @@
                                     </span>
                                 </td>
                               
-                                <td> 
+                                <td>  
                                     <span class="properties__views">{{ $transfer->total_land_size }} per/sqm</span>
                                 </td>
                                 <td>
@@ -59,31 +59,22 @@
                                 <td>
                                     @if($transfer->status == 'pending')
                                         <span class="status__btn pending2 " style="background-color: #f39c12; ">
-                                            <a class="text-white" >{{$transfer->status}}</a>
+                                            <a class="text-white" >{{ ucfirst($transfer->status) }}</a>
                                         </span>
                                     @elseif($transfer->status == 'completed')
                                         <span class="status__btn pending2 " style="background-color:  #28a745; ">
-                                            <a class="text-white" >{{$transfer->status}}</a>
+                                            <a class="text-white" >{{ ucfirst($transfer->status) }}</a>
                                         </span>
                                     @elseif($transfer->status == 'failed')
                                         <span class="status__btn pending2 " style="background-color:  #dc3545; ">
-                                            <a class="text-white" >{{$transfer->status}}</a>
+                                            <a class="text-white" >{{ ucfirst($transfer->status) }}</a>
                                         </span>
                                     @else
                                         <span class="status__btn pending2 " style="background-color:  #6c757d; ">
-                                            <a class="text-white" >{{$transfer->status}}</a>
+                                            <a class="text-white" >{{ ucfirst($transfer->status) }}</a>
                                         </span>
                                     @endif
                                    
-                                    {{-- @if($property->status == 'pending')
-                                    <center>
-                                        <a class="solid__btn offer-price-btn" 
-                                        style="color: #fff; font-size:14px margine:1px; " 
-                                        href="{{ route('user.offerPrice', encrypt($property->property->id))}}">
-                                            Offer Price
-                                        </a>
-                                    </center>
-                                @endif --}}
                                 </td>
                               
                             </tr>

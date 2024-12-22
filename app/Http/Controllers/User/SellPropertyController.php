@@ -87,17 +87,17 @@ class SellPropertyController extends Controller
         $user = Auth::user();
        
         $data['sellProperties'] = Sell::select(
-            'property_id', 
+            'property_id', 'status',
             DB::raw('SUM(selected_size_land) as total_selected_size_land'),
             DB::raw('MAX(created_at) as latest_created_at') 
         )
         ->with('property')
         ->where('user_id', $user->id)
         ->where('user_email', $user->email)
-        ->groupBy('property_id') 
-        ->paginate(10);
- 
-        return view('user.pages.transactions.sell_history', $data);
+        ->groupBy('property_id', 'status') 
+        ->get();
+  
+        return view('user.pages.properties.sell.history' , $data);
     }
  
 }

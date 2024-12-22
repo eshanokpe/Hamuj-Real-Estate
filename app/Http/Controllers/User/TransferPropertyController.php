@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\User;
-
+use App\Notifications\RecipientSubmittedNotification;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
@@ -80,62 +80,99 @@ class TransferPropertyController extends Controller
     public function checkRecipientTransfer(Request $request, PaystackService $paystackService)
     {
       try{
-        $request->validate([
-            'selected_size_land' => 'required',
-            'property_slug' => 'required',
-            'property_id' => 'required',
-            'recipient_id' => 'required',
-            'amount' => 'required|numeric|min:1',
-        ]);
-        $user = Auth::user();
-        $amount = $request->input('amount');
-        $propertyId  = $request->input('property_id');
-        $recipientId = $request->input('recipient_id');
-        $propertySlug = $request->input('property_slug');
-        $landSize = $request->input('selected_size_land');
-        $customerCheck = User::where('recipient_id', $recipientId)->first();
+            $request->validate([
+                'selected_size_land' => 'required',
+                'property_slug' => 'required',
+                'property_id' => 'required',
+                'recipient_id' => 'required',
+                'amount' => 'required|numeric|min:1',
+            ]);
+            $user = Auth::user();
+            $amount = $request->input('amount');
+            $propertyId  = $request->input('property_id');
+            $recipientId = $request->input('recipient_id');
+            $propertySlug = $request->input('property_slug');
+            $landSize = $request->input('selected_size_land');
+            $customerCheck = User::where('recipient_id', $recipientId)->first();
+            
+            if (!$customerCheck) {
+                return back()->with('error', 'This recipient does not exist.');
+            } 
+       
+            // Check if the recipient is the same as the current user
+            if ($recipientId === $user->recipient_id) {
+                return back()->with('error', 'You cannot transfer the property to yourself.');
+            }
+            $propertyData = Property::where('id', $propertyId)->where('slug', $propertySlug)->first();
         
-        if (!$customerCheck) {
-            return back()->with('error', 'This recipient does not exist.');
-        } 
-       
-        // Check if the recipient is the same as the current user
-        if ($recipientId === $user->recipient_id) {
-            return back()->with('error', 'You cannot transfer the property to yourself.');
-        }
-        $propertyData = Property::where('id', $propertyId)->where('slug', $propertySlug)->first();
-       
-        // $reference = null;
-        $reference = 'TRANS-' . strtoupper(Str::random(10));
-        // Check if there's a Sell model associated with this property
-        $buy = Buy::where('property_id', $propertyData->id)
-                ->where('user_id', $user->id)->first();
-        if (!$buy) {
-            return back()->with('error', 'Property not available for sale.');
-        }
+            // $reference = null;
+            $reference = 'TRANS-' . strtoupper(Str::random(10));
+        
+            $buy = Buy::select(
+                'property_id', 'status',
+                DB::raw('SUM(selected_size_land) as total_selected_size_land'),
+                DB::raw('MAX(created_at) as latest_created_at') 
+            )
+            ->with('property')
+            ->where('user_id', $user->id)
+            ->where('user_email', $user->email)
+            ->groupBy('property_id', 'status') 
+            ->get();
+            if ($buy->isEmpty()) {
+                return back()->with('error', 'Property not available for sale.');
+            }
+            foreach ($buy as $item) {
+                if ($item->total_selected_size_land < $landSize) {
+                    return back()->with('error', 'Insufficient land size available for transfer.');
+                }
+            }
+        
+            $transfer = Transfer::create([
+                'property_id' => $propertyData->id,
+                'property_name' => $propertyData->name,
+                'land_size' => $landSize,
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'reference' => $reference,
+                'recipient_id' => $recipientId,
+                'total_price' => $amount,
+                'status' => 'pending',
+                'confirmation_status' => 'pending',
+            ]);
+            // Update the Sell model, reducing the selected_size_land
+            foreach ($buy as $item) {
+                $item->selected_size_land -= $landSize;
+                $item->save();
+            }
+            $transferDetails = [
+                'property_id' => $propertyData->id,
+                'property_slug' => $propertyData->slug,
+                'property_name' => $propertyData->name,
+                'property_image' => $propertyData->property_images,
+                'land_size' => $landSize,
+                'total_price' => $amount,
+                'reference' => $reference,
+                'sender_id' => $user->id, 
+                'recipient_id' => $recipientId, 
+                'property_mode' => 'transfer', 
+                'status' => 'pending',
+            ];
+            // // Notify the user
+            $recipient = User::where('recipient_id', $recipientId)->first();
+           
+            if ($recipient) {
+                $recipient->notify(new RecipientSubmittedNotification($transferDetails));
+            }
 
-        if ($buy->selected_size_land < $landSize) {
-            return back()->with('error', 'Insufficient land size available for transfer.');
+            return redirect()->route('user.transfer.history')
+            ->with(
+                'success', 
+                'We have receive your prompt to transfer the Property to the confirmed User ID. 
+                The recipient has been submitted. A notification has been sent to your account.'
+            );
+        } catch (\Exception $e) {
+            return back()->with('error', 'Something went wrong:' . $e->getMessage());
         }
-        $transfer = Transfer::create([
-            'property_id' => $propertyData->id,
-            'property_name' => $propertyData->name,
-            'land_size' => $landSize,
-            'user_id' => $user->id,
-            'user_email' => $user->email,
-            'reference' => $reference,
-            'recipient_id' => $recipientId,
-            'total_price' => $amount,
-            'status' => 'pending',
-        ]);
-        // Update the Sell model, reducing the selected_size_land
-        $buy->selected_size_land -= $landSize;
-        $buy->save();
-
-        return redirect()->route('user.transfer.history')->with('success', 'We have receive your prompt to transfer the Property to the confirmed User ID, your transfer will be process.');
-    } catch (\Exception $e) {
-        return back()->with('error', 'Something went wrong:' . $e->getMessage());
-    }
     }
 
     public function transferHistory(){ 
@@ -154,7 +191,27 @@ class TransferPropertyController extends Controller
 
         return view('user.pages.properties.transfer.history', $data); 
     }
-   
+    
+    
+    public function confirmTransfer($propertyMode, $slug)
+    {
+        $user = Auth::user();
+
+       
+        $data['property'] = Property::where('slug', $slug)->first();
+
+        $sender = $user->notifications()
+        ->whereJsonContains('data->property_mode', $propertyMode)
+        ->whereJsonContains('data->recipient_id', $user->recipient_id)
+        ->whereJsonContains('data->property_slug', $slug)->first();
+        // dd($sender['data']);
+        $data['data'] = $sender['data'];
+        $sender['data']['recipient_id'];
+       
+
+        return view('user.pages.properties.transfer.property_confirmation', $data); 
+    }
+
  
 }
  

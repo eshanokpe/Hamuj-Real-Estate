@@ -34,6 +34,7 @@
                             <tr>
                                 <th>Listing Title</th>
                                <th>Acquired Size</th>
+                               <th>Status</th>
                                 <th colspan="2">Action</th>
                             </tr>
                         </thead>
@@ -49,13 +50,33 @@
                                             <h3 class="reviews__author--title">{{$property->property->name}}</h3>
                                             <p class="reviews__author--subtitle">{{$property->property->location}}</p>
                                             <span class="properties__author--price">₦{{ number_format($property->property->price, 2)}}</span>
-                                        </div>
+                                        </div> 
                                     </div>
                                 </td>
-                                 
                                 <td> 
                                     <span class="properties__views">{{ $property->total_selected_size_land }} per/sqm</span>
                                 </td>
+                                <td>
+                                    @if($property->status == 'pending')
+                                        <span class="status__btn pending2 " style="background-color: #f39c12; ">
+                                            <a class="text-white" >{{ucfirst($property->status)}}</a>
+                                        </span>
+                                    @elseif($property->status == 'completed')
+                                        <span class="status__btn pending2 " style="background-color:  #28a745; ">
+                                            <a class="text-white" >{{ ucfirst($property->status) }}</a>
+                                        </span>
+                                    @elseif($property->status == 'failed')
+                                        <span class="status__btn pending2 " style="background-color:  #dc3545; ">
+                                            <a class="text-white" >{{ ucfirst($property->status) }}</a>
+                                        </span>
+                                    @else
+                                        <span class="status__btn pending2 " style="background-color:  #6c757d; ">
+                                            <a class="text-white" >{{ ucfirst($property->status) }}</a>
+                                        </span>
+                                    @endif
+                                   
+                                </td>
+                               
                                 <td colspan="2">
                                     <p class="status__btn pending">
                                         <a href="{{ route('user.properties.show', encrypt($property->property->id))}}">

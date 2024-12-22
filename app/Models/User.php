@@ -41,6 +41,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(Wallet::class);
     }
+    public function notifications()
+    {
+        return $this->morphMany(CustomNotification::class, 'notifiable')->orderBy('created_at', 'desc');
+    }
+
 
 }
  
