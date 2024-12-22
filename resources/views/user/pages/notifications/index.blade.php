@@ -17,7 +17,7 @@
                 <div class="properties__wrapper">
                     <div class="properties__table table-responsive">
                         <table class="properties__table--wrapper">
-                            <thead>
+                            <thead> 
                                 <tr>
                                     <th>Image</th>
                                     
@@ -72,26 +72,26 @@
                                             </span>
 
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             <span class="sales__report--status pending2"><a href="{{ route('user.properties.show', encrypt($item->id))}}">View</a></span>
 
-                                        </td>
+                                        </td> --}}
                                         <td>
-                                            @if($item->status === 'sold out')
+                                            @if($item['data']['status'] == 'pending')
                                                
-                                                <span class="status__btn " style="color:#fff; background-color:#47008E ">
-                                                    <a href="{{ route('user.offerPrice', encrypt($item->id))}}" 
-                                                        style=" color: #fff; border: none;  cursor: pointer;">
-                                                        Offer Price
+                                                <span class="status__btn w-100 " style="color:#fff; background-color:#28a745 ">
+                                                    <a href="{{ route('user.transfer.property.confirm', ['propertyMode' => $item['data']['property_mode'], 'slug' => $item['data']['property_slug']]) }}" 
+                                                    style=" color: #fff; border: none;  cursor: pointer;">
+                                                        Confirm Property
                                                     </a>
                                                 </span>
-                                            @elseif($item->status === 'available')
-                                                <span class="sales__report--status pending2"   style="background-color: #008000;">
+                                            @elseif($item->status === 'confirm')
+                                                {{-- <span class="sales__report--status pending2"   style="background-color: #008000;">
                                                     <a 
                                                     style=" color: #fff; border: none;  cursor: pointer;"
                                                     href="{{ route('user.cart.index', encrypt($item->id)) }}"
                                                     >Buy</a> 
-                                                </span>
+                                                </span> --}}
                                             @endif
 
                                         </td>
