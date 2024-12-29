@@ -93,7 +93,7 @@
             
            
             <li class="sidebar__menu--items">
-                <a class="sidebar__menu--link" href="#">
+                <a class="sidebar__menu--link" href="{{ route('user.referral.index')}}">
                     <svg class="sidebar__menu--icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M15 21V19C15 17.3431 13.6569 16 12 16H6C4.34315 16 3 17.3431 3 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

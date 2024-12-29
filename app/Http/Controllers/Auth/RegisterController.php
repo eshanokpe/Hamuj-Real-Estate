@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 use Mail;
 use App\Http\Controllers\WalletController;
 use App\Models\User;
+use App\Models\ReferralLog;
 use App\Models\VirtualAccount;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -41,6 +42,12 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function showRegistrationForm($referralCode = null)
+    {
+        return view('auth.register', ['referralCode' => $referralCode]);
+    }
+
+
     protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -57,16 +64,23 @@ class RegisterController extends Controller
             'first_name' => 'required|string|max:50|unique:users',
             'last_name' => 'required|string|max:50|unique:users',
             'email' => 'required|string|email|max:50|unique:users',
-            'phone' => 'required|string|regex:/^\+?[0-9]{10,15}$/|unique:users',
+            'phone' => 'required|string|unique:users',
+            // 'phone' => 'required|string|regex:/^\+?[0-9]{10,15}$/|unique:users',
             'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
             'referral_code' => 'nullable|string|exists:users,referral_code',
         ]);
      
         // Generate the recipient ID
         $recipientId = $this->createRecipientId();
-        
+
+        $referrer = User::where('referral_code', $request->referral_code)->first();
+
+        if (!$referrer) {
+            return redirect()->back()->with('error', 'Invalid referral code.');
+        }
+
         // Create the user
-        $user = User::create([
+        $user = User::create([ 
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
@@ -75,9 +89,13 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
             'profile_image' => null,
             'referral_code' => $this->generateReferralCode(),
-            'referred_by' => $request->referral_code
-                ? User::where('referral_code', $request->referral_code)->value('id')
-                : null,
+            'referred_by' => null,
+        ]);
+        ReferralLog::create([
+            'referrer_id' => $referrer->id,
+            'referred_id' => $user->id,
+            'referral_code' => $request->referral_code,
+            'referred_at' => now(),
         ]);
         // Create a virtual account
         $customerId = $walletController->createVirtualAccountCustomer($user);
@@ -106,7 +124,7 @@ class RegisterController extends Controller
         $user->wallet()->create([
             'user_id' => $user->id,
             'user_email' =>$user->email,
-            'balance' => '12000000000',
+            'balance' => '500000',
             // 'balance' => 0.00,
             'currency' => $virtualAccountData['currency'] ?? 'NGN',
         ]);
@@ -119,10 +137,15 @@ class RegisterController extends Controller
         return redirect()->route('login')->with('success', 'Please check your email to verify your account.');
     }
     
+    // private function generateReferralCode()
+    // {
+    //     return strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
+    // }
     private function generateReferralCode()
     {
-        return strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
+        return strtoupper(substr(md5(uniqid('DOHMAYN-', true)), 0, 8));
     }
+
 
     public function createRecipientId()
     {

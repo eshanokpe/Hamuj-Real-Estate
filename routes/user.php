@@ -7,6 +7,7 @@ use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\TransferController;
 use App\Http\Controllers\User\PropertyController;
+use App\Http\Controllers\User\ReferralController;
 use App\Http\Controllers\User\TransactionController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\SellPropertyController;
@@ -51,7 +52,6 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/my-properties', [DashboardController::class, 'properties'])->name('myProperties');
     
     Route::get('/my-properties/{id}', [DashboardController::class, 'propertiesShow'])->name('properties.show');
- 
     
     Route::get('/cart/{id}', [CartController::class, 'index'])->name('cart.index');
     Route::get('/cart/sell/{id}', [CartController::class, 'sell'])->name('cart.sell.index');
@@ -80,7 +80,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/{propertyMode}/confirm/{slug}', [TransferPropertyController::class, 'confirmTransfer'])->name('transfer.property.confirm');
     Route::post('/transfer/confirm/{slug}/submit', [TransferPropertyController::class, 'submitConfirmation'])->name('confirm.transfer.submit');
 
-    Route::get('properties/{id}/valuation', [PropertyController::class, 'valuation'])
-            ->name('properties.valuation');
+    Route::get('properties/{id}/valuation', [PropertyController::class, 'valuation'])->name('properties.valuation');
+    Route::get('referral/index', [ReferralController::class, 'index'])->name('referral.index');
 });
 

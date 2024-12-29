@@ -121,6 +121,17 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="account__form--input mb-20">
+                            <label class="account__form--input__label mb-12" for="referral_code">Referral Code</label>
+                            <input readonly id="referral_code" type="text" class="account__form--input__field @error('referral_code') is-invalid @enderror" 
+                                   name="referral_code"  value="{{ old('referral_code', $referralCode) }}" placeholder="Enter referral code (optional)">
+                            @error('referral_code')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        
 
 
                         <button type="submit" class="account__form--btn solid__btn">Creat An Account</button>

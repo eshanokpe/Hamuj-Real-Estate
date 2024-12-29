@@ -104,7 +104,7 @@
                                                         <li class="chat__inbox--menu__list">
                                                             <a class="chat__inbox--menu__link active mark-as-read" href="{{ route('user.notifications.show', $notification->id) }}">
                                                             {{ $notification->data['property_name'] }}: 
-                                                            Market Value ₦{{ number_format($notification->data['market_value'], 2) }}, 
+                                                            Market Value ₦{{ number_format($notification->data['market_value'], 2) ?? 0.0 }}, 
                                                             Increase {{ $notification->data['percentage_increase'] }}%
                                                             </a>
                                                         </li>

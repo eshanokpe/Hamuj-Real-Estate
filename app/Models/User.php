@@ -45,6 +45,17 @@ class User extends Authenticatable
     {
         return $this->morphMany(CustomNotification::class, 'notifiable')->orderBy('created_at', 'desc');
     }
+    public function referralsMade()
+    {
+        return $this->hasMany(ReferralLog::class, 'referrer_id');
+    }
+    public function referralsReceived()
+    {
+        return $this->hasMany(ReferralLog::class, 'id');
+    }
+
+    // Relationship: Referrals received by this user (users who referred by this user)
+   
 
 
 }
