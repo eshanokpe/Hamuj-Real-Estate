@@ -176,7 +176,7 @@
                         @foreach ($referralsMade as $referral)
                             <li class="recent__activity--message__list one d-flex justify-content-between">
                                 <div class="recent__activity--message__content">
-                                    <p class="recent__activity--message__desc">User {{ $referral->user->id }} referred by User {{ $referral->referrer->id }} (Referral Code: {{ $referral->referral_code }}) </p>
+                                    <p class="recent__activity--message__desc">You referred by User {{ $referral->referred->last_name }} {{ $referral->referred->first_name }} </p>
                                 </div>
                                 <span class="recent__activity--message__time">4:45PM</span>
                             </li>
