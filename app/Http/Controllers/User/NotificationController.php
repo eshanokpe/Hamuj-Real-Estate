@@ -33,7 +33,6 @@ class NotificationController extends Controller
                 'property_mode' => $propertyMode,
             ]
         );
-        // return redirect()->route('property.show', ['slug' => $propertySlug]);
     }
 
     public function show($id)
