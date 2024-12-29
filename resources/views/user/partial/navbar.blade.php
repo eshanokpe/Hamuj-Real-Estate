@@ -103,12 +103,13 @@
                                                     @foreach (auth()->user()->unreadNotifications as $notification)
                                                         <li class="chat__inbox--menu__list">
                                                             <a class="chat__inbox--menu__link active mark-as-read" href="{{ route('user.notifications.show', $notification->id) }}">
-                                                            {{ $notification->data['property_name'] }}: 
-                                                            Market Value ₦{{ number_format($notification->data['market_value'], 2) ?? 0.0 }}, 
-                                                            Increase {{ $notification->data['percentage_increase'] }}%
+                                                                {{ $notification->data['property_name'] }}: 
+                                                                Market Value ₦{{ number_format($notification->data['market_value'] ?? 0.0, 2) }}, 
+                                                                Increase {{ $notification->data['percentage_increase'] ?? 'N/A' }}%
                                                             </a>
                                                         </li>
                                                     @endforeach
+
                                                     @foreach ($notificationsBar as $notification)
                                                         <li class="chat__inbox--menu__list">
                                                             <snap class="sales__report--status pending2"> {{ $notification->data['message'] }}</snap>
