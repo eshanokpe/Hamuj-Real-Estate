@@ -14,12 +14,13 @@
                 <div class="reviews__heading mb-30">
                     <h2 class="reviews__heading--title">Notification</h2>
                 </div>
+               
                 <div class="properties__wrapper">
                     <div class="properties__table table-responsive">
                         <table class="properties__table--wrapper">
                             <thead> 
                                 <tr>
-                                    <th>Image</th>
+                                    <th>Listing</th>
                                     
                                     <th>Land Size</th>
                                     <th>
@@ -34,64 +35,76 @@
                                     <tr>
                                         <td>
                                             <div class="properties__author d-flex align-items-center">
-                                                <div class="properties__author--thumb">
-                                                    <img src="{{ asset($item['data']['property_image']) }}" alt="img" style="width: 64px; height:64px; max-width:100%; max-height:100%; object-fit:cover"> 
-                                                </div>
+                                                @if(isset($item['data']['property_image']) && $item['data']['property_image'])
+                                                    <div class="properties__author--thumb">
+                                                        <img src="{{ asset($item['data']['property_image']) }}" alt="img" style="width: 64px; height:64px; max-width:100%; max-height:100%; object-fit:cover"> 
+                                                    </div>
+                                                @endif
                                                 <div class="reviews__author--text">
+                                                @if(isset($item['data']['property_name']) && $item['data']['property_name'])
+
                                                     <h3 class="reviews__author--title">{{$item['data']['property_name']}}</h3>
-                                                    {{-- <p class="reviews__author--subtitle">{{$item->location}}</p> --}}
+                                                    <h3 class="reviews__author--title">₦{{ number_format($item['data']['market_value'], 2)}}</h3>
+                                                    <p class="reviews__author--subtitle">{{$item['data']['percentage_increase']}}%</p>
+                                                @endif
+
+                                                @if(isset($item['data']['total_price']) && $item['data']['total_price'])
                                                     <span class="properties__author--price">₦{{ number_format($item['data']['total_price'], 2) }}</span>
+                                                @endif
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="properties__views">{{$item['data']['land_size']}} per/sqm</span>
+                                            @if(isset($item['data']['land_size']) && $item['data']['land_size'])
+                                                <span class="properties__views">{{$item['data']['land_size']}} per/sqm</span>
+                                            @endif
                                         </td>
                                         <td>
-                                            @if($item['data']['status'] == 'pending')
-                                                <span class="status__btn pending2 " style="background-color: #f39c12; ">
-                                                    <a class="text-white" >{{ ucfirst($item['data']['status']) }}</a>
-                                                </span>
-                                            @elseif($item['data']['status'] == 'completed')
-                                                <span class="status__btn pending2 " style="background-color:  #28a745; ">
-                                                    <a class="text-white" >{{ ucfirst($item['data']['status']) }}</a>
-                                                </span>
-                                            @elseif($item['data']['status'] == 'failed')
-                                                <span class="status__btn pending2 " style="background-color:  #dc3545; ">
-                                                    <a class="text-white" >{{ ucfirst($item['data']['status']) }}</a>
-                                                </span>
-                                            @else
-                                                <span class="status__btn pending2 " style="background-color:  #6c757d; ">
-                                                    <a class="text-white" >{{ ucfirst($item['data']['status']) }}</a>
-                                                </span>
+                                            @if(isset($item['data']['status']) && $item['data']['status'])
+                                                @if($item['data']['status'] == 'pending')
+                                                    <span class="status__btn pending2 " style="background-color: #f39c12; ">
+                                                        <a class="text-white" >{{ ucfirst($item['data']['status']) }}</a>
+                                                    </span>
+                                                @elseif($item['data']['status'] == 'completed')
+                                                    <span class="status__btn pending2 " style="background-color:  #28a745; ">
+                                                        <a class="text-white" >{{ ucfirst($item['data']['status']) }}</a>
+                                                    </span>
+                                                @elseif($item['data']['status'] == 'failed')
+                                                    <span class="status__btn pending2 " style="background-color:  #dc3545; ">
+                                                        <a class="text-white" >{{ ucfirst($item['data']['status']) }}</a>
+                                                    </span>
+                                                @else
+                                                    <span class="status__btn pending2 " style="background-color:  #6c757d; ">
+                                                        <a class="text-white" >{{ ucfirst($item['data']['status']) }}</a>
+                                                    </span>
+                                                @endif
                                             @endif
                                         </td>
                                         <td>
                                             <span class="sales__report--status">
-                                            {{$item->created_at->diffForHumans()}}
+                                                @if(isset($item['data']['property_name']) && $item['data']['property_name'])
+
+                                                    {{$item->created_at->diffForHumans()}}
+                                                @endif
+
                                             </span>
 
                                         </td>
-                                        {{-- <td>
-                                            <span class="sales__report--status pending2"><a href="{{ route('user.properties.show', encrypt($item->id))}}">View</a></span>
-
-                                        </td> --}}
+                              
                                         <td>
-                                            @if($item['data']['status'] == 'pending')
-                                               
-                                                <span class="status__btn w-100 " style="color:#fff; background-color:#28a745 ">
-                                                    <a href="{{ route('user.transfer.property.confirm', ['propertyMode' => $item['data']['property_mode'], 'slug' => $item['data']['property_slug']]) }}" 
-                                                    style=" color: #fff; border: none;  cursor: pointer;">
-                                                        Confirm Property
-                                                    </a>
-                                                </span>
-                                            @elseif($item->status === 'confirm')
-                                                {{-- <span class="sales__report--status pending2"   style="background-color: #008000;">
-                                                    <a 
-                                                    style=" color: #fff; border: none;  cursor: pointer;"
-                                                    href="{{ route('user.cart.index', encrypt($item->id)) }}"
-                                                    >Buy</a> 
-                                                </span> --}}
+                                            @if(isset($item['data']['status']) && $item['data']['status'])
+
+                                                @if($item['data']['status'] == 'pending') 
+                                                
+                                                    <span class="status__btn w-100 " style="color:#fff; background-color:#28a745 ">
+                                                        <a href="{{ route('user.transfer.property.confirm', ['propertyMode' => $item['data']['property_mode'], 'slug' => $item['data']['property_slug']]) }}" 
+                                                        style=" color: #fff; border: none;  cursor: pointer;">
+                                                            Confirm Property
+                                                        </a>
+                                                    </span>
+                                                @elseif($item->status === 'confirm')
+                                                
+                                                @endif
                                             @endif
 
                                         </td>

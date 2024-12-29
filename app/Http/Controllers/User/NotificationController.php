@@ -9,7 +9,7 @@ use App\Models\CustomNotification;
 
 class NotificationController extends Controller
 {
-   
+    
     public function index()
     { 
         $notifications = auth()->user()->notifications()->with('property')->paginate(10);
@@ -34,6 +34,19 @@ class NotificationController extends Controller
             ]
         );
         // return redirect()->route('property.show', ['slug' => $propertySlug]);
+    }
+
+    public function show($id)
+    {
+        $notification = auth()->user()->notifications()->findOrFail($id);
+
+        // Mark the notification as read
+        if ($notification->unread()) {
+            $notification->markAsRead();
+        }
+        $notification = auth()->user()->notifications()->paginate(10);
+
+        return view('user.pages.notifications.index', ['notifications' => $notification]);
     }
 
 }

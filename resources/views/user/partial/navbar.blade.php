@@ -8,7 +8,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon offcanvas__header--menu__open--svg" viewBox="0 0 512 512"><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 160h352M80 256h352M80 352h352"/></svg>
                     <span class="visually-hidden">Offcanvas Menu Open</span>
                 </a>
-            </div>
+            </div> 
             <div class="search__box">
                 <form class="search__box--form laptop__hidden" action="#">
                     <input class="search__box--input__field" placeholder="Search for ...." type="text">
@@ -100,7 +100,16 @@
                                         <div class="chat__inbox--content">
                                             <div class="chat__inbox--wrapper">
                                                 <ul class="chat__inbox--menu">
-                                                    @forelse ($notificationsBar as $notification)
+                                                    @foreach (auth()->user()->unreadNotifications as $notification)
+                                                        <li class="chat__inbox--menu__list">
+                                                            <a class="chat__inbox--menu__link active mark-as-read" href="{{ route('user.notifications.show', $notification->id) }}">
+                                                            {{ $notification->data['property_name'] }}: 
+                                                            Market Value ₦{{ number_format($notification->data['market_value'], 2) }}, 
+                                                            Increase {{ $notification->data['percentage_increase'] }}%
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                    @foreach ($notificationsBar as $notification)
                                                         <li class="chat__inbox--menu__list">
                                                             <snap class="sales__report--status pending2"> {{ $notification->data['message'] }}</snap>
                                                             <a class="chat__inbox--menu__link active mark-as-read" href="#" 
@@ -164,11 +173,8 @@
                                                                 });
                                                             });
                                                         </script>
-                                                    @empty
-                                                        <li class="chat__inbox--menu__list">
-                                                            <p class="chat__inbox--author__desc">No Notifications</p>
-                                                        </li>
-                                                    @endforelse
+                                                    
+                                                    @endforeach
                                                 </ul>
                                             </div>
                                         </div>

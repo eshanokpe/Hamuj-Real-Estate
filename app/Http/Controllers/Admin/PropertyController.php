@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\Property;
 use App\Models\PropertyValuation;
 use App\Models\PropertyPriceUpdate;
+use App\Notifications\PropertyValuationNotification;
 
 class PropertyController extends Controller
 {
@@ -295,6 +297,12 @@ class PropertyController extends Controller
         $property->price = $marketValue; 
         $property->percentage_increase = $priceIncrease; 
         $property->save(); 
+
+        // Send notification to all users
+        $users = User::all();
+        foreach ($users as $user) { 
+            $user->notify(new PropertyValuationNotification($property, $priceIncrease));
+        }
 
         return redirect()->back()->with('success', 'Valuation added successfully.');
     }
