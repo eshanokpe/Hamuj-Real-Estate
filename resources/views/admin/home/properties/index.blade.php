@@ -44,7 +44,9 @@
                                             <th>Name</th>
                                             <th>Content</th>
                                             <th>Image</th>
-                                            <th>DATE</th>
+                                            <th>Amount</th>
+                                            <th>Created date</th>
+                                            <th>Valuation</th>
                                             <th class="text-end">Action</th>
                                         </tr>
                                     </thead>
@@ -60,11 +62,19 @@
                                                          class="img-thumbnail" 
                                                          alt="{{ $property->name }}" />
                                                 </td>
+                                                <td>₦{{ number_format($property->price, 2) }}</td>
+
                                                 <td>{{ $property->created_at ? $property->created_at->format('d F Y') : 'N/A' }}</td>
+                                                <td>
+                                                    <a href="{{ route('admin.properties.evaluate', encrypt($property->id)) }}" class="btn btn-sm btn-warning">
+                                                        <i class="las la-chart-bar"></i> Evaluate
+                                                    </a>
+                                                </td>
                                                 <td class="text-end">
                                                     <a href="{{ route('admin.properties.edit', encrypt($property->id)) }}">
                                                         <i class="las la-pen text-secondary font-16"></i>
                                                     </a>
+                                                  
                                                     <form action="{{ route('admin.properties.destroy', encrypt($property->id)) }}" method="POST" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')

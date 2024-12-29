@@ -5,15 +5,16 @@ use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Property;
+use App\Models\PropertyValuation;
 use App\Models\PropertyPriceUpdate;
 
 class PropertyController extends Controller
 {
-    
+     
     public function index()
     {
         $properties = Property::all();
-        return view('admin.home.property.index', compact('properties'));
+        return view('admin.home.properties.index', compact('properties'));
     }
 
     public function create()
@@ -25,7 +26,7 @@ class PropertyController extends Controller
             "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", 
             "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara", "FCT"
         ];
-        return view('admin.home.property.create', compact('city'));
+        return view('admin.home.properties.create', compact('city'));
     }
 
     public function store(Request $request)
@@ -101,12 +102,7 @@ class PropertyController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function edit($id)
     {
         $property = Property::findOrFail( decrypt($id));
@@ -117,7 +113,7 @@ class PropertyController extends Controller
             "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", 
             "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara", "FCT"
         ];
-        return view('admin.home.property.edit', compact('property', 'city'));
+        return view('admin.home.properties.edit', compact('property', 'city'));
     }
     
     public function update(Request $request, $id)
@@ -225,16 +221,88 @@ class PropertyController extends Controller
 
         return redirect()->back()->with('success', 'Property updated successfully.');
     }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
         $property= Property::findOrFail(decrypt($id));
         $property->delete();
         return redirect()->route('admin.properties.index')->with('success', 'Property deleted successfully.');
     }
+
+    public function evaluate($id)
+    {
+        $propertyId = decrypt($id); 
+        $data['property'] = Property::findOrFail($propertyId);
+        $data['propertyValuation'] = PropertyValuation::where('property_id', $data['property']->id)
+        ->when(request('filter'), function ($query) {
+            // Filter by selected year
+            if ($year = request('filter')) {
+                return $query->whereYear('created_at', $year);
+            }
+            return $query;
+        })
+        ->orderBy('created_at', 'asc') 
+        ->get();
+
+        // Prepare the data for the chart
+        $valuationData = $data['propertyValuation']->map(function ($valuation) {
+            return [
+                'date' => $valuation->created_at->format('M, d'), 
+                'price' => $valuation->market_value,
+            ];
+        });
+
+        $data['valuationData'] = $valuationData;
+        // dd($data['valuationData']);
+        return view('admin.home.properties.evaluate', $data);
+    }
+
+
+    public function valuationStore(Request $request)
+    {
+      
+        $request->validate([
+            'property_id' => 'required|exists:properties,id',
+            'valuation_type' => 'required|string|max:255',
+            'current_price' => 'required|string|min:0',
+            'market_value' => 'required|string|min:0',
+            'percentage_increase' => 'required|string|min:0',
+        ]);
+        // Parse numeric values from currency format if necessary
+        $currentPrice = preg_replace('/[₦,]/', '', $request->current_price);
+        $marketValue = preg_replace('/[₦,]/', '', $request->market_value);
+
+        $percentageIncrease = 0;
+        if ($currentPrice > 0) {
+            $percentageIncrease = ceil((($marketValue - $currentPrice) / $currentPrice) * 100);
+        }
+        // dd($percentageIncrease);
+
+        PropertyValuation::create([
+            'property_id' => $request->property_id,
+            'valuation_type' => $request->valuation_type,
+            'current_price' => $currentPrice,
+            'market_value' => $marketValue,
+            'percentage_increase' => $percentageIncrease,
+        ]);
+
+        // Update the Property price
+        $property = Property::findOrFail($request->property_id);
+        $lunchPrice = $property->lunch_price;
+        $priceIncrease = $lunchPrice > 0 ? (($marketValue - $lunchPrice) / $lunchPrice) * 100 : 0;
+
+
+        $property->price = $marketValue; 
+        $property->percentage_increase = $priceIncrease; 
+        $property->save(); 
+
+        return redirect()->back()->with('success', 'Valuation added successfully.');
+    }
+
+    public function valuationEdit($id){
+        $propertyId = decrypt($id); 
+        $data['property'] = PropertyValuation::findOrFail($propertyId);
+        dd( $data['property']);
+    }
+
 }

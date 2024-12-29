@@ -14,6 +14,9 @@
                 <div class="row add__property--heading mb-30">
                     <h2 class="add__property--heading__title text-start">Show Property</h2>
                     <div class="add__property--heading__title text-end">
+                        <a href="{{ route('user.properties.valuation', encrypt($property->id)) }}"  class="solid__btn add__property--btn">
+                            Valuation
+                        </a>
                         <a href="{{ route('user.properties') }}"  class="solid__btn add__property--btn">
                             Back
                         </a>
@@ -51,7 +54,7 @@
                                                 <input disabled value="{{ $property->price }}" class="add__listing--input__field" id="input1" placeholder="Your Name" type="text">
                                                
                                             </div>
-                                        </div>
+                                        </div> 
                                         <div class="col-lg-4">
                                             <div class="add__listing--input__box mb-20">
                                                 <label class="add__listing--input__label" for="input3">Price Increase (%)</label>

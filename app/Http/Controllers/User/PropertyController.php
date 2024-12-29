@@ -11,6 +11,8 @@ use App\Models\Buy;
 use App\Models\User;
 use App\Models\Property;
 use App\Models\Offerprice;
+use App\Models\PropertyValuation;
+
 
  
 class PropertyController extends Controller
@@ -86,11 +88,6 @@ class PropertyController extends Controller
         }
     }
 
-
-    
-
-    
-
     public function add(){
         $user = Auth::user();
         $data['buyProperty'] = Buy::with('property') 
@@ -103,4 +100,32 @@ class PropertyController extends Controller
 
         return view('user.pages.properties.transfer.add',  $data); 
     }
+
+    public function valuation($id)
+    {
+        $propertyId = decrypt($id); 
+        $data['property'] = Property::findOrFail($propertyId);
+        $data['propertyValuation'] = PropertyValuation::where('property_id', $data['property']->id)
+            ->when(request('filter'), function ($query) {
+                // Filter by selected year
+                if ($year = request('filter')) {
+                    return $query->whereYear('created_at', $year);
+                }
+                return $query;
+            })
+            ->orderBy('created_at', 'asc') 
+            ->get();
+    
+        // Prepare the data for the chart
+        $valuationData = $data['propertyValuation']->map(function ($valuation) {
+            return [
+                'date' => $valuation->created_at->format('M, d'), 
+                'price' => number_format((float)$valuation->market_value, 2, '.', ','),
+            ];
+        });
+    
+        $data['valuationData'] = $valuationData;
+        return view('user.pages.properties.valuation', $data);
+    }
+    
 }

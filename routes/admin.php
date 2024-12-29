@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\VisionMissionController;
 use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 
-
+ 
 Route::redirect('/admin/dashboard', '/admin');
 // Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.index');
 
@@ -63,6 +63,12 @@ Route::prefix('admin')->group(function () {
         //Property
         Route::name('admin.')->group(function () {
             Route::resource('properties', AdminPropertyController::class);
+            Route::get('properties/{id}/evaluate', [AdminPropertyController::class, 'evaluate'])
+            ->name('properties.evaluate');
+            Route::post('properties/valuation/store', [AdminPropertyController::class, 'valuationStore'])
+            ->name('properties.valuation');
+            Route::get('properties/valuation/edit', [AdminPropertyController::class, 'valuationEdit'])
+            ->name('properties.valuation.edit');
         });
        
 

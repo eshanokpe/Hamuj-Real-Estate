@@ -201,7 +201,7 @@
                                 <div class="currency__card">
                                     <h4 class="currency__card--title">
                                        Account number
-                                    </h4>
+                                    </h4> 
                                     <span class="currency__card--amount" style="margin-top: -15px"> 
                                         {{ $user->virtualAccounts->first()->account_number}}
                                     </span>

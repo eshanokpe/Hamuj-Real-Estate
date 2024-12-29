@@ -15,7 +15,7 @@ class Property extends Model
         'slug',
         'description',
         'location',
-        'city',
+        'city', 
         'country',
         'lunch_price', 
         'price',

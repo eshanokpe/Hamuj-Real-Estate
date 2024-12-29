@@ -2,7 +2,7 @@
     <div class="main__logo logo-desktop-none">
         <h1 class="main__logo--title">
             <a class="main__logo--link" href="{{ route('user.dashboard') }}">
-                <img class="main__logo--img desktop light__logo" style="max-height: 100%; max-width:100%; width:171px; height:38px;  object-fit: cover;" src="{{ asset( $contactDetials->site_logo )}}" alt="logo-img">
+                <img class="main__logo--img desktop light__logo" style="max-height: 100%; max-width:100%; width:171px; height:38px;  object-fit: contain;" src="{{ asset( $contactDetials->site_logo )}}" alt="logo-img">
                 <img class="main__logo--img desktop dark__logo" src="{{ asset('assets/admin/img/logo/nav-log-white.jpg')}}" alt="logo-img" style="max-height: 100%; max-width:100%; width:171px; height:38px;  object-fit: cover;" >
                 <img class="main__logo--img mobile" src="{{ asset('assets/admin/img/logo/logo-mobilee.jpg')}}" alt="logo-img" style="max-height: 100%; max-width:100%; width:49; height:34px;  object-fit: cover;" >
             </a>
@@ -10,7 +10,8 @@
     </div>
     <div class="dashboard__sidebar--inner">
         <ul class="sidebar__menu" id="accordionExample">
-            <li class="sidebar__menu--items"><a class="sidebar__menu--link active" href="{{ route('user.dashboard')}}"><svg class="sidebar__menu--icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <li class="sidebar__menu--items"><a class="sidebar__menu--link active" href="{{ route('user.dashboard')}}">
+                <svg class="sidebar__menu--icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0.300049 1.40005C0.300049 1.10831 0.415941 0.828521 0.622231 0.622231C0.828521 0.415941 1.10831 0.300049 1.40005 0.300049H14.6C14.8918 0.300049 15.1716 0.415941 15.3779 0.622231C15.5842 0.828521 15.7 1.10831 15.7 1.40005V3.60005C15.7 3.89179 15.5842 4.17158 15.3779 4.37787C15.1716 4.58416 14.8918 4.70005 14.6 4.70005H1.40005C1.10831 4.70005 0.828521 4.58416 0.622231 4.37787C0.415941 4.17158 0.300049 3.89179 0.300049 3.60005V1.40005ZM0.300049 8.00005C0.300049 7.70831 0.415941 7.42852 0.622231 7.22223C0.828521 7.01594 1.10831 6.90005 1.40005 6.90005H8.00005C8.29179 6.90005 8.57158 7.01594 8.77787 7.22223C8.98416 7.42852 9.10005 7.70831 9.10005 8.00005V14.6C9.10005 14.8918 8.98416 15.1716 8.77787 15.3779C8.57158 15.5842 8.29179 15.7 8.00005 15.7H1.40005C1.10831 15.7 0.828521 15.5842 0.622231 15.3779C0.415941 15.1716 0.300049 14.8918 0.300049 14.6V8.00005ZM12.4 6.90005C12.1083 6.90005 11.8285 7.01594 11.6222 7.22223C11.4159 7.42852 11.3 7.70831 11.3 8.00005V14.6C11.3 14.8918 11.4159 15.1716 11.6222 15.3779C11.8285 15.5842 12.1083 15.7 12.4 15.7H14.6C14.8918 15.7 15.1716 15.5842 15.3779 15.3779C15.5842 15.1716 15.7 14.8918 15.7 14.6V8.00005C15.7 7.70831 15.5842 7.42852 15.3779 7.22223C15.1716 7.01594 14.8918 6.90005 14.6 6.90005H12.4Z" fill="currentColor"/>
                 </svg>
                 <span class="sidebar__menu--text"> Dashboard</span>

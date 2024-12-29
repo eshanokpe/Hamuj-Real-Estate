@@ -306,8 +306,8 @@
                 <div class="row mb-3">
                     <div class="col-lg-1"></div>
                     <div class="col-lg-6">
-                        <button type="submit" class="btn btn-dark">Upload Property </button>
-                        <button type="reset" class="btn btn-danger">Reset</button>
+                        <button type="submit" class="btn btn-dark">Update Property </button>
+                        {{-- <button type="reset" class="btn btn-danger">Reset</button> --}}
                     </div>
                 </div>
                

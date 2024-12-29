@@ -13,7 +13,6 @@ use App\Http\Controllers\User\SellPropertyController;
 use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\TransferPropertyController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -65,10 +64,8 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::post('/sell/property', [SellPropertyController::class, 'sellProperty'])->name('sell.property');
     Route::get('/sell/property/history', [SellPropertyController::class, 'sellPropertyHistory'])->name('sell.history');
    
-    
     Route::resource('profile', ProfileController::class);
     
-
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
@@ -78,12 +75,11 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
             'count' => 2
         ]);
     });
-    // In routes/web.php or routes/api.php
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-    // Route::get('/property/notification/{id}', [NotificationController::class, 'propertiesShow'])->name('properties.show');
     Route::get('/{propertyMode}/confirm/{slug}', [TransferPropertyController::class, 'confirmTransfer'])->name('transfer.property.confirm');
     Route::post('/transfer/confirm/{slug}/submit', [TransferPropertyController::class, 'submitConfirmation'])->name('confirm.transfer.submit');
 
-
+    Route::get('properties/{id}/valuation', [PropertyController::class, 'valuation'])
+            ->name('properties.valuation');
 });
 

@@ -135,7 +135,7 @@
                                                                     data: {
                                                                         _token: '{{ csrf_token() }}',
                                                                         property_mode:propertyMode,
-                                                                    },
+                                                                    }, 
                                                                     success: function(response) {
                                                                         if (response.success) {
                                                                             notificationElement.find('.sales__report--status').removeClass('pending2');

@@ -10,7 +10,7 @@
                 <img src="{{ asset('assets/img/logo/nav-log.png')}}" alt="logo-large" class="logo-lg logo-light">
                 <img src="{{ asset('assets/img/logo/nav-log.png')}}" alt="logo-large" class="logo-lg logo-dark">
             </span> --}}
-        </a>
+        </a> 
     </div> 
     <div class="sidebar-user-pro media border-end">                    
         <div class="position-relative mx-auto">

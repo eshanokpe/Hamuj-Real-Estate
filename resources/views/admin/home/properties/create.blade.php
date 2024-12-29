@@ -298,7 +298,7 @@
                     <div class="col-lg-1"></div>
                     <div class="col-lg-6">
                         <button type="submit" class="btn btn-dark">Create Property </button>
-                        <button type="reset" class="btn btn-danger">Reset</button>
+                        {{-- <button type="reset" class="btn btn-danger">Reset</button> --}}
                     </div>
                 </div>
 

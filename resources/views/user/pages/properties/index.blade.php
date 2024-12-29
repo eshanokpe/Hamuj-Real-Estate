@@ -41,6 +41,7 @@
                                                     <h3 class="reviews__author--title">{{$item->name}}</h3>
                                                     <p class="reviews__author--subtitle">{{$item->location}}</p>
                                                     <span class="properties__author--price">₦{{ number_format($item->price, 2) }}</span>
+                                                    <p class="reviews__author--title">{{$item->percentage_increase}}%</p>
                                                 </div>
                                             </div>
                                         </td>
