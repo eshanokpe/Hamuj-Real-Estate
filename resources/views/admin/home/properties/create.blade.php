@@ -151,7 +151,7 @@
                                     
                                     
                                     <div class="mb-3">
-                                        <label for="exampleInputEmail1">Size (sq. ft.)</label>
+                                        <label for="exampleInputEmail1">Size(sqm)</label>
                                         <input type="text" class="form-control" name="size" placeholder="Enter Land Size" required>
                                         @error('size')
                                             <div class="invalid-feedback">
