@@ -102,10 +102,10 @@
                                         </div> 
                                         <div class="col-lg-4">
                                             <div class="add__listing--input__box mb-20">
-                                                <label class="add__listing--input__label" for="input7">Size</label>
+                                                <label class="add__listing--input__label" for="input7">SIZE(sqm)</label>
                                                 <input 
                                                     disabled 
-                                                    value="{{ $property->size === $property->available_size ? $property->size : $property->available_size }}" 
+                                                    value="{{ $property->size === $property->available_size ? $property->size : $property->available_size }} sqm" 
                                                     class="add__listing--input__field" 
                                                     id="input7" 
                                                     type="text">
