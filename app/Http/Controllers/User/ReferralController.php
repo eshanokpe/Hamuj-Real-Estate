@@ -16,8 +16,8 @@ class ReferralController extends Controller
     public function index(){
         $data['user'] = Auth::user();
         $user = Auth::user();
-        $data['referralsMade'] = $user->referralsMade()->with('user', 'referrer')->get();
-    
+        $data['referralsMade'] = $user->referralsMade()->with('user', 'referrer')->take(6)->get();
+        $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;
         return view('user.pages.referral.index', $data); 
     }
 }

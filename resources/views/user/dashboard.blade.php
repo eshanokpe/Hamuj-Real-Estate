@@ -250,42 +250,36 @@
                 
                 <div class="recent__activity--box">
                     <div class="recent__activity--header d-flex align-items-center justify-content-between mb-25">
-                        <h2 class="recent__activity--title">Recent Activity</h2>
-                        <select class="recent__activity--select">
-                            <option value="1">View All</option>
-                            <option value="1">1 Weekly</option>
-                            <option value="1">1 Monthly</option>
-                            <option value="1">This Yearly</option>
-                        </select>
+                        <h2 class="recent__activity--title">Referral history</h2>
+                       
                     </div>
                     <ul class="recent__activity--message">
-                        <li class="recent__activity--message__list one d-flex justify-content-between">
-                            <div class="recent__activity--message__content">
-                                <p class="recent__activity--message__desc">Your listing <span>Luxury Family Home</span> has been approved!.</p>
-                            </div>
-                            <span class="recent__activity--message__time">4:45PM</span>
-                        </li>
-                        <li class="recent__activity--message__list two d-flex justify-content-between">
-                            <div class="recent__activity--message__content">
-                                <p class="recent__activity--message__desc">Kathy Brown left a review on <span>Renovated Apartment</span></p>
-                                <p class="recent__activity--message__desc2">Lorem ipsum, dolor sit amet.</p>
-                            </div>
-                            <span class="recent__activity--message__time">Today</span>
-                        </li>
-                        <li class="recent__activity--message__list three d-flex justify-content-between">
-                            <div class="recent__activity--message__content">
-                                <p class="recent__activity--message__desc">Someone favorites your <span>Gorgeous Villa Bay</span> View listing!</p>
-                            </div>
-                            <span class="recent__activity--message__time">20 hrs</span>
-                        </li>
-                        <li class="recent__activity--message__list four d-flex justify-content-between">
-                            <div class="recent__activity--message__content">
-                                <p class="recent__activity--message__desc">Replied to new <span>support</span> request</p>
-                            </div>
-                            <span class="recent__activity--message__time">4:45PM</span>
-                        </li>
+                       
+                        @if ($referralsMade->isNotEmpty())
+                            @foreach ($referralsMade as $referral)
+                                <li class="recent__activity--message__list one d-flex justify-content-between">
+                                    <div class="recent__activity--message__content">
+                                        <p class="recent__activity--message__desc">
+                                            {{ $referral->referred->last_name ?? 'Unknown' }}
+                                            {{ $referral->referred->first_name ?? 'Name' }}
+                                        </p>
+                                    </div>
+                                    <span class="recent__activity--message__time">
+                                        {{ $referral->created_at->format('g:i A') ?? 'N/A' }}
+                                    </span>
+                                </li>
+                            @endforeach
+                            {{-- Display "View More" link if there are additional referrals --}}
+                            @if ($hasMoreReferrals)
+                                <a href="{{ route('user.referrals.show') }}" class="view-more-link">View More</a>
+                            @endif
+                        @else
+                            <p>No referrals made yet.</p>
+                        @endif
+
                     </ul>
                 </div>
+                
             </div>
         </div>
         <!-- dashboard container .\ -->

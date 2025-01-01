@@ -119,8 +119,6 @@ class RegisterController extends Controller
         } else {
             return redirect()->back()->withErrors('Unable to register with Paystack. Please try again later.');
         }
-        // $users = Auth::user();
-        // Create a wallet for the user
         $user->wallet()->create([
             'user_id' => $user->id,
             'user_email' =>$user->email,
@@ -135,7 +133,7 @@ class RegisterController extends Controller
 
         // Redirect to the intended page or dashboard
         return redirect()->route('login')->with('success', 'Please check your email to verify your account.');
-    }
+    } 
     
     // private function generateReferralCode()
     // {
@@ -143,7 +141,11 @@ class RegisterController extends Controller
     // }
     private function generateReferralCode()
     {
-        return strtoupper(substr(md5(uniqid('DOHMAYN-', true)), 0, 8));
+        do {
+            $code = 'DOHMAYN' . strtoupper(Str::random(6));
+        } while (User::where('referral_code', $code)->exists());
+
+        return $code;
     }
 
 

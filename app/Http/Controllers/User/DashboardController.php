@@ -34,7 +34,8 @@ class DashboardController extends Controller
         $data['user'] = User::where('id', $user->id)
                             ->where('email', $user->email)
                             ->first();
-
+        $data['referralsMade'] = $user->referralsMade()->with('user', 'referrer')->take(6)->get();
+        $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;
         return view('user.dashboard', $data); 
     }
 

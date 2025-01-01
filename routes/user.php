@@ -82,5 +82,6 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
 
     Route::get('properties/{id}/valuation', [PropertyController::class, 'valuation'])->name('properties.valuation');
     Route::get('referral/index', [ReferralController::class, 'index'])->name('referral.index');
+    Route::get('referral/show', [ReferralController::class, 'show'])->name('referrals.show');
 });
 

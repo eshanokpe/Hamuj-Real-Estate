@@ -22,7 +22,7 @@ class ReferralLog extends Model
     }
 
     public function referrer()
-    {
+    { 
         return $this->belongsTo(User::class, 'referrer_id');
     }
 
