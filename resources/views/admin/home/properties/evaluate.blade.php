@@ -72,13 +72,12 @@
                                     <div class="row d-flex justify-content-center mb-3">                                                
                                         <div class="col">
                                             <p class="text-dark mb-1 fw-semibold">{{ $item->valuation_type }}</p>
-                                            <h4 class="font-22 fw-bold">₦{{ number_format($item->market_value, 2) ?? '' }}</h4> 
+                                            <h4 class="font-18 fw-bold">₦{{ number_format($item->market_value, 2) ?? '' }}</h4> 
                                             <p class="mb-0 text-truncate text-muted">{{  \Carbon\Carbon::parse($item->created_at)->format('d F, Y') }} </p>
                                             
                                         </div>
-                                        <div class="col-auto align-self-center">
+                                        <div class="col-auto align-self-center" style="margin-right: 10px">
                                             <div class="bg-light-alt d-flex justify-content-center align-items-center thumb-md  rounded-circle">
-                                                {{-- <i data-feather="fas fa-angle-double-up" class="align-self-center text-muted icon-sm"></i>   --}}
                                                 {{ $item->percentage_increase}}% <i class="fas fa-angle-double-up align-self-center text-success icon-md"></i>
                                                 <a href="{{ route('admin.properties.valuation.edit', encrypt($item->id)) }}" class="btn btn-link text-secondary p-2" >
                                                     <i class="las la-pen font-16"></i>

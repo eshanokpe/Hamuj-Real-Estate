@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\VisionMissionController;
-// use App\Http\Controllers\Admin\SociallinkController;
+use App\Http\Controllers\Admin\SociallinkController;
 use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 
@@ -65,10 +65,26 @@ Route::prefix('admin')->group(function () {
             Route::resource('properties', AdminPropertyController::class);
             Route::get('properties/{id}/evaluate', [AdminPropertyController::class, 'evaluate'])
             ->name('properties.evaluate');
+            
             Route::post('properties/valuation/store', [AdminPropertyController::class, 'valuationStore'])
             ->name('properties.valuation');
-            Route::get('properties/valuation/edit', [AdminPropertyController::class, 'valuationEdit'])
+            Route::get('properties/valuation/edit/{id}', [AdminPropertyController::class, 'valuationEdit'])
             ->name('properties.valuation.edit');
+            Route::put('properties/valuation/update/{id}', [AdminPropertyController::class, 'valuationUpdate'])
+            ->name('properties.valuation.update');
+            
+            Route::get('properties/{id}/neighborhood', [AdminPropertyController::class, 'neighborhood'])
+            ->name('properties.neighborhood');
+            Route::post('properties/neighborhood/store', [AdminPropertyController::class, 'storeNeighborhood'])->name('properties.neighborhood.store');
+            Route::get('/properties/neighborhood/{id}/edit', [AdminPropertyController::class, 'editNeighborhood'])->name('properties.neighborhood.edit');
+            Route::put('/properties/neighborhood/{id}', [AdminPropertyController::class, 'updateNeighborhood'])->name('properties.neighborhood.update');
+
+            Route::get('/properties/neighborhood/category', [AdminPropertyController::class, 'neighborhoodCategory'])->name('properties.neighborhood.category');
+            Route::post('properties/neighborhood/category/store', [AdminPropertyController::class, 'neighborhoodCategoryStore'])->name('properties.neighborhood.category.store');
+            Route::get('properties/neighborhood/category/edit/{id}', [AdminPropertyController::class, 'neighborhoodCategoryEdit'])->name('properties.neighborhood.category.edit');
+            Route::put('properties/neighborhood/category/update/{id}', [AdminPropertyController::class, 'neighborhoodCategoryUpdate'])->name('properties.neighborhood.category.update');
+            Route::delete('properties/neighborhood/category/delete/{id}', [AdminPropertyController::class, 'neighborhoodCategoryDelete'])->name('properties.neighborhood.category.delete');
+            
         });
        
 
@@ -103,7 +119,12 @@ Route::prefix('admin')->group(function () {
         Route::put('faq/{id}', [FAQController::class, 'update'])->name('admin.faq.update');
         Route::get('faq/{id}', [FAQController::class, 'destroy'])->name('admin.faq.destroy');
        
-       
+       //Social Links 
+       Route::name('admin.')->group(function () {
+            Route::get('/sociallinks/index', [SociallinkController::class, 'index'])->name('socialLink.index');
+            Route::post('/settings/store/social-links', [SociallinkController::class, 'storeSocialLinks'])->name('settings.storeSocialLinks');
+            Route::put('/settings/update/social-links/{id}', [SociallinkController::class, 'updateSocialLinks'])->name('settings.updateSocialLinks');
+       });
         
     });  
 }); 

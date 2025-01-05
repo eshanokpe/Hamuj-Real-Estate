@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Property;
+use App\Models\Neighborhood;
 use App\Models\Transaction;
 use Auth;
 
@@ -34,14 +35,19 @@ class HomeController extends Controller
     public function showProperties($slug)
     {
         try {   
-            $property = Property::with('priceUpdates')->where('slug', $slug)->first();
-            if (!$property) {
+            $data['property'] = Property::with('priceUpdates')->where('slug', $slug)->first();
+            if (!$data['property']) {
                 return redirect()->route('home')->with('error', 'Property not found.');
             }
+            
+            $neighborhoods = Neighborhood::with(['property', 'category'])->get();
 
+            $data['neighborhoods'] = $neighborhoods->groupBy(function ($item) {
+                return $item->category->name ?? 'Uncategorized';
+            });
             
 
-            return view('home.pages.properties.show', compact('property'));
+            return view('home.pages.properties.show', $data);
 
         } catch (\Exception $e) {
             \Log::error('Error fetching property: ' . $e->getMessage());

@@ -69,16 +69,11 @@
                                     <div class="row">
                                         <div class="col">
                                             <div class="mb-3">
-                                                <label for="exampleInputEmail1"> State</label>
-                                                <select name="city" id="state" class="form-select">
-                                                    <option value="">Select a state</option>
-                                                    @foreach ($city as $city)
-                                                        <option value="{{ $city }}" >
-                                                            {{ $city }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('city')
+                                                <label for="exampleInputEmail1"> Country</label>
+                                            <select name="country" class="form-select">
+                                                    <option>Nigeria</option>
+                                            </select>
+                                                @error('country')
                                                     <div class="invalid-feedback">
                                                         {{ $message }}
                                                     </div>
@@ -87,11 +82,28 @@
                                         </div>
                                         <div class="col">
                                             <div class="mb-3">
-                                                <label for="exampleInputEmail1"> Country</label>
-                                            <select name="country" class="form-select">
-                                                    <option>Nigeria</option>
-                                            </select>
-                                                @error('country')
+                                                <label for="exampleInputEmail1"> State</label>
+                                                <select name="state" id="state" class="form-select">
+                                                    <option value="">Select a state</option>
+                                                    @foreach ($state as $state)
+                                                        <option value="{{ $state }}" >
+                                                            {{ $state }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('state')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1"> City</label>
+                                                <input type="text" class="form-control" id="city" name="city" placeholder="Enter City" value="{{ $property->city ?? '' }}" required>
+                                                @error('city')
                                                     <div class="invalid-feedback">
                                                         {{ $message }}
                                                     </div>

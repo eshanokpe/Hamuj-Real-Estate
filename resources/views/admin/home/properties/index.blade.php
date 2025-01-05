@@ -42,10 +42,11 @@
                                         <tr>
                                             <th class="width80">#</th>
                                             <th>Name</th>
-                                            <th>Content</th>
+                                            {{-- <th>Content</th> --}}
                                             <th>Image</th>
                                             <th>Amount</th>
                                             <th>Created date</th>
+                                            <th>Neighborhood</th>
                                             <th>Valuation</th>
                                             <th class="text-end">Action</th>
                                         </tr>
@@ -55,7 +56,7 @@
                                             <tr>
                                                 <td><strong>{{ $loop->iteration }}</strong></td>
                                                 <td>{{ $property->name }}</td>
-                                                <td>{!! Str::limit($property->description, 80) !!}</td>
+                                                {{-- <td>{!! Str::limit($property->description, 80) !!}</td> --}}
                                                 <td>
                                                     <img style="width: 100px; height: 100px; object-fit: cover;" 
                                                          src="{{ asset($property->property_images) }}" 
@@ -65,6 +66,11 @@
                                                 <td>₦{{ number_format($property->price, 2) }}</td>
 
                                                 <td>{{ $property->created_at ? $property->created_at->format('d F Y') : 'N/A' }}</td>
+                                                <td>
+                                                    <a href="{{ route('admin.properties.neighborhood', encrypt($property->id)) }}" class="btn btn-sm btn-primary">
+                                                        Neighborhood
+                                                    </a>
+                                                </td>
                                                 <td>
                                                     <a href="{{ route('admin.properties.evaluate', encrypt($property->id)) }}" class="btn btn-sm btn-warning">
                                                         <i class="las la-chart-bar"></i> Evaluate

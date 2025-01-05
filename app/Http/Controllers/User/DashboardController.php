@@ -7,6 +7,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Neighborhood;
 use App\Models\Property;
 use App\Models\Transaction;
 use App\Http\Controllers\Controller;
@@ -104,11 +105,16 @@ class DashboardController extends Controller
     public function propertiesShow($id)
     {
         $users = Auth::user();
-        $property = Property::findOrFail(decrypt($id));
-        $user = User::where('id', $users->id)
+        $data['property'] = Property::findOrFail(decrypt($id));
+        $data['user'] = User::where('id', $users->id)
                         ->where('email', $users->email)
                         ->first();
-        return view('user.pages.properties.show', compact('property','user'));
+        $neighborhoods = Neighborhood::with(['property', 'category'])->get();
+
+        $data['neighborhoods'] = $neighborhoods->groupBy(function ($item) {
+            return $item->category->name ?? 'Uncategorized';
+        });
+        return view('user.pages.properties.show', $data);
     }
 
 

@@ -36,8 +36,9 @@
                                     <a class="nav-link waves-effect waves-light mb-3 active"  href="{{ route('admin.settings.index')}}">About</a>
                                     <a class="nav-link waves-effect waves-light "  href="{{ route('admin.visionMission.index')}}">Vision / Mission</a>
                                     <a class="nav-link waves-effect waves-light "  href="{{ route('admin.contact.index')}}">Contact </a>
-                                    <a class="nav-link waves-effect waves-light "  href="{{ route('admin.terms.index')}}">Terms </a>
+                                    <a class="nav-link waves-effect waves-light "  href="{{ route('admin.terms.index')}}">Terms of use</a>
                                     <a class="nav-link waves-effect waves-light "  href="{{ route('admin.privacyPolicy.index')}}">Privacy Policy </a>
+                                    <a class="nav-link waves-effect waves-light "  href="{{ route('admin.socialLink.index') }}">Social Media </a>
                                     
                                 </div>
                             </div>

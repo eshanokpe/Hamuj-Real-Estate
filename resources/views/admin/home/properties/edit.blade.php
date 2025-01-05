@@ -66,33 +66,13 @@
                                             </div>
                                         @enderror
                                     </div>
-
                                     <div class="row">
                                         <div class="col">
                                             <div class="mb-3">
-                                                <label for="exampleInputEmail1"> City</label>
-                                                <select name="city" id="state" class="form-control">
-                                                    <option value="">Select a city</option>
-                                                    @foreach ($city as $city)
-                                                        <option value="{{ $city }}" {{ $property->city == $city ? 'selected' : '' }}>
-                                                            {{ $city }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                
-                                                @error('city')
-                                                    <div class="invalid-feedback">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="mb-3">
                                                 <label for="exampleInputEmail1"> Country</label>
-                                               <select name="country" class="form-select">
+                                            <select name="country" class="form-select">
                                                     <option>Nigeria</option>
-                                               </select>
+                                            </select>
                                                 @error('country')
                                                     <div class="invalid-feedback">
                                                         {{ $message }}
@@ -100,8 +80,39 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                       
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1"> State</label>
+                                                <select name="state" id="state" class="form-control">
+                                                    <option value="">Select a State</option>
+                                                    @foreach ($state as $state)
+                                                        <option value="{{ $state }}" {{ $property->state == $state ? 'selected' : '' }}>
+                                                            {{ $state }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                
+                                                @error('state')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                      
+                                        <div class="col">
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1"> City</label>
+                                                <input type="text" class="form-control" id="city" name="city" placeholder="Enter City" value="{{ $property->city ?? '' }}" required>
+                                                @error('city')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
                                     </div>
-                                   
                                     <div class="mb-3">
                                         <label for="launchPrice">Launch Price</label>
                                         <input type="number" class="form-control" id="launchPrice" name="lunch_price" placeholder="Enter Launch Price" value="{{ $property->lunch_price ?? '' }}" required>
@@ -208,25 +219,27 @@
                                             </div>
                                         @enderror
                                     </div>
+
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1">Upload Land Payment Plan</label>
+                                        <input onchange="paymentPlan(event)" type="file" class="form-control" name="payment_plan" >
+                                        @error('payment_plan')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                        @if(isset($property))
+                                            <img src="{{ asset($property->payment_plan) }}" alt="{{ $property->name }}" class="img-thumbnail mt-2" width="200">
+                                        @endif
+                                        <img id="image-paymentPlan" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
+                                    </div>
                                            
                             </div><!--end card-body-->
                     
                     </div><!--end col-->
                     <div class="col-lg-5">
                        
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1">Upload Land Payment Plan</label>
-                            <input onchange="paymentPlan(event)" type="file" class="form-control" name="payment_plan" >
-                            @error('payment_plan')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                            @if(isset($property))
-                                <img src="{{ asset($property->payment_plan) }}" alt="{{ $property->name }}" class="img-thumbnail mt-2" width="200">
-                            @endif
-                            <img id="image-paymentPlan" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
-                        </div>
+                        
                         <div class="mb-3">
                             <label for="exampleInputEmail1">Upload Brochure</label>
                             <input onchange="previewBrochure(event)" type="file" class="form-control" name="brochure" >

@@ -86,7 +86,7 @@
     </div>
 </section>
 
-<section class="listing__details--section section--padding">
+<section class="listing__details--section ">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
@@ -146,9 +146,9 @@
                                         <p>
                                             <span class="apartment__info--title">
                                                 @if($property->size === $property->available_size)
-                                                    {{$property->size}}
+                                                    {{$property->size}} (sqm)
                                                 @else
-                                                    {{$property->available_size}}
+                                                    {{$property->available_size}} (sqm)
                                                 @endif
                                             </span>
                                         </p>
@@ -164,7 +164,7 @@
                                     <span class="properties__details--info__subtitle">₦{{ number_format($property->price, 2) }}</span>
                                 </li>
                                 <li class="properties__details--info__list d-flex justify-content-between">
-                                    <span class="properties__details--info__title">Land Area Size:</span>
+                                    <span class="properties__details--info__title">Land Area Size (sqm):</span>
                                     <span class="properties__details--info__subtitle">
                                         @if($property->size === $property->available_size)
                                             {{$property->size}}
@@ -193,6 +193,7 @@
                             </div>
                         </div> --}}
 
+                        
                         <div class="listing__details--content__step mb-80">
                             <div class="listing__details--location__header d-flex justify-content-between mb-40">
                                 <div class="listing__details--location__header--left">
@@ -220,13 +221,58 @@
                                 <ul class="location__google--maps__info--step">
                                     <li class="location__google--maps__info--list d-flex">
                                         <span class="location__google--maps__info--title">City/Town:</span>
-                                        <span class="location__google--maps__info--subtitle">Lekki</span>
+                                        <span class="location__google--maps__info--subtitle">{{ $property->city}}</span>
                                     </li>
                                     <li class="location__google--maps__info--list d-flex">
                                         <span class="location__google--maps__info--title">Province/State: </span>
-                                        <span class="location__google--maps__info--subtitle">{{ $property->city}}</span>
+                                        <span class="location__google--maps__info--subtitle">{{ $property->state}}</span>
                                     </li>
                                 </ul>
+                            </div>
+                        </div>
+
+                        <div class="listing__details--content__step mb-80">
+                            <h2 class="widget__step--title">Neighborhood </h2>
+    
+                            <div class="properties__floor--plans d-flex">
+                                <iframe src="{{ $property->google_map}}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                               
+                                <div class="properties__floor--plans__gallery">
+                                    <ul class="nav floor__plans--tab__btn" id="neighborhoodCategories">
+                                        @foreach ($neighborhoods as $categoryName => $neighborhoodsList)
+              
+                                            <li class="nav-item floor__plans--tab__btn--list">
+                                                <button 
+                                                    class="floor__plans--tab__btn--field {{ $loop->first ? 'active' : '' }}" 
+                                                    data-bs-toggle="tab" 
+                                                    data-bs-target="#category{{ $loop->index }}" 
+                                                    type="button">
+                                                    {{ $categoryName }}
+                                                </button>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                    <div class="tab-content" id="neighborhoodDetails">
+                                        @foreach ($neighborhoods as $categoryName => $neighborhoodsList)
+               
+                                           <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="category{{ $loop->index }}">
+                                                <div class="properties__floor--plans__display">
+                                                        <p>Nearest Landmark</p>
+                                                   
+                                                        @foreach ($neighborhoodsList as $neighborhood)
+                                                            <li class="location__google--maps__info--list d-flex">
+                                                                <span class="location__google--maps__info--title">{{ $neighborhood->neighborhood_name }}</span>
+                                                                <span class="location__google--maps__info--subtitle">Distance: {{ $neighborhood->distance }} miles</span>
+                                                            </li>
+                                                           
+                                                            <hr>
+                                                        @endforeach
+                                                   
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -246,6 +292,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        
                        
                       
                     </div>
@@ -253,8 +301,6 @@
             </div>
             <div class="col-lg-4">
                 <div class="listing__widget">
-                    
-                    
                     <div class="widget__step mb-30">
                         <h3 class="widget__step--title">Property sale history</h3>
                         <div class="widget__form">
@@ -322,10 +368,7 @@
                             </div>
                         </div>
                     </div>
-
-                   
-
-                    <div class="widget__step">
+                    <div class="widget__step mb-30">
                         <h2 class="widget__step--title">Land Survey</h2>
                         <div class="widget__featured">
                             <div class="properties__floor--plans__display">
@@ -358,6 +401,8 @@
                             @endforelse
                         </div>
                     </div>
+
+                    
 
 
                 </div>

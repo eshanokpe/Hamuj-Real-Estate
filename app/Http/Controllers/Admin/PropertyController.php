@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Property;
+use App\Models\Neighborhood;
 use App\Models\PropertyValuation;
 use App\Models\PropertyPriceUpdate;
+use App\Models\NeighborhoodCategory;
 use App\Notifications\PropertyValuationNotification;
 
 class PropertyController extends Controller
@@ -21,14 +23,14 @@ class PropertyController extends Controller
 
     public function create()
     {
-        $city = [
+        $state = [
             "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", 
             "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", 
             "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", 
             "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", 
             "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara", "FCT"
         ];
-        return view('admin.home.properties.create', compact('city'));
+        return view('admin.home.properties.create', compact('state'));
     }
 
     public function store(Request $request)
@@ -38,6 +40,7 @@ class PropertyController extends Controller
             'description' => 'nullable|string',
             'location' => 'required|string|max:255',
             'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
             'country' => 'required|string|max:255',
             'lunch_price' => 'required|numeric',
             'price' => 'required|numeric',
@@ -71,6 +74,7 @@ class PropertyController extends Controller
             'description' => $request->input('description'),
             'location' => $request->input('location'),
             'city' => $request->input('city'),
+            'state' => $request->input('state'),
             'country' => $request->input('country'),
             'lunch_price' => $request->input('lunch_price'),
             'price' => $request->input('price'),
@@ -108,14 +112,14 @@ class PropertyController extends Controller
     public function edit($id)
     {
         $property = Property::findOrFail( decrypt($id));
-        $city = [
+        $state = [
             "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", 
             "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", 
             "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", 
             "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", 
             "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara", "FCT"
         ];
-        return view('admin.home.properties.edit', compact('property', 'city'));
+        return view('admin.home.properties.edit', compact('property', 'state'));
     }
     
     public function update(Request $request, $id)
@@ -129,6 +133,7 @@ class PropertyController extends Controller
             'description' => 'nullable|string',
             'location' => 'required|string|max:255',
             'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
             'country' => 'required|string|max:255',
             'lunch_price' => 'required|numeric',
             'price' => 'required|numeric',
@@ -169,6 +174,7 @@ class PropertyController extends Controller
             'description' => $request->input('description'),
             'location' => $request->input('location'),
             'city' => $request->input('city'),
+            'state' => $request->input('state'),
             'country' => $request->input('country'), 
             'lunch_price' => $request->input('lunch_price'),
             'price' => $newPrice,
@@ -259,7 +265,6 @@ class PropertyController extends Controller
         return view('admin.home.properties.evaluate', $data);
     }
 
-
     public function valuationStore(Request $request)
     {
       
@@ -309,8 +314,165 @@ class PropertyController extends Controller
 
     public function valuationEdit($id){
         $propertyId = decrypt($id); 
-        $data['property'] = PropertyValuation::findOrFail($propertyId);
-        dd( $data['property']);
+        $data['propertyValuation'] = PropertyValuation::findOrFail($propertyId);
+        $data['property'] = Property::findOrFail($data['propertyValuation']->property_id);
+        // dd( $data['property']);
+        return view('admin.home.properties.edit-evaluation', $data);
     }
 
+    public function valuationUpdate(Request $request, $id){
+    
+        $request->validate([
+            'property_id' => 'required|exists:properties,id',
+            'valuation_type' => 'required|string|max:255',
+            'current_price' => 'required|string|min:0',
+            'market_value' => 'required|string|min:0',
+            'percentage_increase' => 'required|string|min:0',
+        ]);
+
+        // Parse numeric values from currency format if necessary
+        $currentPrice = preg_replace('/[₦,]/', '', $request->current_price);
+        $marketValue = preg_replace('/[₦,]/', '', $request->market_value);
+
+        $percentageIncrease = 0;
+        if ($currentPrice > 0) {
+            $percentageIncrease = ceil((($marketValue - $currentPrice) / $currentPrice) * 100);
+        }
+        $propertyValuation = PropertyValuation::findOrFail($id);
+        $propertyValuation->update([
+            'property_id' => $request->property_id,
+            'valuation_type' => $request->valuation_type,
+            'current_price' => $currentPrice,
+            'market_value' => $marketValue,
+            'percentage_increase' => $percentageIncrease,
+        ]);
+
+        
+        // Update the Property price
+        $property = Property::findOrFail($request->property_id);
+        $lunchPrice = $property->lunch_price;
+        $priceIncrease = $lunchPrice > 0 ? (($marketValue - $lunchPrice) / $lunchPrice) * 100 : 0;
+
+
+        $property->price = $marketValue; 
+        $property->percentage_increase = $priceIncrease; 
+        $property->save(); 
+
+        // Send notification to all users
+        $users = User::all();
+        foreach ($users as $user) { 
+            $user->notify(new PropertyValuationNotification($property, $priceIncrease));
+        }
+
+        return redirect()->back()->with('success', 'Properties Valuation updated successfully!');
+    }
+
+    public function neighborhood($id)
+    {
+        
+        $propertyId = decrypt($id);
+        $data['property'] = Property::findOrFail($propertyId);
+        $data['categories'] = NeighborhoodCategory::all();
+        $data['neighborhoods'] = Neighborhood::with(['property', 'category'])->get();
+       
+        return view('admin.home.properties.neighborhood', $data);
+    }
+
+    public function storeNeighborhood(Request $request)
+    {
+        $request->validate([
+            'property_id' => 'required|exists:properties,id',
+            'neighborhood_category_id' => 'required|exists:neighborhood_categories,id',
+            'neighborhood_name' => 'required|string|max:255',
+            'distance' => 'nullable|string|max:255',
+        ]);
+    
+        Neighborhood::create([
+            'property_id' => $request->property_id,
+            'neighborhood_category_id' => $request->neighborhood_category_id,
+            'neighborhood_name' => $request->neighborhood_name,
+            'distance' => $request->distance,
+        ]);
+    
+        return redirect()->back()->with('success', 'Neighborhood saved successfully!');
+    }
+
+    public function editNeighborhood($id)
+    {
+
+        $data['neighborhood'] = Neighborhood::findOrFail(decrypt($id));
+        $data['categories'] = NeighborhoodCategory::all(); // Retrieve all categories for the dropdown
+        $data['neighborhoods'] = Neighborhood::with(['property', 'category'])->get();
+        // dd();
+        $data['property'] = Property::findOrFail($data['neighborhood']->property_id);
+
+        return view('admin.home.properties.edit-neighborhood', $data);
+    }
+
+    public function updateNeighborhood(Request $request, $id)
+    {
+        $request->validate([
+            'property_id' => 'required|exists:properties,id',
+            'neighborhood_category_id' => 'required|exists:neighborhood_categories,id',
+            'neighborhood_name' => 'required|string|max:255',
+            'distance' => 'nullable|string|max:255',
+        ]);
+
+        $neighborhoodDetail = Neighborhood::findOrFail($id);
+        $neighborhoodDetail->update([
+            'property_id' => $request->property_id,
+            'neighborhood_category_id' => $request->neighborhood_category_id,
+            'neighborhood_name' => $request->neighborhood_name,
+            'distance' => $request->distance,
+        ]);
+
+        return redirect()->back()->with('success', 'Neighborhood details updated successfully!');
+    }
+
+    public function neighborhoodCategory(){
+        $data['categories'] = NeighborhoodCategory::all();
+        $data['editNeighborhoodCategory'] = null;
+        return view('admin.home.properties.neighborhoodCategory', $data);
+    }
+
+    public function neighborhoodCategoryStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+    
+        NeighborhoodCategory::create([
+            'name' => $request->name,
+        ]);
+    
+        return redirect()->back()->with('success', 'Neighborhood Category saved successfully!');
+    }
+
+    public function neighborhoodCategoryEdit($id){
+        $data['editNeighborhoodCategory'] = NeighborhoodCategory::findOrFail(decrypt($id));
+        $data['categories'] = NeighborhoodCategory::all();
+        return view('admin.home.properties.neighborhoodCategory', $data);
+    }
+
+    public function neighborhoodCategoryDelete($id){
+        $neighborhoodCategory= NeighborhoodCategory::findOrFail(decrypt($id));
+        $neighborhoodCategory->delete();
+        return redirect()->back()->with('success', 'Neighborhood Category deleted successfully.');
+    }
+
+    public function neighborhoodCategoryUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'neighborhood_category_id' => 'required|exists:neighborhood_categories,id',
+            'name' => 'required|string|max:255',
+        ]);
+
+        $neighborhoodDetail = NeighborhoodCategory::findOrFail($id);
+        $neighborhoodDetail->update([
+            'property_id' => $request->property_id,
+            'name' => $request->name,
+        ]);
+
+        return redirect()->back()->with('success', 'Neighborhood Category updated successfully!');
+    }
 }
