@@ -1,0 +1,262 @@
+/*
+    8. Add listing css
+*/
+.add__listing--header{
+    @media only screen and (max-width: 767px) {
+        margin-bottom: 3rem;
+    }
+}
+.add__listing--tab__btn{
+    gap: 2.5rem;
+    @media only screen and (min-width: 768px) {
+        gap: 4rem;
+    }
+    @media only screen and (min-width: 992px) {
+        gap: 5rem;
+    }
+}
+.add__listing--tab__btn--field{
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+    font-weight: 700;
+    border: 0;
+    background: inherit;
+    padding: 0;
+    position: relative;
+    padding-bottom: 0.7rem;
+    @media only screen and (min-width: 768px) {
+        font-size: 2rem;
+    }
+    @media only screen and (min-width: 992px) {
+        font-size: 2.2rem;
+    }
+    &:hover{
+        color: var(--color-hover);
+    }
+    &:hover{
+        &::before{
+            width: 100%;
+        }
+    }
+    &.active{
+        color: var(--color-hover);
+        &::before{
+            width: 100%;
+        }
+    }
+    &::before{
+        position: absolute;
+        content: "";
+        width: 0;
+        height: 0.1rem;
+        background: var(--color-hover);
+        bottom: 0;
+        left: 0;
+        transition: .3s;
+    }
+}
+.add__listing--form__step{
+    @media only screen and (max-width: 575px) {
+        margin-bottom: 2rem;
+    }
+    &.last{
+        &.mb-30{
+            @media only screen and (max-width: 767px) {
+                margin-bottom: 1rem;
+            }
+        }
+    }
+}
+.add__listing--title{
+    font-size: 1.7rem;
+    line-height: 2.4rem;
+    position: relative;
+    padding-left: 1.5rem;
+    @media only screen and (min-width: 576px) {
+        font-size: 1.8rem;
+    }
+    @media only screen and (min-width: 768px) {
+        font-size: 2rem;
+    }
+    @media only screen and (max-width: 767px) {
+        &.mb-30{
+            margin-bottom: 2rem;
+        }
+    }
+    &::before{
+        position: absolute;
+        content: "";
+        width: 0.2rem;
+        height: 2rem;
+        background: var(--color-hover);
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
+.add__listing--input__box {
+    input::-webkit-input-placeholder {
+        color: #838383;
+        font-weight: 500;
+      }
+     input::-moz-placeholder {
+        color: #838383;
+        font-weight: 500;
+      }
+     input:-ms-input-placeholder {
+        color: #838383;
+        font-weight: 500;
+      }
+     input:-moz-placeholder {
+        color: #838383;
+        font-weight: 500;
+      }
+}
+.add__listing--input__field{
+    width: 100%;
+    height: 5rem;
+    border: 1px solid var(--color-border);
+    padding: 0 1.5rem;
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    -ms-border-radius: 0.5rem;
+    -o-border-radius: 0.5rem;
+    font-weight: 500;
+    &:focus{
+        border-color: var(--color-hover);
+    }
+}
+.add__listing--input__label{
+    font-weight: 700;
+    margin-bottom: 1.4rem;
+    line-height: 1.8rem;
+}
+.add__listing--textarea__box{
+    textarea::-webkit-input-placeholder {
+        color: #838383;
+        font-weight: 500;
+      }
+      textarea::-moz-placeholder {
+        color: #838383;
+        font-weight: 500;
+      }
+      textarea:-ms-input-placeholder {
+        color: #838383;
+        font-weight: 500;
+      }
+      textarea:-moz-placeholder {
+        color: #838383;
+        font-weight: 500;
+      }
+}
+.add__listing--textarea__field{
+    width: 100%;
+    height: 15rem;
+    border: 1px solid var(--color-border);
+    padding: 1rem 1.5rem;
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    -ms-border-radius: 0.5rem;
+    -o-border-radius: 0.5rem;
+    resize: none;
+    &:focus{
+        border-color: var(--color-hover);
+    }
+    @media only screen and (min-width: 768px) {
+        height: 20rem;
+    }
+}
+
+.add__listing--form__select{
+    width: 100%;
+    height: 5rem;
+    border: 1px solid var(--color-border);
+    padding: 0 1.5rem;
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    -ms-border-radius: 0.5rem;
+    -o-border-radius: 0.5rem;
+    color: var(--color-foreground-sub);
+    -webkit-appearance: none;
+    cursor: pointer;
+    &:focus{
+        border-color: var(--color-hover);
+    }
+}
+
+.browse__file--area{
+    border: 1px solid var(--color-border);
+    padding: 4rem 3rem;
+    border-radius: 1rem;
+    transition: .3s;
+    @media only screen and (min-width: 768px) {
+        padding: 5rem 3rem;
+    }
+}
+.browse__file--input__field{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+.browse__file--area{
+    &:hover{
+        border-color: var(--color-hover);
+        & .browse__file--btn{
+            border-color: var(--color-hover);
+            color: var(--color-hover);
+        }
+    }
+}
+.browse__file--btn{
+    background: inherit;
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+    font-size: 1.6rem;
+    line-height: 4.8rem;
+    @media only screen and (min-width: 768px) {
+        font-size: 1.7rem;
+        line-height: 5.3rem;
+    }
+}
+.browse__file--title{
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    @media only screen and (min-width: 768px) {
+        font-size: 2.2rem;
+        margin-bottom: 2rem;
+    }
+}
+.browse__file--desc{
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--color-foreground-sub);
+    margin-bottom: 2.5rem;
+}
+.add__listing--google__map{
+    & h3{
+        font-size: 1.7rem;
+        line-height: 2rem;
+        margin-bottom: 2rem;
+        @media only screen and (min-width: 768px) {
+            font-size: 1.8rem;
+            margin-bottom: 2.5rem;
+        }
+    }
+    & iframe{
+        width: 100%;
+        height: 30rem;
+        @media only screen and (min-width: 768px) {
+            height: 50rem;
+        }
+    }
+}

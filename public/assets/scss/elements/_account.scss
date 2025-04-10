@@ -1,0 +1,225 @@
+/*
+    7. Account css
+*/
+.account__section--inner{
+    max-width: 100%;
+    margin: 0 auto;
+    @media only screen and (min-width: 576px) {
+        max-width: 52rem;
+    }
+}
+.account__form--wrapper{
+    border: 1px solid var(--color-border);
+    padding: 4rem 2rem 3rem;
+    border-radius: 0.5rem;
+    @media only screen and (min-width: 576px) {
+        padding: 6rem 4rem 5rem; 
+    }
+}
+.account__tab--btn{
+    margin-bottom: -1rem;
+}
+.account__tab--btn__field{
+    width: 12rem;
+    height: 5rem;
+    text-align: center;
+    line-height: 4.8rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    font-size: 1.6rem;
+    font-weight: 600;
+    @media only screen and (min-width: 576px) {
+        width: 17rem;
+        height: 5.5rem;
+        line-height: 5.3rem;
+        font-size: 1.8rem;
+    }
+    &:hover{
+        background: var(--color-hover);
+        color: var( --color-white);
+        border-color: var(--color-hover);
+    }
+    &.active{
+        background: var(--color-hover);
+        color: var( --color-white);
+        border-color: var(--color-hover);
+    }
+}
+.account__title{
+    font-size: 2rem;
+    line-height: 2.2rem;
+    margin-bottom: 2rem;
+    @media only screen and (min-width: 576px) {
+        font-size: 2.2rem;
+        line-height: 2.5rem;
+    }
+}
+.account__desc{
+    font-size: 1.6rem;
+    color: var(--color-foreground-sub);
+}
+.account__form--input__field{
+    width: 100%;
+    height: 5rem;
+    border: 1px solid var(--color-border);
+    padding: 0 1.5rem;
+    font-size: 1.4rem;
+    border-radius: 0.5rem;
+    @media only screen and (min-width: 576px) {
+        height: 5.5rem;
+    }
+   &:focus{
+    border-color: var(--color-hover);
+   }
+}
+.account__form--input__label{
+    line-height: 2rem;
+    font-weight: 600;
+}
+.account__form--forgot__password{
+    line-height: 2rem;
+    font-weight: 600;
+    color: var(--color-hover);
+    &:hover{
+        color: var(--color-foreground);
+    }
+}
+.account__sing-in__google{
+    gap: 1.5rem;
+    @media only screen and (max-width: 575px) {
+        &.mb-50{
+            margin-bottom: 3rem;
+        }
+    }
+    @media only screen and (max-width: 399px) {
+        flex-wrap: wrap;
+    }
+}
+.account__sing-in__google--link{
+    width: 100%;
+    background: #1A73E8;
+    padding: 0.7rem;
+    border-radius: 0.5rem;
+    color: var(--color-white);
+    font-weight: 600;
+    &:hover{
+        background: var(--color-hover);
+        color: var(--color-white);
+    }
+}
+.account__sing-in__google--icon{
+    width: 4.5rem;
+    height: 4rem;
+    background: var(--color-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+}
+.account__sing-in__google--text{
+   transition: inherit;
+   transition: inherit;
+   margin-left: 2rem;
+}
+.account__form--twitter__btn{
+    width: 5.4rem;
+    min-width: 5.4rem;
+    height: 5.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F3F4F6;
+    color: #1DA1F2;
+    border-radius: 0.5rem;
+    &:hover{
+        background: var(--color-hover);
+        color: var(--color-white);
+    }
+}
+
+
+.account__form--condition__label{
+    cursor: pointer;
+    display: block;
+    color: var(--color-foreground-sub);
+    padding-left: 3rem;
+    font-weight: 500;
+    line-height: 2.4rem;
+    text-transform: capitalize;
+    & span{
+        color: var(--color-hover);
+    }
+}
+.account__form--condition__input{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translatey(-50%);
+    opacity: 0;
+    cursor: pointer;
+    z-index: 999;
+    width: 1.9rem;
+    height: 1.9rem;
+    &:checked ~ .account__form--condition__checkmark{
+        background-color: var(--color-hover);
+        border: 1px solid var(--color-hover);
+        &::before{
+            display: block;
+        }
+    }
+}
+
+.account__form--condition__checkmark{
+    height: 1.9rem;
+    width: 1.9rem;
+    border: 1.5px solid var(--color-border);
+    background: var(--color-background);
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translatey(-50%);
+    transition: var(--transition);
+    border-radius: 0.5rem;
+    &::before{
+        right: 0.5rem;
+        top: 0.2rem;
+        width: 0.6rem;
+        height: 1rem;
+        border: solid white;
+        border-top-width: medium;
+        border-right-width: medium;
+        border-bottom-width: medium;
+        border-left-width: medium;
+        border-width: 0 2px 2px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+        content: "";
+        position: absolute;
+        display: none;
+       
+    }
+}
+
+.account__form--btn{
+    width: 100%;
+    margin-top: 3rem;
+    @media only screen and (min-width: 576px) {
+        margin-top: 5rem;
+    }
+}
+.account__form--password__show--icon{
+    position: absolute;
+    padding: 0;
+    border: 0;
+    background: inherit;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.account__form--create__password{
+    & .account__form--input__field{
+        padding-right: 5rem;
+    }
+}
