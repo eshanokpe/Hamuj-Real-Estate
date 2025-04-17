@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\PropertyHistoryController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 
-   
+  
 Route::redirect('/admin/dashboard', '/admin');
 // Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.index');
 
@@ -65,11 +65,38 @@ Route::prefix('admin')->group(function () {
             Route::get('{id}', [BlogController::class, 'destroy'])->name('admin.post.destroy');
         });
 
+
+        // Buy Routes
+        Route::name('admin.')->group(function () {
+            Route::get('buy', [BuyController::class, 'index'])->name('buy.index');
+            Route::get('{id}/editbuy', [BuyController::class, 'edit'])->name('buy.edit');
+            Route::put('{id}/buy', [BuyController::class, 'update'])->name('buy.update');
+            Route::delete('{id}/buy', [BuyController::class, 'destroy'])->name('buy.destroy');
+        });
+
+               
+        // Sell Routes
+        Route::name('admin.')->group(function () {
+            Route::get('sell', [SellController::class, 'index'])->name('sell.index');
+            Route::get('{id}/editsell', [SellController::class, 'edit'])->name('sell.edit');
+            Route::put('{id}/sell', [SellController::class, 'update'])->name('sell.update');
+            Route::delete('{id}/sell', [SellController::class, 'destroy'])->name('sell.destroy');
+        });
+
+        // Transfer Routes
+        Route::name('admin.')->group(function () {
+            Route::get('transfer', [TransferController::class, 'index'])->name('transfer.index');
+            Route::get('{id}/edittransfer', [TransferController::class, 'edit'])->name('transfer.edit');
+            Route::put('{id}/transfer', [TransferController::class, 'update'])->name('transfer.update');
+            Route::delete('{id}/transfer', [TransferController::class, 'destroy'])->name('transfer.destroy');
+        });
+        
+
         //Property
         Route::name('admin.')->group(function () {
             Route::resource('properties', AdminPropertyController::class);
             Route::get('properties/{id}/evaluate', [AdminPropertyController::class, 'evaluate'])
-            ->name('properties.evaluate');
+            ->name('properties.evaluate'); 
             
             Route::post('properties/valuation/store', [AdminPropertyController::class, 'valuationStore'])
             ->name('properties.valuation');
@@ -150,11 +177,14 @@ Route::prefix('admin')->group(function () {
                 Route::put('/settings/update/social-links/{id}', [SociallinkController::class, 'updateSocialLinks'])->name('settings.updateSocialLinks');
         });
 
+        //User Links 
         Route::name('admin.')->group(function () {
             Route::get('user/index', [UserController::class, 'index'])->name('users');
             Route::get('user/{id}/show', [UserController::class, 'edit'])->name('users.show');
+            Route::put('user/{id}/', [UserController::class, 'update'])->name('users.update');
             Route::get('user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
         });
+       
 
        Route::get('buy/index', [BuyController::class, 'index'])->name('admin.buy');
        Route::get('transfer/index', [Transferontroller::class, 'index'])->name('admin.transfer');
