@@ -12,13 +12,6 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="page-title-box">
-                        <div class="float-end">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="{{ route('admin.faq.create')}}" class="btn btn-dark">Add FAQ</a>
-                                </li>
-                            </ol>
-                        </div>
                         <h4 class="page-title">Users</h4>
                     </div>
                     <!--end page-title-box-->
