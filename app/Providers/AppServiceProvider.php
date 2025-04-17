@@ -4,7 +4,7 @@ namespace App\Providers;
 use App\Services\WalletService;
 use function App\Helpers\getWalletBalance;
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Pagination\Paginator;
 use Auth;
 use App\Models\User;
 use App\Models\Faqs;
