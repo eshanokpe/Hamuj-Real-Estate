@@ -9,7 +9,7 @@
                     *****
                 @else
                     <span class="currency__card--amount">{{ $wallet->currency}} {{ number_format($wallet->balance, 2) }}</span>
-                @endif
+                @endif 
 
                 <br>
             </div>

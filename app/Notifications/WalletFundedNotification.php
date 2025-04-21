@@ -14,7 +14,7 @@ class WalletFundedNotification extends Notification implements ShouldQueue
 
     protected $amount;
     protected $balance;
-    protected $$reference;
+    protected $reference; 
 
     /**
      * Create a new notification instance.
@@ -23,11 +23,11 @@ class WalletFundedNotification extends Notification implements ShouldQueue
      * @param float $balance
      * @param string $$reference
      */
-    public function __construct($amount, $balance, $$reference)
+    public function __construct($amount, $balance, $reference)
     {
         $this->amount = $amount;
         $this->balance = $balance;
-        $this->$reference = $$reference;
+        $this->reference = $reference;
     }
 
     /**
@@ -60,7 +60,7 @@ class WalletFundedNotification extends Notification implements ShouldQueue
             ->line('')
             ->line('*Transaction Details:*')
             ->line('•⁠  ⁠*Amount Credited:* ₦' . $formattedAmount)
-            ->line('•⁠  ⁠*Transaction ID:* ' . $this->$reference)
+            ->line('•⁠  ⁠*Transaction ID:* ' . $this->reference)
             ->line('•⁠  ⁠*Date:* ' . $formattedDate)
             ->line('')
             ->line('You can now utilize these funds to purchase assets listed on our platform. Explore our latest offerings and make your next investment today!')
@@ -84,7 +84,7 @@ class WalletFundedNotification extends Notification implements ShouldQueue
             'subject' => 'Your Wallet Has Been Credited!',
             'amount' => number_format($this->amount / 100, 2),
             'balance' => number_format($this->balance / 100, 2),
-            'transaction_id' => $this->transactionId,
+            'transaction_id' => $this->reference,
             'date' => now()->toDateTimeString(),
             'message' => '₦' . number_format($this->amount / 100, 2) . ' has been added to your wallet. New balance: ₦' . number_format($this->balance / 100, 2) . '.',
         ];

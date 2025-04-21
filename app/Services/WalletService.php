@@ -11,7 +11,7 @@ class WalletService
         if (Auth::check()) {
             $wallet = Auth::user()->wallet;
             return $wallet;
-        }
+        } 
         // if (Auth::check()) {
         //     $wallet = Auth::user()->wallet;
         //     $balance = $wallet ? $wallet->balance : 0;

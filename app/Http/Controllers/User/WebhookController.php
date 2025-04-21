@@ -83,7 +83,7 @@ class WebhookController extends Controller
             Transaction::create([
                 'user_id' => $user->id,
                 'email' => $user->email,
-                'amount' => $amount,
+                'transaction_type' => 'wallet',
                 'reference' => $reference,
                 'status' => $status,
                 'description' => 'Fund added to wallet',
@@ -91,7 +91,7 @@ class WebhookController extends Controller
                 'recipient_name' => $customerName,
                 'source' => 'web',
                 'metadata' => json_encode($data->metadata ?? null),
-            ]);
+            ]);  
             // Trigger the notification
             $newBalance = $user->wallet->balance;
             $user->notify(new WalletFundedNotification($amount, $newBalance, $reference));
@@ -136,7 +136,8 @@ class WebhookController extends Controller
                 'reference' => $reference,
                 'status' => $status,
                 'description' => $reason,
-                'payment_method' => 'Withdraw',
+                'transaction_type' => 'withdraw',
+                'payment_method' => 'withdraw',
                 'recipient_name' => $recipientName,
                 'recipient_code' => $recipientCode,
                 'account_number' => $accountNumber,
