@@ -55,7 +55,7 @@ class DashboardController extends Controller
             return response()->json([
                 'referralsMade' => $data['referralsMade'],
                 'hasMoreReferrals' => $data['hasMoreReferrals'],
-                'totalAmount' => $data['totalWalletAmount'],
+                'totalAmount' => $data['totalPropertyAmount'], 
                 'totalPropertyAmount' => $data['totalPropertyAmount'],
                 'totalAssets' => $data['totalTransactionsAssets'],
             ]);
