@@ -30,15 +30,21 @@ class DashboardController extends Controller
         $data['totalAmount'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
                                             // ->where('status', 'success')
-                                            ->where('transaction_type', 'wallet')
+                                            // ->where('payment_method', 'wallet')
+                                            ->sum('amount');
+
+        // For Property Transactions (has property_id)
+        $data['totalPropertyAmount'] = Transaction::where('user_id', $user->id)
+                                            ->where('email', $user->email)
+                                            ->whereNotNull('property_id') // Property transactions have property_id
                                             ->sum('amount');
 
         $data['totalTransactionsAssets'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
                                             // ->where('status', 'success')
-                                            ->where('transaction_type', 'property_purchase')
                                             ->distinct('property_id')
                                             ->count('property_id');
+                                            
                                             
         $data['user'] = User::where('id', $user->id)
                             ->where('email', $user->email)
@@ -51,6 +57,7 @@ class DashboardController extends Controller
                 'referralsMade' => $data['referralsMade'],
                 'hasMoreReferrals' => $data['hasMoreReferrals'],
                 'totalAmount' => $data['totalAmount'],
+                'totalPropertyAmount' => $data['totalPropertyAmount'],
                 'totalAssets' => $data['totalTransactionsAssets'],
             ]);
         } 
