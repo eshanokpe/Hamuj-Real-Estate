@@ -67,28 +67,7 @@ class AppServiceProvider extends ServiceProvider
            
             $view->with('wallet', $walletBalance);
         });
-        // View::composer('*', function ($view) {
-        //     if (Auth::check()) {
-        //         $user = Auth::user();
-        //         $userId = (string) $user->id; 
-        //         $recipientId = $user->recipient_id;
-          
-        //         $sender = $user->notifications()->whereJsonContains('data->recipient_id', $recipientId)->first();
-                
-        //         $sender_id = $sender ? $sender->data['sender_id'] : null;
-        
-        //         $notifications = $user->notifications()
-        //             ->where('notifiable_id', $sender_id)  
-        //             ->orWhereJsonContains('data->recipient_id', $recipientId) 
-        //             ->orderBy('created_at', 'desc') 
-        //             ->take(4) 
-        //             ->get();
-        
-        //         $view->with('notificationsBar', $notifications);
-        //     } else {
-        //         $view->with('notificationsBar', 0);
-        //     }
-        // });
+       
         View::composer('*', function ($view) {
             if (!Auth::check()) {
                 return $view->with([

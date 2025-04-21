@@ -27,10 +27,9 @@ class DashboardController extends Controller
         $balance = $wallet ? $wallet->balance : 0;
         $data['transactions'] = Transaction::where('user_id', $user->id)->where('email', $user->email)->latest()->limit(6)->get();
          
-        $data['totalAmount'] = Transaction::where('user_id', $user->id)
+        $data['totalWalletAmount'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
-                                            // ->where('status', 'success')
-                                            // ->where('payment_method', 'wallet')
+                                            ->where('transaction_type', 'wallet')
                                             ->sum('amount');
 
         // For Property Transactions (has property_id)
@@ -56,7 +55,7 @@ class DashboardController extends Controller
             return response()->json([
                 'referralsMade' => $data['referralsMade'],
                 'hasMoreReferrals' => $data['hasMoreReferrals'],
-                'totalAmount' => $data['totalAmount'],
+                'totalAmount' => $data['totalWalletAmount'],
                 'totalPropertyAmount' => $data['totalPropertyAmount'],
                 'totalAssets' => $data['totalTransactionsAssets'],
             ]);
