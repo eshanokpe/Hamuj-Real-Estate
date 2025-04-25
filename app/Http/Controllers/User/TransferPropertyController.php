@@ -716,15 +716,15 @@ class TransferPropertyController extends Controller
                 throw new \Exception('Wallet configuration error', 400);
             }
             $recipientWallet =  Wallet::where('user_id', $recipient->id)->first();
-            
+       
             // Ensure recipientWallet has enough balance
             if ($recipientWallet->balance < $amount) {
-                if ($request->wantsJson()) { 
+                if ($request->wantsJson()) {
                     return response()->json(['error' => 'You do not has insufficient funds'], 404);
                 }
                 return redirect()->back()->with(['error' => 'Insufficient wallet balance']);
             }
-            dd($recipientWallet);
+
             // Find notification
             $notification = CustomNotification::find($id);
             if (!$notification) {
@@ -747,130 +747,130 @@ class TransferPropertyController extends Controller
             }
 
             // Process land transfer
-            // $buyRecords = Buy::select(
-            //         'id',
-            //         'property_id',
-            //         'status',
-            //         'selected_size_land',
-            //         DB::raw('SUM(selected_size_land) as total_selected_size_land'),
-            //         DB::raw('MAX(created_at) as latest_created_at')
-            //     )
-            //     ->with('property')
-            //     ->where('user_id', $sender->id)
-            //     ->where('user_email', $sender->email)
-            //     ->groupBy('id', 'property_id', 'status', 'selected_size_land')
-            //     ->get();
+            $buyRecords = Buy::select(
+                    'id',
+                    'property_id',
+                    'status',
+                    'selected_size_land',
+                    DB::raw('SUM(selected_size_land) as total_selected_size_land'),
+                    DB::raw('MAX(created_at) as latest_created_at')
+                )
+                ->with('property')
+                ->where('user_id', $sender->id)
+                ->where('user_email', $sender->email)
+                ->groupBy('id', 'property_id', 'status', 'selected_size_land')
+                ->get();
 
             $totalLandSize = $buyRecords->sum('selected_size_land');
 
             // Deduct land size from sender's purchases
-            // $landDeducted = false;
-            // foreach ($buyRecords as $item) {
-            //     if ($item->selected_size_land >= $landSize) {
-            //         $item->selected_size_land -= $landSize;
-            //         $item->save();
-            //         $landDeducted = true;
-            //         break;
-            //     }
-            // }
+            $landDeducted = false;
+            foreach ($buyRecords as $item) {
+                if ($item->selected_size_land >= $landSize) {
+                    $item->selected_size_land -= $landSize;
+                    $item->save();
+                    $landDeducted = true;
+                    break;
+                }
+            }
 
-            // if (!$landDeducted) {
-            //     throw new \Exception('Insufficient land size available for transfer', 400);
-            // }
+            if (!$landDeducted) {
+                throw new \Exception('Insufficient land size available for transfer', 400);
+            }
 
             // Create new buy record for recipient
-            // Buy::create([
-            //     'property_id' => $propertyId,
-            //     'transaction_id' => null,
-            //     'selected_size_land' => $landSize,
-            //     'remaining_size' => $totalLandSize - $landSize,
-            //     'user_id' => $recipient->id,
-            //     'user_email' => $recipient->email,
-            //     'total_price' => $amount / 100,
-            //     'status' => 'transfer',
-            // ]);
+            Buy::create([
+                'property_id' => $propertyId,
+                'transaction_id' => null,
+                'selected_size_land' => $landSize,
+                'remaining_size' => $totalLandSize - $landSize,
+                'user_id' => $recipient->id,
+                'user_email' => $recipient->email,
+                'total_price' => $amount / 100,
+                'status' => 'transfer',
+            ]);
 
             // Process wallet transactions
-            // $propertyData = Property::find($propertyId);
-            // if (!$propertyData) {
-            //     throw new \Exception('Property not found', 404);
-            // }
+            $propertyData = Property::find($propertyId);
+            if (!$propertyData) {
+                throw new \Exception('Property not found', 404);
+            }
 
             // Update wallet balances
-            // $sendWallet->balance += $amount / 100;
-            // $sendWallet->save();
+            $sendWallet->balance += $amount / 100;
+            $sendWallet->save();
 
-            // $recipientWallet->balance -= $amount / 100;
-            // $recipientWallet->save();
+            $recipientWallet->balance -= $amount / 100;
+            $recipientWallet->save();
 
             // Create transaction records
-            // $reference = 'TRXDOHREF-' . strtoupper(Str::random(8));
+            $reference = 'TRXDOHREF-' . strtoupper(Str::random(8));
 
-            // Transaction::create([
-            //     'user_id' => $sender->id,
-            //     'email' => $sender->email,
-            //     'property_id' => $propertyId,
-            //     'property_name' => $propertyData->name,
-            //     'status' => 'success',
-            //     'payment_method' => 'wallet',
-            //     'amount' => -$amount / 100,
-            //     'description' => 'Transfer to ' . $recipient->email,
-            //     'reference' => $reference.'-D',
-            //     'transaction_state' => 'success',
-            // ]);
+            Transaction::create([
+                'user_id' => $sender->id,
+                'email' => $sender->email,
+                'property_id' => $propertyId,
+                'property_name' => $propertyData->name,
+                'status' => 'success',
+                'payment_method' => 'wallet',
+                'amount' => -$amount / 100,
+                'description' => 'Transfer to ' . $recipient->email,
+                'reference' => $reference.'-D',
+                'transaction_state' => 'success',
+            ]);
 
-            // Transaction::create([
-            //     'user_id' => $recipient->id,
-            //     'email' => $recipient->email,
-            //     'property_id' => $propertyId,
-            //     'property_name' => $propertyData->name,
-            //     'status' => 'success',
-            //     'payment_method' => 'card',
-            //     'amount' => $amount / 100,
-            //     'description' => 'Received from ' . $sender->email,
-            //     'reference' => $reference.'-C',
-            //     'transaction_state' => null,
-            // ]);
+            Transaction::create([
+                'user_id' => $recipient->id,
+                'email' => $recipient->email,
+                'property_id' => $propertyId,
+                'property_name' => $propertyData->name,
+                'status' => 'success',
+                'payment_method' => 'card',
+                'amount' => $amount / 100,
+                'description' => 'Received from ' . $sender->email,
+                'reference' => $reference.'-C',
+                'transaction_state' => null,
+            ]);
 
             // Update notification
-            // $notificationData = $notification->data;
-            // $notificationData['status'] = 'approved';
-            // $notification->update(['data' => $notificationData]);
+            $notificationData = $notification->data;
+            $notificationData['status'] = 'approved';
+            $notification->update(['data' => $notificationData]);
 
-            // // Update transfer record if exists
-            // $transfer = Transfer::where('reference', $notificationData['reference'])
-            //     ->where('user_id', $sender->id)
-            //     ->where('recipient_id', $recipient->id)
-            //     ->where('property_id', $propertyId)
-            //     ->first();
+            // Update transfer record if exists
+            $transfer = Transfer::where('reference', $notificationData['reference'])
+                ->where('user_id', $sender->id)
+                ->where('recipient_id', $recipient->id)
+                ->where('property_id', $propertyId)
+                ->first();
 
-            // if ($transfer) {
-            //     $transfer->update([
-            //         'status' => 'approved',
-            //         'confirmation_status' => 'confirmed',
-            //         'confirmation_date' => now(),
-            //         'confirmed_by' => auth()->id(),
-            //     ]);
-            // }
+            if ($transfer) {
+                $transfer->update([
+                    'status' => 'approved',
+                    'confirmation_status' => 'confirmed',
+                    'confirmation_date' => now(),
+                    'confirmed_by' => auth()->id(),
+                ]);
+            }
 
             // Send notifications
-            // $sender->notify(new TransferNotification($recipient, $amount, 'Sender', $propertyData));
-            // $recipient->notify(new TransferNotification($sender, $amount, 'Recipient', $propertyData));
+            $sender->notify(new TransferNotification($recipient, $amount, 'Sender', $propertyData));
+            $recipient->notify(new TransferNotification($sender, $amount, 'Recipient', $propertyData));
 
-            // DB::commit();
+            DB::commit();
 
             // Return appropriate response
-            // if ($request->wantsJson()) {
-            //     return response()->json([
-            //         'success' => true,
-            //         'message' => 'Amount transferred successfully!',
-            //         'data' => [
-            //             'reference' => $reference,
-            //             'amount' => $amount,
-            //             'land_size' => $landSize,
-            //         ]
-            //     ], 200);
-            // }
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Amount transferred successfully!',
+                    'data' => [
+                        'reference' => $reference,
+                        'amount' => $amount,
+                        'land_size' => $landSize,
+                    ]
+                ], 200);
+            }
 
             return redirect()->route('user.dashboard')->with('success', 'Assets transferred successfully!');
 
