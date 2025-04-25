@@ -718,9 +718,8 @@ class TransferPropertyController extends Controller
             $recipientWallet =  Wallet::where('user_id', $recipient->id)->first();
             $requiredAmountInNaira = $amount / 100; // Convert amount to the same unit as balance
 
-            dd($requiredAmountInNaira);
             // Ensure recipientWallet has enough balance
-            if ($recipientWallet->balance < $amount) {
+            if ($recipientWallet->balance < $requiredAmountInNaira) {
                 if ($request->wantsJson()) {
                     return response()->json(['error' => 'You do not has insufficient funds, Please fund your wallet'], 404);
                 }
