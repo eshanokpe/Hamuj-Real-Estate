@@ -97,6 +97,8 @@ class PaymentController extends Controller
         $transaction = Transaction::create([
             'user_id' => $user->id,
             'email' => $user->email,
+            'property_id' => $property->id,
+            'property_name' => $property->name,
             'amount' => $amount,
             'reference' => $reference,
             'status' => 'completed',
@@ -129,7 +131,7 @@ class PaymentController extends Controller
             $property->status = 'sold out';
             $buy->status = 'sold out';
             $buy->save();
-        }
+        } 
         // dd($selectedSizeLand);
 
         $property->save();
