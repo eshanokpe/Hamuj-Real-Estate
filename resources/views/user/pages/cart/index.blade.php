@@ -201,8 +201,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- Initial Data ---
-    const pricePerSqm = parseFloat(itemPriceElement.dataset.priceRaw) || 0; // Default to 0 if parsing fails
-    const initialAvailableSize = parseFloat(propertyRow.dataset.initialSize) || 0;
+    // Use optional chaining and nullish coalescing for safer access
+    const pricePerSqm = parseFloat(itemPriceElement?.dataset?.priceRaw ?? 0);
+    const initialAvailableSize = parseFloat(propertyRow?.dataset?.initialSize ?? 0);
     const maxQuantity = Math.floor(initialAvailableSize); // Use floor for whole SQM units
     const commissionAvailable = parseFloat({{ auth()->user()->commission_balance ?? 0 }});
 
@@ -213,8 +214,8 @@ document.addEventListener('DOMContentLoaded', function() {
         quantityInput.disabled = true;
         decrementBtn.disabled = true;
         incrementBtn.disabled = true;
-        makePaymentBtn.disabled = true; // Disable payment if nothing to buy
-         if(commissionSwitch) commissionSwitch.disabled = true;
+        if(makePaymentBtn) makePaymentBtn.disabled = true; // Disable payment if nothing to buy
+        if(commissionSwitch) commissionSwitch.disabled = true;
     }
 
 
@@ -236,10 +237,17 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (maxQuantity <= 0) {
              quantity = 0; // Cannot select quantity if none available
         }
-        quantityInput.value = quantity; // Update input field if corrected
+        // Only update input value if it was corrected to avoid cursor jumping
+        if (parseInt(quantityInput.value) !== quantity) {
+            quantityInput.value = quantity;
+        }
+
 
         const total = pricePerSqm * quantity;
-        const remainingSize = initialAvailableSize - quantity;
+        // Calculate remaining size based on potentially corrected quantity
+        const currentSelectedQuantity = parseInt(quantityInput.value) || 0;
+        const remainingSize = initialAvailableSize - currentSelectedQuantity;
+
 
         let finalPrice = total; // This is the amount the user needs to pay
         let commissionApplied = 0;
@@ -253,41 +261,49 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Update displayed values
-        totalPriceElement.textContent = formatCurrency(finalPrice); // Show the final payable amount
-        availableSizeElement.textContent = `${remainingSize.toFixed(2)} SQM`; // Show remaining size, allow decimals if needed
+        if (totalPriceElement) {
+            totalPriceElement.textContent = formatCurrency(finalPrice); // Show the final payable amount
+        }
+        if (availableSizeElement) {
+            // Display remaining size, ensure it doesn't go below zero visually
+            availableSizeElement.textContent = `${Math.max(0, remainingSize).toFixed(2)} SQM`;
+        }
+
 
         // Update hidden form fields for submission
-        formQuantityInput.value = quantity;
-        formTotalPriceInput.value = finalPrice.toFixed(2); // Send final payable amount to server
-        formApplyCommissionInput.value = applyCommissionFlag;
-        formCommissionAppliedInput.value = commissionApplied.toFixed(2); // Send how much commission was used
+        if(formQuantityInput) formQuantityInput.value = quantity;
+        if(formTotalPriceInput) formTotalPriceInput.value = finalPrice.toFixed(2); // Send final payable amount to server
+        if(formApplyCommissionInput) formApplyCommissionInput.value = applyCommissionFlag;
+        if(formCommissionAppliedInput) formCommissionAppliedInput.value = commissionApplied.toFixed(2); // Send how much commission was used
 
-        // For debugging:
-        // console.log({
-        //     pricePerSqm, quantity, total, commissionAvailable,
-        //     commissionApplied, finalPrice, remainingSize, applyCommissionFlag
-        // });
     }
 
     // --- Event Listeners ---
 
     // Quantity Buttons & Input
-    decrementBtn.addEventListener('click', () => {
-        if (parseInt(quantityInput.value) > 1) {
-            quantityInput.stepDown(); // Use built-in stepDown
-            updateDisplayAndForm();
-        }
-    });
+    if (decrementBtn) {
+        decrementBtn.addEventListener('click', () => {
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.stepDown(); // Use built-in stepDown
+                updateDisplayAndForm();
+            }
+        });
+    }
 
-    incrementBtn.addEventListener('click', () => {
-        if (parseInt(quantityInput.value) < maxQuantity) {
-             quantityInput.stepUp(); // Use built-in stepUp
-            updateDisplayAndForm();
-        }
-    });
+    if (incrementBtn) {
+        incrementBtn.addEventListener('click', () => {
+            // Check against maxQuantity before incrementing
+            if (parseInt(quantityInput.value) < maxQuantity) {
+                 quantityInput.stepUp(); // Use built-in stepUp
+                updateDisplayAndForm();
+            }
+        });
+    }
 
-    quantityInput.addEventListener('input', updateDisplayAndForm); // Update on every keystroke/change
-    quantityInput.addEventListener('change', updateDisplayAndForm); // Ensure update on blur/enter after manual input
+    if (quantityInput) {
+        quantityInput.addEventListener('input', updateDisplayAndForm); // Update on every keystroke/change
+        quantityInput.addEventListener('change', updateDisplayAndForm); // Ensure update on blur/enter after manual input
+    }
 
 
     // Commission Switch Change
@@ -299,7 +315,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (makePaymentBtn) {
         makePaymentBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            if (maxQuantity <= 0 || parseInt(quantityInput.value) <= 0) {
+            const currentQuantity = parseInt(quantityInput.value) || 0;
+            if (maxQuantity <= 0 || currentQuantity <= 0) {
                 alert("Please select a valid quantity to purchase.");
                 return;
             }
@@ -309,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (paymentDetailsSection) {
                 paymentDetailsSection.style.display = 'block';
                 paymentDetailsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                pinInput.focus(); // Focus the PIN input
+                if (pinInput) pinInput.focus(); // Focus the PIN input
             }
         });
     }
@@ -317,6 +334,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form Submission (using 'submit' event is better for validation)
     if (paymentForm) {
         paymentForm.addEventListener('submit', function(e) {
+            if (!pinInput) return; // Should not happen if form is visible, but safety check
+
             const pin = pinInput.value.trim();
             pinInput.classList.remove('is-invalid'); // Reset validation state
 
@@ -324,7 +343,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault(); // Prevent form submission
                 pinInput.classList.add('is-invalid'); // Show validation feedback
                 pinInput.focus();
-                // alert('Please enter a valid 4-digit PIN.'); // Optional: keep alert if preferred
             } else {
                 // PIN looks valid, ensure latest values are in hidden fields just before submission
                 updateDisplayAndForm();
@@ -334,6 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     submitButton.disabled = true;
                     submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
                 }
+                // Allow form submission to proceed
             }
         });
     }
@@ -342,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Run only if there's quantity available to purchase
     if (maxQuantity > 0) {
        updateDisplayAndForm();
-    } else {
+    } else if (totalPriceElement) {
         totalPriceElement.textContent = formatCurrency(0); // Show 0 if nothing available
     }
 
