@@ -96,7 +96,7 @@
                                        
                                         <h4 class="text-muted fw-normal">No Assets Currently Available to Sell</h4>
                                         
-                                        <a href="{{ route('user.properties.index') }}" class="btn btn-link mt-2">View All Holdings</a>
+                                        <a href="{{ route('user.properties') }}" class="btn btn-link mt-2">View All Holdings</a>
                                     </div>
                                 </td>
                             </tr>
@@ -158,7 +158,7 @@
                         </ul>
                     </nav>
                 </div> 
-                
+
             </div>
         </div>
         <!-- dashboard container .\ -->
