@@ -716,7 +716,7 @@ class TransferPropertyController extends Controller
                 throw new \Exception('Wallet configuration error', 400);
             }
             $recipientWallet =  Wallet::where('user_id', $recipient->id)->first();
-       
+            dd($amount);
             // Ensure recipientWallet has enough balance
             if ($recipientWallet->balance < $amount) {
                 if ($request->wantsJson()) {
