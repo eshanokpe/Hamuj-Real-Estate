@@ -720,9 +720,9 @@ class TransferPropertyController extends Controller
             // Ensure recipientWallet has enough balance
             if ($recipientWallet->balance < $amount) {
                 if ($request->wantsJson()) {
-                    return response()->json(['error' => 'You do not has insufficient funds'], 404);
+                    return response()->json(['error' => 'You do not has insufficient funds, Please fund your wallet'], 404);
                 }
-                return redirect()->back()->with(['error' => 'Insufficient wallet balance']);
+                return redirect()->back()->with(['error' => 'Insufficient wallet balance, Please fund your wallet']);
             }
 
             // Find notification
