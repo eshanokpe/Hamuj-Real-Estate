@@ -18,7 +18,7 @@
         
         <div class="notification-meta mt-3">
             <p>Here are the details of your transfer</p>
-            <p><strong>Amount:</strong> ₦{{ number_format($notification->data['total_price']/100, 2) }}</p>
+            <p><strong>Amount:</strong> ₦{{ number_format($notification->data['total_price'], 2) }}</p>
             <p><strong>Receiver:</strong> {{ $notification->data['recipient_name'] ?? 'Unknown recipient' }}</p>
             <p><strong>Transfer ID:</strong> {{ $notification->data['reference'] }}</p>
             <p><strong>Submitted:</strong> {{ \Carbon\Carbon::parse($notification->created_at)->format('F j, Y \a\t g:i A') }}</p>

@@ -47,6 +47,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::post('/offer/price/post', [PropertyController::class, 'offerPricePost'])->name('offerPrice.post'); 
    
     Route::get('/transfer', [TransferPropertyController::class, 'index'])->name('transfer');
+    
     Route::get('/transfer/recipient', [TransferPropertyController::class, 'transferRecipient'])->name('transfer.recipient');
     Route::post('/transfer/recipient/initiate', [TransferPropertyController::class, 'checkRecipientTransfer'])->name('checkRecipient.transfer');
      
@@ -72,14 +73,11 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/cart/{id}', [CartController::class, 'index'])->name('cart.index'); 
     Route::get('/cart/sell/{id}', [CartController::class, 'sell'])->name('cart.sell.index');  
     Route::get('/cart/transfer/{id}', [CartController::class, 'transfer'])->name('cart.transfer.index');
- 
     Route::post('/pay', [PaymentController::class, 'initializePayment'])->name('payment.initiate'); 
     Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
 
     
     Route::get('/purchases', [DashboardController::class, 'purchases'])->name('purchases');
-
-
     Route::get('/sell', [SellPropertyController::class, 'index'])->name('sell');
     Route::post('/sell/property', [SellPropertyController::class, 'sellProperty'])->name('sell.property');
     Route::get('/sell/property/history', [SellPropertyController::class, 'sellPropertyHistory'])->name('sell.history');
@@ -96,7 +94,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     ->name('notifications.count');
     Route::get('/notifications/{notification}/redirect', [NotificationController::class, 'redirect'])
     ->name('notifications.redirect');
- 
+  
     // Route::get('/{propertyMode}/confirm/{slug}', [TransferPropertyController::class, 'confirmTransfer'])->name('transfer.property.confirm');
     Route::post('/transfer/confirm/{slug}/submit', [TransferPropertyController::class, 'submitConfirmation'])->name('confirm.transfer.submit');
 
