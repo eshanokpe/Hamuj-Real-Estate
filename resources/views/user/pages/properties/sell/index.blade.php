@@ -92,13 +92,11 @@
                                 {{-- Span across all table columns --}}
                                 <td colspan="5">
                                     <div class="text-center p-5 border-top">
-                                        {{-- Optional: Add an icon (e.g., using Font Awesome)
                                         <i class="fas fa-store-slash fa-3x text-muted mb-3"></i>
-                                        --}}
+                                       
                                         <h4 class="text-muted fw-normal">No Assets Currently Available to Sell</h4>
-                                        <p class="text-muted mb-0">You do not have any property portions with a size greater than 0 SQM available for sale at this time.</p>
-                                        {{-- Optional: Link to buy more or view all holdings --}}
-                                        {{-- <a href="{{ route('user.properties.index') }}" class="btn btn-link mt-2">View All Holdings</a> --}}
+                                        
+                                        <a href="{{ route('user.properties.index') }}" class="btn btn-link mt-2">View All Holdings</a>
                                     </div>
                                 </td>
                             </tr>
@@ -108,17 +106,59 @@
                     </table>
                 </div>
 
-                 @if ($sellProperty->hasPages())
-                <div class="pagination__area mt-4">
+                 <!-- Pagination -->
+                 <div class="pagination__area">
                     <nav class="pagination justify-content-center">
-                        {{-- Recommended: Use Laravel's default pagination view --}}
-                        {{ $sellProperty->links('vendor.pagination.bootstrap-5') }}
+                        <ul class="pagination__menu d-flex align-items-center justify-content-center">
+                            <!-- Render pagination links dynamically -->
+                            @if ($sellProperty->onFirstPage())
+                                <li class="pagination__menu--items pagination__arrow disabled">
+                                    <span class="pagination__arrow-icon">
+                                        <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M10.583 20.5832L0.999675 10.9998L10.583 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </li>
+                            @else
+                                <li class="pagination__menu--items pagination__arrow">
+                                    <a href="{{ $sellProperty->previousPageUrl() }}" class="pagination__arrow-icon link">
+                                        <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M10.583 20.5832L0.999675 10.9998L10.583 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                            @endif
 
-                        {{-- Or keep your custom pagination logic if needed, ensuring it uses $sellProperty --}}
-                        {{-- <ul class="pagination__menu d-flex align-items-center justify-content-center"> ... your custom links using $sellProperty ... </ul> --}}
+                            <!-- Page numbers -->
+                            @foreach ($sellProperty->links()->elements[0] as $page => $url)
+                                <li class="pagination__menu--items">
+                                    <a href="{{ $url }}" class="pagination__menu--link {{ $page == $sellProperty->currentPage() ? 'active color-accent-1' : '' }}">
+                                        {{ $page }}
+                                    </a>
+                                </li>
+                            @endforeach
+
+                            @if ($sellProperty->hasMorePages())
+                                <li class="pagination__menu--items pagination__arrow">
+                                    <a href="{{ $sellProperty->nextPageUrl() }}" class="pagination__arrow-icon link">
+                                        <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1.00098 20.5832L10.5843 10.9998L1.00098 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </a>
+                                </li>
+                            @else
+                                <li class="pagination__menu--items pagination__arrow disabled">
+                                    <span class="pagination__arrow-icon">
+                                        <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1.00098 20.5832L10.5843 10.9998L1.00098 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </span>
+                                </li>
+                            @endif
+                        </ul>
                     </nav>
-                </div>
-                @endif
+                </div> 
+                
             </div>
         </div>
         <!-- dashboard container .\ -->
