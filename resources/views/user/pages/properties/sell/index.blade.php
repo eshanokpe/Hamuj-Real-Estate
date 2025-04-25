@@ -95,12 +95,13 @@
                                         <i class="fas fa-store-slash fa-3x text-muted mb-3"></i>
                                        
                                         <h4 class="text-muted fw-normal">No Assets Currently Available to Sell</h4>
-                                        
-                                        <a href="{{ route('user.properties') }}" class="btn btn-link mt-2">View All Holdings</a>
-                                    </div>
+                                        <a href="{{ route('user.properties')}}">
+                                            Buy Properties
+                                        </a>
+                                     </div>
                                 </td>
                             </tr>
-                            @endforelse
+                            @endforelse 
 
                         </tbody>
                     </table>
