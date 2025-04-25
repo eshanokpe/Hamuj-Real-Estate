@@ -95,9 +95,12 @@
                                         <i class="fas fa-store-slash fa-3x text-muted mb-3"></i>
                                        
                                         <h4 class="text-muted fw-normal">No Assets Currently Available to Sell</h4>
-                                        <a href="{{ route('user.properties')}}">
-                                            Buy Properties
-                                        </a>
+                                        
+                                        <span class="status__btn pending2 " style="background-color: #47008E; ">
+                                            <a href="{{ route('user.properties')}}">
+                                                Buy Properties
+                                            </a>
+                                        </span>
                                      </div>
                                 </td>
                             </tr>
