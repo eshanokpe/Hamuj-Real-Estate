@@ -93,9 +93,9 @@
                             </div>
                         </div>
                         </div>
-                        <div class="col">
+                        <div class="col text-end">
 
-                        {{-- <input type="text" name="commission_balance" id="commission_balance" value="{{auth()->user()->commission_balance}}"> --}}
+                        <input type="text" name="commission_applied_amount" id="commission_applied_amount" value="{{auth()->user()->commission_balance}}">
                         <input type="hidden" name="remaining_size" id="remaining_size">
                         <input type="hidden" name="property_slug" id="property_slug" value="{{ $property->slug }}">
                         <input type="hidden" name="quantity" id="quantity">

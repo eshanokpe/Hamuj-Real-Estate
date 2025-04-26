@@ -32,15 +32,17 @@ class PaymentController extends Controller
             'property_slug' => 'required',
             'quantity' => 'required',
             'total_price' => 'required|numeric|min:1',
+            'commission_applied_amount' => 'required|numeric|min:0', 
             'transaction_pin' => 'required|digits:4' // Make PIN mandatory
         ]); 
         $user = Auth::user();
         $commissionToApply = 0.0; 
         $finalAmountPayable = 0.0;
+        $commissionAppliedFromRequest = $request->commission_applied_amount;
         $finalAmountFromRequest = $request->total_price;
         $applyCommission = $request->apply_commission;
         $commissionAvailable = $user->commission_balance;
-        
+        // $request->boolean('apply_commission');
 
         if($applyCommission == 'on'){
             $finalAmountPayable = $finalAmountFromRequest -  $commissionAvailable;
@@ -106,16 +108,17 @@ class PaymentController extends Controller
         $reference = 'TRXDOHREF-' . strtoupper(Str::random(8));
     
         // Deduct from wallet
-        $wallet->balance -= $finalAmountPayable;
-        $wallet->save();
+        // $wallet->balance -= $finalAmountPayable;
+        // $wallet->save();
 
-        // $wallet->decrement('balance', $finalAmountPayable);
-        if ($applyCommission == 'on') {
-            $user->commission_balance -= $commissionAvailable;
-            $user->save();
-            // $user->decrement('commission_balance', $commissionAvailable);
+        $wallet->decrement('balance', $finalAmountPayable);
+        if ($request->boolean('apply_commission')) {
+            $user->decrement('commission_balance', $commissionToApply);
+        
         }
-    
+        dd($request->boolean('apply_commission'));
+         // $user->decrement('commission_balance', $commissionAvailable);
+
         // Create transaction record
         $transaction = Transaction::create([
             'user_id' => $user->id,
