@@ -23,6 +23,7 @@ class PaymentController extends Controller
     public function initializePayment(Request $request)
     {
         
+        dd($request);
         $request->validate([
             'remaining_size' => 'required',
             'property_slug' => 'required',
@@ -31,6 +32,8 @@ class PaymentController extends Controller
             'transaction_pin' => 'required|digits:4' // Make PIN mandatory
         ]); 
         $user = Auth::user();
+        $commissionBalance = $user->commission_balance;
+        dd($commissionBalance);
         
         // 1. FIRST CHECK: Verify if PIN is required and set
         if (config('app.enable_transaction_pin')) {
