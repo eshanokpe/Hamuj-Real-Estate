@@ -717,7 +717,6 @@ class TransferPropertyController extends Controller
             }
             $recipientWallet =  Wallet::where('user_id', $recipient->id)->first();
             $requiredAmountInNaira = $amount / 100; // Convert amount to the same unit as balance
-
             // Ensure recipientWallet has enough balance
             if ($recipientWallet->balance < $requiredAmountInNaira) {
                 if ($request->wantsJson()) {
@@ -725,6 +724,8 @@ class TransferPropertyController extends Controller
                 }
                 return redirect()->back()->with(['error' => 'Insufficient wallet balance, Please fund your wallet']);
             }
+            dd($recipientWallet->balance);
+
 
             // Find notification
             $notification = CustomNotification::find($id);
