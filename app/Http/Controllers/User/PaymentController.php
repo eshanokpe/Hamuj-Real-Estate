@@ -43,6 +43,8 @@ class PaymentController extends Controller
         $applyCommission = $request->apply_commission;
         $commissionAvailable = $user->commission_balance;
         // $request->boolean('apply_commission');
+        dd($applyCommission);
+
         if ($applyCommission == 'on') {
             $user->decrement('commission_balance', $commissionAppliedFromRequest);
             dd('correct');
