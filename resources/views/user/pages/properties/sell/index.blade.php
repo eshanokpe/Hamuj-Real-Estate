@@ -64,10 +64,9 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-nowrap align-middle"> {{-- Align vertically --}}
+                                <td>
                                     <span class="reviews__date">
-                                        {{-- Use optional() and Carbon's helper for cleaner date formatting --}}
-                                        {{ optional($property->latest_created_at)->isoFormat('ll') ?? 'N/A' }} {{-- e.g., Sep 5, 2024 --}}
+                                        {{  \Carbon\Carbon::parse($property->latest_created_at)->format('d F, Y')  }} 
                                     </span>
                                 </td>
                                 <td class="text-nowrap align-middle fw-bold"> {{-- Align vertically, make bold --}}
