@@ -26,16 +26,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- Filter the collection in the view to only include properties with a sellable size --}}
-                            {{-- Note: It's generally better practice to filter this in the Controller before passing to the view, especially for pagination accuracy. --}}
                             @php
                                 $sellableProperties = $sellProperty->filter(function ($item) {
-                                    // Ensure total_selected_size_land exists, is numeric, and greater than 0
                                     return isset($item->total_selected_size_land) && is_numeric($item->total_selected_size_land) && $item->total_selected_size_land > 0;
                                 });
                             @endphp
 
-                            {{-- Loop through only the properties that have a sellable size --}}
                             @forelse ($sellableProperties as $property)
                             <tr>
                                 <td>
@@ -47,9 +43,9 @@
                                                  style="width:70px; height:90px; object-fit:cover; border-radius: 4px;"> {{-- Consistent size & added radius --}}
                                         </div>
                                         <div class="reviews__author--text">
-                                            {{-- Use optional() helper for safety --}}
-                                            <h3 class="reviews__author--title mb-1 fs-6">{{ optional($property->property)->name ?? 'N/A' }}</h3>
-                                            <p class="reviews__author--subtitle text-muted small mb-1">{{ optional($property->property)->location ?? 'N/A' }}</p>
+                                            
+                                            <h3 class="reviews__author--title mb-1 ">{{ optional($property->property)->name ?? 'N/A' }}</h3>
+                                            <p class="reviews__author--subtitle text-muted  mb-1">{{ optional($property->property)->location ?? 'N/A' }}</p>
                                             @if($property->valuationSummary)
                                                 <span class="properties__author--price d-block small">₦{{ number_format($property->valuationSummary->current_value_sum, 2)}} <small class="text-muted">per/sqm</small></span>
                                                 <p class="properties__author--price text-decoration-line-through text-muted small mb-0">₦{{ number_format($property->valuationSummary->initial_value_sum, 2)}} <small class="text-muted">per/sqm</small></p>
@@ -63,7 +59,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                </td>
+                                </td> 
                                 <td>
                                     <span class="reviews__date">
                                         {{  \Carbon\Carbon::parse($property->latest_created_at)->format('d F, Y')  }} 

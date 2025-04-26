@@ -12,6 +12,9 @@ use App\Models\Wallet;
 use App\Models\Property;  
 use App\Models\Transaction;   
 use App\Models\ReferralLog;
+use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use App\Notifications\BuyPropertiesNotification;
 use App\Notifications\ReferralCommissionEarnedNotification;
 use App\Notifications\ReferredUserPurchasedNotification;
@@ -32,22 +35,19 @@ class PaymentController extends Controller
             'transaction_pin' => 'required|digits:4' // Make PIN mandatory
         ]); 
         $user = Auth::user();
-        $total = 0.0;
-        $amount = $request->total_price;
-        $commissionCheck = $request->commission_check;
-        $commissionBalance = $user->commission_balance;
+        $commissionToApply = 0.0; 
+        $finalAmountPayable = 0.0;
+        $finalAmountFromRequest = $request->total_price;
+        $applyCommission = $request->apply_commission;
+        $commissionAvailable = $user->commission_balance;
         
 
-        if($commissionCheck == 'on'){
-            $total = $amount -  $commissionBalance;
+        if($applyCommission == 'on'){
+            $finalAmountPayable = $finalAmountFromRequest -  $commissionAvailable;
         }else{
-            $total = $amount;
+            $finalAmountPayable = $finalAmountFromRequest;
         }
-        // dd($total);
-
-        // dd($amount);
-        // dd($commissionBalance);
-
+       
         // 1. FIRST CHECK: Verify if PIN is required and set
         if (config('app.enable_transaction_pin')) {
             if (empty($user->transaction_pin)) {
@@ -98,7 +98,7 @@ class PaymentController extends Controller
     
         // Check wallet balance
         $wallet = $user->wallet;
-        if (!$wallet || $wallet->balance < $total) {
+        if (!$wallet || $wallet->balance < $finalAmountPayable) {
             return $this->errorResponse('Insufficient funds in your wallet. Please add funds to proceed.', 400);
         }
     
@@ -106,8 +106,13 @@ class PaymentController extends Controller
         $reference = 'TRXDOHREF-' . strtoupper(Str::random(8));
     
         // Deduct from wallet
-        $wallet->balance -= $total;
-        $wallet->save();
+        // $wallet->balance -= $finalAmountPayable;
+        // $wallet->save();
+
+        $wallet->decrement('balance', $finalAmountPayable);
+        if ($commissionToApply > 0) {
+            $user->decrement('commission_balance', $commissionAvailable);
+        }
     
         // Create transaction record
         $transaction = Transaction::create([
@@ -115,7 +120,7 @@ class PaymentController extends Controller
             'email' => $user->email,
             'property_id' => $property->id,
             'property_name' => $property->name,
-            'amount' => $total,
+            'amount' => $finalAmountPayable,
             'reference' => $reference,
             'status' => 'completed',
             'source' => $request->is('api/*') ? 'mobile' : 'web',
@@ -134,13 +139,13 @@ class PaymentController extends Controller
             'user_email' => $user->email,
             'property_id' => $property->id,
             'size' => $selectedSizeLand,
-            'total_price' => $total,
+            'total_price' => $finalAmountPayable,
             'transaction_id' => $transaction->id,
             'selected_size_land' => $selectedSizeLand,
             'remaining_size' => $remainingSize - $selectedSizeLand,
             'status' => 'available',
-            'use_referral' => $request->commission_check == "on"  ? 1 : 0,
-            'referral_amount' => $request->commission_check ? $request->commissionBalance : 0,
+            'use_referral' => $request->applyCommission == "on"  ? 1 : 0,
+            'referral_amount' => $request->applyCommission == "on" ? $commissionAvailable : 0,
         ]);
     
         // Update property status
@@ -153,16 +158,10 @@ class PaymentController extends Controller
         // dd($selectedSizeLand);
 
         $property->save();
-    
-        // Process referral commission
-        $this->processReferralCommission($user, $property, $total, $transaction);
-         // ✅ Send Email and Notification
+        $this->processReferralCommission($user, $property, $finalAmountPayable, $transaction);
         try {
-           
-            // Send notification
             $user->notify(new BuyPropertiesNotification($transaction, $buy));
         } catch (\Exception $e) {
-            // Log or handle email/notification failure
             logger()->error('Payment notification error: ' . $e->getMessage());
         }
     
