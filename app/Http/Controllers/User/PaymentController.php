@@ -23,7 +23,7 @@ class PaymentController extends Controller
     public function initializePayment(Request $request)
     {
         
-        dd($request);
+        // dd($request);
         $request->validate([
             'remaining_size' => 'required',
             'property_slug' => 'required',
