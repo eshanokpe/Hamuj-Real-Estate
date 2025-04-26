@@ -139,7 +139,7 @@ class PaymentController extends Controller
             'selected_size_land' => $selectedSizeLand,
             'remaining_size' => $remainingSize - $selectedSizeLand,
             'status' => 'available',
-            'use_referral' => $request->commission_check,
+            'use_referral' => $request->commission_check == "on"  ? 1 : 0,
             'referral_amount' => $request->commission_check ? $request->commissionBalance : 0,
         ]);
     
