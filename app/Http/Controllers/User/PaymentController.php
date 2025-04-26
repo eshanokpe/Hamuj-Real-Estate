@@ -112,11 +112,11 @@ class PaymentController extends Controller
         // $wallet->save();
 
         $wallet->decrement('balance', $finalAmountPayable);
-        if ($request->boolean('apply_commission')) {
+        if (!$request->boolean('apply_commission')) {
             $user->decrement('commission_balance', $commissionToApply);
         
         }
-        dd($request->boolean('apply_commission'));
+        // dd($request->boolean('apply_commission'));
          // $user->decrement('commission_balance', $commissionAvailable);
 
         // Create transaction record
