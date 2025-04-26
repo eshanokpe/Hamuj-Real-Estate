@@ -75,10 +75,11 @@
                     </div>
                 </div> 
 
-                <div class="cart__footer d-flex justify-content-between align-items-center mt-4">
                     
                     
-                    <form id="payment-form" action="{{ route('user.payment.initiate') }}" method="POST" style="display: none;">
+                <form id="payment-form" action="{{ route('user.payment.initiate') }}" method="POST" style="display: none;">
+                    <div class="cart__footer d-flex justify-content-between align-items-center mt-4">
+                       
                         @csrf
                         <div class="reviews__author--check position-relative">
                             <p for="commission-switch"><b>Apply Commission</b></p>
@@ -111,8 +112,9 @@
                         </div>
 
                         <button type="submit" class="solid__btn mt-2" id="confirm-payment-btn">Confirm Payment</button>
-                    </form>
-                </div>
+                    </div>
+                </form>
+               
 
                
             </div>
