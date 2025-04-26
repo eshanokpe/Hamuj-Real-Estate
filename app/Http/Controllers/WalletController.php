@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Http;
 
 class WalletController extends Controller
 { 
+    public function getWalletBalance($userId = null)
+    {
+        $userId = $userId ?? auth()->id();
+        return User::find($userId)->wallet_balance;
+    }
+    
     // Create Customer  
     public function createVirtualAccountCustomer($user)
     {
@@ -42,7 +48,7 @@ class WalletController extends Controller
             if ($response->successful()) {
                 return $response->json(); 
             }
-
+ 
             return null; 
         } catch (\Exception $e) {
             // Log the exception for debugging

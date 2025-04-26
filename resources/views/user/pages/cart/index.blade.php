@@ -6,368 +6,220 @@
         <main class="main__content_wrapper">
             <div class="dashboard__container dashboard__reviews--container">
                 <div class="reviews__heading mb-30">
-                    <h2 class="reviews__heading--title">Purchase Property</h2>
-                    <p class="reviews__heading--desc">Review the property details and confirm your purchase.</p>
-                </div>
+                    <h2 class="reviews__heading--title">My Property</h2>
+                    <p class="reviews__heading--desc">We are glad to see you again!</p>
+                </div> 
 
                 <div class="properties__wrapper">
                     <div class="properties__table table-responsive">
-                        {{-- Ensure $property exists before trying to access it --}}
-                        @if($property)
                         <table class="properties__table--wrapper cart__table">
                             <thead>
                                 <tr>
-                                    <th>Property Details</th>
-                                    <th>Price per SQM</th>
-                                    <th>Total Size</th>
-                                    <th>Available Size</th>
-                                    <th>Select Size (SQM)</th>
-                                    <th>Amount Payable</th>
+                                    <th>Product Image</th>
+                                    <th>Price</th>
+                                    <th>Actual Land Size</th>
+                                    <th>Available Land Size</th>
+                                    <th>Select Land Size</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- Add data attributes for easier JS access --}}
-                                <tr data-property-price="{{ $property->valuationSummary->current_value_sum ?? $property->price }}"
-                                    data-property-slug="{{ $property->slug }}"
-                                    data-initial-size="{{ $property->available_size }}">
+                                <tr>
                                     <td>
                                         <div class="properties__author d-flex align-items-center">
-                                            <div class="properties__author--thumb flex-shrink-0 me-3">
-                                                {{-- Use secure_asset for HTTPS if applicable, add descriptive alt text --}}
-                                                <img src="{{ asset($property->property_images) }}" alt="Image of {{ $property->name }}"
-                                                    style="width: 64px; height:64px; object-fit:cover; border-radius: 4px;">
+                                            <div class="properties__author--thumb">
+                                                <img src="{{ asset($property->property_images) }}" alt="img" 
+                                                    style="width: 64px; height:64px; object-fit:cover">
                                             </div>
                                             <div class="reviews__author--text">
-                                                <h3 class="reviews__author--title mb-1">{{ $property->name }}</h3>
-                                                <p class="reviews__author--subtitle text-muted small">{{ $property->location }}</p>
+                                                <h3 class="reviews__author--title">{{ $property->name }}</h3>
+                                                <p class="reviews__author--subtitle">{{ $property->location }}</p>
                                             </div>
-                                        </div>
+                                        </div> 
                                     </td>
                                     <td>
-                                        {{-- Store raw price in data attribute for JS --}}
-                                        <span class="item-price" data-price-raw="{{ $property->valuationSummary->current_value_sum ?? $property->price }}">
-                                            ₦{{ number_format($property->valuationSummary->current_value_sum ?? $property->price, 2) }}
+                                        <span class="item-price">
+                                            ₦{{ number_format($property->valuationSummary->current_value_sum ?? $property->price, 2) }} per/sqm
                                         </span>
                                     </td>
                                     <td><span>{{ $property->size }} SQM</span></td>
-                                    <td class="available-size">
-                                        {{ $property->available_size }} SQM
+                                    <td class="available-size" data-initial-size="{{ $property->available_size }}">
+                                        {{ $property->available_size }} SQM 
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center input-group input-group-sm" style="max-width: 120px;">
-                                            {{-- Use button type="button" for non-submitting buttons --}}
-                                            <button type="button" class="btn btn-outline-secondary decrement-btn" style="background:#47008E; color:#fff; border-color: #47008E;">-</button>
-                                            <input type="number" value="1" class="quantity-input form-control text-center px-1" min="1" max="{{ $property->available_size }}" aria-label="Quantity">
-                                            <button type="button" class="btn btn-outline-secondary increment-btn" style="background:#47008E; color:#fff; border-color: #47008E;">+</button>
+                                        <div class="d-flex align-items-center">
+                                            <button class="btn btn-outline-secondary btn-sm decrement-btn" style="padding: 5px 10px; background:#47008E; color:#fff; font-size:18px">-</button>
+                                            <input type="number" value="1" class="quantity-input text-center mx-2" style="width: 50px;" min="1">
+                                            <button class="btn btn-outline-secondary btn-sm increment-btn" style="padding: 5px 10px; background:#47008E; color:#fff; font-size:18px">+</button>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="total-price h5 mb-0" style="color: #47008E; font-weight: bold;">
-                                            {{-- Initial total based on default quantity 1 --}}
+                                        <span class="total-price" style="color: #47008E">
                                             ₦{{ number_format($property->valuationSummary->current_value_sum ?? $property->price, 2) }}
                                         </span>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        @else
-                            <div class="alert alert-warning" role="alert">
-                                Property details could not be loaded or are unavailable.
-                            </div>
-                        @endif
                     </div>
                 </div>
 
+                
 
-                {{-- Only show payment options if property exists --}}
-                @if($property)
-                <div class="cart__footer d-flex flex-column flex-md-row justify-content-between align-items-md-center mt-4 gap-3">
-                    <a href="{{ route('user.buy') }}" class="solid__btn btn btn-secondary" style="background-color: #CC9933; border-color: #CC9933;">
-                        <i class="fas fa-arrow-left me-1"></i> View Other Properties
-                    </a>
+                <div class="cart__footer d-flex justify-content-between align-items-center mt-4">
+                    <a href="{{ route('user.buy') }}" class="solid__btn" style="background-color: #CC9933">
+                        View Properties
+                    </a> 
                     <div>
-                        {{-- Use button type="button" --}}
-                        <button type="button" class="solid__btn btn btn-primary" id="make-payment-btn">
-                           Proceed to Payment <i class="fas fa-credit-card ms-1"></i>
-                        </button>
+                        <a href="#" class="solid__btn" id="make-payment-btn">Make Payment</a>
                     </div>
-                </div>
+                </div> 
 
-                <div class="payment-section mt-4 border-top pt-4" id="payment-details-section" style="display: none;">
-                     {{-- Commission Section --}}
-                     <div class="mb-4">
-                        <div class="form-check">
-                             {{-- Disable checkbox if commission balance is zero or property price is zero --}}
-                            <input class="form-check-input" id="commission-switch" type="checkbox" {{ (auth()->user()->commission_balance ?? 0) > 0 && ($property->valuationSummary->current_value_sum ?? $property->price) > 0 ? '' : 'disabled' }}>
-                            <label class="form-check-label" for="commission-switch">
-                                <b>Apply Commission Balance</b>
-                            </label>
+                <div class="cart__footer d-flex justify-content-between align-items-center mt-4">
+                    <div class="reviews__author--check position-relative">
+                        <p for="commission-switch"><b>Apply Commission</b></p>
+                       
+                        <div class="reviews__author--check position-relative d-flex align-items-center">
+                            <input class="reviews__author--check__input" id="commission-switch" type="checkbox">
+                            
+                            <span class="reviews__author--checkmark"></span> 
+                            <span style="margin-left: 20px">Commission Balance: ₦{{ number_format(auth()->user()->commission_balance, 2) }}</span>
                         </div>
-                         <div class="ms-4 mt-1">
-                             <span class="text-muted">
-                                 Available Commission: <span id="commission-balance-display" class="fw-bold">₦{{ number_format(auth()->user()->commission_balance ?? 0, 2) }}</span>
-                                 @if((auth()->user()->commission_balance ?? 0) <= 0)
-                                 <small class="text-danger">(None available)</small>
-                                 @endif
-                             </span>
-                         </div>
-                     </div>
-
-                    {{-- Payment Form --}}
-                    <form id="payment-form" action="{{ route('user.payment.initiate') }}" method="POST">
+                    </div>
+                    
+                    <form id="payment-form" action="{{ route('user.payment.initiate') }}" method="POST" style="display: none;">
                         @csrf
-                        {{-- Hidden fields will be populated by JS --}}
+                        <input type="hidden" name="remaining_size" id="remaining_size">
                         <input type="hidden" name="property_slug" id="property_slug" value="{{ $property->slug }}">
-                        <input type="hidden" name="quantity" id="form_quantity">
-                        <input type="hidden" name="total_price" id="form_total_price"> {{-- This will be the FINAL amount payable --}}
-                        <input type="hidden" name="apply_commission" id="form_apply_commission" value="0"> {{-- 0 for false, 1 for true --}}
-                        <input type="hidden" name="commission_applied_amount" id="form_commission_applied_amount" value="0"> {{-- Actual amount deducted from commission --}}
+                        <input type="hidden" name="quantity" id="quantity">
+                        <input type="hidden" name="total_price" id="total_price">
 
-                        <div class="row justify-content-end">
-                            <div class="col-md-6 col-lg-4">
-                                <div class="mb-3">
-                                    <label for="transaction_pin" class="form-label">Enter 4-digit Transaction PIN <span class="text-danger">*</span></label>
-                                    <input type="password"
-                                           class="form-control form-input text-center" {{-- Use Bootstrap class --}}
-                                           name="transaction_pin"
-                                           id="transaction_pin"
-                                           maxlength="4"
-                                           inputmode="numeric"
-                                           pattern="\d{4}"
-                                           placeholder="****"
-                                           required
-                                           autocomplete="off">
-                                     <div class="invalid-feedback">
-                                        Please enter a valid 4-digit PIN.
-                                     </div>
-                                </div>
-                                <button type="submit" class="solid__btn btn btn-success w-100" id="confirm-payment-btn">
-                                    <i class="fas fa-lock me-1"></i> Confirm & Pay
-                                </button>
-                            </div>
+                        <div class="form-group mt-3">
+                            <label for="transaction_pin" class="form-label">Enter 4-digit Transaction PIN</label>
+                            <input type="password"
+                                   class="form-input"
+                                   name="transaction_pin"
+                                   id="transaction_pin"
+                                   class="form-control"
+                                   maxlength="4"
+                                   inputmode="numeric"
+                                   pattern="\d{4}"
+                                   placeholder="****"
+                                   required>
                         </div>
+
+                        <button type="submit" class="solid__btn mt-2" id="confirm-payment-btn">Confirm Payment</button>
                     </form>
                 </div>
-                @endif
 
+               
             </div>
         </main>
     </div>
 </div>
 
-{{-- Ensure script runs only if property exists --}}
-@if($property)
 <script>
-document.addEventListener('DOMContentLoaded', function() {
 
-    // --- Authentication and PIN Check ---
-    @auth
-        @if (!auth()->user()->transaction_pin)
-            // Consider a more user-friendly approach like a modal or alert first
-            alert('Please set your transaction PIN before you can make purchases.');
-            window.location.href = "{{ route('user.transaction.pin') }}"; // Redirect to PIN setup page
-        @endif
-    @else
-        // Should ideally be handled by middleware, but as a fallback:
-        alert('You must be logged in to make a purchase.');
-        window.location.href = "{{ route('login') }}"; // Adjust route name if needed
-        return; // Stop script execution
-    @endauth
+@auth
+@if (!auth()->user()->transaction_pin)
+    window.location.href = "{{ route('user.transaction.pin') }}"; 
+@endif
+@endauth 
 
-    // --- Element References ---
-    const propertyRow = document.querySelector('.cart__table tbody tr');
-    if (!propertyRow) {
-        console.error("Property row not found in table.");
-        return; // Stop script if essential elements are missing
+// Initialize commission amount
+const commissionRate = @json(auth()->user()->commission_balance); 
+console.log(commissionRate);
+
+// Function to update the total price including commission deduction
+function updateTotalWithCommission(row) {
+    const priceText = row.querySelector('.item-price').textContent;
+    const price = parseFloat(priceText.replace(/[^\d.]/g, ''));
+    const quantityInput = row.querySelector('.quantity-input');
+    const availableSizeElement = row.querySelector('.available-size');
+    const initialSize = parseFloat(availableSizeElement.dataset.initialSize);
+    const quantity = parseInt(quantityInput.value) || 1;
+    const total = price * quantity;
+    const remainingSize = Math.max(initialSize - quantity, 1);
+
+    let totalWithCommission = total;
+
+    // Check if commission is applied and subtract the fixed commission amount
+    if (document.getElementById('commission-switch').checked) {
+        // Subtract the fixed commission amount (2000 in your case)
+        // But ensure it doesn't make the total negative
+        totalWithCommission = Math.max(total - commissionRate, 0);
     }
 
-    const decrementBtn = propertyRow.querySelector('.decrement-btn');
-    const incrementBtn = propertyRow.querySelector('.increment-btn');
-    const quantityInput = propertyRow.querySelector('.quantity-input');
-    const availableSizeElement = propertyRow.querySelector('.available-size');
-    const totalPriceElement = propertyRow.querySelector('.total-price');
-    const itemPriceElement = propertyRow.querySelector('.item-price');
-    const commissionSwitch = document.getElementById('commission-switch');
-    const makePaymentBtn = document.getElementById('make-payment-btn');
-    const paymentDetailsSection = document.getElementById('payment-details-section'); // Reference the whole section
-    const paymentForm = document.getElementById('payment-form');
-    const pinInput = document.getElementById('transaction_pin');
+    row.querySelector('.total-price').textContent = `₦${totalWithCommission.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
+    availableSizeElement.textContent = `${remainingSize} SQM`;
+    
+    // For debugging:
+    console.log({
+        price,
+        quantity,
+        total,
+        commissionRate,
+        totalWithCommission
+    });
+}
 
-    // Hidden form inputs
-    const formQuantityInput = document.getElementById('form_quantity');
-    const formTotalPriceInput = document.getElementById('form_total_price'); // Final payable amount
-    const formApplyCommissionInput = document.getElementById('form_apply_commission');
-    const formCommissionAppliedInput = document.getElementById('form_commission_applied_amount');
+// Quantity logic
+document.querySelectorAll('.cart__table tbody tr').forEach(row => {
+    const decrementBtn = row.querySelector('.decrement-btn');
+    const incrementBtn = row.querySelector('.increment-btn');
+    const quantityInput = row.querySelector('.quantity-input');
 
-
-    // --- Initial Data ---
-    // Use optional chaining and nullish coalescing for safer access
-    const pricePerSqm = parseFloat(itemPriceElement?.dataset?.priceRaw ?? 0);
-    const initialAvailableSize = parseFloat(propertyRow?.dataset?.initialSize ?? 0);
-    const maxQuantity = Math.floor(initialAvailableSize); // Use floor for whole SQM units
-    const commissionAvailable = parseFloat({{ auth()->user()->commission_balance ?? 0 }});
-
-    // Set max attribute for quantity input, ensure it's at least 1 if available
-    quantityInput.max = maxQuantity > 0 ? maxQuantity : 1;
-    if (maxQuantity <= 0) {
-        quantityInput.value = 0; // Or handle appropriately if no size available
-        quantityInput.disabled = true;
-        decrementBtn.disabled = true;
-        incrementBtn.disabled = true;
-        if(makePaymentBtn) makePaymentBtn.disabled = true; // Disable payment if nothing to buy
-        if(commissionSwitch) commissionSwitch.disabled = true;
-    }
-
-
-    // --- Helper Functions ---
-    function formatCurrency(amount) {
-        // Ensure amount is a number, default to 0 if not
-        const numericAmount = typeof amount === 'number' && !isNaN(amount) ? amount : 0;
-        return `₦${numericAmount.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    }
-
-    // --- Core Update Function ---
-    function updateDisplayAndForm() {
-        // Ensure quantity is within valid bounds (1 to maxQuantity)
-        let quantity = parseInt(quantityInput.value) || 0;
-        if (quantity < 1 && maxQuantity > 0) {
-            quantity = 1;
-        } else if (quantity > maxQuantity) {
-            quantity = maxQuantity;
-        } else if (maxQuantity <= 0) {
-             quantity = 0; // Cannot select quantity if none available
+    decrementBtn.addEventListener('click', () => {
+        if (quantityInput.value > 1) {
+            quantityInput.value--;
+            updateTotalWithCommission(row);
         }
-        // Only update input value if it was corrected to avoid cursor jumping
-        if (parseInt(quantityInput.value) !== quantity) {
-            quantityInput.value = quantity;
-        }
+    });
 
+    incrementBtn.addEventListener('click', () => {
+        quantityInput.value++;
+        updateTotalWithCommission(row);
+    });
 
-        const total = pricePerSqm * quantity;
-        // Calculate remaining size based on potentially corrected quantity
-        const currentSelectedQuantity = parseInt(quantityInput.value) || 0;
-        const remainingSize = initialAvailableSize - currentSelectedQuantity;
+    quantityInput.addEventListener('input', () => {
+        if (quantityInput.value < 1) quantityInput.value = 1;
+        updateTotalWithCommission(row);
+    });
+});
 
+// Listen for toggle switch change
+document.getElementById('commission-switch').addEventListener('change', () => {
+    document.querySelectorAll('.cart__table tbody tr').forEach(row => {
+        updateTotalWithCommission(row);
+    });
+});
 
-        let finalPrice = total; // This is the amount the user needs to pay
-        let commissionApplied = 0;
-        let applyCommissionFlag = 0;
+// Show the form on "Make Payment"
+document.getElementById('make-payment-btn').addEventListener('click', function(e) {
+    e.preventDefault();
 
-        // Apply commission only if switch is checked, commission is available, and total > 0
-        if (commissionSwitch && commissionSwitch.checked && commissionAvailable > 0 && total > 0) {
-            commissionApplied = Math.min(total, commissionAvailable); // Apply up to the total cost or available balance
-            finalPrice = total - commissionApplied; // Reduce the amount payable
-            applyCommissionFlag = 1;
-        }
+    const row = document.querySelector('.cart__table tbody tr');
+    const availableSizeElement = row.querySelector('.available-size');
+    const remainingSize = availableSizeElement.textContent.trim().split(' ')[0]; 
+    const quantity = row.querySelector('.quantity-input').value.trim();
+    const totalPrice = row.querySelector('.total-price').textContent.replace(/₦|,/g, '').trim();
 
-        // Update displayed values
-        if (totalPriceElement) {
-            totalPriceElement.textContent = formatCurrency(finalPrice); // Show the final payable amount
-        }
-        if (availableSizeElement) {
-            // Display remaining size, ensure it doesn't go below zero visually
-            availableSizeElement.textContent = `${Math.max(0, remainingSize).toFixed(2)} SQM`;
-        }
+    document.getElementById('remaining_size').value = remainingSize;
+    document.getElementById('quantity').value = quantity;
+    document.getElementById('total_price').value = totalPrice;
 
+    const form = document.getElementById('payment-form');
+    form.style.display = 'block';
+    form.scrollIntoView({ behavior: 'smooth' });
+});
 
-        // Update hidden form fields for submission
-        if(formQuantityInput) formQuantityInput.value = quantity;
-        if(formTotalPriceInput) formTotalPriceInput.value = finalPrice.toFixed(2); // Send final payable amount to server
-        if(formApplyCommissionInput) formApplyCommissionInput.value = applyCommissionFlag;
-        if(formCommissionAppliedInput) formCommissionAppliedInput.value = commissionApplied.toFixed(2); // Send how much commission was used
-
+// Confirm payment (submit form only when valid PIN)
+document.getElementById('confirm-payment-btn').addEventListener('click', function(e) {
+    const pin = document.getElementById('transaction_pin').value.trim();
+    if (pin.length !== 4 || !/^\d{4}$/.test(pin)) {
+        alert('Please enter a valid 4-digit PIN.');
+        e.preventDefault();
     }
-
-    // --- Event Listeners ---
-
-    // Quantity Buttons & Input
-    if (decrementBtn) {
-        decrementBtn.addEventListener('click', () => {
-            if (parseInt(quantityInput.value) > 1) {
-                quantityInput.stepDown(); // Use built-in stepDown
-                updateDisplayAndForm();
-            }
-        });
-    }
-
-    if (incrementBtn) {
-        incrementBtn.addEventListener('click', () => {
-            // Check against maxQuantity before incrementing
-            if (parseInt(quantityInput.value) < maxQuantity) {
-                 quantityInput.stepUp(); // Use built-in stepUp
-                updateDisplayAndForm();
-            }
-        });
-    }
-
-    if (quantityInput) {
-        quantityInput.addEventListener('input', updateDisplayAndForm); // Update on every keystroke/change
-        quantityInput.addEventListener('change', updateDisplayAndForm); // Ensure update on blur/enter after manual input
-    }
-
-
-    // Commission Switch Change
-    if (commissionSwitch) {
-        commissionSwitch.addEventListener('change', updateDisplayAndForm);
-    }
-
-    // Make Payment Button Click
-    if (makePaymentBtn) {
-        makePaymentBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const currentQuantity = parseInt(quantityInput.value) || 0;
-            if (maxQuantity <= 0 || currentQuantity <= 0) {
-                alert("Please select a valid quantity to purchase.");
-                return;
-            }
-            // Ensure calculations are up-to-date before showing form
-            updateDisplayAndForm();
-            // Show the payment details section
-            if (paymentDetailsSection) {
-                paymentDetailsSection.style.display = 'block';
-                paymentDetailsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                if (pinInput) pinInput.focus(); // Focus the PIN input
-            }
-        });
-    }
-
-    // Form Submission (using 'submit' event is better for validation)
-    if (paymentForm) {
-        paymentForm.addEventListener('submit', function(e) {
-            if (!pinInput) return; // Should not happen if form is visible, but safety check
-
-            const pin = pinInput.value.trim();
-            pinInput.classList.remove('is-invalid'); // Reset validation state
-
-            if (pin.length !== 4 || !/^\d{4}$/.test(pin)) {
-                e.preventDefault(); // Prevent form submission
-                pinInput.classList.add('is-invalid'); // Show validation feedback
-                pinInput.focus();
-            } else {
-                // PIN looks valid, ensure latest values are in hidden fields just before submission
-                updateDisplayAndForm();
-                // Optional: Disable submit button to prevent double-clicks
-                const submitButton = paymentForm.querySelector('button[type="submit"]');
-                if(submitButton) {
-                    submitButton.disabled = true;
-                    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
-                }
-                // Allow form submission to proceed
-            }
-        });
-    }
-
-    // --- Initial Calculation on Load ---
-    // Run only if there's quantity available to purchase
-    if (maxQuantity > 0) {
-       updateDisplayAndForm();
-    } else if (totalPriceElement) {
-        totalPriceElement.textContent = formatCurrency(0); // Show 0 if nothing available
-    }
-
-
 });
 </script>
-@endif {{-- End of @if($property) for script --}}
-
 @endsection
