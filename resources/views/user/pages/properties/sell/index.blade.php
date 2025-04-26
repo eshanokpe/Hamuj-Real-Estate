@@ -72,18 +72,18 @@
                                 </td>
                                 <td class="text-nowrap align-middle fw-bold"> {{-- Align vertically, make bold --}}
                                     <span class="properties__views">{{ number_format($property->total_selected_size_land, 0) }} SQM</span>
+                                </td> 
+                                <td>
+                                    <span class="status__btn pending2"> 
+                                        <a href="{{ route('user.properties.show', encrypt($property->property->id))}}">
+                                        View</a>
+                                    </span> 
                                 </td>
-                                <td class="text-nowrap align-middle text-center"> {{-- Align vertically & center --}}
-                                    {{-- Use button classes for better styling consistency --}}
-                                    <a href="{{ route('user.properties.show', encrypt(optional($property->property)->id)) }}" class="btn btn-sm btn-outline-secondary">
-                                        View
-                                    </a>
-                                </td>
-                                <td class="text-nowrap align-middle text-center"> {{-- Align vertically & center --}}
-                                    {{-- Use button classes and specific styling --}}
-                                    <a href="{{ route('user.cart.sell.index', encrypt(optional($property->property)->id)) }}" class="btn btn-sm text-white" style="background-color: #47008E; border-color: #47008E;">
-                                        Sell
-                                    </a>
+                                <td> 
+                                    <span class="status__btn pending2 " style="background-color: #47008E; ">
+                                        <a class="text-white" href="{{ route('user.cart.sell.index', encrypt($property->property->id))}}">
+                                        Sell</a>
+                                    </span>
                                 </td>
                             </tr>
                             @empty

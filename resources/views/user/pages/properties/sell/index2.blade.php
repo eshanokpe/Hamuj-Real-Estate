@@ -51,7 +51,7 @@
                                         {{  \Carbon\Carbon::parse($property->latest_created_at)->format('d F, Y')  }} 
                                     </span>
                                 </td>
-                                <td> 
+                                <td>  
                                     <span class="properties__views">{{ $property->total_selected_size_land }} SQM </span>
                                 </td>
                                 <td>
