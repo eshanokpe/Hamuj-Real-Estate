@@ -43,16 +43,7 @@ class PaymentController extends Controller
         $applyCommission = $request->commission_check;
         $commissionAvailable = $user->commission_balance;
         // $request->boolean('apply_commission');
-        dd($request->boolean('commission_check'));
-
-        if ($applyCommission == 'on') {
-            $user->decrement('commission_balance', $commissionAppliedFromRequest);
-            dd('correct');
-            // $user->decrement('commission_balance', $commissionAvailable);
-        
-        }else{
-            dd('Not correct');
-        }
+      
         // dd($request->boolean('apply_commission'));
         if($applyCommission == 'on'){
             $finalAmountPayable = $finalAmountFromRequest -  $commissionAvailable;
@@ -118,11 +109,13 @@ class PaymentController extends Controller
         $reference = 'TRXDOHREF-' . strtoupper(Str::random(8));
     
         // Deduct from wallet
-        // $wallet->balance -= $finalAmountPayable;
-        // $wallet->save();
-
         $wallet->decrement('balance', $finalAmountPayable);
-       
+        
+        if ($request->boolean('commission_check')) {
+            $user->decrement('commission_balance', $commissionAppliedFromRequest);
+        }else{
+            dd('Not correct');
+        }
 
         // Create transaction record
         $transaction = Transaction::create([
