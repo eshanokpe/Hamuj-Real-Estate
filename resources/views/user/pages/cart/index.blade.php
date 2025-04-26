@@ -82,7 +82,6 @@
                         @csrf
                         <div class="reviews__author--check position-relative">
                             <p for="commission-switch"><b>Apply Commission</b></p>
-                           
                             <div class="reviews__author--check position-relative d-flex align-items-center">
                                 <input class="reviews__author--check__input" name="commission_balance" id="commission-switch" type="checkbox">
                                 
