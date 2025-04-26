@@ -38,9 +38,12 @@ class PaymentController extends Controller
         $commissionBalance = $user->commission_balance;
 
         if($commissionCheck == 'on'){
-            $total = $commissionBalance - $amount;
-            dd($total);
+            $total = $amount -  $commissionBalance ;
+        }else{
+            $total = $amount;
         }
+        dd($total);
+
         dd($amount);
         // dd($commissionBalance);
 
