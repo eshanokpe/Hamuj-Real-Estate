@@ -40,7 +40,7 @@ class PaymentController extends Controller
         $finalAmountPayable = 0.0;
         $commissionAppliedFromRequest = $request->commission_applied_amount;
         $finalAmountFromRequest = $request->total_price;
-        $applyCommission = $request->apply_commission;
+        $applyCommission = $request->commission_check;
         $commissionAvailable = $user->commission_balance;
         // $request->boolean('apply_commission');
         dd($applyCommission);
