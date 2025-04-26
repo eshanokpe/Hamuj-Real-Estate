@@ -106,12 +106,14 @@ class PaymentController extends Controller
         $reference = 'TRXDOHREF-' . strtoupper(Str::random(8));
     
         // Deduct from wallet
-        // $wallet->balance -= $finalAmountPayable;
-        // $wallet->save();
+        $wallet->balance -= $finalAmountPayable;
+        $wallet->save();
 
-        $wallet->decrement('balance', $finalAmountPayable);
+        // $wallet->decrement('balance', $finalAmountPayable);
         if ($applyCommission == 'on') {
-            $user->decrement('commission_balance', $commissionAvailable);
+            $user->commission_balance -= $commissionAvailable;
+            $user->save();
+            // $user->decrement('commission_balance', $commissionAvailable);
         }
     
         // Create transaction record

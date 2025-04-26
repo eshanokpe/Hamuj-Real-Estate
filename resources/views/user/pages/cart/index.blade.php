@@ -79,6 +79,8 @@
                     
                 <form id="payment-form" action="{{ route('user.payment.initiate') }}" method="POST" style="display: none;">
                     <div class="cart__footer d-flex justify-content-between align-items-center mt-4">
+                       <div class="col">
+
                        
                         @csrf
                         <div class="reviews__author--check position-relative">
@@ -90,6 +92,8 @@
                                 <span style="margin-left: 20px">Commission Balance: ₦{{ number_format(auth()->user()->commission_balance, 2) }}</span>
                             </div>
                         </div>
+                        </div>
+                        <div class="col">
 
                         {{-- <input type="text" name="commission_balance" id="commission_balance" value="{{auth()->user()->commission_balance}}"> --}}
                         <input type="hidden" name="remaining_size" id="remaining_size">
@@ -112,6 +116,7 @@
                         </div>
 
                         <button type="submit" class="solid__btn mt-2" id="confirm-payment-btn">Confirm Payment</button>
+                        </div>
                     </div>
                 </form>
                
