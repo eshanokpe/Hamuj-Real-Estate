@@ -40,6 +40,16 @@ class BuyPropertyController extends Controller
             ], 422);
         } 
         $user = Auth::user();
+        $totalPrice = 0.0;
+        $amount = $request->total_price;
+        $commissionCheck = $request->commission_balance;
+        $commissionBalance = $user->commission_balance;
+
+        if($commissionCheck == 'on'){
+            $totalPrice = $amount -  $commissionBalance;
+        }else{
+            $totalPrice = $amount;
+        }
         
         // 3. Process property and payment
         $property = Property::where('slug', $request->property_slug)->first();
@@ -47,13 +57,12 @@ class BuyPropertyController extends Controller
             return $this->errorResponse('Property not found.', 404);
         }
     
-        $amount = $request->total_price;
         $selectedSizeLand = $request->quantity;
         $remainingSize = $request->remaining_size;
     
         // Check wallet balance
         $wallet = $user->wallet;
-        if (!$wallet || $wallet->balance < $amount) {
+        if (!$wallet || $wallet->balance < $totalPrice) {
             return $this->errorResponse('Insufficient funds in your wallet. Please add funds to proceed.', 400);
         }
     
@@ -70,10 +79,10 @@ class BuyPropertyController extends Controller
             'email' => $user->email,
             'property_id' => $property->id,
             'property_name' => $property->name,
-            'amount' => $amount,
+            'amount' => $totalPrice,
             'reference' => $reference,
             'status' => 'completed',
-            'source' => $request->is('api/*') ? 'api' : 'web',
+            'source' => $request->is('api/*') ? 'mobile' : 'web',
             'payment_method' => 'wallet',
             'metadata' => [
                 'property_id' => $property->id,
@@ -89,7 +98,7 @@ class BuyPropertyController extends Controller
             'user_email' => $user->email,
             'property_id' => $property->id,
             'size' => $selectedSizeLand,
-            'total_price' => $amount,
+            'total_price' => $totalPrice,
             'transaction_id' => $transaction->id,
             'selected_size_land' => $selectedSizeLand,
             'remaining_size' => $remainingSize - $selectedSizeLand,
@@ -110,7 +119,7 @@ class BuyPropertyController extends Controller
         $property->save();
     
         // Process referral commission
-        $this->processReferralCommission($user, $property, $amount, $transaction);
+        $this->processReferralCommission($user, $property, $totalPrice, $transaction);
         
         try {
             $user->notify(new BuyPropertiesNotification($transaction, $buy));

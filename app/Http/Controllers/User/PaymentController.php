@@ -38,13 +38,13 @@ class PaymentController extends Controller
         $commissionBalance = $user->commission_balance;
 
         if($commissionCheck == 'on'){
-            $total = $amount -  $commissionBalance ;
+            $total = $amount -  $commissionBalance;
         }else{
             $total = $amount;
         }
-        dd($total);
+        // dd($total);
 
-        dd($amount);
+        // dd($amount);
         // dd($commissionBalance);
 
         // 1. FIRST CHECK: Verify if PIN is required and set
@@ -97,7 +97,7 @@ class PaymentController extends Controller
     
         // Check wallet balance
         $wallet = $user->wallet;
-        if (!$wallet || $wallet->balance < $amount) {
+        if (!$wallet || $wallet->balance < $total) {
             return $this->errorResponse('Insufficient funds in your wallet. Please add funds to proceed.', 400);
         }
     
@@ -105,7 +105,7 @@ class PaymentController extends Controller
         $reference = 'TRXDOHREF-' . strtoupper(Str::random(8));
     
         // Deduct from wallet
-        $wallet->balance -= $amount;
+        $wallet->balance -= $total;
         $wallet->save();
     
         // Create transaction record
@@ -114,10 +114,10 @@ class PaymentController extends Controller
             'email' => $user->email,
             'property_id' => $property->id,
             'property_name' => $property->name,
-            'amount' => $amount,
+            'amount' => $total,
             'reference' => $reference,
             'status' => 'completed',
-            'source' => $request->is('api/*') ? 'api' : 'web',
+            'source' => $request->is('api/*') ? 'mobile' : 'web',
             'payment_method' => 'wallet',
             'metadata' => [
                 'property_id' => $property->id,
@@ -133,7 +133,7 @@ class PaymentController extends Controller
             'user_email' => $user->email,
             'property_id' => $property->id,
             'size' => $selectedSizeLand,
-            'total_price' => $amount,
+            'total_price' => $total,
             'transaction_id' => $transaction->id,
             'selected_size_land' => $selectedSizeLand,
             'remaining_size' => $remainingSize - $selectedSizeLand,
@@ -152,7 +152,7 @@ class PaymentController extends Controller
         $property->save();
     
         // Process referral commission
-        $this->processReferralCommission($user, $property, $amount, $transaction);
+        $this->processReferralCommission($user, $property, $total, $transaction);
          // ✅ Send Email and Notification
         try {
            
