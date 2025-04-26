@@ -724,7 +724,7 @@ class TransferPropertyController extends Controller
                 }
                 return redirect()->back()->with(['error' => 'Insufficient wallet balance, Please fund your wallet']);
             }
-            dd($recipientWallet->balance);
+            // dd($recipientWallet->balance);
 
 
             // Find notification
