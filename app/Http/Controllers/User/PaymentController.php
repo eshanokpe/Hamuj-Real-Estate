@@ -34,8 +34,9 @@ class PaymentController extends Controller
         $user = Auth::user();
         $total = 0.0;
         $amount = $request->total_price;
-        $commissionCheck = $request->commission_balance;
+        $commissionCheck = $request->commission_check;
         $commissionBalance = $user->commission_balance;
+        
 
         if($commissionCheck == 'on'){
             $total = $amount -  $commissionBalance;
@@ -138,6 +139,8 @@ class PaymentController extends Controller
             'selected_size_land' => $selectedSizeLand,
             'remaining_size' => $remainingSize - $selectedSizeLand,
             'status' => 'available',
+            'use_referral' => $request->commission_check,
+            'referral_amount' => $request->commission_check ? $request->commissionBalance : 0,
         ]);
     
         // Update property status
