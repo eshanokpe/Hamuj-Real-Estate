@@ -76,20 +76,22 @@
                 </div> 
 
                 <div class="cart__footer d-flex justify-content-between align-items-center mt-4">
-                    <div class="reviews__author--check position-relative">
-                        <p for="commission-switch"><b>Apply Commission</b></p>
-                       
-                        <div class="reviews__author--check position-relative d-flex align-items-center">
-                            <input class="reviews__author--check__input" id="commission-switch" type="checkbox">
-                            
-                            <span class="reviews__author--checkmark"></span> 
-                            <span style="margin-left: 20px">Commission Balance: ₦{{ number_format(auth()->user()->commission_balance, 2) }}</span>
-                        </div>
-                    </div>
+                    
                     
                     <form id="payment-form" action="{{ route('user.payment.initiate') }}" method="POST" style="display: none;">
                         @csrf
-                        <input type="text" name="commission_balance" id="commission_balance" value="{{auth()->user()->commission_balance}}">
+                        <div class="reviews__author--check position-relative">
+                            <p for="commission-switch"><b>Apply Commission</b></p>
+                           
+                            <div class="reviews__author--check position-relative d-flex align-items-center">
+                                <input class="reviews__author--check__input" name="commission_balance" id="commission-switch" type="checkbox">
+                                
+                                <span class="reviews__author--checkmark"></span> 
+                                <span style="margin-left: 20px">Commission Balance: ₦{{ number_format(auth()->user()->commission_balance, 2) }}</span>
+                            </div>
+                        </div>
+
+                        {{-- <input type="text" name="commission_balance" id="commission_balance" value="{{auth()->user()->commission_balance}}"> --}}
                         <input type="hidden" name="remaining_size" id="remaining_size">
                         <input type="hidden" name="property_slug" id="property_slug" value="{{ $property->slug }}">
                         <input type="hidden" name="quantity" id="quantity">
