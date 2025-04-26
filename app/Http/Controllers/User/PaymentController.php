@@ -110,7 +110,7 @@ class PaymentController extends Controller
         // $wallet->save();
 
         $wallet->decrement('balance', $finalAmountPayable);
-        if ($commissionToApply > 0) {
+        if ($applyCommission == 'on') {
             $user->decrement('commission_balance', $commissionAvailable);
         }
     
