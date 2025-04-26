@@ -43,7 +43,15 @@ class PaymentController extends Controller
         $applyCommission = $request->apply_commission;
         $commissionAvailable = $user->commission_balance;
         // $request->boolean('apply_commission');
-
+        if ($applyCommission == 'on') {
+            $user->decrement('commission_balance', $commissionAppliedFromRequest);
+            dd('correct');
+            // $user->decrement('commission_balance', $commissionAvailable);
+        
+        }else{
+            dd('Not correct');
+        }
+        // dd($request->boolean('apply_commission'));
         if($applyCommission == 'on'){
             $finalAmountPayable = $finalAmountFromRequest -  $commissionAvailable;
         }else{
@@ -112,12 +120,7 @@ class PaymentController extends Controller
         // $wallet->save();
 
         $wallet->decrement('balance', $finalAmountPayable);
-        if (!$request->boolean('apply_commission')) {
-            $user->decrement('commission_balance', $commissionToApply);
-        
-        }
-        // dd($request->boolean('apply_commission'));
-         // $user->decrement('commission_balance', $commissionAvailable);
+       
 
         // Create transaction record
         $transaction = Transaction::create([
