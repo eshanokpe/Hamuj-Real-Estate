@@ -743,7 +743,7 @@ class TransferPropertyController extends Controller
             }
 
             // Check sender's wallet balance
-            if ($sendWallet->balance < $amount) {
+            if ($sendWallet->balance < $requiredAmountInNaira) {
             
                 return redirect()->back()->with(['error' => 'You do not has insufficient funds']);
             }
@@ -788,7 +788,7 @@ class TransferPropertyController extends Controller
                 'remaining_size' => $totalLandSize - $landSize,
                 'user_id' => $recipient->id,
                 'user_email' => $recipient->email,
-                'total_price' => $amount / 100,
+                'total_price' => $requiredAmountInNaira,
                 'status' => 'transfer',
             ]);
 
@@ -799,10 +799,10 @@ class TransferPropertyController extends Controller
             }
 
             // Update wallet balances
-            $sendWallet->balance += $amount / 100;
+            $sendWallet->balance += $requiredAmountInNaira;
             $sendWallet->save();
 
-            $recipientWallet->balance -= $amount / 100;
+            $recipientWallet->balance -= $requiredAmountInNaira;
             $recipientWallet->save();
 
             // Create transaction records
@@ -815,7 +815,7 @@ class TransferPropertyController extends Controller
                 'property_name' => $propertyData->name,
                 'status' => 'success',
                 'payment_method' => 'wallet',
-                'amount' => -$amount / 100,
+                'amount' => -$requiredAmountInNaira,
                 'description' => 'Transfer to ' . $recipient->email,
                 'reference' => $reference.'-D',
                 'transaction_state' => 'success',
@@ -828,7 +828,7 @@ class TransferPropertyController extends Controller
                 'property_name' => $propertyData->name,
                 'status' => 'success',
                 'payment_method' => 'card',
-                'amount' => $amount / 100,
+                'amount' => $requiredAmountInNaira,
                 'description' => 'Received from ' . $sender->email,
                 'reference' => $reference.'-C',
                 'transaction_state' => null,
