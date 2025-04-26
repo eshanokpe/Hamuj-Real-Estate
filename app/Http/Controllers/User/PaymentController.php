@@ -41,6 +41,7 @@ class PaymentController extends Controller
             $total = $commissionBalance - $amount;
             dd($total);
         }
+        dd($amount);
         // dd($commissionBalance);
 
         // 1. FIRST CHECK: Verify if PIN is required and set
