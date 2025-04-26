@@ -32,9 +32,17 @@ class PaymentController extends Controller
             'transaction_pin' => 'required|digits:4' // Make PIN mandatory
         ]); 
         $user = Auth::user();
+        $total = 0.0;
+        $amount = $request->total_price;
+        $commissionCheck = $request->commission_balance;
         $commissionBalance = $user->commission_balance;
-        dd($commissionBalance);
-        
+
+        if($commissionCheck == 'on'){
+            $total = $commissionBalance - $amount;
+            dd($total);
+        }
+        // dd($commissionBalance);
+
         // 1. FIRST CHECK: Verify if PIN is required and set
         if (config('app.enable_transaction_pin')) {
             if (empty($user->transaction_pin)) {
@@ -80,7 +88,6 @@ class PaymentController extends Controller
             return $this->errorResponse('Property not found.', 404);
         }
     
-        $amount = $request->total_price;
         $selectedSizeLand = $request->quantity;
         $remainingSize = $request->remaining_size;
     
