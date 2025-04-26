@@ -110,12 +110,8 @@ class PaymentController extends Controller
     
         // Deduct from wallet
         $wallet->decrement('balance', $finalAmountPayable);
+
         
-        if ($request->boolean('commission_check')) {
-            $user->decrement('commission_balance', $commissionAppliedFromRequest);
-        }else{
-            dd('Not correct');
-        }
 
         // Create transaction record
         $transaction = Transaction::create([
@@ -150,7 +146,9 @@ class PaymentController extends Controller
             'use_referral' => $request->applyCommission == "on"  ? 1 : 0,
             'referral_amount' => $request->applyCommission == "on" ? $commissionAvailable : 0,
         ]);
-    
+        if ($request->boolean('commission_check')) {
+            $user->decrement('commission_balance', $commissionAppliedFromRequest);
+        }
         // Update property status
         $property->available_size -= $selectedSizeLand;
         if ($property->price <= 0) {

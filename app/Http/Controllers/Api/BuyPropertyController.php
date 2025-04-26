@@ -42,10 +42,10 @@ class BuyPropertyController extends Controller
         $user = Auth::user();
         $totalPrice = 0.0;
         $amount = $request->total_price;
-        $commissionCheck = $request->commission_balance;
+        $commissionCheck = $request->use_referral;
         $commissionBalance = $user->commission_balance;
 
-        if($commissionCheck == 'on'){
+        if($request->use_referral){
             $totalPrice = $amount -  $commissionBalance;
         }else{
             $totalPrice = $amount;
@@ -70,9 +70,10 @@ class BuyPropertyController extends Controller
         $reference = 'TRXDOHREF-' . strtoupper(Str::random(8));
     
         // Deduct from wallet
-        $wallet->balance -= $amount;
-        $wallet->save();
-    
+        // $wallet->balance -= $totalPrice;
+        // $wallet->save();
+        $wallet->decrement('balance', $totalPrice);
+
         // Create transaction record
         $transaction = Transaction::create([
             'user_id' => $user->id,
@@ -106,6 +107,10 @@ class BuyPropertyController extends Controller
             'referral_amount' => $request->use_referral ? $request->referral_amount : 0,
             'status' => 'available',
         ]);
+       
+        if ($request->use_referral) {
+            $user->decrement('commission_balance', $commissionBalance);
+        }
     
         // Update property status
         $property->available_size -= $selectedSizeLand;
@@ -114,8 +119,6 @@ class BuyPropertyController extends Controller
             $buy->status = 'sold out';
             $buy->save();
         }
-        // dd($selectedSizeLand);
-
         $property->save();
     
         // Process referral commission
