@@ -742,7 +742,7 @@ class TransferPropertyController extends Controller
                 throw new \Exception('Transfer already approved', 400);
             }
             dd([
-                'sender_balance' => $sendWallet->balance,
+                'recipient_balance' => $recipientWallet->balance,
                 'required_amount' => $requiredAmountInNaira
             ]);
             // Check sender's wallet balance
