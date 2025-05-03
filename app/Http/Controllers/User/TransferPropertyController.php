@@ -741,12 +741,12 @@ class TransferPropertyController extends Controller
             if ($notification->data['status'] == 'approved') {
                 throw new \Exception('Transfer already approved', 400);
             }
-            dd([
-                'recipient_balance' => $recipientWallet->balance,
-                'required_amount' => $requiredAmountInNaira
-            ]);
+            // dd([
+            //     'recipient_balance' => $recipientWallet->balance,
+            //     'required_amount' => $requiredAmountInNaira
+            // ]);
             // Check sender's wallet balance
-            if ($sendWallet->balance < $requiredAmountInNaira) {
+            if ($recipientWallet->balance < $requiredAmountInNaira) {
             
                 return redirect()->back()->with(['error' => 'You do not has insufficient funds']);
             }
