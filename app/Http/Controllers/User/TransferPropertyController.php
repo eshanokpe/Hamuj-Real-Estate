@@ -741,7 +741,10 @@ class TransferPropertyController extends Controller
             if ($notification->data['status'] == 'approved') {
                 throw new \Exception('Transfer already approved', 400);
             }
-
+            dd([
+                'sender_balance' => $sendWallet->balance,
+                'required_amount' => $requiredAmountInNaira
+            ]);
             // Check sender's wallet balance
             if ($sendWallet->balance < $requiredAmountInNaira) {
             
