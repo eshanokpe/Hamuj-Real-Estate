@@ -24,14 +24,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($sellProperty as $property)
+                            @php
+                            $sellableProperties = $sellProperty->filter(function ($item) {
+                                return isset($item->total_selected_size_land) && is_numeric($item->total_selected_size_land) && $item->total_selected_size_land > 0;
+                            });
+                        @endphp
+                            @forelse ($sellableProperties as $property)
                             <tr>
                                 <td>
                                     <div class="properties__author d-flex align-items-center">
                                         <div class="properties__author--thumb">
                                             <img src="{{ asset($property->property->property_images) }}" alt="img" style="max-height: 100%; max-width:100%; width:70px; height:70px; object-fit:cover">
                                         </div>
-                                        <div class="reviews__author--text">
+                                        <div class="reviews__author--text"> 
                                             <h3 class="reviews__author--title">{{$property->property->name}}</h3>
                                             <p class="reviews__author--subtitle">{{$property->property->location}}</p>
                                             @if($property->valuationSummary)
@@ -69,9 +74,21 @@
                               
                             </tr>
                             @empty
-                                <tr>
-                                    <tr><td>You have not bought any property yet.</td></tr>
-                                </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <div class="text-center p-5 border-top">
+                                        <i class="fas fa-store-slash fa-3x text-muted mb-3"></i>
+                                       
+                                        <h4 class="text-muted fw-normal">No Assets Currently Available to Transfer</h4>
+                                        <br><br>
+                                        <span class="status__btn pending2 " style="background-color: #47008E; ">
+                                            <a class="text-white" href="{{ route('user.properties')}}">
+                                                Buy Properties
+                                            </a>
+                                        </span>
+                                     </div>
+                                </td>
+                            </tr>
                             @endforelse
                            
                             

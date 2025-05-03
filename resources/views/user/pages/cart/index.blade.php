@@ -49,13 +49,13 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <button class="btn btn-outline-secondary btn-sm decrement-btn" style="padding: 5px 10px; background:#47008E; color:#fff; font-size:18px">-</button>
-                                            <input type="number" value="1" class="quantity-input text-center mx-2" style="width: 50px;" min="1">
+                                            <input type="number" value="0" class="quantity-input text-center mx-2" style="width: 50px;" min="0">
                                             <button class="btn btn-outline-secondary btn-sm increment-btn" style="padding: 5px 10px; background:#47008E; color:#fff; font-size:18px">+</button>
                                         </div>
                                     </td>
                                     <td>
                                         <span class="total-price" style="color: #47008E">
-                                            ₦{{ number_format($property->valuationSummary->current_value_sum ?? $property->price, 2) }}
+                                            ₦0.00 {{-- Initial total price is 0 --}}
                                         </span>
                                     </td>
                                 </tr>
@@ -146,9 +146,10 @@ function updateTotalWithCommission(row) {
     const quantityInput = row.querySelector('.quantity-input');
     const availableSizeElement = row.querySelector('.available-size');
     const initialSize = parseFloat(availableSizeElement.dataset.initialSize);
-    const quantity = parseInt(quantityInput.value) || 1;
+    const quantity = parseInt(quantityInput.value) || 0; // Default to 0 if input is invalid
     const total = price * quantity;
-    const remainingSize = Math.max(initialSize - quantity, 1);
+    // Ensure remaining size doesn't go below 0, but can be 0
+    const remainingSize = Math.max(initialSize - quantity, 0); 
 
     let totalWithCommission = total;
 
@@ -177,21 +178,33 @@ document.querySelectorAll('.cart__table tbody tr').forEach(row => {
     const decrementBtn = row.querySelector('.decrement-btn');
     const incrementBtn = row.querySelector('.increment-btn');
     const quantityInput = row.querySelector('.quantity-input');
+    const availableSizeElement = row.querySelector('.available-size');
+    const initialSize = parseFloat(availableSizeElement.dataset.initialSize); // Available size
 
     decrementBtn.addEventListener('click', () => {
-        if (quantityInput.value > 1) {
+        if (quantityInput.value > 0) { // Allow decrementing to 0
             quantityInput.value--;
             updateTotalWithCommission(row);
         }
     });
 
     incrementBtn.addEventListener('click', () => {
-        quantityInput.value++;
-        updateTotalWithCommission(row);
+        if (parseInt(quantityInput.value) < initialSize) {
+            quantityInput.value++;
+            updateTotalWithCommission(row);
+        } else {
+            alert(`You cannot exceed the available size of ${initialSize} per/sqm.`);
+        }
     });
 
     quantityInput.addEventListener('input', () => {
-        if (quantityInput.value < 1) quantityInput.value = 1;
+        const currentVal = parseInt(quantityInput.value);
+        if (isNaN(currentVal) || currentVal < 0) { // Prevent negative values or non-numeric input
+             quantityInput.value = 0;
+        } else if (currentVal > initialSize) { // Prevent exceeding available size
+            alert(`You cannot exceed the available size of ${initialSize} per/sqm.`);
+            quantityInput.value = initialSize;
+        }
         updateTotalWithCommission(row);
     });
 });
@@ -211,6 +224,12 @@ document.getElementById('make-payment-btn').addEventListener('click', function(e
     const availableSizeElement = row.querySelector('.available-size');
     const remainingSize = availableSizeElement.textContent.trim().split(' ')[0]; 
     const quantity = row.querySelector('.quantity-input').value.trim();
+
+    // Prevent showing payment form if quantity is 0
+    if (parseInt(quantity) <= 0) {
+        alert('Please select a quantity greater than 0 to proceed.');
+        return; // Stop the function here
+    }
     const totalPrice = row.querySelector('.total-price').textContent.replace(/₦|,/g, '').trim();
 
     document.getElementById('remaining_size').value = remainingSize;
@@ -229,6 +248,13 @@ document.getElementById('confirm-payment-btn').addEventListener('click', functio
         alert('Please enter a valid 4-digit PIN.');
         e.preventDefault();
     }
+});
+
+// Initial update on page load to set correct initial total and remaining size
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.cart__table tbody tr').forEach(row => {
+        updateTotalWithCommission(row);
+    });
 });
 </script>
 @endsection

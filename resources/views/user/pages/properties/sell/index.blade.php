@@ -25,7 +25,7 @@
                                 <th colspan="2" class="text-center">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody> 
                             @php
                                 $sellableProperties = $sellProperty->filter(function ($item) {
                                     return isset($item->total_selected_size_land) && is_numeric($item->total_selected_size_land) && $item->total_selected_size_land > 0;
@@ -82,9 +82,7 @@
                                 </td>
                             </tr>
                             @empty
-                            {{-- This message shows if $sellableProperties is empty --}}
                             <tr>
-                                {{-- Span across all table columns --}}
                                 <td colspan="5">
                                     <div class="text-center p-5 border-top">
                                         <i class="fas fa-store-slash fa-3x text-muted mb-3"></i>

@@ -53,19 +53,19 @@
                                         <div class="d-flex align-items-center">
                                             <button class="btn btn-outline-secondary btn-sm decrement-btn" 
                                                 style="padding: 5px 10px; background:#47008E; color:#fff; font-size:18px">-</button>
-                                            <input type="number" value="1" class="quantity-input text-center mx-2" 
-                                                style="width: 50px;" min="1">
+                                            <input type="number" value="0" class="quantity-input text-center mx-2"
+                                                style="width: 50px;" min="0">
                                             <button class="btn btn-outline-secondary btn-sm increment-btn" 
                                                 style="padding: 5px 10px; background:#47008E; color:#fff; font-size:18px">+</button>
                                         </div>
                                     </td>
                                     @if($property->valuationSummary) 
                                         <td>
-                                            <span class="total-price" style="color: #47008E">₦{{ number_format($property->valuationSummary->current_value_sum, 2) }}</span>
+                                            <span class="total-price" style="color: #47008E">₦0.00</span> {{-- Initial total price is 0 --}}
                                         </td>
                                     @else
                                         <td>
-                                            <span class="total-price" style="color: #47008E">₦{{ number_format($property->price, 2) }}</span>
+                                            <span class="total-price" style="color: #47008E">₦0.00</span> {{-- Initial total price is 0 --}}
                                         </td>
                                     @endif
                                 </tr>
@@ -105,10 +105,10 @@ function updateCart(row) {
     const availableSizeElement = row.querySelector('.available-size');
     const initialSize = parseFloat(availableSizeElement.dataset.initialSize);
 
-    const quantity = parseInt(quantityInput.value) || 1;
+    const quantity = parseInt(quantityInput.value) || 0; // Default to 0 if input is invalid
     const total = price * quantity;
-    const remainingSize = Math.max(initialSize - quantity, 1); // Prevent negative sizes
-
+    // Ensure remaining size doesn't go below 0, but can be 0
+    const remainingSize = Math.max(initialSize - quantity, 0); 
     row.querySelector('.total-price').textContent = `₦${total.toLocaleString('en-NG', { minimumFractionDigits: 2 })}`;
     availableSizeElement.textContent = `${remainingSize} SQM`;
 }
@@ -123,7 +123,7 @@ document.querySelectorAll('.cart__table tbody tr').forEach(row => {
 
 
     decrementBtn.addEventListener('click', () => {
-        if (quantityInput.value > 1) {
+        if (quantityInput.value > 0) { // Allow decrementing to 0
             quantityInput.value--;
             updateCart(row);
         }
@@ -139,9 +139,17 @@ document.querySelectorAll('.cart__table tbody tr').forEach(row => {
     });
 
     quantityInput.addEventListener('input', () => {
-        if (quantityInput.value < 1) quantityInput.value = 1;
+        const currentVal = parseInt(quantityInput.value);
+        if (isNaN(currentVal) || currentVal < 0) { // Prevent negative values or non-numeric input
+             quantityInput.value = 0;
+        } else if (currentVal > initialSize) { // Prevent exceeding available size
+            alert(`You cannot exceed the available size of ${initialSize} per/sqm.`);
+            quantityInput.value = initialSize;
+        }
         updateCart(row);
     });
+    // Initial update on page load
+    updateCart(row);
 });
 
 // Handle "Make Payment" button click
@@ -155,6 +163,13 @@ document.getElementById('make-payment-btn').addEventListener('click', function(e
  
     // Update hidden input fields
     document.getElementById('remaining_size').value = remainingSize;
+
+    // Prevent submission if quantity is 0
+    if (parseInt(quantity) <= 0) {
+        alert('Please select a quantity greater than 0 to transfer.');
+        return; // Stop the function here
+    }
+
     document.getElementById('quantity').value = quantity;
     document.getElementById('total_price').value = totalPrice;
 
