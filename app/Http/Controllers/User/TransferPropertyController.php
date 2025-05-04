@@ -779,6 +779,8 @@ class TransferPropertyController extends Controller
                 }
             }
 
+            dd($landDeducted);
+
             if (!$landDeducted) {
                 throw new \Exception('Insufficient land size available for transfer', 400);
             }
