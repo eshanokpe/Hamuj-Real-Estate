@@ -774,18 +774,18 @@ class TransferPropertyController extends Controller
                     $landDeducted = true;
                     break;
                 }
-                dd([
-                    'selected_size_land' => $item->selected_size_land,
-                    'landSize' => $landSize
-                ]);
+                // dd([
+                //     'selected_size_land' => $item->selected_size_land,
+                //     'landSize' => $landSize
+                // ]);
             }
            
 
-            dd($landDeducted);
+            // dd($landDeducted);
 
-            if (!$landDeducted) {
-                throw new \Exception('Insufficient land size available for transfer', 400);
-            }
+            // if (!$landDeducted) {
+            //     throw new \Exception('Insufficient land size available for transfer', 400);
+            // }
 
             // Create new buy record for recipient
             Buy::create([
