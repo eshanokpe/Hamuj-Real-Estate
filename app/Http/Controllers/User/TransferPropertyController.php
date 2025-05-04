@@ -741,10 +741,7 @@ class TransferPropertyController extends Controller
             if ($notification->data['status'] == 'approved') {
                 throw new \Exception('Transfer already approved', 400);
             }
-            // dd([
-            //     'recipient_balance' => $recipientWallet->balance,
-            //     'required_amount' => $requiredAmountInNaira
-            // ]);
+            
             // Check sender's wallet balance
             if ($recipientWallet->balance < $requiredAmountInNaira) {
             
@@ -777,7 +774,12 @@ class TransferPropertyController extends Controller
                     $landDeducted = true;
                     break;
                 }
+                dd([
+                    'selected_size_land' => $item->selected_size_land,
+                    'landSize' => $landSize
+                ]);
             }
+           
 
             dd($landDeducted);
 
