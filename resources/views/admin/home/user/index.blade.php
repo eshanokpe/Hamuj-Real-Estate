@@ -36,6 +36,7 @@
                                             <th class="width80">#</th>
                                             <th>Full Name</th>
                                             <th>Email</th>
+                                            <th>Balance</th>
                                             <th>DATE   </th>
                                             <th class="text-end">Action</th>
                                         </tr>
@@ -47,6 +48,7 @@
                                                 <td><strong>{{  $index + 1 }}</strong></td>
                                                 <td>{{ $user->first_name . ' ' . $user->last_name }}</td>
                                                 <td>{{ $user->email ?? ''}}</td>
+                                                <td>₦{{ number_format($user->wallet->balance ?? 0, 2) }}</td>
                                                 <td>{{ $user->created_at->format('d F Y') ??'' }}</td>
                                                 <td class="text-end">                                                       
                                                     <a class="btn btn-primary text-white" href="{{ route('admin.users.show', encrypt($user->id) )  }}" ><i class="las la-eye text-white font-16"></i></a>
