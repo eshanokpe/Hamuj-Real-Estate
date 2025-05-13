@@ -108,6 +108,7 @@ class AuthMethodController extends Controller
         $user->update([
             'active' => false,
             'deactivated_at' => now(),
+            'deactivation_reason' => $request->reason,
         ]);
 
         // Revoke tokens

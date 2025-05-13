@@ -8,28 +8,23 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
-    { 
+    public function up(): void
+    {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('active')->default(true)->after('email_verified_at'); // Adjust placement as needed
+            $table->boolean('active')->default(true)->after('email_verified_at');
             $table->timestamp('deactivated_at')->nullable()->after('active');
+            $table->string('deactivation_reason')->nullable()->after('deactivated_at');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            Schema::table('users', function (Blueprint $table) {
-                $table->dropColumn(['active', 'deactivated_at']);
-            });
+            $table->dropColumn(['active', 'deactivated_at', 'deactivation_reason']);
         });
     }
 };
