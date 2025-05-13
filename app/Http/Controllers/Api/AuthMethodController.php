@@ -87,24 +87,24 @@ class AuthMethodController extends Controller
         ]);
     }
 
-    public function deactivateAccount(Request $request)
+     public function deactivateAccount(Request $request)
     {
-        $user = Auth::user();
+        $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+            'reason' => 'required|string|max:255',
+        ]);
+
+        $user = User::find($request->user_id);
+
         if (!$user) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Unauthorized access.',
-            ], 401);
+                'message' => 'User not found.',
+            ], 404);
         }
-        // Optionally validate the reason
-        $request->validate([
-            'reason' => 'required|string|max:255',
-        ]);
- 
-        // Log reason for deactivation (optional)
+
         \Log::info("User {$user->id} deactivated account. Reason: " . $request->reason);
 
-        // Perform deactivation (e.g., soft delete or status update)
         $user->update([
             'active' => false,
             'deactivated_at' => now(),
@@ -118,4 +118,5 @@ class AuthMethodController extends Controller
             'message' => 'Account successfully deactivated.',
         ], 200);
     }
+
 }
