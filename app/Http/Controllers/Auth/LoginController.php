@@ -106,7 +106,37 @@ class LoginController extends Controller
 
   
 
-   
+    public function deactivateAccount(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+            'reason' => 'required|string|max:255',
+        ]);
+
+        $user = User::find($request->user_id);
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found.',
+            ], 404);
+        }
+
+        \Log::info("User {$user->id} deactivated account. Reason: " . $request->reason);
+
+        $user->update([
+            'active' => false,
+            'deactivated_at' => now(),
+        ]);
+
+        // Revoke tokens
+        $user->tokens()->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Account successfully deactivated.',
+        ], 200);
+    }
 
 
     public function logout(Request $request)
