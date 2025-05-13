@@ -51,6 +51,21 @@ class LoginController extends Controller
         // Attempt to log in with credentials
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
+            // Check if the user account is active
+            if (!$user->active) {
+                Auth::logout();
+
+                if ($request->wantsJson()) {
+                    return response()->json([
+                        'message' => 'Account deactivated.',
+                        'error' => 'Your account has been deactivated. Please contact support.',
+                    ], 403);
+                }
+
+                return back()->withErrors([
+                    'login_error' => 'Your account has been deactivated. Please contact support.',
+                ])->onlyInput('email');
+            }
             if (Auth::user()->hasVerifiedEmail()) {
                 $user->update([
                     'last_login_at' => now(),
