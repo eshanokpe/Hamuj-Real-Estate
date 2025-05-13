@@ -30,4 +30,9 @@ class Buy extends Model
     {
         return $this->hasOne(PropertyValuationSummary::class, 'property_id', 'property_id');
     }
-}
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+} 

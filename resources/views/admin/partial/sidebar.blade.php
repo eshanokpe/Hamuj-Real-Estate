@@ -75,6 +75,30 @@
                         </a>
                     </li><!--end nav-item-->
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.wallet') }}" >
+                            <i class="ti ti-wallet menu-icon"></i>
+                            <span>Wallet</span>
+                        </a>
+                    </li><!--end nav-item-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.transaction') }}" >
+                            <i class="ti ti-wallet menu-icon"></i>
+                            <span>Transactions</span>
+                        </a>
+                    </li><!--end nav-item-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.walletTransaction') }}" >
+                            <i class="ti ti-wallet menu-icon"></i>
+                            <span>Wallet Transactions</span>
+                        </a>
+                    </li><!--end nav-item-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.referral') }}" >
+                            <i class="ti ti-wallet menu-icon"></i>
+                            <span>Referral</span>
+                        </a>
+                    </li><!--end nav-item-->
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.post.index')}}" >
                             <i class="ti ti-shopping-cart menu-icon"></i>

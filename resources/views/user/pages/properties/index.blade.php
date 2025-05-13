@@ -45,10 +45,10 @@
                                                         <p class="properties__author--price text-decoration-line-through text-muted">₦{{ number_format($item->valuationSummary->initial_value_sum, 2)}} per/sqm</p>
                                                         <p class="reviews__author--title">{{$item->valuationSummary->percentage_value}}%</p>
                                                     @else   
-                                                        <span class="properties__author--price">₦{{ number_format($item->property->price, 2)}} per/sqm</span>
+                                                        <span class="properties__author--price">₦{{ number_format($item->price, 2)}} per/sqm</span>
                                                         <p class="reviews__author--title">{{$item->percentage_increase}}%</p>
 
-                                                    @endif
+                                                    @endif 
                                                 </div>
                                             </div>
                                         </td>

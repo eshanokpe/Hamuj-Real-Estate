@@ -35,11 +35,10 @@
                                     <thead> 
                                         <tr>
                                             <th class="width80">#</th>
-                                            <th>User ID</th>
+                                            <th>User FullName</th>
                                             <th>User Email</th>
-                                            <th>Property ID</th>
                                             <th>Property Name</th>
-                                            <th>Recipient ID</th>
+                                            <th>Recipient FullName</th>
                                             <th>Land Size</th>
                                             <th>Transaction ID</th>
                                             <th>Total Price</th>                                            
@@ -56,28 +55,48 @@
                                         @forelse ($transfers as $transfer)
                                             <tr>
                                                 <td><strong>{{ $loop->iteration }}</strong></td>
-                                                <td>{{ $transfer->user_id }}</td>
+                                                <td style="text-transform: uppercase;">
+                                                    {{ $transfer->user->first_name ?? '' }} {{ $transfer->user->last_name ?? '' }}
+                                                </td>
                                                 <td>{{ $transfer->user_email }}</td>
-                                                <td>{{ $transfer->property_id }}</td>
                                                 <td>{{ $transfer->property_name }}</td>
-                                                <td>{{ $transfer->recipient_id }}</td>
+                                                <td style="text-transform: uppercase;">
+                                                    {{ $transfer->recipient->first_name ?? '' }} {{ $transfer->recipient->last_name ?? '' }}
+                                                </td>
+                                                
                                                 <td>{{ $transfer->land_size }}</td>
                                                 <td>{{ $transfer->reference }}</td>
                                                 <td>₦{{ number_format($transfer->total_price, 2) }}</td>
-                                                <td>{{ $transfer->status }}</td> 
-                                                <td>{{ $transfer->confirmation_status }}</td> 
+                                                <td>
+                                                    @if($transfer->status === 'pending')
+                                                        <button class="btn btn-warning btn-sm">{{ ucfirst($transfer->status) }}</button>
+                                                    @elseif($transfer->status === 'confirmed' || $transfer->status === 'approved')
+                                                        <button class="btn btn-success btn-sm">{{ ucfirst($transfer->status) }}</button>
+                                                    @elseif($transfer->status === 'failed' || $transfer->status === 'cancelled')
+                                                        <button class="btn btn-danger btn-sm">{{ ucfirst($transfer->status) }}</button>
+                                                    @endif 
+                                                </td>
+                                                <td>
+                                                    @if($transfer->confirmation_status === 'pending')
+                                                        <button class="btn btn-warning btn-sm">{{ ucfirst($transfer->confirmation_status) }}</button>
+                                                    @elseif($transfer->confirmation_status === 'confirmed' || $transfer->confirmation_status === 'approved')
+                                                        <button class="btn btn-success btn-sm">{{ ucfirst($transfer->confirmation_status) }}</button>
+                                                    @elseif($transfer->confirmation_status === 'failed' || $transfer->confirmation_status === 'cancelled')
+                                                        <button class="btn btn-danger btn-sm">{{ ucfirst($transfer->confirmation_status) }}</button>
+                                                    @endif 
+                                                </td>
                                                 <td>{{ $transfer->confirmation_date ? \Carbon\Carbon::parse($transfer->confirmation_date)->format('d F Y') : 'N/A' }}</td>
                                                 <td>
-                                                    @if ($transfer->confirmed_by == 1)
+                                                    @if ($transfer->confirmed_by == 3)
                                                         Admin
-                                                    @elseif ($transfer->confirmed_by == 2)
+                                                    @elseif ($transfer->confirmed_by == 6)
                                                         Sales Rep
                                                     @else
                                                         None
                                                     @endif
                                                 </td>
 
-                                                <td>{{ $transfer->rejection_reason }}</td>
+                                                <td>{{ $transfer->rejection_reason ?? 'None' }}</td>
                                                 <td>{{ $transfer->created_at ? $transfer->created_at->format('d F Y') : 'N/A' }}</td>
                                                 
                                                 <td class="text-end">

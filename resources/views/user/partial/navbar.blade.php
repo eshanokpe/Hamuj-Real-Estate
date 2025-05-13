@@ -122,7 +122,7 @@
                         </script>
                        <div class="dropdown__related--apps">
                         <h3 class="dropdown__apps--title">Notification</h3>
-                        <ul class="dropdown__apps--menu">
+                        <ul class="dropdown__apps--menu"> 
                             <div class="chat__inbox">
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="chat">
@@ -164,7 +164,7 @@
                                                             </a>
                                                         </li>
                                                     @endforeach
-
+                                                    
                                                     @foreach ($notificationsBar as $notification)
                                                         <li class="chat__inbox--menu__list mb-2">
                                                             <snap class="sales__report--status pending2"> {{ $notification->data['message'] }}</snap>

@@ -603,4 +603,3 @@ if (document.getElementById('properties')) {
         </React.StrictMode>
     )
 }
-

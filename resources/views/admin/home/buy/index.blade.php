@@ -35,9 +35,9 @@
                                     <thead> 
                                         <tr>
                                             <th class="width80">#</th>
-                                            <th>User ID</th>
+                                            <th>User FullName</th>
                                             <th>User Email</th>
-                                            <th>Property ID</th>
+                                            <th>Property Name</th>
                                             <th>Transaction ID</th>
                                             <th>Selected Size Land</th>
                                             <th>Remaining Size</th>
@@ -51,9 +51,9 @@
                                         @forelse ($buys as $buy)
                                             <tr>
                                                 <td><strong>{{ $loop->iteration }}</strong></td>
-                                                <td>{{ $buy->user_id }}</td>
+                                                <td style="text-transform: uppercase;">{{ $buy ->user->first_name. ' ' . $buy->user->last_name}}</td>
                                                 <td>{{ $buy->user_email }}</td>
-                                                <td>{{ $buy->property_id }}</td>
+                                                <td>{{ $buy->property->name }}</td>
                                                 <td>{{ $buy->transaction_id }}</td>
                                                 <td>{{ $buy->selected_size_land }}</td>
                                                 <td>{{ $buy->remaining_size }}</td>

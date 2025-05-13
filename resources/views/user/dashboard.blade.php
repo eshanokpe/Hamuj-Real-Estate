@@ -48,6 +48,7 @@
                 <div class="main__content--left__inner">
                     <!-- Welcome section -->
                     <div class="dashboard__chart--box mb-30">
+                        
                         <h2 class="dashboard__chart--title"> Hi, {{ auth::user()->last_name}} {{ auth::user()->first_name}}</h2>
                         <div class="row">
                             <div class="col-lg-12">
@@ -151,7 +152,7 @@
                             <thead>
                                 <tr>
                                     <th style="width: 5%; padding: 10px;">#</th> <!-- Minimal space for index -->
-                                    <th style="width: 20%; padding: 5px;">Transaction Ref</th>
+                                    <th style="width: 20%; padding: 5px;">Transaction Refs</th>
                                     <th style="width: 20%; padding: 5px;">Payment Method</th>
                                     <th style="width: 15%; padding: 5px;">Amount</th>
                                     <th style="width: 15%; padding: 5px;">Created</th>

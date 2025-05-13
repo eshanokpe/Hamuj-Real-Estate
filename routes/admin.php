@@ -5,6 +5,11 @@ use App\Http\Controllers\Admin\BuyController;
 use App\Http\Controllers\Admin\SellController;
 use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WalletController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\WalletTransactionController;
+use App\Http\Controllers\Admin\ReferralController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\TermsController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Admin\AdminController;
@@ -66,30 +71,7 @@ Route::prefix('admin')->group(function () {
         });
 
 
-        // Buy Routes
-        Route::name('admin.')->group(function () {
-            Route::get('buy', [BuyController::class, 'index'])->name('buy.index');
-            Route::get('{id}/editbuy', [BuyController::class, 'edit'])->name('buy.edit');
-            Route::put('{id}/buy', [BuyController::class, 'update'])->name('buy.update');
-            Route::delete('{id}/buy', [BuyController::class, 'destroy'])->name('buy.destroy');
-        });
-
-               
-        // Sell Routes
-        Route::name('admin.')->group(function () {
-            Route::get('sell', [SellController::class, 'index'])->name('sell.index');
-            Route::get('{id}/editsell', [SellController::class, 'edit'])->name('sell.edit');
-            Route::put('{id}/sell', [SellController::class, 'update'])->name('sell.update');
-            Route::delete('{id}/sell', [SellController::class, 'destroy'])->name('sell.destroy');
-        });
-
-        // Transfer Routes
-        Route::name('admin.')->group(function () {
-            Route::get('transfer', [TransferController::class, 'index'])->name('transfer.index');
-            Route::get('{id}/edittransfer', [TransferController::class, 'edit'])->name('transfer.edit');
-            Route::put('{id}/transfer', [TransferController::class, 'update'])->name('transfer.update');
-            Route::delete('{id}/transfer', [TransferController::class, 'destroy'])->name('transfer.destroy');
-        });
+       
         
 
         //Property
@@ -185,11 +167,56 @@ Route::prefix('admin')->group(function () {
             Route::get('user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
         });
        
+        Route::name('admin.')->group(function () {
+            Route::get('wallet/index', [WalletController::class, 'index'])->name('wallet');
+        });
 
-       Route::get('buy/index', [BuyController::class, 'index'])->name('admin.buy');
-       Route::get('transfer/index', [Transferontroller::class, 'index'])->name('admin.transfer');
-       Route::get('sell/index', [SellController::class, 'index'])->name('admin.sell');
-
+        Route::name('admin.')->group(function () {
+            Route::get('transaction/index', [TransactionController::class, 'index'])->name('transaction');
+        });
         
+        Route::name('admin.')->group(function () {
+            Route::get('wallettransaction/index', [WalletTransactionController::class, 'index'])->name('walletTransaction');
+        });
+
+        Route::name('admin.')->group(function () {
+            Route::get('referral/index', [ReferralController::class, 'index'])->name('referral');
+            Route::get('referral/{id}/show', [ReferralController::class, 'edit'])->name('referral.show');
+            Route::put('referral/{id}/', [ReferralController::class, 'update'])->name('referral.update');
+        });
+       //Route::get('buy/index', [BuyController::class, 'index'])->name('admin.buy');
+       //Route::get('transfer/index', [Transferontroller::class, 'index'])->name('admin.transfer');
+       //Route::get('sell/index', [SellController::class, 'index'])->name('admin.sell');
+
+        // Buy Routes
+        Route::name('admin.')->group(function () {
+            Route::get('buy', [BuyController::class, 'index'])->name('buy.index');
+            Route::get('{id}/editbuy', [BuyController::class, 'edit'])->name('buy.edit');
+            Route::put('{id}/buy', [BuyController::class, 'update'])->name('buy.update');
+            Route::delete('{id}/buy', [BuyController::class, 'destroy'])->name('buy.destroy');
+        });
+
+               
+        // Sell Routes
+        Route::name('admin.')->group(function () {
+            Route::get('sell', [SellController::class, 'index'])->name('sell.index');
+            Route::get('{id}/editsell', [SellController::class, 'edit'])->name('sell.edit');
+            Route::put('{id}/sell', [SellController::class, 'update'])->name('sell.update');
+            Route::delete('{id}/sell', [SellController::class, 'destroy'])->name('sell.destroy');
+        });
+
+        // Transfer Routes
+        Route::name('admin.')->group(function () {
+            Route::get('transfer', [TransferController::class, 'index'])->name('transfer.index');
+            Route::get('{id}/edittransfer', [TransferController::class, 'edit'])->name('transfer.edit');
+            Route::put('{id}/transfer', [TransferController::class, 'update'])->name('transfer.update');
+            Route::delete('{id}/transfer', [TransferController::class, 'destroy'])->name('transfer.destroy');
+        });
+
+        Route::name('admin.')->group(function () {
+            Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+            Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+            Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        });
     });  
 }); 

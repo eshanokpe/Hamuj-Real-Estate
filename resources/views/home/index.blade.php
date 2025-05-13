@@ -140,7 +140,7 @@
             </div>
             <div class="featured__inner" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="150">
                 <div class="row mb--n30">
-                    @forelse ($properties as $recentProperty)
+                    @forelse ($properties as $recentProperty) 
                         <div class="col-xl-6 offset-xl-0 col-lg-10 offset-lg-1 mb-30">
                             <article class="featured__card--list d-flex">
                                 <div class="featured__card--list__thumbnail position-relative">

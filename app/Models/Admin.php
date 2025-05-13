@@ -14,4 +14,9 @@ class Admin extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password', 'phone', 'last_login', 'login_ip', 'otp'
     ];
+
+    public function notifications()
+    {
+        return $this->morphMany(CustomNotification::class, 'notifiable')->orderBy('created_at', 'desc');
+    }
 }

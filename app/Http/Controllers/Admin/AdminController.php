@@ -9,6 +9,8 @@ use App\Models\MenuItem;
 use App\Models\DropdownItem;
 use App\Models\Property;
 use App\Models\Slider;
+use App\Models\Admin;
+
  
 class AdminController extends Controller
 {
@@ -24,6 +26,7 @@ class AdminController extends Controller
             'users' => User::count(),
             'properties' => Property::count(),
         ];
+
         return view('admin.home.index', $data);
     }
 

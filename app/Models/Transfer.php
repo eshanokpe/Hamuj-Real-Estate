@@ -25,7 +25,7 @@ class Transfer extends Model
         'confirmed_by',
         'rejection_reason'
     ]; 
-    
+     
     public function property()
     {
         return $this->belongsTo(Property::class);
@@ -38,8 +38,14 @@ class Transfer extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function recipient()
+    { 
+        return $this->belongsTo(User::class, 'recipient_id');
+    }    
+    
 
     public function valuationSummary()
     {

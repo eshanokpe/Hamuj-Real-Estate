@@ -99,7 +99,7 @@
                         <div class="listing__details--content__top mb-25 d-flex align-items-center justify-content-between">
                             <div class="listing__details--meta">
                                 <ul class="listing__details--meta__wrapper d-flex align-items-center">
-                                    <li><span class="listing__details--badge">Featured</span></li>
+                                    <li><span class="listing__details--badge">Featured losss</span></li>
                                     <li><span class="listing__details--badge two">{{ ucfirst($property->status)}}</span></li>
                                     <li>
                                         <span class="listing__details--meta__icon">

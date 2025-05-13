@@ -43,7 +43,7 @@ class SellController extends Controller
 
         $sell->update($updateData);
 
-        return redirect()->route('admin.buy.index')->with('success', 'Sell Property updated successfully.');
+        return redirect()->route('admin.sell.index')->with('success', 'Sell Property updated successfully.');
     }
 
 }

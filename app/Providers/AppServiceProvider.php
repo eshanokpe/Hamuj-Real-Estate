@@ -5,8 +5,10 @@ use App\Services\WalletService;
 use function App\Helpers\getWalletBalance;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Notifications\DatabaseNotification;
 use Auth;
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\Faqs;
 use App\Models\Post;
 use App\Models\About;
@@ -66,17 +68,8 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('*', function ($view) {
             $walletBalance = (new WalletService())->getWalletBalance(); 
-            // or
-            // $walletBalance = getWalletBalance(); 
-
             $view->with('wallet', $walletBalance);
-        //     if (Auth::check()) {
-        //         $wallet = Auth::user()->wallet;
-        //         $balance = $wallet ? $wallet->balance : 0;
-        //         $view->with('wallet', $wallet);
-        //     } else {
-        //         $view->with('wallet', 0);
-        //     }
+        
         }); 
         View::composer('*', function ($view) {
             if (Auth::check()) {
@@ -100,6 +93,31 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('notificationsBar', 0);
             }
         });
+        View::composer('*', function ($view) {
+            if (Auth::guard('admin')->check()) {
+                $admin = Auth::guard('admin')->user();
+
+                // Admin sees all notifications related to users
+                $notifications = DatabaseNotification::whereNull('read_at')
+                    ->orderBy('created_at', 'desc')
+                    ->take(10)
+                    ->get();
+                $unreadCount = DatabaseNotification::whereNull('read_at')->count();
+        
+                $view->with([
+                    'notificationsAdminBar' => $notifications,
+                    'unreadAdminCount' => $unreadCount,
+                ]);
+        
+                
+            } else {
+                $view->with('notificationsAdminBar', 0);
+            }
+            
+        });
+
+        
+        
         
         
 

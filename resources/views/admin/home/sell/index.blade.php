@@ -51,9 +51,9 @@
                                         @forelse ($sells as $sell)
                                             <tr>
                                                 <td><strong>{{ $loop->iteration }}</strong></td>
-                                                <td>{{ $sell->user_id }}</td>
+                                                <td style="text-transform: uppercase;">{{ $sell ->user->first_name. ' ' . $sell->user->last_name}}</td>
                                                 <td>{{ $sell->user_email }}</td>
-                                                <td>{{ $sell->property_id }}</td>
+                                                <td>{{ $sell->property->name }}</td>
                                                 <td>{{ $sell->transaction_id }}</td>
                                                 <td>{{ $sell->selected_size_land }}</td>
                                                 <td>{{ $sell->remaining_size }}</td>

@@ -56,7 +56,7 @@ Route::get('/paystack/create-customer', [WalletController::class, 'createCustome
 Route::get('/paystack/create-dedicated-account', [WalletController::class, 'createDedicatedAccount']);
 
 Route::prefix('home')->name('home.')->group(function () {
-    Route::get('/properties/{slug}', [HomeController::class, 'showProperties'])->name('properties.show');
-
+    Route::get('/properties/{slug}', [HomesController::class, 'showProperties'])->name('properties.show');
+ 
 
 });

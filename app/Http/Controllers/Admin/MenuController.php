@@ -20,7 +20,7 @@ class MenuController extends Controller
         $menuItems = MenuItem::with('dropdownItems')->get();
         return view('admin.menu.index', compact('menuItems'));
     }
-
+ 
     public function store(Request $request){
         $this->validateMenu($request); 
         $name = $request->name; 

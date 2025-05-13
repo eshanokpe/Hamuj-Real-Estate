@@ -62,34 +62,48 @@ class User extends Authenticatable
         return "{$this->first_name} {$this->last_name}";
     }
 
-
     public function virtualAccounts()
     {
-        return $this->hasMany(VirtualAccount::class);
+        return $this->hasOne(VirtualAccount::class);
     } 
 
-
     public function wallet()
-    {
+    { 
         return $this->hasOne(Wallet::class);
     }
     public function notifications()
     {
         return $this->morphMany(CustomNotification::class, 'notifiable')->orderBy('created_at', 'desc');
     }
-    public function referralsMade()
+    public function referralsMade() 
     {
         return $this->hasMany(ReferralLog::class, 'referrer_id');
     }
-    public function referralsReceived()
+    public function referralsReceived() 
     {
         return $this->hasMany(ReferralLog::class, 'id');
     }
     
     public function walletTransactions()
     {
-        return $this->hasMany(WalletTransaction::class);
+        return $this->hasOne(WalletTransaction::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasOne(Transaction::class);
+    }
+
+    public function buy()
+    {
+        return $this->hasOne(Buy::class);
+    }
+
+    public function sell()
+    {
+        return $this->hasOne(Sell::class);
+    }
+
 
     public function successfulReferrals()
     {

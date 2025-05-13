@@ -17,12 +17,12 @@ class VirtualAccount extends Model
         'account_name',
         'account_number',
         'currency',
-        'customer_code',
+        'customer_code', 
         'is_active',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

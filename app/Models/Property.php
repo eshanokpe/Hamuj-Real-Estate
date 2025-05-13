@@ -59,6 +59,7 @@ class Property extends Model
     {
         return $this->hasMany(PropertyPriceUpdate::class);
     }
+    
 
     public function notifications()
     {

@@ -35,7 +35,7 @@ class PropertyController extends Controller
         
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json([
-                'user' => $data['user'],
+                'user' => $data['user'], 
                 'properties' => $data['properties'],
             ]);
         }
