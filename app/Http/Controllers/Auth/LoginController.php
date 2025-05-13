@@ -104,6 +104,36 @@ class LoginController extends Controller
         ]);
     }
 
+  
+
+    public function deactivateAccount(Request $request)
+    {
+        $user = Auth::user();
+
+        // Optionally validate the reason
+        $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
+
+        // Log reason for deactivation (optional)
+        \Log::info("User {$user->id} deactivated account. Reason: " . $request->reason);
+
+        // Perform deactivation (e.g., soft delete or status update)
+        $user->update([
+            'active' => false,
+            'deactivated_at' => now(),
+        ]);
+
+        // Revoke tokens
+        $user->tokens()->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Account successfully deactivated.',
+        ], 200);
+    }
+
+
     public function logout(Request $request)
     {
         $user = Auth::user();

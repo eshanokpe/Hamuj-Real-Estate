@@ -44,6 +44,8 @@ use App\Http\Controllers\User\HelpSupportController;
 Route::post('register', [RegisterController::class, 'register']);
 Route::get('/check/email', [RegisterController::class, 'checkEmail']);
 Route::post('login', [LoginController::class, 'login']);
+Route::post('deactivate-account', [LoginController::class, 'deactivateAccount']);
+
  
  
  
