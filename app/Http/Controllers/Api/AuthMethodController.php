@@ -106,7 +106,8 @@ class AuthMethodController extends Controller
         \Log::info("User {$user->id} deactivated account. Reason: " . $request->reason);
 
         $user->update([
-            'active' => false,
+            'active' => 0,
+            'is_active' => 0,
             'deactivated_at' => now(),
             'deactivation_reason' => $request->reason,
         ]);
