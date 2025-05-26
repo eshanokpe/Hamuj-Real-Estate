@@ -102,7 +102,6 @@ const RevolutPayButton = () => {
 
   return (
     <div>
-      <h2>Pay with Revolut</h2>
       <div ref={buttonRef} />
     </div>
   );
