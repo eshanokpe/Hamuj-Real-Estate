@@ -1,0 +1,56 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.prismcheck.gaphub",
+      "sha256_cert_fingerprints": [
+        "AB:F0:39:67:17:DF:AC:8E:AA:96:01:68:8B:37:B9:88:56:9F:F8:AB:DE:38:5E:33:3A:14:6A:3F:49:B0:EE:21"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "web",
+      "site": "https://www.mygaphub.com"
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "web",
+      "site": "https://appstaging.mygaphub.com"
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.prismcheck.gaphub",
+      "sha256_cert_fingerprints": [
+        "AB:F0:39:67:17:DF:AC:8E:AA:96:01:68:8B:37:B9:88:56:9F:F8:AB:DE:38:5E:33:3A:14:6A:3F:49:B0:EE:21"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.prismcheck.gaphub",
+      "sha256_cert_fingerprints": [
+        "48:52:CB:E0:C6:A9:31:AC:5E:32:B3:C2:17:A2:8F:6C:EF:64:FB:3D:52:0A:C1:79:20:3D:6F:C4:31:80:2F:40"
+      ]
+    }
+  }
+]

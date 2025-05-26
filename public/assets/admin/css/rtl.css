@@ -1,0 +1,364 @@
+/* Rtl css */
+@media only screen and (min-width: 1600px) {
+    [dir="rtl"] .main__header {
+        padding: 0 4rem 0 5rem;
+    }
+}
+[dir="rtl"] .header__user--profile__thumbnail{
+    margin-right: 0;
+    margin-left: 1rem;
+}
+[dir="rtl"] .header__user--profile__name{
+    margin-right: 0;
+    margin-left: 0.5rem;
+}
+[dir="rtl"] .dropdown__user--profile{
+    right: auto;
+    left: 0;
+}
+[dir="rtl"] .user__profile--menu__link svg{
+    margin-right: 0;
+    margin-left: 0.8rem;
+}
+[dir="rtl"] .profile__messages--count{
+    right: auto;
+    left: -3rem;
+}
+[dir="rtl"] .profile__upgrade--badge{
+    right: auto;
+    left: -5rem;
+}
+[dir="rtl"] .main__menu--items {
+    margin-left: 2rem;
+    margin-right: 0;
+}
+[dir="rtl"] .sidebar__menu--link__arrow{
+    right: auto;
+    left: 1.5rem;
+}
+[dir="rtl"] .main__menu--link svg{
+    margin-right: 0;
+    margin-left: 4px;
+}
+@media only screen and (min-width: 1366px) {
+    [dir="rtl"] .main__menu--items {
+        margin-left: 2.5rem;
+    }
+}
+@media only screen and (min-width: 1600px) {
+    [dir="rtl"] .main__menu--items {
+        margin-left: 3rem;
+    }
+}
+[dir="rtl"] .main__menu--items:last-child{
+    margin-left: 0;
+}
+[dir="rtl"] .main__menu {
+    padding-left: 2rem;
+    margin-left: 2rem;
+    padding-right: 0;
+    margin-right: 0;
+}
+@media only screen and (min-width: 1366px) {
+    [dir="rtl"] .main__menu {
+        padding-left: 2.5rem;
+        margin-left: 2.5rem;
+    }
+}
+[dir="rtl"] .main__menu::before{
+    left: 0;
+    right: auto;
+}
+[dir="rtl"] .search__box--icon{
+    right: 1rem;
+    left: auto;
+}
+[dir="rtl"] .search__box--input__field{
+    padding: 0 2.8rem 0 1rem;
+}
+[dir="rtl"] .collaps__menu{
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+}
+
+[dir="rtl"] .dashboard__sidebar{
+    right: 0;
+    left: auto;
+    border-left: 1px solid var(--color-border-2);
+    border-right: 0;
+}
+@media only screen and (max-width: 1199px) {
+    [dir="rtl"] .dashboard__sidebar {
+        transform: translateX(100%);
+    }
+    [dir="rtl"] .dashboard__sidebar.active {
+        transform: translateX(0);
+    }
+}
+[dir="rtl"] .offcanvas__header{
+    right: 0;
+    left: auto;
+    transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    -o-transform: translateX(100%);
+}
+[dir="rtl"] .offcanvas__header.open {
+    transform: translateX(0);
+}
+[dir="rtl"] .offcanvas__sub_menu_toggle{
+    left: 0;
+    right: auto;
+}
+[dir="rtl"] .offcanvas__sub_menu_item{
+    padding: 15px 30px 15px 0;
+}
+[dir="rtl"] .page__body--wrapper {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+@media only screen and (min-width: 1200px) {
+    [dir="rtl"] .page__body--wrapper {
+        padding-right: 24rem;
+    }
+}
+@media only screen and (min-width: 1366px) {
+    [dir="rtl"] .page__body--wrapper {
+        padding-right: 28rem;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    [dir="rtl"] .header__section {
+        padding-left: 0;
+        padding-right: 24rem;
+    }
+}
+
+@media only screen and (min-width: 1366px) {
+    [dir="rtl"] .header__section {
+        padding-left: 0;
+        padding-right: 28rem;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    [dir="rtl"] .header__section.active {
+        padding-right: 7rem;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    [dir="rtl"] .page__body--wrapper.active {
+        padding-right: 7rem;
+    }
+}
+[dir="rtl"] .sidebar__menu--icon {
+    margin-right: 0;
+    margin-left: 0.6rem;
+}
+[dir="rtl"] .sidebar__dropdown--menu__items{
+    padding-left: 0;
+    padding-right: 1.5rem;
+}
+[dir="rtl"] .sidebar__dropdown--menu__items::before{
+    right: 0;
+    left: auto;
+}
+
+[dir="rtl"] .welcome__content {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+@media only screen and (min-width: 576px) {
+    [dir="rtl"] .welcome__content {
+        padding-left: 2.5rem;
+    }
+}
+@media only screen and (min-width: 1600px) {
+    [dir="rtl"] .welcome__content {
+        padding-left: 7rem;
+    }
+}
+[dir="rtl"] .sales__report--short-by.select::before {
+    left: 1rem;
+    right: auto;
+}
+[dir="rtl"] .sales__report--author__name {
+    margin-left: 0;
+    margin-right: 1.5rem;
+}
+[dir="rtl"] .recent__activity--message{
+    padding-left: 0;
+    padding-right: 1.5rem;
+}
+
+[dir="rtl"] .recent__activity--message__list {
+    border-right: 1px dashed;
+    border-left: 0;
+    padding-left: 0;
+    padding-right: 3rem;
+}
+[dir="rtl"] .recent__activity--message__list.one {
+    border-right: 1px dashed rgba(22, 163, 74, 0.5);
+}
+[dir="rtl"] .recent__activity--message__list.two {
+    border-right: 1px dashed rgba(132, 90, 223, 0.5);
+}
+[dir="rtl"] .recent__activity--message__list.three {
+    border-right: 1px dashed rgba(231, 145, 188, 0.5);
+}
+[dir="rtl"] .recent__activity--message__list::before {
+    left: auto;
+    right: -1rem;
+}
+[dir="rtl"] .recent__activity--message__list::after{
+    left: 0;
+    right: -0.5rem;
+}
+[dir="rtl"] #scroll__top{
+    left: 2rem;
+    right: auto;
+}
+[dir="rtl"] .sold-out__box--header .sold-out__user--dropdown{
+    left: 0 !important;
+    right: auto !important;
+    transform: inherit !important;
+    top: 100% !important;
+}
+
+@media only screen and (max-width: 479px) {
+    [dir="rtl"] .dropdown__related--apps{
+        left: -12%;
+    }
+}
+
+/* Create listing rtl css */
+[dir="rtl"] .select::before{
+    right: auto;
+    left: 1.8rem;
+}
+[dir="rtl"] .interior__amenities--check__label{
+    padding-left: 0;
+    padding-right: 3rem;
+}
+[dir="rtl"] .interior__amenities--check__input{
+    right: 0;
+    left: auto;
+}
+[dir="rtl"] .interior__amenities--checkmark{
+    right: 0;
+    left: auto;
+}
+
+
+/* Chat page rtl css */
+[dir="rtl"] .chat__inbox--search__btn{
+    left: 1.5rem;
+    right: auto;
+}
+[dir="rtl"] .chat__inbox--search__input{
+    padding: 0 1.5rem 0 3.8rem;
+}
+[dir="rtl"] .chat__inbox--author__content{
+    padding-left: 0;
+    padding-right: 1rem;
+}
+[dir="rtl"] .chat__message--input__field{
+    padding: 0 10rem 0 5rem;
+}
+[dir="rtl"] .chat__message--btn__option.three {
+    right: auto;
+    left: 1.5rem;
+}
+[dir="rtl"] .chat__message--btn__option.two {
+    left: auto;
+    right: 6rem;
+}
+[dir="rtl"] .chat__message--btn__option.one {
+    left: auto;
+    right: 2rem;
+}
+
+
+/* my favorites rtl css */
+[dir="rtl"] .reviews__author--text {
+    padding-left: 0;
+    padding-right: 1rem;
+}
+
+[dir="rtl"] .reviews__action--wrapper .dropdown-menu.sold-out__user--dropdown{
+    left: 100% !important;
+    right: auto !important;
+    transform: inherit !important;
+    top: 100% !important;
+}
+
+
+[dir="rtl"] .package_table_wrapper tbody tr td:first-child {
+    padding-left: 0;
+    padding-right: 4rem;
+}
+
+/* profile page rtl css */
+[dir="rtl"] .profile__main--content {
+    padding-left: 0;
+    padding-right: 3rem;
+}
+@media only screen and (max-width: 575px) {
+    [dir="rtl"] .profile__main--content {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+[dir="rtl"] .profile__edit--btn{
+    left: 2rem;
+    right: auto;
+}
+[dir="rtl"] .profile__counterup--items {
+    margin-left: 1.5rem;
+    padding-left: 1.5rem;
+    margin-right: 0;
+    padding-right: 0;
+}
+[dir="rtl"] .profile__counterup--items:last-child {
+    margin-left: 0;
+    padding-left: 0;
+}
+[dir="rtl"] .profile__counterup--items::before{
+    left: 0;
+    right: auto;
+}
+[dir="rtl"] .profile__counterup--text {
+    margin-left: 0;
+    margin-right: 0.5rem;
+}
+@media only screen and (max-width: 550px) {
+    [dir="rtl"] .profile__counterup--text {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+/* reviews pages rtl css */
+[dir="rtl"] .reviews__author{
+    padding-left: 0;
+    padding-right: 3.5rem;
+}
+
+[dir="rtl"] .reviews__author--check__input{
+    right: 0;
+    left: auto;
+}
+[dir="rtl"] .reviews__author--checkmark{
+    right: 0;
+    left: auto;
+}
+[dir="rtl"] .reviews__ratting--text {
+    margin-left: 0;
+    margin-right: 0.5rem;
+}

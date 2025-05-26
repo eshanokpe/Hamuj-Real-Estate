@@ -1,0 +1,62 @@
+@charset "UTF-8";
+/*
+  Template Name: NewVilla - Real Estate HTML Template
+  Author Name: Hook theme
+  Author URL: https://themeforest.net/user/hooktheme
+  Version: 1.0.0
+
+  ----------------------------
+  [Table of contents CSS] 
+  ----------------------------
+
+    1. Base CSS
+    2. Header css
+    3. Hero css
+    4. About css
+    5. Blog css
+    6. Banner css
+    7. Account css
+    8. Add listing css
+    9. Amenities css
+    10. Categories css
+    11. Contact css
+    12. Featured css
+    13. Footer css
+    14. Gallery css
+    15. Listing page css
+    16. listing details css
+    17. Location css
+    18. Other css
+    19. preloader css 
+    20. Project css
+    21. Property css
+    22. Testimonial css
+
+*/
+
+@import 'global';
+@import 'elements/header';
+@import 'elements/preloader';
+@import 'elements/hero';
+@import 'elements/about';
+@import 'elements/featured';
+@import 'elements/location';
+@import 'elements/property';
+@import 'elements/testimonial';
+@import 'elements/amenities';
+@import 'elements/blog';
+@import 'elements/other';
+@import 'elements/categories';
+@import 'elements/footer';
+@import 'elements/listing';
+@import 'elements/listing-details';
+@import 'elements/add-listing';
+@import 'elements/contact';
+@import 'elements/project';
+@import 'elements/account';
+@import 'elements/banner';
+@import 'elements/gallery';
+
+
+
+

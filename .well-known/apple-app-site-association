@@ -1,0 +1,27 @@
+{
+    "applinks": {
+      "details": [
+        {
+          "appIDs": ["J23935Q5L9.com.prismcheck.Gaphub"],
+          "components": [
+            { 
+              "match": "/login",
+              "comment": "Direct link to /login"
+            },
+            {
+              "match": "/home",
+              "comment": "Direct link to /home"
+            },
+            {
+              "match": "/home/*",
+              "comment": "Wildcard for paths under /home"
+            }
+          ]
+        }
+      ]
+    },
+    "webcredentials": {
+      "apps": ["J23935Q5L9.com.prismcheck.Gaphub"]
+    }
+  }
+  
