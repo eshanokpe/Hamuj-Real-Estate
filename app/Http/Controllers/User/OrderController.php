@@ -127,7 +127,7 @@ class OrderController extends Controller
             $currency = $orderData['order_amount']['currency'];
             $amountInPounds = $amount / 100;
             $order->user->wallet->increment('gbp_balance', $amountInPounds);
-            $order->update(['state' => 'completed']);
+            $order->update(['state' => 'COMPLETED']);
  
             return view('user.pages.success.index', [
                 'success' => true,
