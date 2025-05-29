@@ -121,18 +121,19 @@ class OrderController extends Controller
             $order = Order::with(['user.wallet'])
             ->where('revolut_public_id', $id)
             ->firstOrFail(); // Check if already processed
-
-            if ($order->state === 'COMPLETED') {
-                return view('user.pages.success.index', [
-                    'success' => true,
-                    'order' => $order,
-                    'message' => 'Payment was already processed'
-                ]);
-            }
             
             // Verify payment status from Revolut
             $response = $this->revolutService->getOrder($order->revolut_order_id);
             $orderData = json_decode($response->getBody(), true);
+            if ($order->state === 'COMPLETED') {
+                return view('user.pages.success.index', [
+                    'success' => true,
+                    'order' => $orderData,
+                    'message' => 'Payment was already processed'
+                ]);
+            }
+            
+            
             
             // Process in transaction
             DB::transaction(function () use ($order, $orderData) {

@@ -75,7 +75,14 @@
 
                 <div class="success-message">
                     <h3>Payment Successful</h3>
-                    <p>Your payment has been successfully processed.</p>
+                    <p>
+                        @if(!is_null($message))
+                            {{ $message }}
+                        @else
+                           Your payment has been successfully processed.
+                        @endif
+                    </p>
+                    
                     <p>Thank you for your purchase! You will receive an email confirmation shortly.</p>
                     {{-- <a>{{ json_encode($order, true) ?? ''}}</a> --}}
                     @if($order != null)
