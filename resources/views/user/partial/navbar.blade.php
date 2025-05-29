@@ -167,9 +167,15 @@
                                 if (selectedOption) {
                                     const currency = selectedOption.dataset.currency;
                                     const balance = selectedOption.dataset.balance;
+                                    const numericBalance = parseFloat(balance);
+                                    const formattedBalance = new Intl.NumberFormat(document.documentElement.lang || 'en-US', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }).format(numericBalance);
+
                                     balanceText.innerHTML = `
                                         <span class="currency">${currency}</span>
-                                        <span class="amount">${number_format( balance, 2)}</span>
+                                        <span class="amount">${formattedBalance}</span>
                                     `;
                                 } else {
                                     // Fallback to primary wallet if selection doesn't exist
@@ -178,9 +184,15 @@
                                         selectedWalletType = 'primary';
                                         const currency = primaryOption.dataset.currency;
                                         const balance = primaryOption.dataset.balance;
+                                        const numericBalance = parseFloat(balance);
+                                        const formattedBalance = new Intl.NumberFormat(document.documentElement.lang || 'en-US', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        }).format(numericBalance);
+
                                         balanceText.innerHTML = `
                                             <span class="currency">${currency}</span>
-                                            <span class="amount">${number_format( balance, 2)}</span>
+                                            <span class="amount">${formattedBalance}</span>
                                         `;
                                     } else {
                                         // No wallets available
