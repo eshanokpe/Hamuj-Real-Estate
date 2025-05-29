@@ -135,7 +135,8 @@ class OrderController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Failed to get order'
+                'error' => 'Failed to get order',
+                'message' => $e->getMessage(),
             ], 500);
         }
     } 
