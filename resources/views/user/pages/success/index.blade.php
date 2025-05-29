@@ -44,7 +44,7 @@
     }
 
     .btn-return:hover {
-        background-color: #3a0075;
+        background-color: #FFD700; /* Gold color */
     }
 
 </style>
