@@ -215,7 +215,7 @@
                                                 <h3>Top Up Pound Account</h3>
                                                 <p>Add funds to your GBP account using card payment</p>
                                                 <div class="currency__card--amount">£{{ number_format($user->gbp_balance ?? 0, 2) }}</div>
-                                            </div>
+                                            </div> 
                                             <div class="top-up-card" onclick="openTopUpModal('USD', '$')">
                                                 <h3>Top Up Dollar Account</h3>
                                                 <p>Add funds to your USD account using card payment</p>

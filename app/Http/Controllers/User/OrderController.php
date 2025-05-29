@@ -111,76 +111,6 @@ class OrderController extends Controller
         }
     }
 
-    public function success2(Request $request)
-    {
-        dd($request->all());
-        // Validate required parameters
-        $RPOid = $request->input('_rp_oid');
-        
-        if (!$RPOid) {
-            return redirect()
-                ->route('user.payment.failed')
-                ->with('error', 'Payment failed. Order ID not found.');
-        }
-
-        try {
-            // Get Revolut configuration
-            $revolutConfig = config('services.revolut');
-            
-            if (!isset($revolutConfig['secret_key'], $revolutConfig['mode'])) {
-                throw new \RuntimeException('Revolut configuration is incomplete');
-            }
-
-            // Determine API URL based on environment
-            $baseApiUrl = ($revolutConfig['mode'] === 'production')
-                ? ($revolutConfig['production_url'] ?? 'https://merchant.revolut.com/api/')
-                : ($revolutConfig['sandbox_url'] ?? 'https://sandbox-merchant.revolut.com/api/');
-
-            // Fetch order details from Revolut
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $revolutConfig['secret_key'],
-                'Content-Type' => 'application/json',
-                'Revolut-Api-Version' => '2024-09-01',
-            ])->get(rtrim($baseApiUrl) . '/orders/' . $RPOid);
-
-            if (!$response->successful()) {
-                Log::error('Revolut order fetch failed', [
-                    'order_id' => $RPOid,
-                    'status' => $response->status(),
-                    'response' => $response->body()
-                ]);
-                
-                return view('user.pages.success.index', [
-                    'error' => 'We received your payment but couldn\'t verify it immediately.',
-                    'details' => 'Payment verification is pending. Your balance will be updated shortly.'
-                ]);
-            }
-
-            $revolutOrder = $response->json();
-
-            // Here you would typically:
-            // 1. Verify the order status matches what you expect
-            // 2. Update your database records
-            // 3. Prepare success data for the view
-            
-            return view('user.pages.success.index', [
-                'success' => true,
-                'order' => $revolutOrder,
-                'message' => 'Payment completed successfully!'
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('Payment success processing failed: ' . $e->getMessage(), [
-                'exception' => $e,
-                'order_id' => $RPOid ?? 'unknown'
-            ]);
-
-            return view('user.pages.success.index', [
-                'error' => 'Payment verification failed',
-                'details' => 'We received your payment but encountered a technical issue. Our team has been notified.'
-            ]);
-        }
-    }
 
     public function success(Request $request)
     {
@@ -190,8 +120,13 @@ class OrderController extends Controller
             
             $response = $this->revolutService->getOrder($order->revolut_order_id);
             $orderData = json_decode($response->getBody(), true);
-
-            // return response()->json($orderData);
+            
+            $amount = $orderData['order_amount']['value'];
+            $currency = $orderData['order_amount']['currency'];
+            $amountInPounds = $amount / 100;
+            $order->user->wallet->increment('gbp_balance', $amountInPounds);
+            $order->update(['status' => 'completed']);
+ 
             return view('user.pages.success.index', [
                 'success' => true,
                 'order' => $orderData, 
@@ -203,7 +138,7 @@ class OrderController extends Controller
                 'error' => 'Failed to get order'
             ], 500);
         }
-    }
+    } 
 
     public function failed(){
         return view('user.pages.payment.failed'); 

@@ -255,7 +255,7 @@ class WebhookController extends Controller
         $signature = $request->header('Revolut-Signature');
         $timestamp = $request->header('Revolut-Request-Timestamp');
         $payload = $request->getContent();
-        dd($payload);
+        // dd($payload);
   
         if (!$this->revolutService->validateTimestamp($timestamp)) {
             return response('Timestamp outside the tolerance zone', 403);
