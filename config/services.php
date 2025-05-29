@@ -29,15 +29,15 @@ return [
         'key' => env('AWS_ACCESS_KEY_ID'), 
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
-    ],
- 
-    'revolut' => [
+    ], 
+  
+    'revolut' => [ 
         'secret_key' => env('REVOLUT_SECRET_KEY'),
         'public_key' => env('REVOLUT_PUBLIC_KEY'),
         'mode' => env('REVOLUT_MODE', 'sandbox'), // sandbox or production
-        'sandbox_url' => 'https://sandbox-merchant.revolut.com/api/',
-        'production_url' => 'https://merchant.revolut.com/api/1.0/',
-        'webhook_secret' => env('REVOLUT_WEBHOOK_SECRET'),
+        'sandbox_url' => 'https://sandbox-merchant.revolut.com',
+        'production_url' => 'https://merchant.revolut.com',
+        'webhook_secret' => env('REVOLUT_WEBHOOK_SECRET'), 
         'timeout' => env('REVOLUT_TIMEOUT', 30), // request timeout in seconds
     ],
 

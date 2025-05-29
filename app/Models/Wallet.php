@@ -10,9 +10,14 @@ class Wallet extends Model
     use HasFactory; 
 
     protected $fillable = [
-        'user_id', 'user_email', 'balance','currency'
-    ];
-
+        'user_id', 
+        'user_email', 
+        'balance',
+        'gbp_balance',
+        'usd_balance',
+        'currency'
+    ];  
+ 
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -23,5 +28,22 @@ class Wallet extends Model
         return $this->hasMany(WalletTransaction::class);
     }
 
+    public function getDefaultBalanceAttribute()
+    {
+        return $this->{$this->currency . '_balance'} ?? 0;
+    }
+
+    public function getBalance($currency)
+    {
+        $currency = strtolower($currency);
+        return $this->{"{$currency}_balance"} ?? 0;
+    }
+
+    public function setBalance($currency, $amount)
+    {
+        $currency = strtolower($currency);
+        $this->{"{$currency}_balance"} = $amount;
+        return $this;
+    }
 
 }

@@ -89,12 +89,12 @@ export default TopUpWallet;
 // Initialize React app only once
 const propertiesElement = document.getElementById('topUpRevolutModal');
 if (propertiesElement && !propertiesElement._reactRoot) {
-    const root = ReactDOM.createRoot(propertiesElement);
+    const root = ReactDOM.createRoot(propertiesElement); 
     // Initial render. For dynamic updates from Blade, you'd use a separate mounting script
     // (like topUpModalMount.js discussed previously) that can re-render with new props.
     root.render(
         <React.StrictMode>
-            <BrowserRouter>
+            <BrowserRouter> 
                 <TopUpWallet initialCurrency="GBP" />
             </BrowserRouter>
         </React.StrictMode>

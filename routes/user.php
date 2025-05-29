@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\User\HelpSupportController;
 use App\Http\Controllers\User\WebhookController;
 use App\Http\Controllers\User\ProfileController;
-use App\Http\Controllers\User\RevolutPaymentController;
+use App\Http\Controllers\User\OrderController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\TransferController; 
 use App\Http\Controllers\User\PropertyController;
@@ -34,7 +34,7 @@ use App\Http\Controllers\User\Wallet\WalletTransferController;
 
 Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
 
-    Route::post('/revolut-payment/make', [RevolutPaymentController::class, 'makePayment'])->name('revolutPayment.make');
+    Route::post('/revolut-payment/make', [OrderController::class, 'makePayment'])->name('revolutPayment.make');
      
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/transactions', [DashboardController::class, 'transactionReport'])->name('transactions');
@@ -75,9 +75,6 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/my-properties/{id}', [DashboardController::class, 'propertiesShow'])->name('properties.show');
      
     // For React frontend
-   // Make sure this matches exactly what your React component expects
-
-    // For the Buy link (keep this as is)
     Route::get('/cart/buy/{slug}', [CartController::class, 'index'])->name('cart.buy');
     Route::get('properties-details/{slug}', [CartController::class, 'buy']);
    
@@ -87,11 +84,10 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/cart/transfer/{id}', [CartController::class, 'transfer'])->name('cart.transfer.index');
     Route::post('/payment/initiate', [PaymentController::class, 'initializePayment'])->name('payment.initiate'); 
     Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
+
+    Route::get('/payment/failed', [RevolutPaymentController::class, 'failed'])->name('payment.failed');
    
     
-   
-   
-
     Route::get('/purchases', [DashboardController::class, 'purchases'])->name('purchases');
     Route::get('/sell', [SellPropertyController::class, 'index'])->name('sell');
     Route::post('/sell/property', [SellPropertyController::class, 'sellProperty'])->name('sell.property');
@@ -154,13 +150,15 @@ Route::prefix('user')->name('user.')->group(function () {
    
     Route::post('/webhook/paystack', [WebhookController::class, 'handlePaystackWebhook']);
     Route::post('/webhook/transfer', [WebhookController::class, 'handleTransferWebhook']);
+    Route::post('/webhook', [WebhookController::class, 'handleRevolutWebhook']);
 
 });
+Route::post('/webhook', [WebhookController::class, 'handleRevolutWebhook']);
 
 Route::get('user/config', function () {
-    return response()->json([
+    return response()->json([ 
         'revolutPublicKey' => config('services.revolut.public_key'),
     ]);
 });
-Route::post('user/api/orders', [RevolutPaymentController::class, 'createOrder']);
-Route::get('user/success/', [RevolutPaymentController::class, 'success']);
+Route::post('user/api/orders', [OrderController::class, 'createOrder']); 
+Route::get('user/success/', [OrderController::class, 'success']);

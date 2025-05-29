@@ -40,6 +40,6 @@ if (propertiesElement && !propertiesElement._reactRoot) {
                 <Properties />
             </BrowserRouter>
         </React.StrictMode>
-    );
+    ); 
     propertiesElement._reactRoot = true;
 }

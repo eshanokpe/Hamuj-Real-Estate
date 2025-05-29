@@ -381,7 +381,7 @@
         // Set modal content based on selected currency
         modalTitle.textContent = `Top Up ${currency === 'GBP' ? 'Pound' : 'Dollar'} Account`;
         currencySymbol.textContent = symbol;
-        minAmount.textContent = `${symbol}10.00`;
+        minAmount.textContent = `${symbol}10.00`; 
         currencyType.value = currency;
         
         // Show modal

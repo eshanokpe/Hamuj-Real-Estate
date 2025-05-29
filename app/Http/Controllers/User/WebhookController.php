@@ -1,6 +1,5 @@
 <?php
 
-<?php
 
 namespace App\Http\Controllers\User;
 
@@ -14,11 +13,19 @@ use App\Notifications\WalletFundedNotification;
 use App\Notifications\WalletTransferNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; 
+use App\Jobs\ProcessOrderWebhook;
+use App\Services\RevolutService;
 
 
 class WebhookController extends Controller
 {
 
+    protected $revolutService;
+
+    public function __construct(RevolutService $revolutService)
+    {
+        $this->revolutService = $revolutService;
+    }
 
     public function handlePaystackWebhook(Request $request)
     {
@@ -64,54 +71,51 @@ class WebhookController extends Controller
         // Validate essential data presence
         if (!isset($data->reference) || !isset($data->customer->email) || !isset($data->amount) || !isset($data->status)) {
             Log::error('Missing essential data in charge.success payload.', (array) $data);
-            return; // Stop processing if critical data is missing
+            return; 
         }
 
         $reference = $data->reference;
         $email = $data->customer->email;
-        $amount = $data->amount / 100; // Convert kobo to Naira/base currency unit
-        $status = $data->status; // Should be 'success'
+        $amount = $data->amount / 100; 
+        $status = $data->status; 
 
         Log::info("Processing charge.success for reference: {$reference}");
 
         // --- Idempotency Check ---
-        // Use a database transaction with locking for atomicity
         DB::beginTransaction();
         try {
-            // Check if this transaction reference has already been processed
             $existingTransaction = Transaction::where('reference', $reference)
-                                              ->where('transaction_type', 'wallet') // Be specific if reference could be used elsewhere
-                                              ->lockForUpdate() // Lock the row to prevent race conditions
+                                              ->where('transaction_type', 'wallet')
+                                              ->lockForUpdate() 
                                               ->first();
 
             if ($existingTransaction) {
                 Log::info("Duplicate charge.success event ignored for reference: {$reference}");
-                DB::commit(); // Commit transaction even if duplicate
-                return; // Exit early, already processed
+                DB::commit(); 
+                return; 
             }
 
             // --- Process the charge ---
-
             // Check metadata for mobile app identifier if needed
             $isMobileApp = isset($data->metadata->source) && $data->metadata->source === 'mobile_app';
             if ($isMobileApp) {
                 Log::info("Skipping mobile app payment processing via webhook for reference: {$reference}");
-                DB::commit(); // Commit transaction
-                return; // Exit if handled elsewhere for mobile
+                DB::commit();
+                return; 
             }
 
             // Find the user
             $user = User::where('email', $email)->first();
             if (!$user) {
                 Log::warning("User not found for email: {$email}, reference: {$reference}");
-                DB::rollBack(); // Rollback transaction
-                return; // Cannot process without a user
+                DB::rollBack();
+                return; 
             }
 
             // Find or create user's wallet (handle case where wallet might not exist)
             $wallet = Wallet::firstOrCreate(
                 ['user_id' => $user->id],
-                ['balance' => 0] // Initialize balance if creating new wallet
+                ['balance' => 0] 
             );
 
             // Update the wallet balance
@@ -122,19 +126,18 @@ class WebhookController extends Controller
             Transaction::create([
                 'user_id' => $user->id,
                 'email' => $user->email,
-                'amount' => $amount, // Store the actual amount credited
-                'transaction_type' => 'wallet', // Specific type for wallet funding
+                'amount' => $amount, 
+                'transaction_type' => 'wallet', 
                 'reference' => $reference,
-                'status' => $status, // 'success'
+                'status' => $status, 
                 'description' => 'Wallet funded via Paystack',
-                'payment_method' => $data->channel ?? 'card', // Get channel if available
-                'recipient_name' => trim($customerName) ?: null, // Store customer name if available
-                'source' => 'webhook', // Indicate source is webhook
-                'metadata' => json_encode($data->metadata ?? null), // Store metadata if needed
+                'payment_method' => $data->channel ?? 'card', 
+                'recipient_name' => trim($customerName) ?: null, 
+                'source' => 'webhook', 
+                'metadata' => json_encode($data->metadata ?? null), 
             ]);
 
             // Trigger the notification
-            // Fetch the updated balance directly after incrementing
             $newBalance = $wallet->fresh()->balance;
             $user->notify(new WalletFundedNotification($amount, $newBalance, $reference));
 
@@ -147,118 +150,91 @@ class WebhookController extends Controller
             // Rollback transaction on any error
             DB::rollBack();
             Log::error("Error processing charge.success for reference: {$reference}. Error: " . $e->getMessage(), [
-                'trace' => $e->getTraceAsString() // Log stack trace for debugging
+                'trace' => $e->getTraceAsString() 
             ]);
-            // Optionally re-throw or handle the error appropriately
-            // Depending on your setup, you might want Paystack to retry, so don't return 200 OK here.
-            // Consider returning a 5xx error to signal failure.
-            // return response()->json(['error' => 'Internal Server Error'], 500);
+            return response()->json(['error' => 'Internal Server Error'], 500);
         }
-    }
+    } 
 
     protected function handleTransferSuccess($data)
     {
         // Validate essential data presence
         if (!isset($data->reference) || !isset($data->recipient->details->account_number) || !isset($data->amount) || !isset($data->status)) {
              Log::error('Missing essential data in transfer.success payload.', (array) $data);
-             return; // Stop processing if critical data is missing
+             return;
         }
 
         $reference = $data->reference;
         $amount = $data->amount / 100; // Convert kobo to Naira
-        $status = $data->status; // Should be 'success'
+        $status = $data->status; 
         $reason = $data->reason ?? 'Withdrawal';
         $recipient = $data->recipient;
 
         Log::info("Processing transfer.success for reference: {$reference}");
 
-        // --- Idempotency Check ---
         DB::beginTransaction();
         try {
-            // Check if this transfer reference has already been processed
             $existingTransaction = Transaction::where('reference', $reference)
-                                              ->where('transaction_type', 'withdraw') // Be specific
+                                              ->where('transaction_type', 'withdraw')
                                               ->lockForUpdate()
                                               ->first();
 
             if ($existingTransaction) {
                 Log::info("Duplicate transfer.success event ignored for reference: {$reference}");
                 DB::commit();
-                return; // Exit early, already processed
+                return;
             }
 
             // --- Process the transfer ---
-
-            // Extract recipient details safely
             $recipientName = $recipient->name ?? 'N/A';
             $recipientCode = $recipient->recipient_code ?? 'N/A';
             $accountNumber = $recipient->details->account_number ?? 'N/A';
             $accountName = $recipient->details->account_name ?? 'N/A';
             $bankName = $recipient->details->bank_name ?? 'N/A';
 
-            // Find the user associated with this transfer.
-            // Paystack transfer webhooks don't directly link to your initiating user via email in the main data.
-            // You might need to:
-            // 1. Store the user_id in the Paystack transfer metadata when initiating.
-            // 2. Query your *internal* transfer records using the reference to find the user.
-            // **Assuming you stored user_id in metadata:**
-            $userId = $data->metadata->user_id ?? null; // Adjust based on your metadata key
+            $userId = $data->metadata->user_id ?? null; 
             $user = $userId ? User::find($userId) : null;
 
-            // **Alternative: Query internal records (Example)**
-            // $internalTransferRecord = YourTransferModel::where('paystack_reference', $reference)->first();
-            // $user = $internalTransferRecord ? $internalTransferRecord->user : null;
-
+           
             if (!$user) {
                 Log::warning("Could not determine user for transfer.success reference: {$reference}. Check metadata or internal records.");
                 DB::rollBack();
-                return; // Cannot process without user context
+                return; 
             }
 
             // Find the user's wallet
-            $wallet = $user->wallet; // Assumes a 'wallet' relationship exists on the User model
+            $wallet = $user->wallet; 
             if (!$wallet) {
                     Log::error("Wallet not found for user ID: {$user->id}, reference: {$reference}. Cannot deduct amount.");
                     DB::rollBack();
-                    return; // Cannot process without a wallet
+                    return; 
             }
 
             // --- Deduct amount from user's wallet ---
             // Ensure sufficient balance before decrementing (optional but recommended)
             if ($wallet->balance < $amount) {
                 Log::warning("Insufficient wallet balance for user ID: {$user->id}, reference: {$reference}. Balance: {$wallet->balance}, Amount: {$amount}");
-                // Decide how to handle: Log and proceed? Rollback?
-                // Rolling back might be safer if the transfer shouldn't have been possible.
                 DB::rollBack();
                 return;
             }
             $wallet->decrement('balance', $amount);
-            // -----------------------------------------
-
-
-            // Log the withdrawal transaction
-            // Note: Wallet balance should have been *debited* when the transfer was *initiated*,
-            // not credited here on success. This webhook confirms the external transfer completed.
             Transaction::create([
                 'user_id' => $user->id,
-                'email' => $user->email, // Log user's email
-                'amount' => -$amount, // Represent withdrawal as negative or use a 'type' field
+                'email' => $user->email, 
+                'amount' => -$amount, 
                 'reference' => $reference,
-                'status' => $status, // 'success'
+                'status' => $status, 
                 'description' => $reason,
-                'transaction_type' => 'withdraw', // Specific type
-                'payment_method' => 'bank_transfer', // Method used
+                'transaction_type' => 'withdraw', 
+                'payment_method' => 'bank_transfer', 
                 'recipient_name' => $recipientName,
                 'recipient_code' => $recipientCode,
                 'account_number' => $accountNumber,
                 'account_name' => $accountName,
                 'bank_name' => $bankName,
-                'source' => 'webhook', // Indicate source
+                'source' => 'webhook', 
                 'metadata' => json_encode($data->metadata ?? null),
             ]);
-
-            // Trigger notification (optional, maybe notify on initiation or here)
-            // $user->notify(new WalletTransferNotification($amount, $user->wallet->balance)); // Consider if balance is needed here
 
             Log::info("Withdrawal transaction logged successfully for user ID: {$user->id}, reference: {$reference}");
 
@@ -269,8 +245,33 @@ class WebhookController extends Controller
             Log::error("Error processing transfer.success for reference: {$reference}. Error: " . $e->getMessage(), [
                  'trace' => $e->getTraceAsString()
             ]);
-            // return response()->json(['error' => 'Internal Server Error'], 500);
+            return response()->json(['error' => 'Internal Server Error'], 500);
         }
+    }
+
+
+    public function handleRevolutWebhook(Request $request)
+    {
+        $signature = $request->header('Revolut-Signature');
+        $timestamp = $request->header('Revolut-Request-Timestamp');
+        $payload = $request->getContent();
+        dd($payload);
+  
+        if (!$this->revolutService->validateTimestamp($timestamp)) {
+            return response('Timestamp outside the tolerance zone', 403);
+        }
+
+        if (!$this->revolutService->validateSignature($signature, $timestamp, $payload)) {
+            return response('Invalid signature', 403);
+        }
+
+        $event = $request->input('event');
+        $orderData = $request->all();
+
+        // Dispatch job to process the webhook asynchronously
+        ProcessOrderWebhook::dispatch($event, $orderData); 
+
+        return response()->json(['status' => 'success']);
     }
 }
 

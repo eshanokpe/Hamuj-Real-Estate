@@ -77,6 +77,23 @@
                     <h3>Payment Successful</h3>
                     <p>Your payment has been successfully processed.</p>
                     <p>Thank you for your purchase! You will receive an email confirmation shortly.</p>
+                    {{-- <a>{{ json_encode($order, true) ?? ''}}</a> --}}
+                    <div class="order-details">
+                        <h3>Order: {{ $order['description'] ?? 'N/A' }}</h3>
+                        <p><strong>Status:</strong> {{ $order['state'] ?? 'N/A' }}</p>
+                        <p><strong>Order ID:</strong> {{ $order['public_id'] ?? 'N/A' }}</p>
+                        <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($order['created_at'])->format('M d, Y H:i') }}</p>
+                        <p><strong>Amount:</strong> £{{ number_format($order['order_amount']['value'] / 100, 2) }} GBP</p>
+                        
+                        @if(!empty($order['payments']))
+                        <div class="payment-details">
+                            <h4>Payment Information</h4>
+                            <p><strong>Method:</strong> {{ $order['payments'][0]['payment_method']['card']['card_brand'] ?? 'N/A' }}</p>
+                            <p><strong>Card:</strong> **** **** **** {{ $order['payments'][0]['payment_method']['card']['card_last_four'] ?? 'N/A' }}</p>
+                            <p><strong>Settled Amount:</strong> £{{ number_format($order['payments'][0]['settled_amount']['value'] / 100, 2) }}</p>
+                        </div>
+                        @endif
+                    </div>
                     <a href="{{ route('user.dashboard') }}" class="btn-return">Return to Dashboard</a>
                 </div>
             </div>
