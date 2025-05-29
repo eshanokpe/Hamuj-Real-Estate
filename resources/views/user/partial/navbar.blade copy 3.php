@@ -46,251 +46,253 @@
 
         <div class="header__right d-flex align-items-center">
           
+            <div class="header__wallet-container d-flex align-items-center">
+                <!-- Hide Balance Toggle -->
+                <div class="form-check form-switch me-2">
+                    <input class="form-check-input" 
+                        type="checkbox" 
+                        role="switch" 
+                        id="balanceVisibilityToggle"
+                        {{ Auth::user()->hide_balance ? 'checked' : '' }}>
+                    <label class="form-check-label visually-hidden" for="balanceVisibilityToggle">
+                        {{ Auth::user()->hide_balance ? 'Show' : 'Hide' }} Balance
+                    </label>
+                </div>
 
-            <div class="header__nav-bar__wrapper d-flex align-items-center">
-                <div class="header__user--profile d-flex">
-                    <!-- Hide Balance Toggle -->
-                    <a href="#" class="main__menu--link d-flex align-items-center justify-content-between" style="gap: 10px;">
-                        <div class="form-check form-switch">
-                            <input 
-                                class="form-check-input" 
-                                type="checkbox" 
-                                role="switch" 
-                                id="flexSwitchCheckDefault" 
-                                {{ Auth::user()->hide_balance ? 'checked' : '' }}
-                                onchange="toggleHideBalance(this)"
-                                >
-                        </div>
-                    </a>
-                    <!-- Wallet Display -->
-                    <div class="wallet-dropdown-container position-relative">
-                        <button class="wallet-balance-display d-flex align-items-center bg-transparent border-0 p-0"
-                                id="walletBalanceToggle"
-                                aria-expanded="false"
-                                aria-controls="walletBalanceDropdown"
-                                aria-label="Wallet balance options">
-                            <span id="walletBalanceText" class="me-1">
-                                @if(Auth::user()->hide_balance)
-                                    ••••
-                                @else
-                                    @php
-                                        $wallet = Auth::user()->wallet ?? null;
-                                        $balance = $wallet ? ($wallet->gbp_balance ?? $wallet->balance ?? 0) : 0;
-                                        $currency = $wallet ? ($wallet->currency ?? 'GBP') : 'GBP';
-                                        $formattedBalance = number_format($balance, 2);
-                                    @endphp
-                                    <span class="currency">{{ $currency }}</span>
-                                    <span class="amount">{{ $formattedBalance }}</span>
-                                @endif
-                            </span>
-                            <svg class="dropdown-indicator ms-1" width="10" height="6" viewBox="0 0 10 6" fill="none">
-                                <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-
-                        <!-- Wallet Options Dropdown -->
-                        <div class="wallet-options-dropdown dropdown-menu shadow-sm p-0" 
-                            id="walletBalanceDropdown" 
-                            aria-labelledby="walletBalanceToggle">
-                            @php
-                                $wallet = Auth::user()->wallet ?? null;
-                                $hasWallet = $wallet !== null;
-                                $balances = [
-                                    'primary' => [
-                                        'value' => $wallet->balance ?? 0,
-                                        'currency' => $wallet->currency ?? 'GBP',
-                                        'label' => $wallet->currency ?? 'Primary'
-                                    ],
-                                    'gbp' => [
-                                        'value' => $wallet->gbp_balance ?? 0,
-                                        'currency' => 'GBP',
-                                        'label' => 'GBP'
-                                    ],
-                                    'usd' => [
-                                        'value' => $wallet->usd_balance ?? 0,
-                                        'currency' => 'USD',
-                                        'label' => 'USD'
-                                    ]
-                                ];
-                            @endphp
-
-                            @if($hasWallet)
-                                @foreach($balances as $key => $balance)
-                                    @if($balance['value'] > 0)
-                                        <button class="dropdown-item wallet-option d-flex justify-content-between align-items-center px-3 py-2"
-                                                type="button"
-                                                data-wallet-type="{{ $key }}"
-                                                data-currency="{{ $balance['currency'] }}"
-                                                data-balance="{{ $balance['value'] }}">
-                                            <span class="currency-label">{{ $balance['label'] }}</span>
-                                            <span class="balance-amount">
-                                                {{ $balance['currency'] }} {{ number_format($balance['value'], 2) }}
-                                            </span>
-                                        </button>
-                                    @endif
-                                @endforeach
+                <!-- Wallet Display -->
+                <div class="wallet-dropdown-container position-relative">
+                    <button class="wallet-balance-display d-flex align-items-center bg-transparent border-0 p-0"
+                            id="walletBalanceToggle"
+                            aria-expanded="false"
+                            aria-controls="walletBalanceDropdown"
+                            aria-label="Wallet balance options">
+                        <span id="walletBalanceText" class="me-1">
+                            @if(Auth::user()->hide_balance)
+                                ••••
                             @else
-                                <div class="dropdown-item px-3 py-2 text-muted small">
-                                    <i class="fas fa-wallet me-2"></i> Wallet not available
-                                </div>
+                                @php
+                                    $wallet = Auth::user()->wallet ?? null;
+                                    $balance = $wallet ? ($wallet->gbp_balance ?? $wallet->balance ?? 0) : 0;
+                                    $currency = $wallet ? ($wallet->currency ?? 'GBP') : 'GBP';
+                                    $formattedBalance = number_format($balance, 2);
+                                @endphp
+                                <span class="currency">{{ $currency }}</span>
+                                <span class="amount">{{ $formattedBalance }}</span>
                             @endif
+                        </span>
+                        <svg class="dropdown-indicator ms-1" width="10" height="6" viewBox="0 0 10 6" fill="none">
+                            <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+
+                    <!-- Wallet Options Dropdown -->
+                    <div class="wallet-options-dropdown dropdown-menu shadow-sm p-0" 
+                        id="walletBalanceDropdown" 
+                        aria-labelledby="walletBalanceToggle">
+                        @php
+                            $wallet = Auth::user()->wallet ?? null;
+                            $hasWallet = $wallet !== null;
+                            $balances = [
+                                'primary' => [
+                                    'value' => $wallet->balance ?? 0,
+                                    'currency' => $wallet->currency ?? 'GBP',
+                                    'label' => $wallet->currency ?? 'Primary'
+                                ],
+                                'gbp' => [
+                                    'value' => $wallet->gbp_balance ?? 0,
+                                    'currency' => 'GBP',
+                                    'label' => 'GBP'
+                                ],
+                                'usd' => [
+                                    'value' => $wallet->usd_balance ?? 0,
+                                    'currency' => 'USD',
+                                    'label' => 'USD'
+                                ]
+                            ];
+                        @endphp
+
+                        @if($hasWallet)
+                            @foreach($balances as $key => $balance)
+                                @if($balance['value'] > 0)
+                                    <button class="dropdown-item wallet-option d-flex justify-content-between align-items-center px-3 py-2"
+                                            type="button"
+                                            data-wallet-type="{{ $key }}"
+                                            data-currency="{{ $balance['currency'] }}"
+                                            data-balance="{{ $balance['value'] }}">
+                                        <span class="currency-label">{{ $balance['label'] }}</span>
+                                        <span class="balance-amount">
+                                            {{ $balance['currency'] }} {{ number_format($balance['value'], 2) }}
+                                        </span>
+                                    </button>
+                                @endif
+                            @endforeach
+                        @else
+                            <div class="dropdown-item px-3 py-2 text-muted small">
+                                <i class="fas fa-wallet me-2"></i> Wallet not available
+                            </div>
+                        @endif
+                        
+                        <div class="dropdown-divider m-0"></div>
+                        <a href="{{ route('user.wallet.index') }}" class="dropdown-item px-3 py-2 medium text-primary">
+                            <i class="fas fa-cog me-2"></i> View Wallet 
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const balanceToggle = document.getElementById('balanceVisibilityToggle');
+                        const walletToggle = document.getElementById('walletBalanceToggle');
+                        const walletDropdown = document.getElementById('walletBalanceDropdown');
+                        const balanceText = document.getElementById('walletBalanceText');
+                        const walletOptions = document.querySelectorAll('.wallet-option');
+                        
+                        // Get the initially selected wallet from localStorage or use primary as default
+                        let selectedWalletType = localStorage.getItem('selectedWalletType') || 'primary';
+                        let isBalanceHidden = {{ Auth::user()->hide_balance ? 'true' : 'false' }};
+                        
+                        // Function to update the displayed balance
+                        function updateDisplayedBalance() {
+                            if (isBalanceHidden) {
+                                balanceText.innerHTML = '••••';
+                                return;
+                            }
                             
-                            <div class="dropdown-divider m-0"></div>
-                            <a href="{{ route('user.wallet.index') }}" class="dropdown-item px-3 py-2 medium text-primary">
-                                <i class="fas fa-cog me-2"></i> View Wallet 
-                            </a>
-                        </div>
-                
-                    </div> 
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const balanceToggle = document.getElementById('balanceVisibilityToggle');
-                            const walletToggle = document.getElementById('walletBalanceToggle');
-                            const walletDropdown = document.getElementById('walletBalanceDropdown');
-                            const balanceText = document.getElementById('walletBalanceText');
-                            const walletOptions = document.querySelectorAll('.wallet-option');
+                            // Find the selected wallet option
+                            const selectedOption = document.querySelector(`.wallet-option[data-wallet-type="${selectedWalletType}"]`);
                             
-                            // Get the initially selected wallet from localStorage or use primary as default
-                            let selectedWalletType = localStorage.getItem('selectedWalletType') || 'primary';
-                            let isBalanceHidden = {{ Auth::user()->hide_balance ? 'true' : 'false' }};
-                            
-                            // Function to update the displayed balance
-                            function updateDisplayedBalance() {
-                                if (isBalanceHidden) {
-                                    balanceText.innerHTML = '••••';
-                                    return;
-                                }
-                                
-                                // Find the selected wallet option
-                                const selectedOption = document.querySelector(`.wallet-option[data-wallet-type="${selectedWalletType}"]`);
-                                
-                                if (selectedOption) {
-                                    const currency = selectedOption.dataset.currency;
-                                    const balance = selectedOption.dataset.balance;
+                            if (selectedOption) {
+                                const currency = selectedOption.dataset.currency;
+                                const balance = selectedOption.dataset.balance;
+                                balanceText.innerHTML = `
+                                    <span class="currency">${currency}</span>
+                                    <span class="amount">${parseFloat(balance).toFixed(2)}</span>
+                                `;
+                            } else {
+                                // Fallback to primary wallet if selection doesn't exist
+                                const primaryOption = document.querySelector('.wallet-option[data-wallet-type="primary"]');
+                                if (primaryOption) {
+                                    selectedWalletType = 'primary';
+                                    const currency = primaryOption.dataset.currency;
+                                    const balance = primaryOption.dataset.balance;
                                     balanceText.innerHTML = `
                                         <span class="currency">${currency}</span>
                                         <span class="amount">${parseFloat(balance).toFixed(2)}</span>
                                     `;
                                 } else {
-                                    // Fallback to primary wallet if selection doesn't exist
-                                    const primaryOption = document.querySelector('.wallet-option[data-wallet-type="primary"]');
-                                    if (primaryOption) {
-                                        selectedWalletType = 'primary';
-                                        const currency = primaryOption.dataset.currency;
-                                        const balance = primaryOption.dataset.balance;
-                                        balanceText.innerHTML = `
-                                            <span class="currency">${currency}</span>
-                                            <span class="amount">${parseFloat(balance).toFixed(2)}</span>
-                                        `;
-                                    } else {
-                                        // No wallets available
-                                        balanceText.innerHTML = 'N/A';
-                                    }
+                                    // No wallets available
+                                    balanceText.innerHTML = 'N/A';
                                 }
                             }
-                            // Handle wallet option selection
-                            walletOptions.forEach(option => {
-                                option.addEventListener('click', function() {
-                                    // Update the selected wallet type
-                                    selectedWalletType = this.dataset.walletType;
-                                    
-                                    // Save selection to localStorage
-                                    localStorage.setItem('selectedWalletType', selectedWalletType);
-                                    
-                                    // Update the displayed balance
-                                    updateDisplayedBalance();
-                                    
-                                    // Close the dropdown
-                                    if (walletDropdown) {
-                                        walletDropdown.style.display = 'none';
-                                        walletToggle.setAttribute('aria-expanded', 'false');
-                                    }
-                                    
-                                    // Add visual feedback for selected option
-                                    walletOptions.forEach(opt => opt.classList.remove('active'));
-                                    this.classList.add('active');
-                                });
-                            });
-                            
-                            // Initialize the display
-                            updateDisplayedBalance();
-                            
-                            // Highlight the initially selected option
-                            const initialSelectedOption = document.querySelector(`.wallet-option[data-wallet-type="${selectedWalletType}"]`);
-                            if (initialSelectedOption) {
-                                initialSelectedOption.classList.add('active');
-                            }
-                            
-                            // Wallet dropdown toggle
-                            if (walletToggle && walletDropdown) {
-                                walletToggle.addEventListener('click', function(e) {
-                                    e.stopPropagation();
-                                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                                    this.setAttribute('aria-expanded', !isExpanded);
-                                    walletDropdown.style.display = isExpanded ? 'none' : 'block';
-                                });
-                            }
-                            
-                            // Close dropdown when clicking outside
-                            document.addEventListener('click', function(e) {
-                                if (!walletToggle.contains(e.target) && !walletDropdown.contains(e.target)) {
-                                    if (walletDropdown) walletDropdown.style.display = 'none';
-                                    if (walletToggle) walletToggle.setAttribute('aria-expanded', 'false');
+                        }
+                        
+                    
+                        
+                        // Handle wallet option selection
+                        walletOptions.forEach(option => {
+                            option.addEventListener('click', function() {
+                                // Update the selected wallet type
+                                selectedWalletType = this.dataset.walletType;
+                                
+                                // Save selection to localStorage
+                                localStorage.setItem('selectedWalletType', selectedWalletType);
+                                
+                                // Update the displayed balance
+                                updateDisplayedBalance();
+                                
+                                // Close the dropdown
+                                if (walletDropdown) {
+                                    walletDropdown.style.display = 'none';
+                                    walletToggle.setAttribute('aria-expanded', 'false');
                                 }
+                                
+                                // Add visual feedback for selected option
+                                walletOptions.forEach(opt => opt.classList.remove('active'));
+                                this.classList.add('active');
                             });
                         });
-                    </script>
+                        
+                        // Initialize the display
+                        updateDisplayedBalance();
+                        
+                        // Highlight the initially selected option
+                        const initialSelectedOption = document.querySelector(`.wallet-option[data-wallet-type="${selectedWalletType}"]`);
+                        if (initialSelectedOption) {
+                            initialSelectedOption.classList.add('active');
+                        }
+                        
+                        // Wallet dropdown toggle
+                        if (walletToggle && walletDropdown) {
+                            walletToggle.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                                this.setAttribute('aria-expanded', !isExpanded);
+                                walletDropdown.style.display = isExpanded ? 'none' : 'block';
+                            });
+                        }
+                        
+                        // Close dropdown when clicking outside
+                        document.addEventListener('click', function(e) {
+                            if (!walletToggle.contains(e.target) && !walletDropdown.contains(e.target)) {
+                                if (walletDropdown) walletDropdown.style.display = 'none';
+                                if (walletToggle) walletToggle.setAttribute('aria-expanded', 'false');
+                            }
+                        });
+                    });
+                </script>
 
-                    <style>
-                        .header__wallet-container {
-                            min-width: 180px;
-                        }
-                        .wallet-balance-display {
-                            cursor: pointer;
-                            transition: all 0.2s;
-                        }
-                        .wallet-balance-display:hover {
-                            opacity: 0.8;
-                        }
-                        .wallet-options-dropdown {
-                            min-width: 220px;
-                            border: 1px solid rgba(0,0,0,0.1);
-                            border-radius: 8px;
-                            padding: 0.5rem 0;
-                            display: none;
-                            position: absolute;
-                            right: 0;
-                            z-index: 1000;
-                            background: white;
-                        }
-                        .wallet-option {
-                            transition: background 0.2s;
-                        }
-                        .wallet-option:hover, .wallet-option.active {
-                            background: #f8f9fa;
-                            font-weight: 500;
-                        }
-                        .wallet-option.active {
-                            background: #e9ecef;
-                        }
-                        .currency-label {
-                            font-weight: 500;
-                        }
-                        .balance-amount {
-                            color: #6c757d;
-                            /* font-family: monospace; */
-                        }
-                        .currency {
-                            font-weight: 500;
-                            margin-right: 4px;
-                        }
-                        /* .amount {
-                            font-family: monospace;
-                        } */
-                    </style>
-                </div>
+                <style>
+                    .header__wallet-container {
+                        min-width: 180px;
+                    }
+                    .wallet-balance-display {
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+                    .wallet-balance-display:hover {
+                        opacity: 0.8;
+                    }
+                    .wallet-options-dropdown {
+                        min-width: 220px;
+                        border: 1px solid rgba(0,0,0,0.1);
+                        border-radius: 8px;
+                        padding: 0.5rem 0;
+                        display: none;
+                        position: absolute;
+                        right: 0;
+                        z-index: 1000;
+                        background: white;
+                    }
+                    .wallet-option {
+                        transition: background 0.2s;
+                    }
+                    .wallet-option:hover, .wallet-option.active {
+                        background: #f8f9fa;
+                        font-weight: 500;
+                    }
+                    .wallet-option.active {
+                        background: #e9ecef;
+                    }
+                    .currency-label {
+                        font-weight: 500;
+                    }
+                    .balance-amount {
+                        color: #6c757d;
+                        /* font-family: monospace; */
+                    }
+                    .currency {
+                        font-weight: 500;
+                        margin-right: 4px;
+                    }
+                    /* .amount {
+                        font-family: monospace;
+                    } */
+                </style>
+
+
+
                 <ul class="nav-bar__menu d-flex" style="margin-right: 10px">
-                    
                     <li class="nav-bar__menu--items">
                         <a class="nav-bar__menu--icon" href="#" id="light__to--dark">
                             <svg class="light--mode__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -301,55 +303,55 @@
                             <span class="visually-hidden">Dark Light</span> 
                         </a>
                     </li>
+                    <!-- Notifications -->
                     <li class="nav-bar__menu--items header__apps--menu position-relative">
-                        <a class="nav-bar__menu--icon apps__menu--icon active" href="#" aria-label="Notifications">
+                        <button class="nav-bar__menu--icon apps__menu--icon active btn btn-link p-0 position-relative" 
+                                aria-label="Notifications" 
+                                aria-expanded="false" 
+                                aria-controls="notificationsDropdown">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M10.0167 2.42505C7.25841 2.42505 5.01674 4.66672 5.01674 7.42505V9.83338C5.01674 10.3417 4.80007 11.1167 4.54174 11.55L3.58341 13.1417C2.99174 14.125 3.40007 15.2167 4.48341 15.5834C8.07507 16.7834 11.9501 16.7834 15.5417 15.5834C16.5501 15.2501 16.9917 14.0584 16.4417 13.1417L15.4834 11.55C15.2334 11.1167 15.0167 10.3417 15.0167 9.83338V7.42505C15.0167 4.67505 12.7667 2.42505 10.0167 2.42505Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round"/>
-                                <path d="M11.5584 2.6667C11.3001 2.5917 11.0334 2.53337 10.7584 2.50003C9.95843 2.40003 9.19176 2.45837 8.4751 2.6667C8.71676 2.05003 9.31676 1.6167 10.0168 1.6167C10.7168 1.6167 11.3168 2.05003 11.5584 2.6667Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M11.5584 2.6667C11.3001 2.5917 11.0334 2.53337 10.7584 2.50003C9.95843 2.40003 9.19176 2.45837 8.4751 2.6667C8.71676 2.05003 9.31676 2.05003 10.0168 1.6167C10.7168 1.6167 11.3168 2.05003 11.5584 2.6667Z" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M12.5166 15.8833C12.5166 17.2583 11.3916 18.3833 10.0166 18.3833C9.33327 18.3833 8.69993 18.1 8.24993 17.65C7.79993 17.2 7.5166 16.5666 7.5166 15.8833" stroke="currentColor" stroke-miterlimit="10"/>
-                            </svg> 
-                            <span class="nav-bar__notification--badge" id="notificationCount">{{ $notificationCount }}</span>
-                            <span class="visually-hidden">Notification</span>                                         
-                        </a>
-                        
-                        <div class="dropdown__related--apps">
+                            </svg>
+                            <span class="nav-bar__notification--badge" id="notificationCount">{{ $notificationCount ?? 0 }}</span>
+                        </button>
+
+                        <!-- Notifications Dropdown -->
+                        <div class="dropdown__related--apps" id="notificationsDropdown">
                             <div class="dropdown__apps--header">
-                                <h3 class="dropdown__apps--title">Notifications ({{ $notificationCount }})</h3>
+                                <h3 class="dropdown__apps--title">Notifications ({{ $notificationCount ?? 0 }})</h3>
                             </div>
                             
                             <div class="notification__list p-3">
-                                @forelse ($notificationsBar as $notification)
+                                @forelse ($notificationsBar ?? [] as $notification)
                                     <div class="notification__item {{ $notification->read_at ? 'unread' : '' }}">
                                         <a href="{{ route('user.notifications.show', encrypt($notification->id)) }}" 
                                             class="notification__link mark-as-read" 
                                             onclick="markNotificationAsRead(event, this)"
-                                            data-notification-id="{{ $notification->id }}"
-                                            data-property-mode="{{ $notification->data['property_mode'] ?? '' }}">
-            
+                                            data-notification-id="{{ $notification->id }}">
+                                            
                                             <div class="notification__content">
-                                                {{-- {{$notification['data']['notification_status']}} --}}
-                                                @if(in_array($notification['data']['notification_status'], ['PropertyValuationNotification', 'PropertyValuationPredictionNotification','propertyValuationPredictionNotification']))
-                                                    @include('.user/partial/notifications/propertyValuationPredictionNotification')
- 
+                                                @if(in_array($notification['data']['notification_status'], ['PropertyValuationNotification', 'PropertyValuationPredictionNotification']))
+                                                    @include('user.partial.notifications.propertyValuationPredictionNotification')
                                                 @elseif($notification['data']['notification_status'] == 'sellPropertyUserNotification')
-                                                    @include('.user/partial/notifications/sellPropertyUserNotification')
-                                                @elseif($notification['data']['notification_status'] == 'senderTransferNotification' || $notification['data']['notification_status'] == 'Sender Transfer Notification')
-                                                    @include('.user/partial/notifications/senderTransferNotification')
+                                                    @include('user.partial.notifications.sellPropertyUserNotification')
+                                                @elseif(in_array($notification['data']['notification_status'], ['senderTransferNotification', 'Sender Transfer Notification']))
+                                                    @include('user.partial.notifications.senderTransferNotification')
                                                 @elseif($notification['data']['notification_status'] == 'transferNotification')
-                                                    @include('.user/partial/notifications/transferNotification')
-                                                @elseif($notification['data']['notification_status'] == 'propertyValuationNotification' || $notification['data']['notification_status'] == 'Property Valuation Notification')
-                                                    @include('.user/partial/notifications/propertyValuationNotification')
+                                                    @include('user.partial.notifications.transferNotification')
+                                                @elseif(in_array($notification['data']['notification_status'], ['propertyValuationNotification', 'Property Valuation Notification']))
+                                                    @include('user.partial.notifications.propertyValuationNotification')
                                                 @elseif($notification['data']['notification_status'] == 'referral_connection')
-                                                    @include('.user/partial/notifications/referralConnection')
-                                                @elseif($notification['data']['notification_status'] == 'recipientSubmittedNotification' || $notification['data']['notification_status'] == 'Recipient Submitted Notification')
-                                                    @include('.user/partial/notifications/recipientSubmittedNotification')
+                                                    @include('user.partial.notifications.referralConnection')
+                                                @elseif(in_array($notification['data']['notification_status'], ['recipientSubmittedNotification', 'Recipient Submitted Notification']))
+                                                    @include('user.partial.notifications.recipientSubmittedNotification')
                                                 @elseif($notification['data']['notification_status'] == 'new_referral')
-                                                    @include('.user/partial/notifications/new_referral')
-                                                @elseif($notification['data']['notification_status'] == 'WalletFundedNotification' || $notification['data']['notification_status'] == 'walletFundedNotification' || $notification['data']['notification_status'] == 'Wallet Funded Notification')
-                                                    @include('.user/partial/notifications/walletFundedNotification')
-                                                @elseif($notification['data']['notification_status'] == 'buyProperty' )
-                                                    @include('.user/partial/notifications/buyProperty')
-                                                  
+                                                    @include('user.partial.notifications.new_referral')
+                                                @elseif(in_array($notification['data']['notification_status'], ['WalletFundedNotification', 'walletFundedNotification', 'Wallet Funded Notification']))
+                                                    @include('user.partial.notifications.walletFundedNotification')
+                                                @elseif($notification['data']['notification_status'] == 'buyProperty')
+                                                    @include('user.partial.notifications.buyProperty')
                                                 @elseif($notification['data']['notification_status'] == 'WalletTransferNotification')
                                                     <div class="notification__type--transfer">
                                                         <h4>{{ $notification['data']['message'] ?? 'Transfer Notification' }}</h4>
@@ -358,14 +360,8 @@
                                                             <small>New balance: ₦{{ number_format($notification['data']['new_balance'], 2) }}</small>
                                                         </p>
                                                     </div>
-                                                @else
-                                                    
                                                 @endif
-                                                
-                                                <div class="notification__meta">
-                                                </div>
                                             </div>
-                                            
                                         </a>
                                     </div>
                                 @empty
@@ -382,7 +378,6 @@
                             </div>
                         </div>
                     </li>
-                    
                     @push('scripts')
                         <script>
                             function markNotificationAsRead(event, element) {
@@ -452,16 +447,23 @@
                             document.addEventListener('DOMContentLoaded', function() {
                                 const hideBalanceCheckbox = document.getElementById('flexSwitchCheckDefault');
                                 const walletDropdownContainer = document.querySelector('.wallet-dropdown-container');
-
-                                if (!walletDropdownContainer) return; // Exit if dropdown HTML isn't rendered (e.g. balance hidden by default)
-
+                                
+                                if (!walletDropdownContainer) {
+                                    // console.warn('Wallet dropdown container not found.');
+                                    return; 
+                                }
+                                
                                 const activeBalanceDisplay = walletDropdownContainer.querySelector('#activeBalanceDisplay');
                                 const activeBalanceText = walletDropdownContainer.querySelector('#activeBalanceText');
                                 const dropdown = walletDropdownContainer.querySelector('.wallet-options-dropdown');
-                                const walletOptions = dropdown ? dropdown.querySelectorAll('.wallet-select-option') : [];
-
+                                
+                                if (!activeBalanceDisplay || !dropdown || !activeBalanceText) {
+                                    // console.warn('Essential wallet display elements not found.');
+                                    return;
+                                }
+                                
                                 let isHiddenByToggle = hideBalanceCheckbox ? hideBalanceCheckbox.checked : ({{ Auth::user()->hide_balance ? 'true' : 'false' }});
-                                const selectedCurrencyKey = 'selectedWalletCurrencyLabel';
+                                const selectedCurrencyKey = 'selectedWalletCurrencyLabel_v1';
 
                                 function formatBalance(currencySymbol, balanceValue) {
                                     const numericBalance = parseFloat(balanceValue);
@@ -477,14 +479,27 @@
                                         const currency = selectedOption.dataset.currencySymbol;
                                         const balance = selectedOption.dataset.balanceValue;
                                         activeBalanceText.textContent = formatBalance(currency, balance);
-                                        localStorage.setItem(selectedCurrencyKey, selectedOption.dataset.label);
+                                        if (selectedOption.dataset.label) { // Ensure label exists before saving
+                                            localStorage.setItem(selectedCurrencyKey, selectedOption.dataset.label);
+                                        }
                                     } else {
-                                        activeBalanceText.textContent = 'N/A';
+                                        // If no option selected, and not hidden, rely on server-rendered initial text
+                                        // or set to 'N/A' if that's the desired fallback.
+                                        // The initial server-rendered text is already in activeBalanceText.
+                                        // If all options are 0, it might show N/A or the primary currency with 0.00
+                                        // For now, if selectedOption is null and not hidden, we don't change text from initial
+                                        // unless it was explicitly 'N/A' from no options.
+                                        if (walletOptions.length === 0 && !isHiddenByToggle) {
+                                            activeBalanceText.textContent = 'N/A';
+                                        }
                                     }
                                 }
-
+                                
+                                const walletOptions = dropdown.querySelectorAll('.wallet-select-option');
+                                let initiallySelectedOption = null;
+                                
                                 if (walletOptions.length > 0) {
-                                    let initiallySelectedOption = walletOptions[0];
+                                    initiallySelectedOption = walletOptions[0]; // Default to the first option
                                     const savedCurrencyLabel = localStorage.getItem(selectedCurrencyKey);
                                     if (savedCurrencyLabel) {
                                         for (let option of walletOptions) {
@@ -494,50 +509,62 @@
                                             }
                                         }
                                     }
-                                    updateActiveBalanceDisplay(initiallySelectedOption);
+                                }
+                                updateActiveBalanceDisplay(initiallySelectedOption);
 
-                                    activeBalanceDisplay.addEventListener('click', function(event) {
-                                        event.stopPropagation();
-                                        if (!isHiddenByToggle && dropdown) dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-                                    });
+                                activeBalanceDisplay.addEventListener('click', function(event) {
+                                    event.stopPropagation();
+                                    if (!isHiddenByToggle) {
+                                        const isCurrentlyHidden = dropdown.style.display === 'none' || dropdown.style.display === '';
+                                        dropdown.style.display = isCurrentlyHidden ? 'block' : 'none';
+                                        activeBalanceDisplay.setAttribute('aria-expanded', String(!isCurrentlyHidden));
+                                    }
+                                });
 
+                                if (walletOptions.length > 0) {
                                     walletOptions.forEach(option => {
                                         option.addEventListener('click', function(event) {
                                             event.preventDefault();
                                             updateActiveBalanceDisplay(this);
-                                            if (dropdown) dropdown.style.display = 'none';
+                                            dropdown.style.display = 'none';
+                                            activeBalanceDisplay.setAttribute('aria-expanded', 'false');
                                         });
                                     });
                                 } else {
-                                    updateActiveBalanceDisplay(null);
-                                    if(activeBalanceDisplay) activeBalanceDisplay.style.cursor = 'default';
+                                    // If no actual currency options, the dropdown might show "Wallet not available"
+                                    // The main click listener on activeBalanceDisplay still allows opening it.
+                                    // activeBalanceDisplay.style.cursor = 'default'; // Optional: if no items, make it look less clickable
                                 }
-
+                                
                                 if (hideBalanceCheckbox) {
                                     hideBalanceCheckbox.addEventListener('change', function() {
                                         isHiddenByToggle = this.checked;
-                                        // Re-evaluate which option should be displayed
+                                        // This logic runs before page reload from toggleHideBalance()
+                                        // Update text immediately for visual feedback, reload will set final state.
                                         const currentSelectedLabel = localStorage.getItem(selectedCurrencyKey);
-                                        let currentOptionToDisplay = walletOptions.length > 0 ? walletOptions[0] : null;
-                                        if (currentSelectedLabel && walletOptions.length > 0) {
-                                            for (let opt of walletOptions) { if (opt.dataset.label === currentSelectedLabel) { currentOptionToDisplay = opt; break; }}
+                                        let optionToDisplayBasedOnStorage = initiallySelectedOption; // Start with the default/first
+                                        if (currentSelectedLabel && walletOptions.length > 0) { // Try to find stored preference
+                                            for (let opt of walletOptions) { if (opt.dataset.label === currentSelectedLabel) { optionToDisplayBasedOnStorage = opt; break; }}
                                         }
-                                        updateActiveBalanceDisplay(currentOptionToDisplay);
-                                        if (isHiddenByToggle && dropdown) dropdown.style.display = 'none';
+                                        updateActiveBalanceDisplay(optionToDisplayBasedOnStorage);
+                                        
+                                        if (isHiddenByToggle) {
+                                            dropdown.style.display = 'none';
+                                            activeBalanceDisplay.setAttribute('aria-expanded', 'false');
+                                        }
                                     });
                                 }
 
                                 document.addEventListener('click', function(event) {
-                                    if (dropdown && dropdown.style.display === 'block' && !walletDropdownContainer.contains(event.target)) {
+                                    if (dropdown.style.display === 'block' && !walletDropdownContainer.contains(event.target)) {
                                         dropdown.style.display = 'none';
+                                        activeBalanceDisplay.setAttribute('aria-expanded', 'false');
                                     }
                                 });
                             });
                         </script>
                     @endpush
-                   
-                   
-                </ul> 
+                </ul>  
 
                 <div class="header__user--profile">
                     <a class="header__user--profile__link d-flex align-items-center" href="#">

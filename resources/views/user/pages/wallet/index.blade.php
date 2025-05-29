@@ -43,7 +43,7 @@
                                         
                                         <section class="welcome__section d-flex justify-content-between align-items-center">
                                             <div class="welcome__content">
-                                                <span class="currency__card--amount">{{ $wallet->currency}} {{ number_format($wallet->balance, 2) }}</span>
+                                                <span class="currency__card--amount">{{ Auth::user()->hide_balance ? '••••' : $wallet->currency}} {{ Auth::user()->hide_balance ? '••••' : number_format($wallet->balance, 2) }}</span>
                                             </div>
                                             
                                         </section>

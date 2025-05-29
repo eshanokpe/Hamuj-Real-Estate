@@ -66,7 +66,7 @@
                                         </h3>
                                         <span class="currency__card--amount">₦{{ number_format($totalPropertyAmount, 2)}}</span>
                                         <div class="currency__card--footer"> 
-                                        
+                                         
                                             <span class="currency__weekly">Property assets</span>
                                             <span class="currency__increase ">
                                                 <a class="currency__withdrawal" href="{{ route('user.buy') }}">
