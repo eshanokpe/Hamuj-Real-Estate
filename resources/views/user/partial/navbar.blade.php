@@ -169,7 +169,7 @@
                                     const balance = selectedOption.dataset.balance;
                                     balanceText.innerHTML = `
                                         <span class="currency">${currency}</span>
-                                        <span class="amount">${parseFloat(balance).toFixed(2)}</span>
+                                        <span class="amount">${number_format( balance, 2)}</span>
                                     `;
                                 } else {
                                     // Fallback to primary wallet if selection doesn't exist
@@ -180,7 +180,7 @@
                                         const balance = primaryOption.dataset.balance;
                                         balanceText.innerHTML = `
                                             <span class="currency">${currency}</span>
-                                            <span class="amount">${parseFloat(balance).toFixed(2)}</span>
+                                            <span class="amount">${number_format( balance, 2)}</span>
                                         `;
                                     } else {
                                         // No wallets available
