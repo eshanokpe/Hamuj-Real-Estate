@@ -16,12 +16,14 @@ class Order extends Model
         'revolut_public_id',
         'amount',
         'currency',
-        'state'
+        'state',
+        'processed_at'
     ];
 
     // Optionally cast the amount to integer (since it's stored in cents)
     protected $casts = [
-        'amount' => 'integer'
+        'amount' => 'integer',
+        'processed_at' => 'datetime'
     ];
 
     public function user()

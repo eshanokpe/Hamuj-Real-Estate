@@ -118,28 +118,50 @@ class OrderController extends Controller
     {
         $id = $request->input('_rp_oid');
         try {
-            $order = Order::where('revolut_public_id', $id)->firstOrFail();
+            $order = Order::with(['user.wallet'])
+            ->where('revolut_public_id', $id)
+            ->firstOrFail(); // Check if already processed
+
+            if ($order->state === 'COMPLETED') {
+                return view('user.pages.success.index', [
+                    'success' => true,
+                    'order' => $order,
+                    'message' => 'Payment was already processed'
+                ]);
+            }
             
+            // Verify payment status from Revolut
             $response = $this->revolutService->getOrder($order->revolut_order_id);
             $orderData = json_decode($response->getBody(), true);
             
-            $amount = $orderData['order_amount']['value'];
-            $currency = $orderData['order_amount']['currency'];
-            $amountInPounds = $amount / 100;
-            $order->user->wallet->increment('gbp_balance', $amountInPounds);
-            $order->update(['state' => 'COMPLETED']);
- 
+            // Process in transaction
+            DB::transaction(function () use ($order, $orderData) {
+                $amount = $orderData['order_amount']['value'] / 100;
+                $currency = $orderData['order_amount']['currency'];
+                
+                // Final verification inside transaction
+                if ($order->fresh()->state !== 'COMPLETED') {
+                    $order->user->wallet()->increment('gbp_balance', $amount);
+                    $order->update([
+                        'state' => 'COMPLETED',
+                        'processed_at' => now() 
+                    ]);
+                }
+            });
+
             return view('user.pages.success.index', [
                 'success' => true,
-                'order' => $orderData, 
+                'order' => $orderData,
                 'message' => 'Payment completed successfully!'
             ]);
+ 
 
         } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Failed to get order',
-                'message' => $e->getMessage(),
-            ], 500);
+            // return response()->json([
+            //     'error' => 'Failed to get order',
+            //     'message' => $e->getMessage(),
+            // ], 500);
+            return redirect()->route('user.payment.failed')->withErrors($e->getMessage());
         }
     } 
 
