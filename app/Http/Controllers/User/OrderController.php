@@ -79,8 +79,10 @@ class OrderController extends Controller
             // }
 
             // $revolutOrder = $response->json();
+            $user = Auth::user();
             $orderData = json_decode($response->getBody(), true);
             $order = Order::create([
+                'user_id' => $user->id,
                 'description' => $validated['name'],
                 'revolut_order_id' => $orderData['id'],
                 'revolut_public_id' => $orderData['public_id'],
@@ -125,7 +127,7 @@ class OrderController extends Controller
             $currency = $orderData['order_amount']['currency'];
             $amountInPounds = $amount / 100;
             $order->user->wallet->increment('gbp_balance', $amountInPounds);
-            $order->update(['status' => 'completed']);
+            $order->update(['state' => 'completed']);
  
             return view('user.pages.success.index', [
                 'success' => true,
