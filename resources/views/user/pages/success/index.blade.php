@@ -78,22 +78,41 @@
                     <p>Your payment has been successfully processed.</p>
                     <p>Thank you for your purchase! You will receive an email confirmation shortly.</p>
                     {{-- <a>{{ json_encode($order, true) ?? ''}}</a> --}}
+                    @if($order != null)
                     <div class="order-details">
                         <h3>Order: {{ $order['description'] ?? 'N/A' }}</h3>
                         <p><strong>Status:</strong> {{ $order['state'] ?? 'N/A' }}</p>
                         <p><strong>Order ID:</strong> {{ $order['public_id'] ?? 'N/A' }}</p>
-                        <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($order['created_at'])->format('M d, Y H:i') }}</p>
-                        <p><strong>Amount:</strong> £{{ number_format($order['order_amount']['value'] / 100, 2) }} GBP</p>
+                        <p><strong>Date:</strong>
+                            @php $createdAt = data_get($order, 'created_at'); @endphp
+                            {{ $createdAt ? \Carbon\Carbon::parse($createdAt)->format('M d, Y H:i') : 'N/A' }}
+                        </p>
+                        <p><strong>Amount:</strong>
+                            @php $orderAmountValue = data_get($order, 'order_amount.value'); @endphp
+                            @if(!is_null($orderAmountValue))
+                                £{{ number_format($orderAmountValue / 100, 2) }} GBP
+                            @else
+                                N/A
+                            @endif
+                        </p>
                         
-                        @if(!empty($order['payments']))
+                        @if(!empty(data_get($order, 'payments')))
                         <div class="payment-details">
                             <h4>Payment Information</h4>
-                            <p><strong>Method:</strong> {{ $order['payments'][0]['payment_method']['card']['card_brand'] ?? 'N/A' }}</p>
-                            <p><strong>Card:</strong> **** **** **** {{ $order['payments'][0]['payment_method']['card']['card_last_four'] ?? 'N/A' }}</p>
-                            <p><strong>Settled Amount:</strong> £{{ number_format($order['payments'][0]['settled_amount']['value'] / 100, 2) }}</p>
+                            <p><strong>Method:</strong> {{ data_get($order, 'payments.0.payment_method.card.card_brand', 'N/A') }}</p>
+                            <p><strong>Card:</strong> **** **** **** {{ data_get($order, 'payments.0.payment_method.card.card_last_four', 'N/A') }}</p>
+                            <p><strong>Settled Amount:</strong>
+                                @php $settledAmountValue = data_get($order, 'payments.0.settled_amount.value'); @endphp
+                                @if(!is_null($settledAmountValue))
+                                    £{{ number_format($settledAmountValue / 100, 2) }}
+                                @else
+                                    N/A
+                                @endif
+                            </p>
                         </div>
                         @endif
                     </div>
+                    @endif
                     <a href="{{ route('user.dashboard') }}" class="btn-return">Return to Dashboard</a>
                 </div>
             </div>
