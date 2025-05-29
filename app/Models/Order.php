@@ -10,6 +10,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'description',
         'revolut_order_id',
         'revolut_public_id',
@@ -27,4 +28,5 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+
 }
