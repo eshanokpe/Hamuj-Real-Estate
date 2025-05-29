@@ -79,13 +79,14 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('properties-details/{slug}', [CartController::class, 'buy']);
    
   
-
+    Route::get('/cart/{id}', [CartController::class, 'index'])->name('cart.index');
     Route::get('/cart/sell/{id}', [CartController::class, 'sell'])->name('cart.sell.index');  
     Route::get('/cart/transfer/{id}', [CartController::class, 'transfer'])->name('cart.transfer.index');
     Route::post('/payment/initiate', [PaymentController::class, 'initializePayment'])->name('payment.initiate'); 
     Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
 
-    Route::get('/payment/failed', [RevolutPaymentController::class, 'failed'])->name('payment.failed');
+    Route::get('/payment/failed', [OrderController::class, 'failed'])->name('payment.failed');
+    Route::get('success/', [OrderController::class, 'success']);
    
     
     Route::get('/purchases', [DashboardController::class, 'purchases'])->name('purchases');
@@ -159,6 +160,6 @@ Route::get('user/config', function () {
     return response()->json([ 
         'revolutPublicKey' => config('services.revolut.public_key'),
     ]);
-});
+}); 
 Route::post('user/api/orders', [OrderController::class, 'createOrder']); 
-Route::get('user/success/', [OrderController::class, 'success']);
+// Route::get('user/success/', [OrderController::class, 'success']);

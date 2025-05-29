@@ -68,13 +68,13 @@ const RevolutPayButton = ({ amountInCents, currency }) => {
 
         // Handle payment events
         revolutPay.on("payment", (event) => {
-          switch (event.type) {
+          switch (event.type) { 
             case "cancel":
               console.warn("Payment canceled:", event.dropOffState);
               break;
             case "success":
               console.log("Payment event:", event);
-              window.location.href = `${url}/user/success&order_id=${event.orderId}`;
+              window.location.href = `${url}/user/success/?_rp_oid=${event.orderId}&order_id=${event.orderId}`;
              
               // window.location.href = `${url}/user/success/?_rp_oid=${event}&order_id=${event.orderId}`;
               break;

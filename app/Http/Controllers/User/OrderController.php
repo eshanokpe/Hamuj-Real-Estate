@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Order;
+use App\Models\Transaction;
+use Illuminate\Support\Facades\DB; 
 use App\Services\RevolutService;
 
 class OrderController extends Controller
@@ -90,20 +92,12 @@ class OrderController extends Controller
                 'currency' => $validated['currency'],
                 'state' => $orderData['state']
             ]);
+            
             return response()->json([
                 'description' => $order->description,
                 'revolutPublicOrderId' => $order->revolut_public_id,
                 'state' => $order->state
             ]);
-            // return response()->json([
-            //     'amount' => $request->amount,
-            //     'currency' => $request->currency,
-            //     'name' => $request->name,
-            //     'orderId' => $revolutOrder['id'] ?? null,
-            //     'description' => $revolutOrder['description'] ?? null,
-            //     'revolutPublicOrderId' => $revolutOrder['public_id'] ?? null,
-            //     'state' => $revolutOrder['state'] ?? null,
-            // ], $response->status());
 
         } catch (\Exception $e) {
             return response()->json([
@@ -117,35 +111,64 @@ class OrderController extends Controller
     public function success(Request $request)
     {
         $id = $request->input('_rp_oid');
+        
         try {
             $order = Order::with(['user.wallet'])
-            ->where('revolut_public_id', $id)
-            ->firstOrFail(); // Check if already processed
-            
-            // Verify payment status from Revolut
-            $response = $this->revolutService->getOrder($order->revolut_order_id);
-            $orderData = json_decode($response->getBody(), true);
+                ->where('revolut_public_id', $id)
+                ->firstOrFail();
+
+            // Check if already processed
             if ($order->state === 'COMPLETED') {
                 return view('user.pages.success.index', [
                     'success' => true,
-                    'order' => $orderData,
+                    'order' => $order->toArray(),
                     'message' => 'Payment was already processed'
                 ]);
             }
-            
-            
-            
+
+            // Verify payment status from Revolut
+            $response = $this->revolutService->getOrder($order->revolut_order_id);
+            $orderData = json_decode($response->getBody(), true);
+
+            // Double-check payment completion
+            if ($orderData['state'] !== 'COMPLETED') {
+                throw new \Exception('Payment not yet completed');
+            }
+
             // Process in transaction
             DB::transaction(function () use ($order, $orderData) {
                 $amount = $orderData['order_amount']['value'] / 100;
                 $currency = $orderData['order_amount']['currency'];
+                $reference = $orderData['id']; // Using Revolut order ID as reference
                 
                 // Final verification inside transaction
                 if ($order->fresh()->state !== 'COMPLETED') {
+                    // 1. Update wallet
                     $order->user->wallet()->increment('gbp_balance', $amount);
+                    
+                    // 2. Create transaction record
+                    Transaction::create([
+                        'user_id' => $order->user->id,
+                        'email' => $order->user->email,
+                        'amount' => $amount,
+                        'transaction_type' => 'revolut_topup', 
+                        'reference' => $reference,
+                        'status' => 'success', 
+                        'description' => 'Wallet funded via Revolut Pay',
+                        'payment_method' => $orderData['payments'][0]['payment_method']['type'] ?? 'card',
+                        'recipient_name' => $order->user->full_name,
+                        'source' => 'checkout_success', 
+                        'metadata' => json_encode([
+                            'revolut_order_id' => $order->revolut_order_id,
+                            'currency' => $currency,
+                            'payment_details' => $orderData['payments'][0] ?? null
+                        ]), 
+                    ]);
+
+                    // 3. Update order status
                     $order->update([
                         'state' => 'COMPLETED',
-                        'processed_at' => now() 
+                        'processed_at' => now()
                     ]);
                 }
             });
@@ -155,16 +178,15 @@ class OrderController extends Controller
                 'order' => $orderData,
                 'message' => 'Payment completed successfully!'
             ]);
- 
 
         } catch (\Exception $e) {
-            // return response()->json([
-            //     'error' => 'Failed to get order',
-            //     'message' => $e->getMessage(),
-            // ], 500);
+            Log::error("Payment processing failed: " . $e->getMessage(), [
+                'order_id' => $id ?? null,
+                'exception' => $e
+            ]);
             return redirect()->route('user.payment.failed')->withErrors($e->getMessage());
         }
-    } 
+    }
 
     public function failed(){
         return view('user.pages.payment.failed'); 
