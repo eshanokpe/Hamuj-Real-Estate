@@ -106,17 +106,17 @@
                                         'currency' => 'GBP',
                                         'label' => 'GBP'
                                     ],
-                                    'usd' => [
-                                        'value' => $wallet->usd_balance ?? 0,
-                                        'currency' => 'USD',
-                                        'label' => 'USD'
-                                    ]
+                                    // 'usd' => [
+                                    //     'value' => $wallet->usd_balance ?? 0,
+                                    //     'currency' => 'USD',
+                                    //     'label' => 'USD'
+                                    // ]
                                 ];
                             @endphp
 
                             @if($hasWallet)
                                 @foreach($balances as $key => $balance)
-                                    @if($balance['value'] > 0)
+                                    @if($balance['value'])
                                         <button class="dropdown-item wallet-option d-flex justify-content-between align-items-center px-3 py-2"
                                                 type="button"
                                                 data-wallet-type="{{ $key }}"
