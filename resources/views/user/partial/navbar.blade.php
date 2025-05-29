@@ -94,7 +94,7 @@
                             aria-labelledby="walletBalanceToggle">
                             @php
                                 $wallet = Auth::user()->wallet ?? null;
-                                $hasWallet = $wallet !== null;
+                                $hasWallet = $wallet === 0.0;
                                 $balances = [
                                     'primary' => [
                                         'value' => $wallet->balance ?? 0,
