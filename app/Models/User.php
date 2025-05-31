@@ -217,6 +217,19 @@ class User extends Authenticatable
         ];
     }
 
+    public function paystackAccounts()
+    {
+        return $this->hasMany(PaystackAccount::class);
+    }
 
+    public function defaultPaystackAccount()
+    {
+        return $this->hasOne(PaystackAccount::class)->where('is_default', true);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }
  

@@ -32,8 +32,6 @@ class WalletController extends Controller
     }
 
     // Create Dedicated Virtual Account
-    
-
     public function createDedicatedAccount(string $customerId)
     {
         $data = ['customer' => $customerId];
@@ -103,6 +101,7 @@ class WalletController extends Controller
             return [];
         }
     }
+
     public function verifyAccount($accountNumber, $bankCode)
     {
         
@@ -125,6 +124,6 @@ class WalletController extends Controller
         ]);
     }
 
-    
+
 
 }

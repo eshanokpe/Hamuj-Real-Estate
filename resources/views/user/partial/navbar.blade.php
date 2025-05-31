@@ -117,7 +117,8 @@
                             @if($hasWallet)
                                 @foreach($balances as $key => $balance)
                                     @if($balance['value'])
-                                        <button class="dropdown-item wallet-option d-flex justify-content-between align-items-center px-3 py-2"
+                                        <a href="{{ route('user.wallet.exchange', ['from' => strtolower($balance['currency'])]) }}" 
+                                            class="dropdown-item wallet-option d-flex justify-content-between align-items-center px-3 py-2"
                                                 type="button"
                                                 data-wallet-type="{{ $key }}"
                                                 data-currency="{{ $balance['currency'] }}"
@@ -126,7 +127,7 @@
                                             <span class="balance-amount">
                                                 {{ $balance['currency'] }} {{ number_format($balance['value'], 2) }}
                                             </span>
-                                        </button>
+                                        </a>
                                     @endif
                                 @endforeach
                             @else
@@ -275,21 +276,26 @@
                             z-index: 1000;
                             background: white;
                         }
-                        .wallet-option {
+                         .wallet-option {
                             transition: background 0.2s;
                         }
                         .wallet-option:hover, .wallet-option.active {
-                            background: #f8f9fa;
+                            background: #47008E;
+                            color: #fff;
                             font-weight: 500;
                         }
-                        .wallet-option.active {
-                            background: #e9ecef;
+                       .wallet-option.active {
+                            /* background: #e9ecef; */
                         }
                         .currency-label {
                             font-weight: 500;
                         }
+                        .balance-amount.active {
+                            color: #fff;
+                            /* font-family: monospace; */
+                        }
                         .balance-amount {
-                            color: #6c757d;
+                            color: #a4b1bd;
                             /* font-family: monospace; */
                         }
                         .currency {

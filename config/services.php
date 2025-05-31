@@ -40,5 +40,11 @@ return [
         'webhook_secret' => env('REVOLUT_WEBHOOK_SECRET'), 
         'timeout' => env('REVOLUT_TIMEOUT', 30), // request timeout in seconds
     ],
+    'exchange' => [
+        'gbp_to_ngn' => env('EXCHANGE_RATE_GBP_TO_NGN', 1500), // Default rate if not set in .env
+        'ngn_to_gbp' => function() {
+            return 1 / config('services.exchange.gbp_to_ngn');
+        }
+    ],
 
 ];

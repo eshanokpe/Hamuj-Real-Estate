@@ -17,6 +17,7 @@ use App\Http\Controllers\User\SellPropertyController;
 use App\Http\Controllers\User\SecurityController;
 use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\TransferPropertyController;
+use App\Http\Controllers\User\Wallet\ExchangeController;
 use App\Http\Controllers\User\Wallet\WalletController;
 use App\Http\Controllers\User\Wallet\WalletTransferController;
  
@@ -122,6 +123,12 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('wallet/top-up', [WalletController::class, 'topUp'])->name('wallet.topUp');
     Route::get('wallet/with-draw', [WalletController::class, 'withDraw'])->name('wallet.withdraw');
     Route::get('wallet/transfer-post', [WalletController::class, 'transferPost'])->name('wallet.transferPost');
+    
+    Route::get('/wallet/exchange/{from}', [ExchangeController::class, 'index'])->name('wallet.exchange'); 
+    Route::post('/wallet/exchange/gbp-to-ngn', [ExchangeController::class, 'exchangeGbpToNgn'])->name('wallet.exchange-gbp-to-ngn');
+    Route::post('/wallet/exchange/ngn-to-gbp', [ExchangeController::class, 'exchangeNgnToGbp'])->name('wallet.exchange-ngn-to-gbp');
+    Route::post('/wallet/exchange/success', [ExchangeController::class, 'exchangeSuccess'])->name('exchange.success');
+
     
     Route::get('resolve-account', [WalletController::class, 'resolveAccount'])->name('wallet.resolve.account');
  
