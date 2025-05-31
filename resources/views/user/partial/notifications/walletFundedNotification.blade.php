@@ -6,5 +6,5 @@
     <p>
         ₦{{ number_format($notification['data']['amount'], 2) }} received
         <small>New balance: ₦{{ number_format((float) $notification['data']['balance'], 2) }}</small>
-    </p>
+    </p> 
 </div>

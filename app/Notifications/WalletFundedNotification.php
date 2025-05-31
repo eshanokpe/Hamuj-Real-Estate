@@ -20,7 +20,7 @@ class WalletFundedNotification extends Notification implements ShouldQueue
      * Create a new notification instance.
      *
      * @param float $amount
-     * @param float $balance
+     * @param float $balance 
      * @param string $$reference
      */
     public function __construct($amount, $balance, $reference)
@@ -49,8 +49,8 @@ class WalletFundedNotification extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $formattedAmount = number_format($this->amount / 100, 2);
-        $formattedBalance = number_format($this->balance / 100, 2);
+        $formattedAmount = number_format($this->amount, 2);
+        $formattedBalance = number_format($this->balance, 2);
         $formattedDate = Carbon::now()->format('F j, Y, g:i A');
 
         return (new MailMessage)
@@ -82,11 +82,11 @@ class WalletFundedNotification extends Notification implements ShouldQueue
         return [
             'notification_status' => 'walletFundedNotification',
             'subject' => 'Your Wallet Has Been Credited!',
-            'amount' => number_format($this->amount / 100, 2),
-            'balance' => number_format($this->balance / 100, 2),
+            'amount' => number_format($this->amount, 2),
+            'balance' => number_format($this->balance, 2),
             'transaction_id' => $this->reference,
             'date' => now()->toDateTimeString(),
-            'message' => '₦' . number_format($this->amount / 100, 2) . ' has been added to your wallet. New balance: ₦' . number_format($this->balance / 100, 2) . '.',
+            'message' => '₦' . number_format($this->amount, 2) . ' has been added to your wallet. New balance: ₦' . number_format($this->balance / 100, 2) . '.',
         ];
     }
 }
