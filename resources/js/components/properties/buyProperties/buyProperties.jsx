@@ -348,14 +348,14 @@ const BuyProperties = () => {
                                         <div className="modal-body">
                                             {!paymentMethod ? (
                                                 <div className="d-flex flex-column gap-3">
-                                                    <button 
-                                                        className="btn btn-primary"
+                                                    {/* <button 
+                                                        className="solid__btn" style="background-color:rgb(0, 24, 142)"
                                                         onClick={() => handlePaymentMethodSelect('card')}
                                                     >
                                                         Pay with Card
-                                                    </button>
+                                                    </button> */}
                                                     <button 
-                                                        className="btn btn-secondary"
+                                                        className="solid__btn" style="background-color: grey"
                                                         onClick={() => handlePaymentMethodSelect('wallet')}
                                                     >
                                                         Pay with Wallet
