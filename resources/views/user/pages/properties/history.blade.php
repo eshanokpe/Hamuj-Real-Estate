@@ -71,7 +71,7 @@
                             </div>
                             <div class="row mb-3 d-flex justify-content-center">                                                
                                 <div class="d-flex col">
-                                    <p class="text-dark mb-1 fw-semibold">Lunch Price: </p>
+                                    <p class="text-dark mb-1 fw-semibold">Launch Price: </p>
                                     <h3 class="font-22 fw-bold"> ₦{{ number_format($property->lunch_price, 2) }}</h3> 
                                 </div>
                                 <hr/>
@@ -82,7 +82,7 @@
                                     <table class="table cart__table table-borderless" border="0">
                                         <thead class="thead-light">
                                             <th>Year sold</th>
-                                            <th style="padding-left: 20px">Sold price</th>
+                                            <th style="padding-left: 20px">Sale price</th>
                                         </thead> 
                                         <tbody class="timeline mt-10" >
                                             {{-- @forelse ($property->priceUpdates as $item) --}}
