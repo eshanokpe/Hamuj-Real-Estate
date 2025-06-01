@@ -349,13 +349,13 @@ const BuyProperties = () => {
                                             {!paymentMethod ? (
                                                 <div className="d-flex flex-column gap-3">
                                                     <button 
-                                                        className="solid__btn" style="background-color:rgb(0, 24, 142)"
+                                                        className="btn btn-primary"
                                                         onClick={() => handlePaymentMethodSelect('card')}
                                                     >
                                                         Pay with Card
                                                     </button>
                                                     <button 
-                                                        className="solid__btn" style="background-color: grey"
+                                                        className="btn btn-secondary"
                                                         onClick={() => handlePaymentMethodSelect('wallet')}
                                                     >
                                                         Pay with Wallet
@@ -433,7 +433,7 @@ const App = () => (
             <Route path="success" element={<PaymentSuccess />} />
         </Routes>
     </BrowserRouter>
-);  
+);
 
 // Mount to DOM
 const rootEl = document.getElementById('buyProperties');
