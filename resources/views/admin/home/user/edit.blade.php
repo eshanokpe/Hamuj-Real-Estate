@@ -14,10 +14,10 @@
                     <div class="page-title-box">
                         <div class="float-end">
                             <ol class="breadcrumb">
-                                <a href="{{ route('admin.faq.index')}}" class="btn btn-dark">View FAQ</a>
+                                <a href="{{ route('admin.users')}}" class="btn btn-dark">View User</a>
                             </ol>
                         </div>
-                        <h4 class="page-title">Edit FAQ</h4>
+                        <h4 class="page-title">Edit User</h4>
                     </div>
                     <!--end page-title-box-->
                 </div>
@@ -26,27 +26,56 @@
             <!-- end page title end breadcrumb -->
             
             <div class="row">
-                <div class="col-lg-3"></div>
-                <div class="col-lg-6">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">FAQ Edit Form</h4>
+                            <h4 class="card-title">Edit User</h4>
                          </div><!--end card-header-->
                         <div class="card-body">
                            
-                            <form method="POST" action="{{ route('admin.faq.update', $faq->id) }}">
+                            <form method="POST" action="{{ route('admin.users.update', encrypt($user->id)) }}" >
+   
                                 @csrf
                                 @method('PUT')
-                                <div class="mb-3">
-                                    <label for="exampleInputEmail1">Question</label>
-                                    <input type="text" class="form-control" value="{{ $faq->question }}" name="question" id="question" placeholder="Enter Question" required>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1">First Name</label>
+                                            <input type="text" class="form-control" value="{{ $user->first_name}}" name="first_name"  required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1">Last Name</label>
+                                            <input type="text" class="form-control" value="{{ $user->last_name }}" name="last_name"  required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1">Email Address</label>
+                                            <input type="text" class="form-control" value="{{ $user->email }}" name="email" readonly required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1">Phone Number</label>
+                                            <input type="text" class="form-control" value="{{ $user->phone }}" name="phone"   required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1">User ID</label>
+                                            <input type="text" class="form-control" value="{{ $user->recipient_id }}" name="recipient_id" readonly required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1">Referal Code</label>
+                                            <input type="text" class="form-control" value="{{ $user->referral_code }}" name="referral_code" readonly required>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="exampleInputEmail1">Answer</label>
-                                    <input type="text" class="form-control" value="{{ $faq->answer }}" name="answer" id="answer" placeholder="Enter Answer" required>
-                                </div>
-                                
-                               
                                 <button type="submit" class="btn btn-dark">Update </button>
                                 <button type="reset" class="btn btn-danger">Cancel</button>
                             </form>    

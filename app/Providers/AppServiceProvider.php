@@ -4,6 +4,8 @@ namespace App\Providers;
 use App\Services\WalletService;
 use function App\Helpers\getWalletBalance;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Notifications\DatabaseNotification;
 
 use Auth;
 use App\Models\User;
@@ -92,6 +94,29 @@ class AppServiceProvider extends ServiceProvider
                 'notificationCount' => $user->unreadNotifications()->count(),// Count of unread
                 'notificationsBar' => $notificationsBar // Only unread notifications
             ]);
+        });
+
+        View::composer('*', function ($view) {
+            if (Auth::guard('admin')->check()) {
+                $admin = Auth::guard('admin')->user();
+
+                // Admin sees all notifications related to users
+                $notifications = DatabaseNotification::whereNull('read_at')
+                    ->orderBy('created_at', 'desc')
+                    ->take(10)
+                    ->get();
+                $unreadCount = DatabaseNotification::whereNull('read_at')->count();
+        
+                $view->with([
+                    'notificationsAdminBar' => $notifications,
+                    'unreadAdminCount' => $unreadCount,
+                ]);
+        
+                
+            } else {
+                $view->with('notificationsAdminBar', 0);
+            }
+            
         });
         
         
