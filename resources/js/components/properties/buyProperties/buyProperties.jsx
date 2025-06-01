@@ -433,7 +433,7 @@ const App = () => (
             <Route path="success" element={<PaymentSuccess />} />
         </Routes>
     </BrowserRouter>
-);
+);  
 
 // Mount to DOM
 const rootEl = document.getElementById('buyProperties');
