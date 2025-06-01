@@ -16,9 +16,15 @@ class CartController extends Controller
     //     $this->middleware('auth');
     // }
 
-    public function index(){
-        return view('user.pages.cart.index'); 
-    } 
+    // public function index(){
+    //     return view('user.pages.cart.index'); 
+    // } 
+    public function index($id){
+        $user = Auth::user(); 
+        $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
+        $data['property'] = Property::where('id', decrypt($id))->first();
+        return view('user.pages.cart.index', $data); 
+    }
 
     public function buy($slug)
     {
@@ -41,7 +47,7 @@ class CartController extends Controller
         $user = Auth::user(); 
         // $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
         // $property = Property::where('slug', $id)->first();
-        
+          
         return response()->json([
             // 'data' => $property,
             'data' => $property,
