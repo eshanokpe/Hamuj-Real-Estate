@@ -29,7 +29,7 @@
                                                     <div class="col-9">
                                                         <h3 class="card-title">{{ $notification['data']['subject'] ?? 'Your Wallet Has Been Credited' }}</h3>
                                                         <p>
-                                                            ₦{{ number_format($notification['data']['amount'], 2) }} received
+                                                            ₦{{ number_format((float) $notification['data']['amount'] ?? 0, 2) }} received
                                                             <small>New balance: ₦{{ number_format((float)$notification['data']['balance'], 2) }}</small>
                                                         </p>
                                         
