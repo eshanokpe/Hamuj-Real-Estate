@@ -35,7 +35,7 @@ class PropertyController extends Controller
             return response()->json([
                 'user' => $data['user'],
                 'properties' => $data['properties'],
-            ]); 
+            ]);
         } 
         return view('user.pages.properties.index',$data); 
     }

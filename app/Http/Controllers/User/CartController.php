@@ -16,10 +16,10 @@ class CartController extends Controller
     //     $this->middleware('auth');
     // }
 
-    // public function index(){
-    //     return view('user.pages.cart.index'); 
-    // } 
-    public function index($id){
+    public function index(){
+        return view('user.pages.cart.index'); 
+    } 
+    public function indexx($id){
         $user = Auth::user(); 
         $data['user'] = User::where('id', $user->id)->where('email', $user->email)->first();
         $data['property'] = Property::where('slug', $id)->first();
