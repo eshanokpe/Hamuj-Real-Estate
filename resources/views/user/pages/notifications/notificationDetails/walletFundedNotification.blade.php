@@ -22,7 +22,7 @@
                 $cleanAmount = preg_replace('/[^\d]/', '', $rawAmount);
 
                 // Convert to float and divide by 100 to get Naira
-                $amount = is_numeric($cleanAmount) ? ((float) $cleanAmount) / 100 : 0;
+                $amount = is_numeric($cleanAmount) ? ((float) $cleanAmount) : 0;
             @endphp
 
             <p><strong>Amount Received:</strong> ₦{{ number_format($amount, 2) }}</p>
