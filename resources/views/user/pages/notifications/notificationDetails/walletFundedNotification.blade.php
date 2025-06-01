@@ -12,7 +12,7 @@
 
         <div class="notification-meta mt-3">
             <p>Here are the details of your transfer</p>
-
+            {{$notification->data}}
             @php
                 $rawAmount = $notification->data['amount'] ?? 0;
                 $amount = is_numeric($rawAmount) ? ((float) $rawAmount / 100) : 0;
