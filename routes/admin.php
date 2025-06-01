@@ -202,6 +202,7 @@ Route::prefix('admin')->group(function () {
         Route::name('admin.')->group(function () {
             Route::get('user/index', [UserController::class, 'index'])->name('users');
             Route::get('user/{id}/show', [UserController::class, 'edit'])->name('users.show');
+            Route::put('user/{id}/', [UserController::class, 'update'])->name('users.update');
             Route::get('user/{id}', [UserController::class, 'destroy'])->name('users.destroy');
         });
 
