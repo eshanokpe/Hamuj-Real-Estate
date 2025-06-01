@@ -38,7 +38,7 @@ class PropertyController extends Controller
         return view('admin.home.properties.create', compact('state'));
     }
 
-    public function store(Request $request)
+    public function storee(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -102,6 +102,64 @@ class PropertyController extends Controller
         return redirect()->route('admin.properties.create')->with('success', 'Property uploaded successfully.');
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'location' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'lunch_price' => 'required|numeric',
+            'price' => 'required|numeric',
+            'percentage_increase' => 'required|numeric',
+            'size' => 'required|string|max:255',
+            'gazette_number' => 'required|string|max:50',
+            'tenure_free' => 'required|string|max:50',
+            'property_images' => 'required|image|mimes:jpeg,png,jpg|max:5048',
+            'land_survey' => 'required|image|mimes:jpeg,png,jpg|max:5048',
+            'contract_deed' => 'required|image|mimes:jpeg,png,jpg|max:5048',
+            'video_link' => 'required|url|max:255',
+            'google_map' => 'nullable|url',
+            'status' => 'required|in:available,sold',
+            'year' => 'required|numeric',
+        ]);
+
+        // Handle file uploads
+        $propertyImagePath = $request->file('property_images')->store('property_images', 'public');
+        $landSurveyPath = $request->file('land_survey')->store('land_surveys', 'public');
+        $contractDeedPath = $request->file('contract_deed')->store('contract_deeds', 'public');
+    
+        $lunchPrice = $request->input('lunch_price');
+        $currentPrice = $request->input('price');
+        $priceIncrease = $lunchPrice > 0 ? (($currentPrice - $lunchPrice) / $lunchPrice) * 100 : 0;
+
+        Property::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'location' => $request->input('location'),
+            'city' => $request->input('city'),
+            'state' => $request->input('state'),
+            'country' => $request->input('country'),
+            'lunch_price' => $lunchPrice,
+            'price' => $currentPrice,
+            'percentage_increase' => $priceIncrease,
+            'gazette_number' => $request->input('gazette_number'),
+            'tenure_free' => $request->input('tenure_free'),
+            'size' => $request->input('size'),
+            'available_size' => $request->input('size'),
+            'property_images' => $propertyImagePath,
+            'land_survey' => $landSurveyPath,
+            'contract_deed' => $contractDeedPath,
+            'video_link' => $request->input('video_link'),
+            'google_map' => $request->input('google_map'),
+            'year' => $request->input('year'),
+            'status' => $request->input('status'),
+        ]);
+
+        return redirect()->route('admin.properties.index')->with('success', 'Property created successfully.');
+    }
     /**
      * Display the specified resource.
      *
