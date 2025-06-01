@@ -34,7 +34,7 @@ class CartController extends Controller
         $property = Property::where('slug', $slug)->first();
 
         if (!$property) {
-            return response()->json([
+            return response()->json([ 
                 'message' => 'Property not found',
             ], 404);
         } 
