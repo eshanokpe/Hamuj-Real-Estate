@@ -37,7 +37,7 @@ class CartController extends Controller
             return response()->json([
                 'message' => 'Property not found',
             ], 404);
-        }
+        } 
 
         return response()->json([
             'user' => $user,
