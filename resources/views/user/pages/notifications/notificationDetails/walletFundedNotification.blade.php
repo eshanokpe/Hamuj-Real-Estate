@@ -18,17 +18,15 @@
             @php
                 $rawAmount = $notification->data['amount'] ?? 0;
 
-                // Clean the amount (remove commas, symbols, etc.)
+                // Remove commas, ₦, or any non-digit characters
                 $cleanAmount = preg_replace('/[^\d]/', '', $rawAmount);
 
-                // Now convert to float
-                $numericAmount = is_numeric($cleanAmount) ? (float) $cleanAmount : 0;
-
-                // Divide after validation
-                $amount = $numericAmount / 100;
+                // Convert to float and divide by 100 to get Naira
+                $amount = is_numeric($cleanAmount) ? ((float) $cleanAmount) / 100 : 0;
             @endphp
 
             <p><strong>Amount Received:</strong> ₦{{ number_format($amount, 2) }}</p>
+
 
             {{-- <p><strong>New Balance:</strong> ₦{{ ($notification->data['balance'] ?? '0.00') }}</p> --}}
             <p><strong>Transfer Date:</strong> {{ \Carbon\Carbon::parse($notification->created_at)->format('F j, Y \a\t g:i A') }}</p>
