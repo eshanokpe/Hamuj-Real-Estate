@@ -46,4 +46,6 @@ class Wallet extends Model
         return $this;
     }
 
+    
+
 }

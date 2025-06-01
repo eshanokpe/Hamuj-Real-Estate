@@ -1,6 +1,10 @@
 <?php 
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\WalletController;
+use App\Http\Controllers\Admin\WalletTransactionController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\ReferralController;
 use App\Http\Controllers\Admin\BuyController;
 use App\Http\Controllers\Admin\SellController;
 use App\Http\Controllers\Admin\TransferController;
@@ -17,7 +21,7 @@ use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\PropertyHistoryController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 
-   
+    
 Route::redirect('/admin/dashboard', '/admin');
 // Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.index');
 
@@ -111,6 +115,51 @@ Route::prefix('admin')->group(function () {
             
         });
        
+        // Buy Routes
+        Route::name('admin.')->group(function () {
+            Route::get('buy', [BuyController::class, 'index'])->name('buy.index');
+            Route::get('{id}/editbuy', [BuyController::class, 'edit'])->name('buy.edit');
+            Route::put('{id}/buy', [BuyController::class, 'update'])->name('buy.update');
+            Route::delete('{id}/buy', [BuyController::class, 'destroy'])->name('buy.destroy');
+        });
+        Route::name('admin.')->group(function () {
+            Route::get('transaction/index', [TransactionController::class, 'index'])->name('transaction');
+        });
+        
+        Route::name('admin.')->group(function () {
+            Route::get('wallettransaction/index', [WalletTransactionController::class, 'index'])->name('walletTransaction');
+        });
+        Route::name('admin.')->group(function () {
+            Route::get('referral/index', [ReferralController::class, 'index'])->name('referral');
+            Route::get('referral/{id}/show', [ReferralController::class, 'edit'])->name('referral.show');
+            Route::put('referral/{id}/', [ReferralController::class, 'update'])->name('referral.update');
+        });
+
+        // Sell Routes
+        Route::name('admin.')->group(function () {
+            Route::get('sell', [SellController::class, 'index'])->name('sell.index');
+            Route::get('{id}/editsell', [SellController::class, 'edit'])->name('sell.edit');
+            Route::put('{id}/sell', [SellController::class, 'update'])->name('sell.update');
+            Route::delete('{id}/sell', [SellController::class, 'destroy'])->name('sell.destroy');
+        });
+
+        // Transfer Routes
+        Route::name('admin.')->group(function () {
+            Route::get('transfer', [TransferController::class, 'index'])->name('transfer.index');
+            Route::get('{id}/edittransfer', [TransferController::class, 'edit'])->name('transfer.edit');
+            Route::put('{id}/transfer', [TransferController::class, 'update'])->name('transfer.update');
+            Route::delete('{id}/transfer', [TransferController::class, 'destroy'])->name('transfer.destroy');
+        });
+
+        Route::name('admin.')->group(function () {
+            Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+            Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+            Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        });
+
+        Route::name('admin.')->group(function () {
+            Route::get('wallet/index', [WalletController::class, 'index'])->name('wallet');
+        });
 
         //Office Hours 
         Route::post('/settings/store/office-hours', [SettingsController::class, 'storeOfficeHours'])->name('admin.office-hours.store');

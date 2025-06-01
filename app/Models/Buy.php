@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Buy extends Model
 {
     use HasFactory;
-
+ 
     protected $fillable = [ 
         'id',
         'user_id',
@@ -44,5 +44,10 @@ class Buy extends Model
                 ? max(0, $model->total_price - $model->referral_amount)
                 : $model->total_price;
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

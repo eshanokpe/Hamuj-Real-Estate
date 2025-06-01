@@ -52,7 +52,52 @@
                             <i class="ti ti-brand-asana menu-icon"></i>
                             <span>Properties</span>
                         </a>
-                    </li><!--end nav-item-->
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.buy.index') }}" >
+                            <i class="ti ti-arrow-up menu-icon"></i>
+                            <span>Buy</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.sell.index') }}" >
+                            <i class="ti ti-arrow-down menu-icon"></i>
+                            <span>Sell</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.transfer.index') }}" >
+                            <i class="ti ti-recycle menu-icon"></i>
+                            <span>Transfer</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.wallet') }}" >
+                            <i class="ti ti-wallet menu-icon"></i>
+                            <span>Wallet</span>
+                        </a>
+                    </li> 
+                   <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.transaction') }}" >
+                            <i class="ti ti-wallet menu-icon"></i>
+                            <span>Transactions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.walletTransaction') }}" >
+                            <i class="ti ti-wallet menu-icon"></i>
+                            <span>Wallet Transactions</span>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.referral') }}" >
+                            <i class="ti ti-wallet menu-icon"></i>
+                            <span>Referral</span>
+                        </a>
+                    </li> 
 
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.post.index')}}" >
