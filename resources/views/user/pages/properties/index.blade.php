@@ -77,7 +77,7 @@
                                                 <span class="sales__report--status pending2"   style="background-color: #008000;">
                                                     <a  
                                                     style=" color: #fff; border: none;  cursor: pointer;"
-                                                    href="{{ route('user.cart.index', $item->slug) }}"
+                                                    href="{{ route('user.cart.index', encrypt($item->slug) ) }}"
                                                     >Buy</a>  
                                                 </span>
                                             @endif
