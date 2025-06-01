@@ -121,7 +121,7 @@ const BuyProperties = () => {
     // Payment handlers
     const handleMakePayment = (e) => {
         e.preventDefault();
-        if (quantity <= 0) {
+        if (quantity <= 0) { 
             alert('Please select a quantity greater than 0 to proceed.');
             return;
         }

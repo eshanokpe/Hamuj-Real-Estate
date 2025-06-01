@@ -76,7 +76,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/my-properties/{id}', [DashboardController::class, 'propertiesShow'])->name('properties.show');
      
     // For React frontend
-    Route::get('/cart/buy/{slug}', [CartController::class, 'index'])->name('cart.buy');
+    Route::get('/cart/buy/{slug}', [CartController::class, 'buy'])->name('cart.buy'); 
     Route::get('properties-details/{slug}', [CartController::class, 'buy']);
    
   
@@ -119,7 +119,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('referral/index', [ReferralController::class, 'index'])->name('referral.index');
     Route::get('referral/show', [ReferralController::class, 'show'])->name('referrals.show');
     
-    Route::get('/wallet/index', [WalletController::class, 'index'])->name('wallet.index');
+    Route::get('/wallet/index', [WalletController::class, 'index'])->name('wallet.index'); 
     Route::get('wallet/top-up', [WalletController::class, 'topUp'])->name('wallet.topUp');
     Route::get('wallet/with-draw', [WalletController::class, 'withDraw'])->name('wallet.withdraw');
     Route::get('wallet/transfer-post', [WalletController::class, 'transferPost'])->name('wallet.transferPost');
