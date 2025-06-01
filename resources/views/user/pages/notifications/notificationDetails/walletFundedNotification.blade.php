@@ -17,8 +17,13 @@
             {{$notification->data['amount']}}
             @php
                 $rawAmount = $notification->data['amount'] ?? 0;
-                $amount = is_numeric($rawAmount) ? ((float) $rawAmount / 100) : 0;
+
+                // Remove commas, currency symbols, and keep only numbers and decimals
+                $cleanAmount = preg_replace('/[^\d.]/', '', $rawAmount);
+
+                $amount = is_numeric($cleanAmount) ? ((float) $cleanAmount / 100) : 0;
             @endphp
+
             <p><strong>Amount Received:</strong> ₦{{ number_format($amount, 2) }}</p>
             {{-- <p><strong>New Balance:</strong> ₦{{ ($notification->data['balance'] ?? '0.00') }}</p> --}}
             <p><strong>Transfer Date:</strong> {{ \Carbon\Carbon::parse($notification->created_at)->format('F j, Y \a\t g:i A') }}</p>
