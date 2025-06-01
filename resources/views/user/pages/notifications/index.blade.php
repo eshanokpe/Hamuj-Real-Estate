@@ -28,14 +28,19 @@
                                                 <div class="row "> 
                                                     <div class="col-9">
                                                         <h3 class="card-title">{{ $notification['data']['subject'] ?? 'Your Wallet Has Been Credited' }}</h3>
+                                                        @php
+                                                            $amountRaw = $notification['data']['amount'] ?? '0';
+                                                            $balanceRaw = $notification['data']['balance'] ?? '0';
+
+                                                            $amount = (float) str_replace(',', '', $amountRaw);
+                                                            $balance = (float) str_replace(',', '', $balanceRaw);
+                                                        @endphp
+
                                                         <p>
-                                                            ₦{{ number_format((float) $notification['data']['amount'] ?? 0, 2) }} received
-                                                            <small>New balance: ₦{{ number_format((float)$notification['data']['balance'], 2) }}</small>
+                                                            ₦{{ number_format($amount, 2) }} received
+                                                            <small>New balance: ₦{{ number_format($balance, 2) }}</small>
                                                         </p>
-                                        
-                                                        <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
-                                                            <small class="text-muted">Received {{ $notification->created_at->diffForHumans() }}</small>
-                                                        </div>
+
                                                     </div>
                                     
                                                 <div class="col-3">
