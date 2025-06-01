@@ -324,7 +324,7 @@
                                     <div class="listing__details--content__step properties__info mb-0">
                                         <ul class="properties__details--info__wrapper d-flex mb-0">
                                             <li class="location__google--maps__info--list d-flex">
-                                                <span class="location__google--maps__info--subtitle">Lunch Price:</span>
+                                                <span class="location__google--maps__info--subtitle">Launch Price:</span>
                                                 <span class="location__google--maps__info--title">₦{{ number_format($property->lunch_price, 2) }}</span>
                                                 {{-- <span class="location__google--maps__info--subtitle">Lunch price</span> --}}
                                             </li>
@@ -337,7 +337,7 @@
                                         <table class="table cart__table table-borderless" border="0">
                                             <thead class="thead-light">
                                                 <th>Year sold</th>
-                                                <th style="padding-left: 20px">Sold price</th>
+                                                <th style="padding-left: 20px">Sale price</th>
                                             </thead> 
                                             <tbody class="timeline mt-10" >
                                                 {{-- @forelse ($property->priceUpdates as $item) --}}
