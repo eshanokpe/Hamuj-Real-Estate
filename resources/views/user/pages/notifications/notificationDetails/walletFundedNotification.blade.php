@@ -16,12 +16,12 @@
             <p>Here are the details of your transfer</p>
             {{$notification->data['amount']}}
             @php
-                $rawAmount = $notification->data['amount'] / 100?? 0;
+                $rawAmount = $notification->data['amount'] ?? 0;
 
                 // Remove commas, currency symbols, and keep only numbers and decimals
                 $cleanAmount = preg_replace('/[^\d.]/', '', $rawAmount);
 
-                $amount = is_numeric($cleanAmount) ? ((float) $cleanAmount) : 0;
+                $amount = is_numeric($cleanAmount / 100) ? ((float) $cleanAmount / 100) : 0;
             @endphp
 
             <p><strong>Amount Received:</strong> ₦{{ number_format($amount, 2) }}</p>
