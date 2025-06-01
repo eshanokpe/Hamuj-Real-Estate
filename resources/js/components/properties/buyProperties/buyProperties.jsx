@@ -359,7 +359,7 @@ const BuyProperties = () => {
                                                         onClick={() => handlePaymentMethodSelect('wallet')}
                                                     >
                                                         Pay with Wallet
-                                                    </button>
+                                                    </button> 
                                                 </div>
                                             ) : (
                                                 <div>
