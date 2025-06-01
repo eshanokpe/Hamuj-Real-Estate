@@ -14,7 +14,7 @@
 
         <div class="notification-meta mt-3">
             <p>Here are the details of your transfer</p>
-            {{$notification->data['amount']}}
+            {{-- {{$notification->data['amount']}} --}}
             @php
                 $rawAmount = $notification->data['amount'] ?? 0;
 
