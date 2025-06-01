@@ -125,7 +125,7 @@ class PropertyController extends Controller
             'status' => 'required|in:available,sold',
             'year' => 'required|numeric',
         ]);
-
+ 
         // Handle file uploads
         $propertyImagePath = $request->file('property_images')->store('property_images', 'public');
         $landSurveyPath = $request->file('land_survey')->store('land_surveys', 'public');
@@ -185,7 +185,7 @@ class PropertyController extends Controller
         return view('admin.home.properties.edit', compact('property', 'state'));
     }
     
-    public function update(Request $request, $id)
+    public function updatee(Request $request, $id)
     {
         // Find the property by ID
         $property = Property::findOrFail($id);
@@ -280,6 +280,118 @@ class PropertyController extends Controller
             $landSurveyPath = $request->file('land_survey')->move(public_path('assets/images/property'), time().'_'.$request->file('land_survey')->getClientOriginalName());
             $property->land_survey = 'assets/images/property/' . basename($landSurveyPath);
         }
+        if ($request->hasFile('contract_deed')) {
+            if ($property->contract_deed && file_exists(public_path($property->contract_deed))) {
+                unlink(public_path($property->contract_deed));
+            }
+            $contractDeedPath = $request->file('contract_deed')->move(public_path('assets/images/property'), time().'_'.$request->file('contract_deed')->getClientOriginalName());
+            $property->contract_deed = 'assets/images/property/' . basename($contractDeedPath);
+        }
+        
+        $property->save();
+
+        return redirect()->back()->with('success', 'Property updated successfully.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Find the property by ID
+        $property = Property::findOrFail($id);
+
+        // Validate the request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'location' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'lunch_price' => 'required|numeric',
+            'price' => 'required|numeric',
+            'size' => 'required|string|max:255',
+            'gazette_number' => 'required|string|max:50',
+            'tenure_free'=> 'required|string|max:50',
+            'property_images' => 'nullable|image|mimes:jpeg,png,jpg|max:5048',
+            'payment_plan' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',
+            'brochure' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',
+            'land_survey' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',
+            'contract_deed' => 'nullable|file|image|mimes:jpeg,pdf,png,jpg|max:5048',
+            'video_link' => 'required|url|max:255',
+            'google_map' => 'required|url',
+            'status' => 'required|in:available,sold',
+        ]);
+        
+        $year = $request->input('updated_year', Carbon::now()->year);
+        $lunchPrice = $request->input('lunch_price');
+        $newPrice = $request->input('price');
+        $previousPrice = $property->price;
+        $previousPercentageIncrease = $property->percentage_increase;
+        $previousYear = $property->year;
+
+        $percentageIncrease = $lunchPrice > 0 ? (($newPrice - $lunchPrice) / $lunchPrice) * 100 : 0;
+
+        // Log the price update 
+        PropertyPriceUpdate::create([
+            'property_id' => $property->id,
+            'previous_price' => $previousPrice,
+            'previous_percentage_increase' => $previousPercentageIncrease,
+            'previous_year' => $previousYear,
+            'updated_price' => $newPrice,
+            'percentage_increase' => $percentageIncrease,
+            'updated_year' => $year,
+        ]);
+
+        $property->update([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'location' => $request->input('location'),
+            'city' => $request->input('city'),
+            'state' => $request->input('state'), 
+            'country' => $request->input('country'), 
+            'lunch_price' => $request->input('lunch_price'),
+            'price' => $newPrice,
+            'percentage_increase' => $percentageIncrease,
+            'gazette_number' => $request->input('gazette_number'),
+            'tenure_free' => $request->input('tenure_free'),
+            'size' => $request->input('size'),
+            'available_size' => $request->input('size'),
+            'video_link' => $request->input('video_link'),
+            'google_map' => $request->input('google_map'),
+            'status' => $request->input('status'),
+        ]);
+        
+        if ($request->hasFile('property_images')) {
+            if ($property->property_images && file_exists(public_path($property->property_images))) {
+                unlink(public_path($property->property_images));
+            }
+            $propertyImagePath = $request->file('property_images')->move(public_path('assets/images/property'), time().'_'.$request->file('property_images')->getClientOriginalName());
+            $property->property_images = 'assets/images/property/' . basename($propertyImagePath);
+        }
+
+        if ($request->hasFile('payment_plan')) {
+            if ($property->payment_plan && file_exists(public_path($property->payment_plan))) {
+                unlink(public_path($property->payment_plan));
+            }
+            $paymentPlanPath = $request->file('payment_plan')->move(public_path('assets/images/property'), time().'_'.$request->file('payment_plan')->getClientOriginalName());
+            $property->payment_plan = 'assets/images/property/' . basename($paymentPlanPath);
+        }
+        
+        if ($request->hasFile('brochure')) {
+            if ($property->brochure && file_exists(public_path($property->brochure))) {
+                unlink(public_path($property->brochure));
+            }
+            $brochurePath = $request->file('brochure')->move(public_path('assets/images/property'), time().'_'.$request->file('brochure')->getClientOriginalName());
+            $property->brochure = 'assets/images/property/' . basename($brochurePath);
+        }
+    
+        if ($request->hasFile('land_survey')) {
+            if ($property->land_survey && file_exists(public_path($property->land_survey))) {
+                unlink(public_path($property->land_survey));
+            }
+            $landSurveyPath = $request->file('land_survey')->move(public_path('assets/images/property'), time().'_'.$request->file('land_survey')->getClientOriginalName());
+            $property->land_survey = 'assets/images/property/' . basename($landSurveyPath);
+        }
+        
         if ($request->hasFile('contract_deed')) {
             if ($property->contract_deed && file_exists(public_path($property->contract_deed))) {
                 unlink(public_path($property->contract_deed));

@@ -50,7 +50,7 @@
                                             <label for="exampleInputEmail1">Last Name</label>
                                             <input type="text" class="form-control" value="{{ $user->last_name }}" name="last_name"  required>
                                         </div>
-                                    </div>
+                                    </div> 
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1">Email Address</label>
