@@ -16,21 +16,19 @@
             <p>Here are the details of your transfer</p>
             {{-- {{$notification->data['amount']}} --}}
             @php
-                $rawAmount = $notification->data['amount'] ?? 0;
+                $rawAmount = $notification->data['amount'] ?? '0';
 
-                // Remove commas, ₦, or any non-digit characters
-                $cleanAmount = preg_replace('/[^\d]/', '', $rawAmount);
+                // Remove commas and currency symbol but keep the decimal point
+                $cleanAmount = preg_replace('/[^\d.]/', '', $rawAmount);
 
-                // Convert to float and divide by 100 to get Naira
-                $amount = is_numeric($cleanAmount) ? ((float) $cleanAmount)  : 0;
+                // Convert to float and divide by 100
+                $amount = is_numeric($cleanAmount) ? ((float) $cleanAmount) : 0;
             @endphp
 
             <p><strong>Amount Received:</strong> ₦{{ number_format($amount, 2) }}</p>
 
-
-            {{-- <p><strong>New Balance:</strong> ₦{{ ($notification->data['balance'] ?? '0.00') }}</p> --}}
             <p><strong>Transfer Date:</strong> {{ \Carbon\Carbon::parse($notification->created_at)->format('F j, Y \a\t g:i A') }}</p>
-           
+
         </div>
 
     <p class="mt-3">
