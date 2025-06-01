@@ -21,6 +21,7 @@ const PaymentSuccess = () => {
 const BuyProperties = () => {
     const navigate = useNavigate();
     const { slug } = useParams();
+    let url = window.location.origin
     
     // State management
     const [quantity, setQuantity] = useState(0);
@@ -425,7 +426,7 @@ const IndexPage = () => {
 
 // Main App Component
 const App = () => (
-    <BrowserRouter basename="/user/cart/buy">
+    <BrowserRouter basename="/user/cart">
         <Routes>
             <Route index element={<IndexPage />} />
             <Route path=":slug" element={<BuyProperties />} />
