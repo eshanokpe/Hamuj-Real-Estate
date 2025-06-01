@@ -14,7 +14,7 @@
 
         <div class="notification-meta mt-3">
             <p>Here are the details of your transfer</p>
-            <p><strong>Amount Received:</strong> ₦{{ ($notification->data['amount']/100 ?? '0.00') }}</p>
+            <p><strong>Amount Received:</strong> ₦{{ number_format((float)(($notification->data['amount'] ?? 0) / 100), 2) }}</p>
             {{-- <p><strong>New Balance:</strong> ₦{{ ($notification->data['balance'] ?? '0.00') }}</p> --}}
             <p><strong>Transfer Date:</strong> {{ \Carbon\Carbon::parse($notification->created_at)->format('F j, Y \a\t g:i A') }}</p>
            
