@@ -155,11 +155,11 @@ class PaymentController extends Controller
 
         $property->save();
         $this->processReferralCommission($user, $property, $finalAmountPayable, $transaction);
-        // try {
-        //     $user->notify(new BuyPropertiesNotification($transaction, $buy));
-        // } catch (\Exception $e) {
-        //     logger()->error('Payment notification error: ' . $e->getMessage());
-        // }
+        try {
+            $user->notify(new BuyPropertiesNotification($transaction, $buy));
+        } catch (\Exception $e) {
+            logger()->error('Payment notification error: ' . $e->getMessage());
+        }
      
         return $this->successResponse([
             'message' => 'Payment successful', 
