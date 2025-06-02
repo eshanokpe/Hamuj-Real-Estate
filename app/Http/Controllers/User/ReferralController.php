@@ -19,7 +19,8 @@ class ReferralController extends Controller
  
         $data['referralsMade'] = $user->referralsMade()->with('user', 'referrer', 'referred')->take(6)->get();
         $data['referralCount'] = $user->referralsMade()->count();  
-        $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;
+        $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;  
+        dd($data['referralsMade']);
 
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json([
@@ -28,7 +29,7 @@ class ReferralController extends Controller
                 'hasMoreReferrals' => $data['hasMoreReferrals'],
             ]);
         }  
-
+ 
         return view('user.pages.referral.index', $data); 
     }
 }

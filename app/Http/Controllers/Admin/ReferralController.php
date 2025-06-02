@@ -12,7 +12,7 @@ class ReferralController extends Controller
     public function index(){
         $referrals = ReferralLog::latest()->paginate(20);
         return view('admin.home.referral.index', compact('referrals'));
-    }
+    } 
 
     public function edit($id)
     {

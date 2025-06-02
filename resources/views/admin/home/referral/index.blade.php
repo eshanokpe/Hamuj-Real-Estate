@@ -65,12 +65,14 @@
                                                 <td>{{ $referral->referral_code ?? ''}}</td>
                                                 <td>{{ $referral->referred_at->format('d F Y') ??'' }}</td>
                                                 <td>
-                                                    @if($referral->status === 'commission_pending')
-                                                        <button class="btn btn-warning btn-sm">Pending</button>
+                                                    @if($referral->status === 'commission')
+                                                        <button class="btn btn-success btn-sm">Commission</button>
                                                     @elseif($referral->status === 'paid' || $referral->status === 'approved')
                                                         <button class="btn btn-success btn-sm">{{ ucfirst($referral->status) }}</button>
                                                     @elseif($referral->status === 'failed' || $referral->status === 'cancelled')
                                                         <button class="btn btn-danger btn-sm">{{ ucfirst($referral->status) }}</button>
+                                                    @elseif($referral->status === 'commission_pending' || $referral->status === 'cancelled')
+                                                        <button class="btn btn-success btn-sm">Commission</button>
                                                     @endif 
                                                 </td>
                                                 <td>₦{{ number_format($referral->commission_amount ?? 0, 2) }}</td>
@@ -92,7 +94,7 @@
                                                 </td>
                                                 
                                             </tr>
-                                        @empty
+                                        @empty 
                                             <tr>
                                                 <td colspan="5" class="text-center">No menu items found.</td>
                                             </tr>

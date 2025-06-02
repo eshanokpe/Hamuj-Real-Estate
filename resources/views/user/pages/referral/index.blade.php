@@ -49,7 +49,7 @@
                                                 <path d="M12.0083 1.09155L9.27917 3.82072" stroke="#9E38FF" stroke-linecap="round" stroke-linejoin="round"/>
                                                 </svg>
                                             </span>
-                                            Total Referral Reward
+                                            Total Referral Reward 
                                         </h3>
                                         <section class="welcome__section d-flex justify-content-between align-items-center">
                                             <div class="welcome__content">
@@ -58,7 +58,7 @@
                                             <div class="welcome__thumbnail">
                                                 <span class="currency__card--amount">My invite ({{ $user->referralsMade->count()}})</span>
                                             </div>
-                                        </section>
+                                        </section> 
                                         <div class="currency__card--footer">
                                         
                                             <span class="currency__weekly">Reward history</span>
