@@ -57,7 +57,7 @@
                                                 <td>{{ $user->created_at->format('d F Y') ??'' }}</td>
                                                 <td class="text-end">                                                       
                                                     <a class="btn btn-primary text-white" href="{{ route('admin.users.show', encrypt($user->id) )  }}" ><i class="las la-eye text-white font-16"></i></a>
-                                                    <a class="btn btn-danger text-white" href="{{ route('admin.users.destroy', encrypt($user->id) )  }}" onclick="return confirm('Are you sure you want to delete this Menu?');"><i class="las la-trash-alt text-white font-16"></i></a>
+                                                    {{-- <a class="btn btn-danger text-white" href="{{ route('admin.users.destroy', encrypt($user->id) )  }}" onclick="return confirm('Are you sure you want to delete this User?');"><i class="las la-trash-alt text-white font-16"></i></a> --}}
                                                 </td>
                                                 
                                             </tr>
