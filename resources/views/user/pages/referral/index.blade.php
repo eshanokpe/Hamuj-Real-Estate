@@ -11,7 +11,7 @@
     .copy-fail {
         font-size: 14px;
         color: #dc3545;
-        margin-left: 8px;
+        margin-left: 8px; 
         animation: fadeInOut 3s forwards;
     }
 

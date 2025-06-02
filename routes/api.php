@@ -100,7 +100,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('get/wallet/transactions', [WalletTransferController::class, 'getWalletTransactions']);
 
     //Referral
-    Route::get('get/referral', [ReferralController::class, 'index']);
+    Route::get('get/referral', [ReferralController::class, 'index']); 
 
     Route::get('/get/userProfile', [ProfileController::class, 'index']);
     Route::post('/update/profile', [ProfileController::class, 'update']);

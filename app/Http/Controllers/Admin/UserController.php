@@ -21,7 +21,7 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $user = User::findOrFail(decrypt($id)); // not Post::findOrFail()
+        $user = User::findOrFail(decrypt($id)); 
         $user->delete();
 
         return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
