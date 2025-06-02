@@ -53,7 +53,7 @@
                                         </h3>
                                         <section class="welcome__section d-flex justify-content-between align-items-center">
                                             <div class="welcome__content">
-                                                <span class="currency__card--amount">₦{{ number_format(auth()->user()->commission_balance, 2) }}</span>
+                                                <span class="currency__card--amount">₦{{ number_format($referralsMade->commission_amount, 2) }}</span>
                                             </div>
                                             <div class="welcome__thumbnail">
                                                 <span class="currency__card--amount">My invite ({{ $user->referralsMade->count()}})</span>

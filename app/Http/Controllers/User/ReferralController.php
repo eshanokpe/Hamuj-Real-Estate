@@ -20,7 +20,7 @@ class ReferralController extends Controller
         $data['referralsMade'] = $user->referralsMade()->with('user', 'referrer', 'referred')->take(6)->get();
         $data['referralCount'] = $user->referralsMade()->count();  
         $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;  
-        dd($data['referralsMade']);
+        // dd($data['referralsMade']->commission_amount);
 
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json([
