@@ -32,7 +32,7 @@
                                             <th>User Full Name</th>
                                             <th>User Email</th>
                                             <th>Property Name</th>
-                                            <th>Transaction ID</th>
+                                            {{-- <th>Transaction ID</th> --}}
                                             <th>Selected Size</th>
                                             <th>Remaining Size</th>
                                             <th>Total Price</th>
@@ -50,7 +50,7 @@
                                                 </td>
                                                 <td>{{ $buy->user_email }}</td>
                                                 <td>{{ $buy->property->name }}</td>
-                                                <td>{{ $buy->transaction_id }}</td>
+                                                {{-- <td>{{ $buy->transaction_id }}</td> --}}
                                                 <td>{{ $buy->selected_size_land }} per/sqm</td>
                                                 <td>{{ $buy->remaining_size }} sqm</td>
                                                 <td>₦{{ number_format($buy->total_price, 2) }}</td>
