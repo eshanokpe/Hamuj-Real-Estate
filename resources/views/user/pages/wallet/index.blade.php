@@ -131,7 +131,7 @@
                                             <span class="sales__report--body__text">
                                                 ₦{{ number_format($transaction->amount, 2) }}
                                             </span>
-                                        </td>
+                                        </td>  
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
                                                 {{ $transaction->created_at->format('M d, Y g:i A') }}
