@@ -123,7 +123,7 @@
                                             @if(isset($transaction->bankName) || isset($transaction->accountName ))
                                                 <span class="sales__report--body__text"> 
                                                     {{ $transaction->bankName ?? '' }}<br>
-                                                    {{ $transaction->accountName ?? '' }}
+                                                     <b>{{ ucfirst($transaction->accountName ?? '') }}</b>
                                                 </span>
                                             @else
                                                 <span class="sales__report--body__text">N/A</span>
