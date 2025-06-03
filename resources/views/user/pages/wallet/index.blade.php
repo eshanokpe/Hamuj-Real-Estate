@@ -120,18 +120,20 @@
                                             </span>
                                         </td> 
                                         <td style="padding: 5px;"> 
-                                           
+                                            @if(isset($transaction->bankName) || isset($transaction->accountName ))
                                                 <span class="sales__report--body__text"> 
                                                     {{ $transaction->bankName ?? '' }}<br>
                                                     {{ $transaction->accountName ?? '' }}
                                                 </span>
-                                            
+                                            @else
+                                                <span class="sales__report--body__text">N/A</span>
+                                            @endif
                                         </td>
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
                                                 ₦{{ number_format($transaction->amount, 2) }}
                                             </span>
-                                        </td>  
+                                        </td>
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
                                                 {{ $transaction->created_at->format('M d, Y g:i A') }}
