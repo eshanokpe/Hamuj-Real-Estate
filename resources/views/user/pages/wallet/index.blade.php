@@ -104,6 +104,7 @@
                                     <th style="width: 15%; padding: 5px;">Amount</th>
                                     <th style="width: 15%; padding: 5px;">Created</th>
                                     <th style="width: 10%; padding: 5px;">Status</th>
+                                    <th style="width: 10%; padding: 5px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -170,6 +171,21 @@
                                             <button class="btn btn-{{ $statusClass }} btn-sm">
                                                 {{ ucfirst($status) }}
                                             </button>
+                                        </td>
+                                       
+                                        <td style="padding: 5px;">
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{{ route('user.transaction.download', $transaction->id) }}" 
+                                                class="btn btn-primary" 
+                                                title="Download Receipt">
+                                                    <i class="fas fa-download"></i>
+                                                </a>
+                                                <a href="{{ route('user.transaction.show', $transaction->id) }}" 
+                                                class="btn btn-info" 
+                                                title="View Details">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty

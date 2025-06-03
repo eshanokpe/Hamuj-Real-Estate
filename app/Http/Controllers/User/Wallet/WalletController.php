@@ -8,6 +8,7 @@ use App\Http\Controllers\WalletController  as PayStackWalletController;
 use Illuminate\Support\Facades\Http;
 use App\Models\Transaction;
 use App\Models\WalletTransaction;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class WalletController extends Controller
@@ -15,11 +16,10 @@ class WalletController extends Controller
     public function index() {
         $user = Auth::user();
         
-        // Get wallet transactions
         $walletTransactions = WalletTransaction::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
-        // dd($walletTransactions);
+
         // Get regular transactions where payment method is wallet
         $walletPaymentTransactions = Transaction::where('user_id', $user->id)
             ->where('payment_method', 'wallet')
@@ -30,7 +30,6 @@ class WalletController extends Controller
         $allTransactions = $walletTransactions->concat($walletPaymentTransactions)
             ->sortByDesc('created_at')
             ->take(15);
-        // dd($allTransactions);
         $data = [
             'user' => $user,
             'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
@@ -80,7 +79,6 @@ class WalletController extends Controller
         return response()->json(['account_name' => $validated['bank_code'] ]); // Example
     }
  
-
     public function paymentHistory(){
        $user = Auth::user();
     
@@ -113,6 +111,47 @@ class WalletController extends Controller
         }
     
         return response()->json(['status' => 'error', 'message' => 'Unable to resolve account.']);
+    }
+
+    public function show($id)
+    {
+        $data['user'] = Auth::user();
+        // Try to find in WalletTransactions first
+
+        // $data['transaction'] = WalletTransaction::find($id);
+        
+        // // If not found, try in Transactions
+        // if (!$data['transaction'] ) {
+        //     $transaction = Transaction::findOrFail($id);
+        // }
+         // Get wallet transactions
+        $walletTransactions = WalletTransaction::where('id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+            
+        // Get regular transactions where payment method is wallet
+        $walletPaymentTransactions = Transaction::where('id', $id)
+            ->where('payment_method', 'wallet')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        // Combine and sort all transactions
+        $data['transaction'] = $walletTransactions->concat($walletPaymentTransactions)
+            ->sortByDesc('created_at')
+            ->take(15);
+        
+        $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
+        
+        return view('user.pages.wallet.show', $data);
+    }
+
+    public function download($id)
+    {
+        $transaction = WalletTransaction::find($id) ?? Transaction::findOrFail($id);
+        
+        $pdf = PDF::loadView('transactions.partials.receipt', compact('transaction'));
+        
+        return $pdf->download("receipt-{$transaction->reference}.pdf");
     }
 
     
