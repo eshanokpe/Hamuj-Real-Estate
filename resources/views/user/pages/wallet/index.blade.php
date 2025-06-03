@@ -131,7 +131,7 @@
                                         </td>
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
-                                                ₦{{ number_format($transaction->amount, 2) }}
+                                                -₦{{ number_format($transaction->amount, 2) }}
                                             </span>
                                         </td>
                                         <td style="padding: 5px;">

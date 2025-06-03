@@ -58,7 +58,7 @@
                                                 ₦{{ number_format($transaction->amount, 2) }}
                                                 
                                             </span>
-                                             <span class="sales__report--body__text @if($transaction->type === 'transfer') text-danger @else text-danger @endif">
+                                             <span class="sales__report--body__text @if($transaction->type === 'transfer') text-black @else text-success @endif">
                                                     @if($transaction->type === 'transfer') - @else + @endif
                                                     ₦{{ number_format($transaction->amount, 2) }}
                                             </span>
