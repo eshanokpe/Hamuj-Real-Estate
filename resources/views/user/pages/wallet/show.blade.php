@@ -70,7 +70,7 @@
                                                     </div>
                                                     <div class="col-md-6 text-md-end">
                                                         <p class="mb-1"><strong>Date:</strong> {{ $txn->created_at->format('M d, Y') }}</p>
-                                                        <p class="mb-1"><strong>Reference:</strong> {{ $txn->id }}</p>
+                                                        <p class="mb-1"><strong>Transaction Reference:</strong> {{ $txn->reference }}</p>
                                                     </div>
                                                 </div>
 
