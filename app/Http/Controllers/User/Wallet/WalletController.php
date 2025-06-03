@@ -12,7 +12,7 @@ use App\Models\WalletTransaction;
 class WalletController extends Controller
 {
     public function index(){  
-        
+        $user = Auth::user();
         $data = [
             'user' => $user,
             'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
