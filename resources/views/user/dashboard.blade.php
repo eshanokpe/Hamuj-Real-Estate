@@ -197,14 +197,20 @@
                                         <span class="sales__report--body__text">{{ ucfirst($transaction->reference) }}</span>
                                     </td>
                                     <td style="padding: 5px;">
-                                        <span class="sales__report--body__text">{{ ucfirst($transaction->payment_method) }}</span>
-                                    </td>
+                                        <span class="sales__report--body__text">
+                                            @if (strtolower($transaction->payment_method) === 'wallet')
+                                                Deposit 
+                                            @else
+                                                {{ ucfirst($transaction->payment_method) }}
+                                            @endif
+                                        </span>
+                                    </td>  
                                     <td style="padding: 5px;">
                                         <span class="sales__report--body__text">₦{{ number_format($transaction->amount, 2) }}</span>
                                     </td>
                                     <td style="padding: 5px;">
                                         <span class="sales__report--body__text">{{ ($transaction->created_at->format('d F Y')) }}</span>
-                                    </td>
+                                    </td> 
                                     <td style="padding: 5px;">
                                         @if($transaction->status === 'pending')
                                             <button class="btn btn-warning btn-sm">{{ ucfirst($transaction->status) }}</button>

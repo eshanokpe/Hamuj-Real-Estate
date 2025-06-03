@@ -6,23 +6,38 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\WalletController  as PayStackWalletController;
 use Illuminate\Support\Facades\Http;
+use App\Models\Transaction;
 use App\Models\WalletTransaction;
 
 
 class WalletController extends Controller
 {
-    public function index(){  
+    public function index() {
         $user = Auth::user();
+        
+        // Get wallet transactions
+        $walletTransactions = WalletTransaction::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        // dd($walletTransactions);
+        // Get regular transactions where payment method is wallet
+        $walletPaymentTransactions = Transaction::where('user_id', $user->id)
+            ->where('payment_method', 'wallet')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    
+        // Combine and sort all transactions
+        $allTransactions = $walletTransactions->concat($walletPaymentTransactions)
+            ->sortByDesc('created_at')
+            ->take(15);
+        // dd($allTransactions);
         $data = [
             'user' => $user,
             'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
             'hasMoreReferrals' => $user->referralsMade()->count() > 6,
-            'latestTransactions' => WalletTransaction::where('user_id', $user->id)
-                ->orderBy('created_at', 'desc')
-                ->limit(5)
-                ->get()
-        ];
-
+            'latestTransactions' => $allTransactions
+        ]; 
+        // dd($allTransactions);
 
         return view('user.pages.wallet.index', $data); 
     }

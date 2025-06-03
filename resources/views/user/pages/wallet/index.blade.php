@@ -52,7 +52,6 @@
                                             <div class="col-lg-12">
                                                 <div class="swiper-slide">
                                                     <div class="currency__card">
-                                                        
                                                         <!-- Buy, Sell, Transfer Buttons -->
                                                         <div class="currency__actions mt-3 d-flex justify-content-around">
                                                             <a href="{{ route('user.wallet.topUp') }}" class="btn  d-flex flex-column align-items-center justify-content-center text-center">
@@ -85,16 +84,16 @@
                             </div>
                         </div>
                     </div>
-
+ 
                      <!-- Transaction Report Section -->
                      <div class="sales__report--section">
                         <div class="sales__report--heading d-flex align-items-center justify-content-between mb-30">
-                            <h2 class="sales__report--heading__title">Latest Transaction </h2>
+                            <h2 class="sales__report--heading__title">Wallet Transaction </h2>
                             <div class="sales__report--short-by">
-                                <a href="{{ route('user.payment.history') }}" class="btn btn-link p-0" style="text-decoration: none;">
+                                <a href="{{ route('user.payment.history') }}" class=" p-0" style="text-decoration: none;">
                                     View all
                                 </a>
-                            </div>
+                            </div> 
                         </div> 
                         <table class="sales__report--table table-responsive">
                             <thead>
@@ -111,19 +110,35 @@
                                 @forelse ($latestTransactions as $transaction)
                                     <tr>
                                         <td style="padding: 10px;">{{ $loop->iteration }}</td>
-                                        <td style="padding: 5px;">
-                                            <span class="sales__report--body__text">
-                                                {{ ucfirst($transaction->type) }}<br>
-                                                @if($transaction->reason != null)
-                                                    <small class="text-muted">{{ $transaction->reason ??'' }}</small>
-                                                @endif
-                                            </span>
-                                        </td> 
+                                       <td style="padding: 5px;">
+                                        <span class="sales__report--body__text">
+                                            @if (isset($transaction->payment_method) && strtolower($transaction->payment_method) === 'wallet')
+                                                Deposit
+                                            @elseif(isset($transaction->payment_method))
+                                                {{ ucfirst($transaction->payment_method) }}
+                                            @else
+                                                {{ ucfirst($transaction->type ?? 'N/A') }}
+                                            @endif
+                                            <br>
+                                            @if(isset($transaction->reason) && $transaction->reason != null)
+                                                <small class="text-muted">{{ $transaction->reason }}</small>
+                                            @elseif(isset($transaction->description) && $transaction->description != null)
+                                                <small class="text-muted">{{ $transaction->description }}</small>
+                                            @endif
+                                        </span>
+                                    </td>
                                         <td style="padding: 5px;"> 
-                                            @if(isset($transaction->bankName) || isset($transaction->accountName ))
+                                            @if(isset($transaction->bankName) || isset($transaction->accountName))
                                                 <span class="sales__report--body__text"> 
                                                     {{ $transaction->bankName ?? '' }}<br>
-                                                     <b>{{ ucfirst($transaction->accountName ?? '') }}</b>
+                                                    <b>{{ ucfirst($transaction->accountName ?? '') }}</b>
+                                                </span>
+                                            @elseif(isset($transaction->description) || isset($transaction->description))
+                                            {{ ucfirst($transaction->description) }}
+
+                                                <span class="sales__report--body__text"> 
+                                                    {{ $transaction->bank_name ?? '' }}<br>
+                                                    <b>{{ ucfirst($transaction->account_name ?? $transaction->recipient_name ?? '') }}</b>
                                                 </span>
                                             @else
                                                 <span class="sales__report--body__text">N/A</span>
@@ -141,7 +156,7 @@
                                         </td>
                                         <td style="padding: 5px;">
                                             @php
-                                                $status = strtolower($transaction->status);
+                                                $status = strtolower($transaction->status ?? $transaction->transaction_state ?? 'pending');
                                                 $statusClass = 'secondary';
                                                 
                                                 if(in_array($status, ['successful', 'completed', 'success'])) {
@@ -153,7 +168,7 @@
                                                 }
                                             @endphp
                                             <button class="btn btn-{{ $statusClass }} btn-sm">
-                                                {{ ucfirst($transaction->status) }}
+                                                {{ ucfirst($status) }}
                                             </button>
                                         </td>
                                     </tr>
