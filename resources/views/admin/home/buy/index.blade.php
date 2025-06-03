@@ -51,8 +51,8 @@
                                                 <td>{{ $buy->user_email }}</td>
                                                 <td>{{ $buy->property->name }}</td>
                                                 <td>{{ $buy->transaction_id }}</td>
-                                                <td>{{ $buy->selected_size_land }}</td>
-                                                <td>{{ $buy->remaining_size }}</td>
+                                                <td>{{ $buy->selected_size_land }} per/sqm</td>
+                                                <td>{{ $buy->remaining_size }} sqm</td>
                                                 <td>₦{{ number_format($buy->total_price, 2) }}</td>
                                                 <td>{{ ucfirst($buy->status) }}</td>
                                                 <td>{{ $buy->created_at ? $buy->created_at->format('d F Y') : 'N/A' }}</td>
