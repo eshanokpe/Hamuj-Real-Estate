@@ -141,7 +141,8 @@ class WalletController extends Controller
             ->take(15);
         
         $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
-        $data['hasMoreReferrals'] = $user->referralsMade()->count() > 6;
+        $data['hasMoreReferrals'] = $data['user']->referralsMade()->count() > 6;
+        
         return view('user.pages.wallet.show', $data);
     }
 
