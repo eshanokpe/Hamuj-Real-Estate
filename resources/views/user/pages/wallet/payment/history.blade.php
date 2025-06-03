@@ -17,15 +17,7 @@
             <h2 class="dashboard__chart--title"> Payment History </h2>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="add__listing--input__box mb-10">
-                        <input 
-                            class="add__listing--input__field" 
-                            id="searchTransactions" 
-                            name="search" 
-                            placeholder="Search transactions..." 
-                            type="text" 
-                            value="">
-                    </div>
+                    
                    
                     <div class="sales__report--section p-4">
                         <table class="sales__report--table table-responsive">
