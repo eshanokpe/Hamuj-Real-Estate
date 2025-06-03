@@ -99,9 +99,9 @@
                         <table class="sales__report--table table-responsive">
                             <thead>
                                 <tr> 
-                                    <th style="width: 5%; padding: 10px;">#</th> <!-- Minimal space for index -->
-                                    <th style="width: 20%; padding: 5px;">Transaction Ref</th>
-                                    <th style="width: 20%; padding: 5px;">Payment Method</th>
+                                    <th style="width: 5%; padding: 10px;">#</th>
+                                    <th style="width: 20%; padding: 5px;">Type/Reason</th>
+                                    <th style="width: 20%; padding: 5px;">Details</th>
                                     <th style="width: 15%; padding: 5px;">Amount</th>
                                     <th style="width: 15%; padding: 5px;">Created</th>
                                     <th style="width: 10%; padding: 5px;">Status</th>
@@ -112,35 +112,56 @@
                                     <tr>
                                         <td style="padding: 10px;">{{ $loop->iteration }}</td>
                                         <td style="padding: 5px;">
-                                            <span class="sales__report--body__text"> {{ $transaction->description ?? $transaction->type ?? $transaction->reference ?? 'N/A' }}</span>
+                                            <span class="sales__report--body__text">
+                                                {{ ucfirst($transaction->type) }}<br>
+                                                @if($transaction->reason)
+                                                    <small class="text-muted">{{ $transaction->reason }}</small>
+                                                @endif
+                                            </span>
                                         </td>
                                         <td style="padding: 5px;">
-                                            <span class="sales__report--body__text">{{ $transaction->payment_method ?? 'N/A' }}</span>
+                                            @if(isset($transaction->metadata['bank_name']) || isset($transaction->metadata['account_name']))
+                                                <span class="sales__report--body__text">
+                                                    {{ $transaction->metadata['bank_name'] ?? '' }}<br>
+                                                    {{ $transaction->metadata['account_name'] ?? '' }}
+                                                </span>
+                                            @else
+                                                <span class="sales__report--body__text">N/A</span>
+                                            @endif
                                         </td>
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
-                                                {{-- Assuming NGN currency based on static example. Adjust if dynamic. --}}
                                                 ₦{{ number_format($transaction->amount, 2) }}
                                             </span>
                                         </td>
                                         <td style="padding: 5px;">
-                                            <span class="sales__report--body__text">{{ $transaction->created_at->format('M d, Y g:i A') }}</span>
+                                            <span class="sales__report--body__text">
+                                                {{ $transaction->created_at->format('M d, Y g:i A') }}
+                                            </span>
                                         </td>
                                         <td style="padding: 5px;">
-                                            @if(strtolower($transaction->status) == 'successful' || strtolower($transaction->status) == 'completed' || strtolower($transaction->status) == 'success')
-                                                <button class="btn btn-success btn-sm">{{ ucfirst($transaction->status) }}</button>
-                                            @elseif(strtolower($transaction->status) == 'pending')
-                                                <button class="btn btn-warning btn-sm">{{ ucfirst($transaction->status) }}</button>
-                                            @elseif(strtolower($transaction->status) == 'failed' || strtolower($transaction->status) == 'cancelled')
-                                                <button class="btn btn-danger btn-sm">{{ ucfirst($transaction->status) }}</button>
-                                            @else
-                                                <button class="btn btn-secondary btn-sm">{{ ucfirst($transaction->status ?? 'Unknown') }}</button>
-                                            @endif
+                                            @php
+                                                $status = strtolower($transaction->status);
+                                                $statusClass = 'secondary';
+                                                
+                                                if(in_array($status, ['successful', 'completed', 'success'])) {
+                                                    $statusClass = 'success';
+                                                } elseif($status == 'pending') {
+                                                    $statusClass = 'warning';
+                                                } elseif(in_array($status, ['failed', 'cancelled'])) {
+                                                    $statusClass = 'danger';
+                                                }
+                                            @endphp
+                                            <button class="btn btn-{{ $statusClass }} btn-sm">
+                                                {{ ucfirst($transaction->status) }}
+                                            </button>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center" style="padding: 10px;">No transactions found.</td>
+                                        <td colspan="6" class="text-center" style="padding: 10px;">
+                                            No transactions found.
+                                        </td>
                                     </tr>
                                 @endforelse
                             </tbody>
