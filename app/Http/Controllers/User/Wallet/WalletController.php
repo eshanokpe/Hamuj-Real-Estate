@@ -18,15 +18,6 @@ class WalletController extends Controller
             'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
             'hasMoreReferrals' => $user->referralsMade()->count() > 6,
             'latestTransactions' => WalletTransaction::where('user_id', $user->id)
-                ->select([
-                    'id',
-                    'type',
-                    'amount',
-                    'status',
-                    'created_at',
-                    'reason',
-                    'metadata'
-                ])
                 ->orderBy('created_at', 'desc')
                 ->limit(5)
                 ->get()
