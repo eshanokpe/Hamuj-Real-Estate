@@ -114,8 +114,8 @@
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
                                                 {{ ucfirst($transaction->type) }}<br>
-                                                @if($transaction->metadata['reason'] != null)
-                                                    <small class="text-muted">{{ $transaction->metadata['reason'] ??'' }}</small>
+                                                @if($transaction->reason != null)
+                                                    <small class="text-muted">{{ $transaction->reason ??'' }}</small>
                                                 @endif
                                             </span>
                                         </td> 
