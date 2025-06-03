@@ -20,7 +20,7 @@ class WalletTransaction extends Model
         'recipient_code', 
         'status',           
         'metadata',         
-    ];
+    ]; 
 
     protected $casts = [
         'metadata' => 'array', // Cast metadata to an array

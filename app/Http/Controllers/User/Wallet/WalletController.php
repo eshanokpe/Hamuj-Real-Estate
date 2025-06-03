@@ -28,7 +28,7 @@ class WalletController extends Controller
                     'metadata'
                 ])
                 ->orderBy('created_at', 'desc')
-                ->limit(10)
+                ->limit(5)
                 ->get()
         ];
 

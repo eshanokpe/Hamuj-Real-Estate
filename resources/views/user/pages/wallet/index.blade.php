@@ -114,16 +114,16 @@
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
                                                 {{ ucfirst($transaction->type) }}<br>
-                                                @if($transaction->reason)
-                                                    <small class="text-muted">{{ $transaction->reason }}</small>
+                                                @if($transaction->metadata['reason'] != null)
+                                                    <small class="text-muted">{{ $transaction->metadata['reason'] ??'' }}</small>
                                                 @endif
                                             </span>
-                                        </td>
-                                        <td style="padding: 5px;">
-                                            @if(isset($transaction->metadata['bank_name']) || isset($transaction->metadata['account_name']))
-                                                <span class="sales__report--body__text">
-                                                    {{ $transaction->metadata['bank_name'] ?? '' }}<br>
-                                                    {{ $transaction->metadata['account_name'] ?? '' }}
+                                        </td> 
+                                        <td style="padding: 5px;"> 
+                                            @if(isset($transaction->bankName) || isset($transaction->accountName ))
+                                                <span class="sales__report--body__text"> 
+                                                    {{ $transaction->bankName ?? '' }}<br>
+                                                    {{ $transaction->accountName ?? '' }}
                                                 </span>
                                             @else
                                                 <span class="sales__report--body__text">N/A</span>
