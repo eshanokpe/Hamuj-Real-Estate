@@ -90,10 +90,12 @@
                      <div class="sales__report--section">
                         <div class="sales__report--heading d-flex align-items-center justify-content-between mb-30">
                             <h2 class="sales__report--heading__title">Latest Transaction </h2>
-                            <div class="sales__report--short-by select">
-                               View all
+                            <div class="sales__report--short-by">
+                                <a href="{{ route('user.payment.history') }}" class="btn btn-link p-0" style="text-decoration: none;">
+                                    View all
+                                </a>
                             </div>
-                        </div>
+                        </div> 
                         <table class="sales__report--table table-responsive">
                             <thead>
                                 <tr> 
@@ -106,28 +108,43 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td style="padding: 10px;">1</td>
-                                    <td style="padding: 5px;">
-                                        <span class="sales__report--body__text"> Top up</span>
-                                    </td>
-                                    <td style="padding: 5px;">
-                                        <span class="sales__report--body__text">Card</span>
-                                    </td>
-                                    <td style="padding: 5px;">
-                                        <span class="sales__report--body__text">₦120,000.00</span>
-                                    </td>
-                                    <td style="padding: 5px;">
-                                        <span class="sales__report--body__text">date</span>
-                                    </td>
-                                    <td style="padding: 5px;">
-                                        <button class="btn btn-warning btn-sm">Success</button>
-
-                                    </td>
-                                </tr>
+                                @forelse ($latestTransactions as $transaction)
+                                    <tr>
+                                        <td style="padding: 10px;">{{ $loop->iteration }}</td>
+                                        <td style="padding: 5px;">
+                                            <span class="sales__report--body__text"> {{ $transaction->description ?? $transaction->type ?? $transaction->reference ?? 'N/A' }}</span>
+                                        </td>
+                                        <td style="padding: 5px;">
+                                            <span class="sales__report--body__text">{{ $transaction->payment_method ?? 'N/A' }}</span>
+                                        </td>
+                                        <td style="padding: 5px;">
+                                            <span class="sales__report--body__text">
+                                                {{-- Assuming NGN currency based on static example. Adjust if dynamic. --}}
+                                                ₦{{ number_format($transaction->amount, 2) }}
+                                            </span>
+                                        </td>
+                                        <td style="padding: 5px;">
+                                            <span class="sales__report--body__text">{{ $transaction->created_at->format('M d, Y g:i A') }}</span>
+                                        </td>
+                                        <td style="padding: 5px;">
+                                            @if(strtolower($transaction->status) == 'successful' || strtolower($transaction->status) == 'completed' || strtolower($transaction->status) == 'success')
+                                                <button class="btn btn-success btn-sm">{{ ucfirst($transaction->status) }}</button>
+                                            @elseif(strtolower($transaction->status) == 'pending')
+                                                <button class="btn btn-warning btn-sm">{{ ucfirst($transaction->status) }}</button>
+                                            @elseif(strtolower($transaction->status) == 'failed' || strtolower($transaction->status) == 'cancelled')
+                                                <button class="btn btn-danger btn-sm">{{ ucfirst($transaction->status) }}</button>
+                                            @else
+                                                <button class="btn btn-secondary btn-sm">{{ ucfirst($transaction->status ?? 'Unknown') }}</button>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center" style="padding: 10px;">No transactions found.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
-                        
                         
                         {{-- @if($totalTransactions > 6)
                             <div class="text-center mt-3">

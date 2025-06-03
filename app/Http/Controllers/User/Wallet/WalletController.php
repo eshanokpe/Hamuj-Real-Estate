@@ -14,6 +14,13 @@ class WalletController extends Controller
         $data['user'] = Auth::user();
         $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
         $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;
+        // Fetch latest, e.g., 5 transactions. Adjust as needed.
+        $data['latestTransactions'] = Transaction::where('user_id', $user->id)
+        ->orderBy('created_at', 'desc')
+        ->limit(5)
+        ->get();
+
+
         return view('user.pages.wallet.index', $data); 
     }
 

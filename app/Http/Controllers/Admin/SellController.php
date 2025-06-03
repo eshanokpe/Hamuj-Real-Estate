@@ -34,7 +34,7 @@ class SellController extends Controller
             'status' => 'required',
         ]);
 
-        $sell = Sell::findOrFail($id);
+        $sell = Sell::findOrFail(decrypt($id));
 
         $updateData = [
             'status' => $request->status,
