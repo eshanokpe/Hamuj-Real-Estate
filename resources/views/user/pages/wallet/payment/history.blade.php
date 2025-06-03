@@ -66,8 +66,8 @@
                                                 ₦{{ number_format($transaction->amount, 2) }}
                                                 
                                             </span>
-                                             <span class="dashboard__chart--title pr-3 @if($transaction->type === 'transfer' || $transaction->type === 'credit') text-success @else text-danger @endif">
-                                                    @if($transaction->type === 'transfer' || $transaction->type === 'credit') + @else - @endif
+                                             <span class="sales__report--body__text @if($transaction->type === 'transfer') text-danger @else text-danger @endif">
+                                                    @if($transaction->type === 'transfer') - @else + @endif
                                                     ₦{{ number_format($transaction->amount, 2) }}
                                             </span>
                                         </td>
