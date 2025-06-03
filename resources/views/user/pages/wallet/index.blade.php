@@ -100,7 +100,7 @@
                             <thead>
                                 <tr> 
                                     <th style="width: 5%; padding: 10px;">#</th>
-                                    <th style="width: 20%; padding: 5px;">Type/Reason</th>
+                                    <th style="width: 20%; padding: 5px;">Type</th>
                                     <th style="width: 20%; padding: 5px;">Details</th>
                                     <th style="width: 15%; padding: 5px;">Amount</th>
                                     <th style="width: 15%; padding: 5px;">Created</th>

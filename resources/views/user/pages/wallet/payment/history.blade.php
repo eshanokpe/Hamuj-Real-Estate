@@ -11,85 +11,90 @@
         <!-- dashboard container -->
         <div class="dashboard__container d-flex">
             <div class="main__content--left">
-                <div class="main__content--left__inner">
-                    <!-- Welcome section -->
-                    <div class="dashboard__chart--box mb-30">
-                        <h2 class="dashboard__chart--title"> Payment History </h2>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="add__listing--input__box mb-10">
-                                    {{-- <label class="add__listing--input__label" for="name">Search </label> --}}
-                                    <input 
-                                        class="add__listing--input__field" 
-                                        id="name" 
-                                        name="first_name" 
-                                        placeholder="Search ..." 
-                                        type="text" 
-                                        value="">
-                                </div>
-                               
-                                <div class="sales__report--section p-4" >
-                                    <div class="accordion accordion-flush">
-                                     
-                                        <div class="accordion-item mb-3">
-                                            
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0 align-self-center">
-                                                    <img src="{{ asset('assets/admin/img/dashboard/up-arrow.png')}}" alt="Buy" class="me-2" style="width:50px; height:50px; max-width:100px; max-height:100px; object-fit:contain"  >
-                                                </div>
-                                                <div class="flex-grow-1 ms-3 align-self-center">
-                                                    <h1 class="dashboard__chart--title align-self-center">Top up</h1>
-                                                    <p>Yesterday 02:12</p>
-                                                </div>
-                                                   
-                                                <a href="#">
-                                                    <div class="p-2 d-flex flex-shrink-2 align-self-center">
-                                                        <h1 class="dashboard__chart--title pr-3 text-success">+N100,000.00</h1>
-                                                        <svg class="pl-3 mt-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                                            <path d="M7.5 3.33333L12.5 8.33333L7.5 13.3333" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                        {{-- <img src="{{ asset('assets/admin/img/dashboard/right_arrow.jpg')}}" alt="Buy" class="me-2" style="width:50px; height:50px; max-width:100px; max-height:100px; object-fit:contain"  > --}}
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <hr/>
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0 align-self-center">
-                                                    <img src="{{ asset('assets/admin/img/dashboard/withdraw.png')}}" alt="Buy" class="me-2" style="width:50px; height:50px; max-width:100px; max-height:100px; object-fit:contain"  >
-                                                </div>
-                                                <div class="flex-grow-1 ms-3 align-self-center">
-                                                    <h1 class="dashboard__chart--title align-self-center">Withdraw</h1>
-                                                    <p>Friday 02:12</p>
-                                                </div>
-                                                   
-                                                <a href="#">
-                                                    <div class="p-2 d-flex flex-shrink-2 align-self-center">
-                                                        <h1 class="dashboard__chart--title pr-3 text-danger">-N200,000.00</h1>
-                                                        <svg class="pl-3 mt-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                                            <path d="M7.5 3.33333L12.5 8.33333L7.5 13.3333" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                        {{-- <img src="{{ asset('assets/admin/img/dashboard/right_arrow.jpg')}}" alt="Buy" class="me-2" style="width:50px; height:50px; max-width:100px; max-height:100px; object-fit:contain"  > --}}
-                                                    </div>
-                                                </a>
-                                            </div>
-
+    <div class="main__content--left__inner"> 
+        <!-- Welcome section -->
+        <div class="dashboard__chart--box mb-30">
+            <h2 class="dashboard__chart--title"> Payment History </h2>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="add__listing--input__box mb-10">
+                        <input 
+                            class="add__listing--input__field" 
+                            id="searchTransactions" 
+                            name="search" 
+                            placeholder="Search transactions..." 
+                            type="text" 
+                            value="">
+                    </div>
+                   
+                    <div class="sales__report--section p-4">
+                        <div class="accordion accordion-flush">
+                            @forelse ($transactions as $transaction)
+                                <div class="accordion-item mb-3">
+                                    <div class="d-flex">
+                                        <div class="flex-shrink-0 align-self-center">
+                                            @if($transaction->type === 'deposit' || $transaction->type === 'credit')
+                                                <img src="{{ asset('assets/admin/img/dashboard/up-arrow.png')}}" alt="Deposit" class="me-2" style="width:50px; height:50px; max-width:100px; max-height:100px; object-fit:contain">
+                                            @else
+                                                <img src="{{ asset('assets/admin/img/dashboard/withdraw.png')}}" alt="Withdraw" class="me-2" style="width:50px; height:50px; max-width:100px; max-height:100px; object-fit:contain">
+                                            @endif
                                         </div>
-                                       
-
-
-                                        
-                                        
-                                      </div>
-            
+                                        <div class="flex-grow-1 ms-3 align-self-center">
+                                            <h1 class="dashboard__chart--title align-self-center">
+                                                {{ ucfirst($transaction->type) }}
+                                                @if($transaction->reason)
+                                                    <small class="text-muted">({{ $transaction->reason }})</small>
+                                                @endif
+                                            </h1>
+                                            <p>{{ $transaction->created_at->format('l h:i A') }}</p>
+                                        </div>
+                                           
+                                        <a href="#">
+                                            <div class="p-2 d-flex flex-shrink-2 align-self-center">
+                                                <h1 class="dashboard__chart--title pr-3 @if($transaction->type === 'deposit' || $transaction->type === 'credit') text-success @else text-danger @endif">
+                                                    @if($transaction->type === 'deposit' || $transaction->type === 'credit') + @else - @endif
+                                                    ₦{{ number_format($transaction->amount, 2) }}
+                                                </h1>
+                                                <svg class="pl-3 mt-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                    <path d="M7.5 3.33333L12.5 8.33333L7.5 13.3333" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <hr/>
+                                    <div class="px-3 py-2">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Status:</strong> 
+                                                    <span class="badge @if($transaction->status === 'successful') bg-success @elseif($transaction->status === 'pending') bg-warning @else bg-danger @endif">
+                                                        {{ ucfirst($transaction->status) }}
+                                                    </span>
+                                                </p>
+                                                @if($transaction->metadata && isset($transaction->metadata['bank_name']))
+                                                    <p class="mb-1"><strong>Bank:</strong> {{ $transaction->metadata['bank_name'] }}</p>
+                                                @endif
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Date:</strong> {{ $transaction->created_at->format('M d, Y') }}</p>
+                                                @if($transaction->metadata && isset($transaction->metadata['account_name']))
+                                                    <p class="mb-1"><strong>Account:</strong> {{ $transaction->metadata['account_name'] }}</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-                            </div>
+                            @empty
+                                <div class="text-center py-4">
+                                    <p>No transactions found</p>
+                                </div>
+                            @endforelse
                         </div>
                     </div>
-
-                   
                 </div>
             </div>
+        </div>
+    </div>
+</div>
             <div class="main__content--right">
                 <div class="dashboard__chart--box mb-30">
                     <h2 class="dashboard__chart--title">  Main Balance</h2>

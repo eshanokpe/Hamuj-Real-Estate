@@ -67,9 +67,17 @@ class WalletController extends Controller
  
 
     public function paymentHistory(){
-        $data['user'] = Auth::user();
-        $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
-        $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;
+       $user = Auth::user();
+    
+        $data = [
+            'user' => $user,
+            'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
+            'hasMoreReferrals' => $user->referralsMade()->count() > 6,
+            'transactions' => WalletTransaction::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->limit(10) // Increased to show more transactions
+                ->get()
+        ];
       
         return view('user.pages.wallet.payment.history', $data);
     }
