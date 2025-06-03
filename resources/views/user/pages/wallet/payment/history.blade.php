@@ -40,7 +40,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($latestTransactions as $transaction)
+                                @forelse ($transactions as $transaction)
                                     <tr>
                                         <td style="padding: 10px;">{{ $loop->iteration }}</td>
                                         <td style="padding: 5px;">
