@@ -64,9 +64,9 @@ class WalletController extends Controller
             'user' => $user,
             'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
             'hasMoreReferrals' => $user->referralsMade()->count() > 6,
-            'latestTransactions' => $latestTransaction
+            'latestTransactions' => collect([$allTransactions])
         ]; 
-        dd($data['latestTransactions']);
+        // dd($data['latestTransactions']);
 
         return view('user.pages.wallet.index', $data); 
     }
