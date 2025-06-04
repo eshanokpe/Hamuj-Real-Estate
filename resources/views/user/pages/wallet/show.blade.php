@@ -64,16 +64,16 @@
                                             @forelse($transaction as $txn)
                                             <div class="transaction-detail mb-4 pb-4 border-bottom">
                                                 <div class="row mb-4">
+                                                    <div class="col-md-6 text-md-end">
+                                                        <img src="{{ asset('assets/img/dohmaynlogo.png') }}" />
+                                                    </div>
                                                     <div class="col-md-6">
                                                         <h5 class="text-primary">{{ config('app.name') }}</h5>
-                                                        <p class="text-muted mb-0">Transaction Receipt</p>
                                                         <p class="mb-1"><strong>Date:</strong> {{ $txn->created_at->format('M d, Y') }}</p>
                                                         <p class="mb-1"><strong>Transaction Reference:</strong> {{ $txn->reference ?? 'N/A' }}</p>
 
                                                     </div>
-                                                    <div class="col-md-6 text-md-end">
-                                                        <img src="{{ asset('assets/img/dohmaynlogo.png') }}" />
-                                                    </div>
+                                                   
                                                 </div>
 
                                                 <div class="row mb-4">
@@ -120,6 +120,7 @@
                                                         <div class="card border-0 bg-light">
                                                             <div class="card-body">
                                                                 <h6 class="card-title text-muted">Recipient Details</h6>
+                                                                {{$txn->metadata }}
                                                                 @if(isset($txn->bankName) || isset($txn->accountName) || isset($txn->bank_name) || isset($txn->account_name))
                                                                 <div class="mb-2">
                                                                     <small class="text-muted">Bank</small>
