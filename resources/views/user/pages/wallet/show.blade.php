@@ -120,12 +120,18 @@
                                                         <div class="card border-0 bg-light">
                                                             <div class="card-body">
                                                                 <h6 class="card-title text-muted">Recipient Details</h6>
-                                                                {{$txn->metadata['receiver_account_number'] }}
-                                                                {{$txn->metadata['receiver_bank'] }}
-                                                                 <div class="mb-2">
+                                                                @if(is_array($txn->metadata))
+                                                                    <div class="mb-2">
+                                                                        <small class="text-muted">Account Number</small>
+                                                                        <p class="mb-0 fw-bold">{{ $txn->metadata['receiver_account_number'] ?? 'N/A' }}</p>
+                                                                            {{$txn->metadata['receiver_bank'] }}
+
+                                                                    </div>
+                                                                @endif
+                                                                 {{-- <div class="mb-2">
                                                                     <small class="text-muted">Account Number</small>
                                                                     <p class="mb-0 fw-bold">{{ $txn->metadata['receiver_account_number']}}</p>
-                                                                </div>
+                                                                </div> --}}
                                                                 @if(isset($txn->bankName) || isset($txn->accountName) || isset($txn->bank_name) || isset($txn->account_name))
                                                                 <div class="mb-2">
                                                                     <small class="text-muted">Bank</small>
