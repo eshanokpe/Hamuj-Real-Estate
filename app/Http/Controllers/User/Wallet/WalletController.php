@@ -123,19 +123,16 @@ class WalletController extends Controller
     {
         $data['user'] = Auth::user();
 
-        // Get wallet transaction
         $walletTransaction = WalletTransaction::where('id', $id)->first();
 
-        // Get wallet-based regular transaction
         $walletPaymentTransaction = Transaction::where('id', $id)
             ->where('payment_method', 'dedicated_nuban')
             ->first();
 
-        // Combine the two into a collection for consistent Blade usage
-        $data['transaction'] = collect([
+         $data['transaction'] = collect([
             $walletTransaction,
             $walletPaymentTransaction
-        ])->filter(); // Remove nulls
+        ])->filter(); 
 
         $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
         $data['hasMoreReferrals'] = $data['user']->referralsMade()->count() > 6;

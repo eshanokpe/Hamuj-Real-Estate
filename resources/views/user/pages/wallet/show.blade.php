@@ -67,10 +67,12 @@
                                                     <div class="col-md-6">
                                                         <h5 class="text-primary">{{ config('app.name') }}</h5>
                                                         <p class="text-muted mb-0">Transaction Receipt</p>
-                                                    </div>
-                                                    <div class="col-md-6 text-md-end">
                                                         <p class="mb-1"><strong>Date:</strong> {{ $txn->created_at->format('M d, Y') }}</p>
                                                         <p class="mb-1"><strong>Transaction Reference:</strong> {{ $txn->reference ?? 'N/A' }}</p>
+
+                                                    </div>
+                                                    <div class="col-md-6 text-md-end">
+                                                        <img src="{{ assets('assets/img/dohmaynlogo.png') }}" />
                                                     </div>
                                                 </div>
 
