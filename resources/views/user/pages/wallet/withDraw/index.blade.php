@@ -277,7 +277,7 @@
                         </div>
                         <div class="modal__contact--form__input mb-20">
                             <label class="modal__contact--input__label" for="name"> Enter Transaction PIN</label>
-                            <input name="modal-amount" class="modal__contact--input__field" id="transaction-pin" type="text" required>
+                            <input name="modal-pin" class="modal__contact--input__field" id="transaction-pin" type="text" required>
                         </div>
                        
                         <div class="modal__contact--footer">
