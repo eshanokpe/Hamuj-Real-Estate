@@ -35,9 +35,7 @@
                 <div class="main__content--left__inner">
                     <!-- Welcome section -->
                     <div class="dashboard__chart--box mb-30">
-                        <h2 class="dashboard__chart--title"> Main Balance</h2>
-                       
-                       
+                        <h2 class="dashboard__chart--title">Main Balance</h2>
 
                         <div class="container py-4">
                             <div class="row justify-content-center">
@@ -50,9 +48,11 @@
                                                     <button onclick="window.print()" class="btn btn-light btn-sm">
                                                         <i class="fas fa-print me-1"></i> Print
                                                     </button>
-                                                    <a href="{{ route('user.transaction.download', $transaction->id) }}" class="btn btn-light btn-sm">
+                                                    @if($transaction->isNotEmpty())
+                                                    <a href="{{ route('user.transaction.download', $transaction->first()->id) }}" class="btn btn-light btn-sm">
                                                         <i class="fas fa-download me-1"></i> Download
                                                     </a>
+                                                    @endif
                                                     <button class="btn btn-light btn-sm" id="shareBtn" style="display: none;">
                                                         <i class="fas fa-share-alt me-1"></i> Share
                                                     </button>
@@ -61,7 +61,7 @@
                                         </div>
 
                                         <div class="card-body" id="receiptContent">
-                                            @foreach($transaction as $txn)
+                                            @forelse($transaction as $txn)
                                             <div class="transaction-detail mb-4 pb-4 border-bottom">
                                                 <div class="row mb-4">
                                                     <div class="col-md-6">
@@ -70,7 +70,7 @@
                                                     </div>
                                                     <div class="col-md-6 text-md-end">
                                                         <p class="mb-1"><strong>Date:</strong> {{ $txn->created_at->format('M d, Y') }}</p>
-                                                        <p class="mb-1"><strong>Transaction Reference:</strong> {{ $txn->reference }}</p>
+                                                        <p class="mb-1"><strong>Transaction Reference:</strong> {{ $txn->reference ?? 'N/A' }}</p>
                                                     </div>
                                                 </div>
 
@@ -100,19 +100,14 @@
                                                                     <p class="mb-0">
                                                                         @php
                                                                             $status = strtolower($txn->status ?? $txn->transaction_state ?? 'pending');
-                                                                            $statusClass = 'secondary';
-                                                                            
-                                                                            if(in_array($status, ['successful', 'completed', 'success'])) {
-                                                                                $statusClass = 'success';
-                                                                            } elseif($status == 'pending') {
-                                                                                $statusClass = 'warning';
-                                                                            } elseif(in_array($status, ['failed', 'cancelled'])) {
-                                                                                $statusClass = 'danger';
-                                                                            }
+                                                                            $statusClass = match(true) {
+                                                                                in_array($status, ['successful', 'completed', 'success']) => 'success',
+                                                                                $status === 'pending' => 'warning',
+                                                                                in_array($status, ['failed', 'cancelled']) => 'danger',
+                                                                                default => 'secondary',
+                                                                            };
                                                                         @endphp
-                                                                        <span class="badge bg-{{ $statusClass }}">
-                                                                            {{ ucfirst($status) }}
-                                                                        </span>
+                                                                        <span class="badge bg-{{ $statusClass }}">{{ ucfirst($status) }}</span>
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -155,13 +150,17 @@
                                                 </div>
                                                 @endif
                                             </div>
-                                            @endforeach
+                                            @empty
+                                                <p class="text-center text-muted">No transaction found.</p>
+                                            @endforelse
 
                                             <div class="d-flex justify-content-between align-items-center mt-4">
                                                 <a href="{{ route('user.wallet.index') }}" class="btn btn-outline-secondary">
                                                     <i class="fas fa-arrow-left me-1"></i> Back to Wallet
                                                 </a>
-                                                <small class="text-muted">Processed on: {{ $txn->created_at->format('M d, Y g:i A') }}</small>
+                                                @if($transaction->isNotEmpty())
+                                                <small class="text-muted">Processed on: {{ $transaction->last()->created_at->format('M d, Y g:i A') }}</small>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -172,15 +171,14 @@
                         @push('scripts')
                         <script>
                             document.addEventListener('DOMContentLoaded', function() {
-                                // Show share button if Web Share API is supported
                                 if (navigator.share) {
                                     document.getElementById('shareBtn').style.display = 'block';
-                                    
+
                                     document.getElementById('shareBtn').addEventListener('click', async () => {
                                         try {
                                             await navigator.share({
                                                 title: 'Transaction Receipt',
-                                                text: 'Transaction Reference: {{ $transaction->first()->id }}',
+                                                text: 'Transaction Reference: {{ $transaction->first()->id ?? 'N/A' }}',
                                                 url: window.location.href,
                                             });
                                         } catch (err) {
@@ -219,40 +217,8 @@
                                 }
                             }
                         </style>
-
-                       
-
-                        <style>
-                            @media print {
-                                body * {
-                                    visibility: hidden;
-                                }
-                                #receiptContent, #receiptContent * {
-                                    visibility: visible;
-                                }
-                                #receiptContent {
-                                    position: absolute;
-                                    left: 0;
-                                    top: 0;
-                                    width: 100%;
-                                    padding: 20px;
-                                }
-                                .no-print {
-                                    display: none !important;
-                                }
-                                .card {
-                                    border: none !important;
-                                    box-shadow: none !important;
-                                }
-                            }
-                        </style>
                     </div>
  
-                    
-                    
-
-                   
-                  
                 </div>
             </div>
             <div class="main__content--right">

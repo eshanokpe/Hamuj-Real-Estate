@@ -148,20 +148,26 @@ class WalletController extends Controller
     {
         $data['user'] = Auth::user();
 
-        // Try to find the transaction in WalletTransaction
-        $transaction = WalletTransaction::find($id);
+        // Get wallet transaction
+        $walletTransaction = WalletTransaction::where('id', $id)->first();
 
-        // If not found, try to find it in Transaction table (remove strict 'wallet' check)
-        if (!$transaction) {
-            $transaction = Transaction::findOrFail($id);
-        }
+        // Get wallet-based regular transaction
+        $walletPaymentTransaction = Transaction::where('id', $id)
+            ->where('payment_method', 'wallet')
+            ->first();
 
-        $data['transaction'] = $transaction;
+        // Combine the two into a collection for consistent Blade usage
+        $data['transaction'] = collect([
+            $walletTransaction,
+            $walletPaymentTransaction
+        ])->filter(); // Remove nulls
+
         $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
         $data['hasMoreReferrals'] = $data['user']->referralsMade()->count() > 6;
 
         return view('user.pages.wallet.show', $data);
     }
+
 
 
     public function download($id)
