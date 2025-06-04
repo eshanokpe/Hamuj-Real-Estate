@@ -182,18 +182,25 @@
                                         </td>
                                        
                                         <td style="padding: 5px;">
-                                            <div class="btn-group btn-group-sm">
-                                                <a href="{{ route('user.transaction.download', $transaction->id) }}" 
-                                                class="btn btn-primary" 
-                                                title="Download Receipt">
-                                                    <i class="fas fa-download"></i>
-                                                </a>
-                                                <a href="{{ route('user.transaction.show', $transaction->id) }}" 
-                                                class="btn btn-info" 
-                                                title="View Details">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            </div>
+                                            @if(is_object($transaction) && isset($transaction->id))
+                                                <div class="btn-group btn-group-sm">
+                                                    <a href="{{ route('user.transaction.download', $transaction->id) }}"
+                                                       class="btn btn-primary"
+                                                       title="Download Receipt">
+                                                        <i class="fas fa-download"></i>
+                                                    </a>
+                                                    <a href="{{ route('user.transaction.show', $transaction->id) }}"
+                                                       class="btn btn-info"
+                                                       title="View Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                </div>
+                                            @else
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-primary btn-sm" title="Download Receipt" disabled><i class="fas fa-download"></i></button>
+                                                    <button class="btn btn-info btn-sm" title="View Details" disabled><i class="fas fa-eye"></i></button>
+                                                </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
