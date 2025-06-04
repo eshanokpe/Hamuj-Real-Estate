@@ -19,7 +19,8 @@ class WalletTransaction extends Model
         'reason',     
         'recipient_code', 
         'status',           
-        'metadata',         
+        'metadata',           
+        
     ]; 
  
     protected $casts = [
