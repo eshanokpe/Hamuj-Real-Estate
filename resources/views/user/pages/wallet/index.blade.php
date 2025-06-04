@@ -113,7 +113,7 @@
                                         <td style="padding: 10px;">{{ $loop->iteration }}</td>
                                        <td style="padding: 5px;">
                                         <span class="sales__report--body__text">
-                                            {{ $transaction->payment_method }}
+                                            {{ $transaction }}
                                             @if (isset($transaction->payment_method) && strtolower($transaction->payment_method) === 'dedicated_nuban')
                                                 Deposit
                                             @elseif(isset($transaction->payment_method))
