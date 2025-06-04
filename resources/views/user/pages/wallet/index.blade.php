@@ -112,17 +112,16 @@
                                     @php
                                         $originalTransactionType = $transaction['type'] ?? null;
 
-                                        // Determine transaction nature for amount prefix (+/-)
-                                        // A transaction is considered a deposit if its original type is 'deposit' or 'dedicated_nuban'.
                                         $isDeposit = ($originalTransactionType === 'dedicated_nuban');
                                         $isTransfer = ($originalTransactionType === 'transfer');
                                         
                                         // Determine display type string
                                         if ($originalTransactionType === 'dedicated_nuban') {
-                                            $type = 'Deposit'; // Display 'dedicated_nuban' as 'Deposit'
+                                            $type = 'Deposit'; 
                                         } else {
                                             // Use original type if set, otherwise fallback to payment_method
-                                            $type = $originalTransactionType ?? $transaction['payment_method'] ?? 'N/A';
+                                            // $type = $originalTransactionType ?? $transaction['payment_method'] ?? 'N/A';
+                                            $type = 'N/A';
                                         }
                                         $description = $transaction['reason'] ?? ($transaction['description'] ?? null);
                                         $bankName = $transaction['bankName'] ?? ($transaction['bank_name'] ?? '');
