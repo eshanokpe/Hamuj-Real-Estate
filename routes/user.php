@@ -150,7 +150,8 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::put('/{id}/change-password', [SecurityController::class, 'changePasswordPost'])->name('change.password.post');
     Route::get('/transaction-pin', [SecurityController::class, 'transactionPin'])->name('transaction.pin');
     Route::put('/{id}/transaction-create', [SecurityController::class, 'createTransactionPin'])->name('transaction.create.pin');
-     Route::post('/transaction-pin/verify', [SecurityController::class, 'getTransactionPin'])->name('wallet.verifyPin');
+    
+    Route::post('/transaction/verify/pin', [SecurityController::class, 'verifyPinWeb'])->name('wallet.verifyPin');
 
     Route::post('/user/toggle-hide-balance', [DashboardController::class, 'toggleHideBalance'])->name('toggle.hide.balance');
 

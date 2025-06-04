@@ -39,7 +39,7 @@
     function toggleHideBalance(el) { 
         fetch('{{ route("user.toggle.hide.balance") }}', {
             method: 'POST',
-            headers: {
+            headers: { 
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },

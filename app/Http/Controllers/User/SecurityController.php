@@ -131,10 +131,11 @@ class SecurityController extends Controller
             return back()->with('success', $message);
         }
     }
-
+ 
     public function getTransactionPin(Request $request, $userId)
     {
         try {
+             
             // Ensure the authenticated user is accessing their own PIN
             if ($request->user()->id != $userId) {
                 return response()->json([
@@ -203,4 +204,54 @@ class SecurityController extends Controller
         }
     }
 
+    public function verifyPinWeb(Request $request)
+    {
+        // Fetch the user
+        $user = $request->user();
+        // 1. Get all input data
+        $input = $request->all();
+        
+        // 2. Access specific fields (both methods work)
+        $enteredPin = $request->input('entered_pin');  // Recommended
+        $userId = $request->user_id; 
+
+        // 3. Validate the request
+        $validator = Validator::make($request->all(), [
+            'entered_pin' => 'required|digits:4',
+            'user_id' => 'required|numeric'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        if ($request->user()->id == $userId) {
+            // Compare the entered PIN with the stored hashed PIN
+            if (Hash::check($request->entered_pin, $user->transaction_pin)) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'PIN verification successful',
+                    'pin_match' => true,
+                ]);
+            }
+            return response()->json([
+                'status' => 'error',
+                'message' => 'The entered PIN is incorrect',
+                'pin_match' => false,
+            ]); 
+            
+        }else{
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An unexpected error occurred',
+                // 'userId' => $user->transaction_pin,
+                // 'id' => $request->user_id ,
+                // 'entered_pin' => $request->entered_pin ,
+            ]);
+        }
+            
+    }
 }

@@ -20,7 +20,7 @@ class WalletTransferController extends Controller
     }
 
     public function createRecipient(Request $request)
-    {  
+    {   
         $user = Auth::user();
         $response = Http::withToken(env('PAYSTACK_SECRET_KEY'))->post('https://api.paystack.co/transferrecipient', [
             'type' => 'nuban', // Nigerian bank account
@@ -51,6 +51,7 @@ class WalletTransferController extends Controller
             'reason' => 'nullable|string',
             'accountName' => 'nullable|string',
             'bankName' => 'nullable|string',
+            'account_number' => 'nullable',
         ]);
 
         $user = Auth::user();
@@ -71,14 +72,18 @@ class WalletTransferController extends Controller
             if ($userWallet->balance >= $transferAmount) {
                 $userWallet->balance -= $transferAmount;
                 $userWallet->save();
+                Log::info('validated', $validated);
+                Log::info('Transfer successful. Wallet updated.', $transferResponse['data']);
 
                 // Log the transaction
                 WalletTransaction::create([
                     'user_id' => $user->id,
                     'wallet_id' => $userWallet->id,
                     'type' => 'transfer',
-                    'accountName' => $validated['accountName'],
-                    'bankName' => $validated['bankName'],
+                    'currency' => $transferResponse['data']['currency'],
+                    'accountName' => $validated['account_number']??'',
+                    'transfer_code' => $validated['transfer_code']??'',
+                    'bankName' => $validated['bankName']??'',
                     'amount' => $transferAmount,
                     'recipient_code' => $validated['recipient_code'],
                     'reason' => $validated['reason'],
@@ -86,8 +91,11 @@ class WalletTransferController extends Controller
                     'metadata' => $transferResponse, // Store the Paystack response
                 ]);
 
-                Log::info('Transfer successful. Wallet updated.');
-                return response()->json(['status' => 'success', 'data' => $transferResponse['data']]);
+                return response()->json([
+                    'status' => 'success', 
+                    'data' => $transferResponse['data'],
+                    'redirect_url' => route('user.wallet.index')
+                ]);
             } else {
                 Log::error('Wallet balance mismatch after transfer.');
                 return response()->json(['status' => 'error', 'message' => 'Insufficient wallet balance.'], 400);
@@ -104,7 +112,7 @@ class WalletTransferController extends Controller
                 'reason' => $validated['reason'],
                 'status' => 'failed',
                 'metadata' => $transferResponse, // Store the Paystack response
-            ]);
+            ]); 
             Log::error('Transfer failed. Paystack response:', $transferResponse);
             return response()->json(['status' => 'error', 'message' => $transferResponse['message']]);
         }

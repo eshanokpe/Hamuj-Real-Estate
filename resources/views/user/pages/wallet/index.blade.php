@@ -118,6 +118,7 @@
                                             @elseif(isset($transaction->payment_method))
                                                 {{ ucfirst($transaction->payment_method) }}
                                             @else
+                                                {{-- {{$transaction->type}} --}}
                                                 {{ ucfirst($transaction->type ?? 'N/A') }}
                                             @endif
                                             <br>
