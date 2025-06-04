@@ -121,7 +121,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('referral/show', [ReferralController::class, 'show'])->name('referrals.show');
     
     Route::get('/wallet/index', [WalletController::class, 'index'])->name('wallet.index'); 
-    Route::get('wallet/top-up', [WalletController::class, 'topUp'])->name('wallet.topUp');
+    Route::get('wallet/top-up', [WalletController::class, 'topUp'])->name('wallet.topUp'); 
     Route::get('wallet/with-draw', [WalletController::class, 'withDraw'])->name('wallet.withdraw');
     Route::get('wallet/transfer-post', [WalletController::class, 'transferPost'])->name('wallet.transferPost');
     
@@ -150,6 +150,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::put('/{id}/change-password', [SecurityController::class, 'changePasswordPost'])->name('change.password.post');
     Route::get('/transaction-pin', [SecurityController::class, 'transactionPin'])->name('transaction.pin');
     Route::put('/{id}/transaction-create', [SecurityController::class, 'createTransactionPin'])->name('transaction.create.pin');
+     Route::post('/transaction-pin/verify', [SecurityController::class, 'getTransactionPin'])->name('wallet.verifyPin');
 
     Route::post('/user/toggle-hide-balance', [DashboardController::class, 'toggleHideBalance'])->name('toggle.hide.balance');
 

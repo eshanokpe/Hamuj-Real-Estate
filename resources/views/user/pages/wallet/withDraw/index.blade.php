@@ -30,6 +30,18 @@
 </style>
 
 <style>
+    .resolved-account-display {
+        padding: 10px 15px; /* Consistent padding */
+        border: 1px solid #e0e0e0; /* Standard border */
+        border-radius: 5px; /* Rounded corners like other inputs */
+        background-color: #f8f9fa; /* Light background to indicate read-only */
+        min-height: 50px; /* Ensure it has some height */
+        line-height: 1.4;
+    }
+    .resolved-account-display .account-name { font-weight: bold; display: block; color: #28a745; /* Green for success */}
+    .resolved-account-display .bank-name { font-size: 0.9em; color: #555; display: block; }
+    .resolved-account-display .status-message { color: #007bff; /* Blue for neutral/verifying messages */ }
+    .resolved-account-display .status-message.error { color: #dc3545; /* Red for error messages */ }
  
 
 </style>
@@ -70,27 +82,26 @@
                                                         </div>
                                                         
                                                         <!-- Bank Select -->
-                                                        <div class="add__listing--input__box mb-20" >
+                                                        <div class="add__listing--input__box mb-20">
                                                             <label class="add__listing--input__label" for="bank">Select Bank</label>
-                                                            <div style="border: 1px solid  #ccc; padding:10px; border-radius:5px" class="w-100">
-                                                                <select  name="bank_code" id="bank" class="add__listing--input__field js-bank-select">
-                                                                    <option value="">Select a bank</option>
-                                                                    @if(!empty($banks))
-                                                                        @foreach($banks as $bank)
-                                                                            <option value="{{ $bank['code'] }}">{{ $bank['name'] }}</option>
-                                                                        @endforeach
-                                                                    @else
-                                                                        <option value="">No banks available</option>
-                                                                    @endif
-                                                                </select>
-                                                            </div>
+                                                            <select name="bank_code" id="bank" class="add__listing--input__field js-bank-select">
+                                                                <option value="">Select a bank</option>
+                                                                @if(!empty($banks))
+                                                                    @foreach($banks as $bank)
+                                                                        <option value="{{ $bank['code'] }}">{{ $bank['name'] }}</option>
+                                                                    @endforeach
+                                                                @else
+                                                                    <option value="">No banks available</option>
+                                                                @endif
+                                                            </select>
                                                         </div>
 
                                                         <!-- Account Name Display -->
                                                         <div class="add__listing--input__box mb-20">
-                                                            <label class="add__listing--input__label">Account Name</label>
-                                                            <div id="account_name_display" style="font-weight: bold; color: green;"> </div>
-                                                            <div id="bank_name_display" style="font-weight: bold; color: green;"> </div>
+                                                            <label class="add__listing--input__label">Verified Account Details</label>
+                                                            <div id="resolved_account_info_display" class="resolved-account-display">
+                                                                <span class="status-message">Details will appear here upon verification.</span>
+                                                            </div>
                                                         </div>
 
                                                         <div class="add__listing--input__box mb-20" id="amount-container" style="display: none;">
@@ -275,6 +286,10 @@
                             <label class="modal__contact--input__label" for="name"> Amount</label>
                             <input name="modal-amount" class="modal__contact--input__field" id="modal-amount" type="text" readonly>
                         </div>
+                        <div class="modal__contact--form__input mb-20">
+                            <label class="modal__contact--input__label" for="name"> Enter Transaction PIN</label>
+                            <input name="modal-amount" class="modal__contact--input__field" id="transaction-pin" type="text" required>
+                        </div>
                        
                         <div class="modal__contact--footer">
                             <button class="solid__btn border-0" id="process-transfer" type="submit">
@@ -295,6 +310,11 @@
 
     
 <script>
+    @auth
+        @if (!auth()->user()->transaction_pin)
+            window.location.href = "{{ route('user.transaction.pin') }}"; 
+        @endif
+    @endauth 
     document.addEventListener("DOMContentLoaded", function () {
         const amountInput = document.getElementById("amount");
 
@@ -339,13 +359,26 @@
     $(document).ready(function () {
         $('#create-recipient-form').on('submit', function (e) {
             e.preventDefault(); // Prevent form submission
-            
+             
             // Collect form data
             const accountNumber = $('#modal-account-number').val();
             const accountName = $('#modal-account-name').val();
             const bankCode = $('#modal-bankCode').val();
             const amount = $('#modal-amount').val();
             const $button = $('#process-transfer');
+            const $transactionPin = $('#transaction-pin');
+
+            // Check if Transaction PIN is empty
+            if ($transactionPin.val().trim() === '') {
+                toastr.error('Please enter your Transaction PIN.', 'PIN Required');
+                // No need to reset button state as loading wasn't shown yet
+                return; // Stop the form submission process
+            }
+            
+            if($transactionPin.val() !== Auth::user()->transaction_pin){
+                toastr.error('Invalid transaction PIN', 'Error');
+                return;
+            }
 
             // Show loading state
             $button.prop('disabled', true);
@@ -444,7 +477,7 @@
             const amount = $('#amount_display').val();
 
             if (accountNumber.length === 10 && bankCode) {
-                $('#account_name_display').text('Verifying...');
+                $('#resolved_account_info_display').html('<span class="status-message">Verifying...</span>');
                 $('#next-button').prop('disabled', true);
 
                 // Send AJAX request
@@ -463,8 +496,12 @@
                         if (response.status === 'success') {
                             const data = response.data;
                             console.log(data); 
-                            $('#account_name_display').text(data.account_name);
+                            const selectedBankName = $('#bank option:selected').text();
                             $('#modal-account-name').val(data.account_name);
+                            $('#resolved_account_info_display').html(
+                                '<span class="account-name">' + data.account_name + '</span>' +
+                                '<span class="bank-name">' + selectedBankName + '</span>'
+                            );
 
                             $('#account_number').text(data.account_number); 
                             $('#modal-account-number').val(data.account_number); 
@@ -482,7 +519,7 @@
                                 $('#next-button').prop('disabled', true);
                             }
                         } else {
-                            $('#account_name_display').text('Account name not found');
+                            $('#resolved_account_info_display').html('<span class="status-message error">' + (response.message || 'Account details not found.') + '</span>');
                             $('#amount').prop('disabled', true);
                             $('#amount-container').hide();
                             $('#next-button').prop('disabled', true);
@@ -490,11 +527,11 @@
                     },
                     error: function () {
                         $('#next-button').prop('disabled', true);
-                        $('#account_name_display').text('Unable to verify account. Please try again.');
+                        $('#resolved_account_info_display').html('<span class="status-message error">Unable to verify account. Please try again.</span>');
                     },
                 });
             } else {
-                $('#account_name_display').text(''); // Clear the name if inputs are incomplete
+                $('#resolved_account_info_display').html('<span class="status-message">Details will appear here upon verification.</span>'); // Clear or set placeholder
                 $('#next-button').prop('disabled', true); // Ensure button remains disabled
             }
         });

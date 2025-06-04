@@ -20,6 +20,9 @@
         </div>
          
         <div class="details">
+            <div style="margin-left: auto; padding-left: 10px;">
+                <img src="{{ public_path('assets/img/dohmaynlogo.png') }}" style="width: 100px; height: auto; display: block;" alt="Company Logo">
+            </div>
             <div class="detail-row" style="align-items: center;">
                 <div class="detail-label">Transaction Reference:</div>
                 <div>{{ $transaction->reference }}</div>
@@ -27,9 +30,7 @@
             <div class="detail-row" style="align-items: center;">
                 <div class="detail-label">Date:</div>
                 <div>{{ $transaction->created_at->format('M d, Y g:i A') }}</div>
-                <div style="margin-left: auto; padding-left: 10px;">
-                    <img src="{{ public_path('assets/img/dohmaynlogo.png') }}" style="width: 100px; height: auto; display: block;" alt="Company Logo">
-                </div>
+                
             </div>
             <div class="detail-row">
                 <div class="detail-label">Type:</div>
@@ -51,15 +52,70 @@
                 <div class="detail-label">Status:</div>
                 <div>{{ ucfirst($transaction->status ?? $transaction->transaction_state ?? 'pending') }}</div>
             </div>
-            @if(isset($transaction->bankName) || isset($transaction->accountName) || isset($transaction->bank_name) || isset($transaction->account_name))
-            <div class="detail-row">
-                <div class="detail-label">Bank Details:</div>
-                <div>
-                    {{ $transaction->bankName ?? $transaction->bank_name ?? '' }}<br>
-                    {{ $transaction->accountName ?? $transaction->account_name ?? '' }}
+
+            @php
+                $metadata = [];
+                // Safely decode metadata
+                if (!empty($transaction->metadata)) {
+                    if (is_array($transaction->metadata)) {
+                        $metadata = $transaction->metadata;
+                    } elseif (is_string($transaction->metadata)) {
+                        $decoded = json_decode($transaction->metadata, true);
+                        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                            $metadata = $decoded;
+                        }
+                    }
+                }
+
+                // Initialize receiver details
+                $receiverName = $metadata['receiver_name'] ?? $transaction->recipient_name ?? null;
+                $receiverBank = $metadata['receiver_bank'] ?? $transaction->bank_name ?? $transaction->bankName ?? null;
+                $receiverAccountNumber = $metadata['receiver_account_number'] ?? $transaction->account_number ?? null;
+
+                // Fallback for receiver name using account_name or accountName if not already set
+                if (empty($receiverName)) {
+                    $potentialName = $metadata['account_name'] ?? $transaction->account_name ?? $transaction->accountName ?? null;
+                    if ($potentialName && (!is_numeric(str_replace(' ', '', $potentialName)) || !empty($receiverAccountNumber)) ) {
+                        $receiverName = $potentialName;
+                    }
+                }
+
+                // Fallback for account number using account_name or accountName if not already set
+                if (empty($receiverAccountNumber)) {
+                    $potentialAccountNumber = $metadata['account_name'] ?? $transaction->account_name ?? $transaction->accountName ?? null;
+                    if ($potentialAccountNumber && is_numeric(str_replace(' ', '', $potentialAccountNumber))) {
+                        $receiverAccountNumber = $potentialAccountNumber;
+                        if ($receiverName === $receiverAccountNumber) {
+                            $receiverName = $metadata['receiver_name'] ?? $transaction->recipient_name ?? null;
+                        }
+                    }
+                }
+            @endphp
+
+            @if($receiverName || $receiverBank || $receiverAccountNumber)
+                <div style="margin-top: 15px; margin-bottom: 5px; border-top: 1px solid #eee; padding-top: 10px;">
+                    <div style="font-weight:bold; margin-bottom: 5px;">Receiver Information:</div>
                 </div>
-            </div>
+                @if($receiverName)
+                <div class="detail-row">
+                    <div class="detail-label">Name:</div>
+                    <div>{{ $receiverName }}</div>
+                </div>
+                @endif
+                @if($receiverBank)
+                <div class="detail-row">
+                    <div class="detail-label">Bank:</div>
+                    <div>{{ $receiverBank }}</div>
+                </div>
+                @endif
+                @if($receiverAccountNumber)
+                <div class="detail-row">
+                    <div class="detail-label">Account Number:</div>
+                    <div>{{ $receiverAccountNumber }}</div>
+                </div>
+                @endif
             @endif
+
             @if(isset($transaction->reason) || isset($transaction->description))
             <div class="detail-row">
                 <div class="detail-label">Description:</div>

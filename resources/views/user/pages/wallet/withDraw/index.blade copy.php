@@ -90,18 +90,21 @@
                                                         <div class="add__listing--input__box mb-20">
                                                             <label class="add__listing--input__label">Account Name</label>
                                                             <div id="account_name_display" style="font-weight: bold; color: green;"> </div>
+                                                            <div id="bank_name_display" style="font-weight: bold; color: green;"> </div>
                                                         </div>
 
                                                         <div class="add__listing--input__box mb-20" id="amount-container" style="display: none;">
                                                             <label class="add__listing--input__label" for="amount">Amount (₦)</label>
                                                             <input 
-                                                                type="text" 
-                                                                id="amount" 
+                                                                type="number" 
+                                                                id="amount_display" 
+                                                                placeholder="0.00" 
+                                                                min="0" 
+                                                                step="0.01"
                                                                 name="amount" 
                                                                 class="add__listing--input__field" 
-                                                                placeholder="Enter amount" 
                                                                 required
-                                                                disabled
+                                                                {{-- disabled --}}
                                                             />
                                                         </div>
                                                     
@@ -110,175 +113,9 @@
                                                             Next
                                                         </button>
                                                     </div>
-
-                                                    <!-- Modal -->
-                                                    <div class="modal fade" id="modaladdcontact" tabindex="-1">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content modal__contact--main__content">
-                                                                <div class="modal__contact--header d-flex align-items-center justify-content-between">
-                                                                    <h3 class="modal__contact--header__title">Add Contact</h3>
-                                                                    <button type="button" class="modal__contact--close__btn" data-bs-dismiss="modal" aria-label="Close">    
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="12.711" height="12.711" viewBox="0 0 12.711 12.711">
-                                                                            <g id="Group_7205" data-name="Group 7205" transform="translate(-113.644 -321.644)">
-                                                                              <path id="Vector" d="M0,9.883,9.883,0" transform="translate(115.059 323.059)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                                                              <path id="Vector-2" data-name="Vector" d="M9.883,9.883,0,0" transform="translate(115.059 323.059)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                                                                            </g>
-                                                                          </svg>                                                              
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body modal__contact--body">
-                                                                    <div class="modal__contact--form">
-                                                                       
-                                                                        <form action="{{ route('user.wallet.createRecipient') }}" method="POST">
-                                                                            <div class="modal__contact--form__input mb-20">
-                                                                                <label class="modal__contact--input__label" for="name">Account Number</label>
-                                                                                <input class="modal__contact--input__field" id="modal-account-number" type="text" disabled>
-                                                                            </div>
-                                                                            <div class="modal__contact--form__input mb-20">
-                                                                                <label class="modal__contact--input__label" for="name">Account Name</label>
-                                                                                <input class="modal__contact--input__field" id="modal-account-name"  type="text" disabled>
-                                                                            </div>
-                                                                            <div class="modal__contact--form__input mb-20">
-                                                                                <label class="modal__contact--input__label" for="name">Bank Name</label>
-                                                                                <input class="modal__contact--input__field" id="modal-bank-name"  type="text" disabled>
-                                                                            </div>
-                                                                            <div class="modal__contact--form__input mb-20">
-                                                                                <label class="modal__contact--input__label" for="name"> Amount</label>
-                                                                                <input class="modal__contact--input__field" id="modal-amount" type="text" disabled>
-                                                                            </div>
-                                                                           
-                                                                            <div class="modal__contact--footer">
-                                                                                <button class="solid__btn border-0" type="submit">Contact</button>
-                                                                            </div>
-                                                                        </form>
-                                                                       
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div> 
-                                                  
-                                                   
-                                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                                                    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-                                                        
-                                                    <script>
-                                                        document.addEventListener("DOMContentLoaded", function () {
-                                                            const amountInput = document.getElementById("amount");
-
-                                                            amountInput.addEventListener("input", function () {
-                                                                let value = amountInput.value.replace(/,/g, ""); // Remove existing commas
-                                                                if (!isNaN(value) && value) {
-                                                                    amountInput.value = new Intl.NumberFormat().format(value); // Add commas
-                                                                } else if (!value) {
-                                                                    amountInput.value = ""; // Clear the field if input is invalid
-                                                                }
-                                                            });
-                                                        });
-                                                        $(document).ready(function() {
-                                                            $('.js-bank-select').select2({
-                                                                placeholder: "Select a bank",
-                                                                allowClear: false,
-                                                                // width: '100%',
-                                                            });
-                                                        });
-                                                        $(document).ready(function () {
-                                                            const $accountNumber = $('#number');
-                                                            const $bankSelect = $('#bank');
-                                                            const $nextButton = $('#next-button');
-
-                                                            function toggleNextButton() {
-                                                                const isAccountNumberValid = $accountNumber.val().length === 10;
-                                                                const isBankSelected = $bankSelect.val() !== '';
-                                                                $nextButton.prop('disabled', !(isAccountNumberValid && isBankSelected));
-                                                            }
-
-                                                            // Listen for input changes
-                                                            $accountNumber.on('input', function () {
-                                                                // Ensure the input does not exceed 10 digits
-                                                                const currentValue = $accountNumber.val();
-                                                                if (currentValue.length > 10) {
-                                                                    $accountNumber.val(currentValue.slice(0, 10)); // Truncate to 10 characters
-                                                                }
-                                                                toggleNextButton();
-                                                            });
-                                                            $bankSelect.on('change', toggleNextButton);
-                                                        });
-                           
-                                                        $(document).ready(function () {
-                                                            $('#bank, #number').on('input change', function () {
-                                                                const accountNumber = $('#number').val().trim();
-                                                                const bankCode = $('#bank').val();
-
-                                                                if (accountNumber.length === 10 && bankCode) {
-                                                                    $('#account_name_display').text('Verifying...');
-                                                                    $('#next-button').prop('disabled', true);
-
-                                                                    // Send AJAX request
-                                                                    $.ajax({
-                                                                        url: "{{ route('user.wallet.resolve.account') }}", // Route for resolving account
-                                                                        method: "GET",
-                                                                        headers: {
-                                                                            'Content-Type': 'application/json',
-                                                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                                                        }, 
-                                                                        data: {
-                                                                            account_number: accountNumber,
-                                                                            bank_code: bankCode,
-                                                                        },
-                                                                        success: function (response) {
-                                                                            // alert(response.status);
-                                                                            if (response.status === 'success') {
-                                                                                $('#account_name_display').text(response.account_name); 
-                                                                                $('#amount').prop('disabled', false);
-                                                                                $('#amount-container').show();
-                                                                                $('#next-button').prop('disabled', false);
-                                                                            } else {
-                                                                                $('#account_name_display').text('Account name not found');
-                                                                                $('#amount').prop('disabled', true);
-                                                                                $('#amount-container').hide();
-                                                                                $('#next-button').prop('disabled', true);
-                                                                            }
-                                                                        },
-                                                                        error: function () {
-                                                                            $('#next-button').prop('disabled', true);
-                                                                            $('#account_name_display').text('Unable to verify account. Please try again.');
-                                                                        },
-                                                                    });
-                                                                } else {
-                                                                    $('#account_name_display').text(''); // Clear the name if inputs are incomplete
-                                                                }
-                                                            });
-                                                        });
-                                                        // Modal Logic
-                                                        const modal = $('#modal');
-                                                        const modalOverlay = $('#modal-overlay');
-                                                        $('#next-button').click(function() {
-                                                            $('#modal-account-number').text($('#number').val());
-                                                            $('#modal-account-name').text($('#account_name_display').text());
-                                                            $('#modal-bank-name').text($('#bank option:selected').text());
-                                                            $('#modal-amount').text($('#amount').val());
-                                                            modal.addClass('active');
-                                                            modalOverlay.addClass('active');
-                                                        });
-
-                                                        $('#modal-close, #modal-overlay').click(function() {
-                                                            modal.removeClass('active');
-                                                            modalOverlay.removeClass('active');
-                                                        });
-
-
-                                                    </script>
-                                                    
                                                 </div>
-                                                 
                                             </div>
-                                            
-                                            
                                         </section>
-                                        
-                                     
                                     </div>
                                 </div>
                             </div>
@@ -403,39 +240,276 @@
        
     </main>
 </div>
+ <!-- Modal -->
+ <div class="modal fade" id="modaladdcontact" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal__contact--main__content">
+            <div class="modal__contact--header d-flex align-items-center justify-content-between">
+                <h3 class="modal__contact--header__title">Transfer Confirmation</h3>
+                <button type="button" class="modal__contact--close__btn" data-bs-dismiss="modal" aria-label="Close">    
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12.711" height="12.711" viewBox="0 0 12.711 12.711">
+                        <g id="Group_7205" data-name="Group 7205" transform="translate(-113.644 -321.644)">
+                          <path id="Vector" d="M0,9.883,9.883,0" transform="translate(115.059 323.059)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                          <path id="Vector-2" data-name="Vector" d="M9.883,9.883,0,0" transform="translate(115.059 323.059)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                        </g>
+                      </svg>                                                              
+                </button>
+            </div>
+            <div class="modal-body modal__contact--body">
+                <div class="modal__contact--form">
+                    <form  id="create-recipient-form">
+                        <div class="modal__contact--form__input mb-20">
+                            <label class="modal__contact--input__label" for="name">Account Number</label>
+                            <input name="modal-account-number" class="modal__contact--input__field" id="modal-account-number" type="text" readonly>
+                        </div>
+                        <div class="modal__contact--form__input mb-20">
+                            <label class="modal__contact--input__label" for="name">Account Name</label>
+                            <input name="modal-account-name" class="modal__contact--input__field" id="modal-account-name"  type="text" readonly>
+                        </div>
+                        <div class="modal__contact--form__input mb-20">
+                            <label class="modal__contact--input__label" for="name">Bank Name</label>
+                            <input name="bank_name" class="modal__contact--input__field" id="modal-bank-name"  type="text" readonly>
+                            <input name="modal-bankCode" class="modal__contact--input__field" id="modal-bankCode"  type="hidden" readonly>
+                        </div>
+                        <div class="modal__contact--form__input mb-20">
+                            <label class="modal__contact--input__label" for="name"> Amount</label>
+                            <input name="modal-amount" class="modal__contact--input__field" id="modal-amount" type="text" readonly>
+                        </div>
+                       
+                        <div class="modal__contact--footer">
+                            <button class="solid__btn border-0" id="process-transfer" type="submit">
+                                <span class="button-text">Process Transfer</span>
+                                <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            </button>
+                            {{-- <button class="solid__btn border-0"  type="submit">Process Transfer</button> --}}
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
 
-@endsection 
+
+
+    
 <script>
-    function copyReferralLink() {
-        const referralLink = document.querySelector('.referral_code').innerText;
-        navigator.clipboard.writeText(referralLink).then(() => {
-            const message = document.createElement('span');
-            message.className = 'copy-success';
-            message.innerText = 'Referral link copied!';
-            
-            const referralContainer = document.querySelector('.referral-code');
-            referralContainer.appendChild(message);
+    document.addEventListener("DOMContentLoaded", function () {
+        const amountInput = document.getElementById("amount");
 
-            // Remove the message after 3 seconds
-            setTimeout(() => {
-                referralContainer.removeChild(message);
-            }, 3000);
-        }).catch(() => {
-            const message = document.createElement('span');
-            message.className = 'copy-fail';
-            message.innerText = 'Failed to copy referral link.';
-            
-            const referralContainer = document.querySelector('.referral-code');
-            referralContainer.appendChild(message);
-
-            // Remove the message after 3 seconds
-            setTimeout(() => {
-                referralContainer.removeChild(message);
-            }, 3000);
+        amountInput.addEventListener("input", function () {
+            let value = amountInput.value.replace(/,/g, ""); // Remove existing commas
+            if (!isNaN(value) && value) {
+                amountInput.value = new Intl.NumberFormat().format(value); // Add commas
+            } else if (!value) {
+                amountInput.value = ""; // Clear the field if input is invalid
+            }
         });
-    }
+    });
+    $(document).ready(function() {
+        $('.js-bank-select').select2({
+            placeholder: "Select a bank",
+            allowClear: false,
+            // width: '100%',
+        });
+    });
+    $(document).ready(function () {
+        const $accountNumber = $('#number');
+        const $bankSelect = $('#bank');
+        const $nextButton = $('#next-button');
+
+        function toggleNextButton() {
+            const isAccountNumberValid = $accountNumber.val().length === 10;
+            const isBankSelected = $bankSelect.val() !== '';
+            $nextButton.prop('disabled', !(isAccountNumberValid && isBankSelected));
+        }
+
+        // Listen for input changes
+        $accountNumber.on('input', function () {
+            const currentValue = $accountNumber.val();
+            if (currentValue.length > 10) {
+                $accountNumber.val(currentValue.slice(0, 10)); 
+            }
+            toggleNextButton();
+        });
+        $bankSelect.on('change', toggleNextButton);
+    });
+
+    $(document).ready(function () {
+        $('#create-recipient-form').on('submit', function (e) {
+            e.preventDefault(); // Prevent form submission
+             
+            // Collect form data
+            const accountNumber = $('#modal-account-number').val();
+            const accountName = $('#modal-account-name').val();
+            const bankCode = $('#modal-bankCode').val();
+            const amount = $('#modal-amount').val();
+            const $button = $('#process-transfer');
+
+            // Show loading state
+            $button.prop('disabled', true);
+            $button.find('.button-text').text('Loading...');
+            $button.find('.spinner-border').removeClass('d-none');
+
+            // Step 1: Create Recipient 
+            $.ajax({
+                url: "{{ route('user.wallet.createRecipient') }}", 
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }, 
+                data: JSON.stringify({
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    name: accountName,
+                    account_number: accountNumber,
+                    bank_code: bankCode
+                }),
+                success: function (response) {
+                    if (response.status === 'success') {
+                        // $('#process-transfer').prop('disabled', false);
+                        const recipientCode = response.recipient_code;
+                        console.log(recipientCode); 
+                        
+                        // Step 2: Initiate Transfer
+                        $.ajax({
+                            url: "{{ route('user.wallet.initiateTransfer') }}",
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }, 
+                            data: JSON.stringify({
+                                _token: $('meta[name="csrf-token"]').attr('content'),
+                                name: accountName, 
+                                account_number: accountNumber,
+                                bank_code: bankCode,
+                                recipient_code: recipientCode,
+                                amount: amount,
+                                reason: 'Payment',
+                                transfer_reference: generateUUID()
+                            }),
+                            success: function (transferResponse) {
+                                if (transferResponse.status === 'success') {
+                                    const transactionDetails = transferResponse.data;                                                        
+                                    console.log(transactionDetails); 
+                                    toastr.success('The transfer has been completed successfully.', 'Success');
+                                    setTimeout(() => {
+                                        location.reload(); 
+                                    }, 1500);
+                                    
+                                } else {
+                                    toastr.error('Transfer failed: ' + transferResponse.message, 'Error');
+
+                                }
+                            },
+                            error: function () {
+                                toastr.error('An error occurred during the transfer process', 'Error');
+                            },
+                            complete: function () {
+                                resetButtonState($button);
+                            }
+                        });
+                    } else {
+                        toastr.error('Recipient creation failed: '+ response.message, 'Error');
+                        resetButtonState($button);
+                    }
+                },
+                error: function () {
+                    toastr.error('An error occurred while creating the recipient.', 'Error');
+                    resetButtonState($button);
+                }
+            });
+        });
+        function resetButtonState($button) {
+            $button.prop('disabled', false);
+            $button.find('.button-text').text('Process Transfer');
+            $button.find('.spinner-border').addClass('d-none');
+        }
+
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+    });
+
    
-   
+    $(document).ready(function () {
+        $('#bank, #number, #amount_display').on('input change', function () {
+            const accountNumber = $('#number').val().trim();
+            const bankCode = $('#bank').val();
+            const amount = $('#amount_display').val();
+
+            if (accountNumber.length === 10 && bankCode) {
+                $('#account_name_display').text('Verifying...');
+                $('#next-button').prop('disabled', true);
+
+                // Send AJAX request
+                $.ajax({
+                    url: "{{ route('user.wallet.resolve.account') }}", 
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }, 
+                    data: {
+                        account_number: accountNumber,
+                        bank_code: bankCode,
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            const data = response.data;
+                            console.log(data); 
+                            $('#account_name_display').text(data.account_name);
+                            $('#modal-account-name').val(data.account_name);
+
+                            $('#account_number').text(data.account_number); 
+                            $('#modal-account-number').val(data.account_number); 
+
+                            $('#modal-bank-name').val($('#bank option:selected').text());
+                            $('#modal-amount').val(amount);
+                            $('#modal-bankCode').val(bankCode);
+
+                            $('#amount').prop('disabled', false);
+                            $('#amount-container').show();
+
+                            if (amount && parseFloat(amount) > 0) {
+                                $('#next-button').prop('disabled', false);
+                            } else {
+                                $('#next-button').prop('disabled', true);
+                            }
+                        } else {
+                            $('#account_name_display').text('Account name not found');
+                            $('#amount').prop('disabled', true);
+                            $('#amount-container').hide();
+                            $('#next-button').prop('disabled', true);
+                        }
+                    },
+                    error: function () {
+                        $('#next-button').prop('disabled', true);
+                        $('#account_name_display').text('Unable to verify account. Please try again.');
+                    },
+                });
+            } else {
+                $('#account_name_display').text(''); // Clear the name if inputs are incomplete
+                $('#next-button').prop('disabled', true); // Ensure button remains disabled
+            }
+        });
+        // Additional event listener to ensure button enables when `amount_display` is filled
+        $('#amount_display').on('input', function () {
+            const amount = $(this).val();
+
+            if (amount && parseFloat(amount) > 0) {
+                $('#next-button').prop('disabled', false);
+            } else {
+                $('#next-button').prop('disabled', true);
+            }
+        });
+    });
 
 
 </script>
+@endsection 

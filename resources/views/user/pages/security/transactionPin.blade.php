@@ -5,7 +5,7 @@
     <!-- Dashboard sidebar -->
     <div class="page__body--wrapper" id="dashbody__page--body__wrapper">
         <main class="main__content_wrapper">
-            <!-- dashboard container -->
+            <!-- dashboard container --> 
             <div class="dashboard__container setting__container">
                 <div class="add__property--heading mb-30">
                     <h2 class="add__property--heading__title">Transaction PIN</h2>
@@ -38,7 +38,7 @@
                     <div class="row">
                         <div class="col-2"></div>
                         <div class="setting__profile edit-profile">
-                            <div class="col-8">
+                            <div class="col-8"> 
                                 <form action="{{ route('user.transaction.create.pin', Auth::user()->id) }}" method="POST" id="pinForm">
                                     @csrf
                                     @method('PUT')
