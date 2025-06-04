@@ -134,7 +134,7 @@
                                                                         <p class="mb-0 fw-bold">{{ $metadata['receiver_bank'] ?? 'N/A' }}</p>
                                                                     </div>
 
-                                                                    @if(!empty($metadata['custom_fields']) && is_array($metadata['custom_fields']))
+                                                                    {{-- @if(!empty($metadata['custom_fields']) && is_array($metadata['custom_fields']))
                                                                         <div class="mb-2">
                                                                             <small class="text-muted">Custom Fields</small>
                                                                             <ul class="mb-0">
@@ -143,32 +143,10 @@
                                                                                 @endforeach
                                                                             </ul>
                                                                         </div>
-                                                                    @endif
+                                                                    @endif --}}
                                                                 @endif
 
-
-                                                                 {{-- <div class="mb-2">
-                                                                    <small class="text-muted">Account Number</small>
-                                                                    <p class="mb-0 fw-bold">{{ $txn->metadata['receiver_account_number']}}</p>
-                                                                </div> --}}
-                                                                @if(isset($txn->bankName) || isset($txn->accountName) || isset($txn->bank_name) || isset($txn->account_name))
-                                                                <div class="mb-2">
-                                                                    <small class="text-muted">Bank</small>
-                                                                    <p class="mb-0 fw-bold">{{ $txn->bankName ?? $txn->bank_name ?? 'N/A' }}</p>
-                                                                </div>
-                                                                <div class="mb-2">
-                                                                    <small class="text-muted">Account Name</small>
-                                                                    <p class="mb-0 fw-bold">{{ $txn->accountName ?? $txn->account_name ?? 'N/A' }}</p>
-                                                                </div>
-                                                                @if(isset($txn->account_number))
-                                                                <div>
-                                                                    <small class="text-muted">Account Number</small>
-                                                                    <p class="mb-0 fw-bold">{{ $txn->account_number ?? 'N/A' }}</p>
-                                                                </div>
-                                                                @endif
-                                                                @else
-                                                                <p class="text-muted">No recipient details available</p>
-                                                                @endif
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
