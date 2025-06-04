@@ -120,6 +120,7 @@
                                                         <div class="card border-0 bg-light">
                                                             <div class="card-body">
                                                                 <h6 class="card-title text-muted">Recipient Details</h6>
+                                                                {{$txn->metadata}}
                                                                 @if(is_array($txn->metadata))
                                                                     <div class="mb-2">
                                                                         <small class="text-muted">Account Number</small>
