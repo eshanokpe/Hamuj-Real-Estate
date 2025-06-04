@@ -147,10 +147,10 @@
                                         </td>
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
-                                                @if(is_object($transaction) && isset($transaction->amount))
-                                                    -₦{{ number_format($transaction->amount, 2) }}
+                                                @if (isset($transaction->payment_method) && strtolower($transaction->payment_method) === 'dedicated_nuban')
+                                                    <snap class="text-success">+₦{{ number_format($transaction->amount, 2) }}</snap>
                                                 @else
-                                                    N/A
+                                                    -₦{{ number_format($transaction->amount, 2) }}
                                                 @endif
                                             </span>
                                         </td>
