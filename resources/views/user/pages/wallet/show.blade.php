@@ -65,7 +65,7 @@
                                             <div class="transaction-detail mb-4 pb-4 border-bottom">
                                                 <div class="row mb-4">
                                                     <div class="col-md-6 text-md-end">
-                                                        <img src="{{ asset('assets/img/dohmaynlogo.png') }}" style="width: 40px; height:40px" />
+                                                        <img src="{{ asset('assets/img/dohmaynlogo.png') }}" style="width: 80px; height:40px" />
                                                     </div>
                                                     <div class="col-md-6">
                                                         <h5 class="text-primary">{{ config('app.name') }}</h5>
@@ -121,14 +121,29 @@
                                                             <div class="card-body">
                                                                 <h6 class="card-title text-muted">Recipient Details</h6>
                                                                 {{$txn->metadata}}
-                                                                @if(is_array($txn->metadata))
+                                                               @if(is_array($txn->metadata))
                                                                     <div class="mb-2">
                                                                         <small class="text-muted">Account Number</small>
                                                                         <p class="mb-0 fw-bold">{{ $txn->metadata['receiver_account_number'] ?? 'N/A' }}</p>
-                                                                            {{$txn->metadata['receiver_bank'] }}
 
+                                                                        <small class="text-muted">Bank</small>
+                                                                        <p class="mb-0 fw-bold">{{ $txn->metadata['receiver_bank'] ?? 'N/A' }}</p>
                                                                     </div>
+
+                                                                    @if(!empty($txn->metadata['custom_fields']) && is_array($txn->metadata['custom_fields']))
+                                                                        <div class="mb-2">
+                                                                            <small class="text-muted">Additional Info</small>
+                                                                            <ul class="mb-0">
+                                                                                @foreach($txn->metadata['custom_fields'] as $field)
+                                                                                    <li>
+                                                                                        <strong>{{ $field['display_name'] ?? 'Field' }}:</strong> {{ $field['value'] ?? 'N/A' }}
+                                                                                    </li>
+                                                                                @endforeach
+                                                                            </ul>
+                                                                        </div>
+                                                                    @endif
                                                                 @endif
+
                                                                  {{-- <div class="mb-2">
                                                                     <small class="text-muted">Account Number</small>
                                                                     <p class="mb-0 fw-bold">{{ $txn->metadata['receiver_account_number']}}</p>
