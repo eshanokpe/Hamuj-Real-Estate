@@ -290,6 +290,7 @@
                             <label class="modal__contact--input__label" for="name"> Enter Transaction PIN</label>
                             <input name="modal-amount" class="modal__contact--input__field" id="transaction-pin" type="text" required>
                         </div>
+                        
                        
                         <div class="modal__contact--footer">
                             <button class="solid__btn border-0" id="process-transfer" type="submit">
@@ -366,7 +367,7 @@
             const bankCode = $('#modal-bankCode').val();
             const amount = $('#modal-amount').val();
             const $button = $('#process-transfer');
-            const $transactionPin = $('#transaction-pin');
+             const $transactionPin = $('#transaction-pin');
 
             // Check if Transaction PIN is empty
             if ($transactionPin.val().trim() === '') {
@@ -379,6 +380,7 @@
                 toastr.error('Invalid transaction PIN', 'Error');
                 return;
             }
+
 
             // Show loading state
             $button.prop('disabled', true);
