@@ -65,7 +65,7 @@
                                             <div class="transaction-detail mb-4 pb-4 border-bottom">
                                                 <div class="row mb-4">
                                                     <div class="col-md-6 text-md-end">
-                                                        <img src="{{ asset('assets/img/dohmaynlogo.png') }}" style="width:120px; height:40px" />
+                                                        <img src="{{ asset('assets/img/dohmaynlogo.png') }}" style="width:150px; height:40px" />
                                                     </div>
                                                     <div class="col-md-6">
                                                         <h5 class="text-primary">{{ config('app.name') }}</h5>
@@ -84,7 +84,7 @@
                                                                 <div class="mb-2">
                                                                     <small class="text-muted">Type</small>
                                                                     <p class="mb-0 fw-bold">
-                                                                        @if(isset($txn->payment_method) && strtolower($txn->payment_method) === 'wallet')
+                                                                        @if(isset($txn->payment_method) && strtolower($txn->payment_method) === 'dedicated_nuban')
                                                                             Wallet Deposit
                                                                         @elseif(isset($txn->payment_method))
                                                                             {{ ucfirst($txn->payment_method) }} Payment
