@@ -15,7 +15,7 @@ class WalletTransaction extends Model
         'type',            
         'accountName',            
         'bankName',            
-        'amount',           
+        'amount',            
         'reason',     
         'recipient_code', 
         'status',           
