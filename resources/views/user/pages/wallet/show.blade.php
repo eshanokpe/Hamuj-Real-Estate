@@ -121,28 +121,31 @@
                                                             <div class="card-body">
                                                                 <h6 class="card-title text-muted">Recipient Details</h6>
                                                                 {{$txn->metadata}}
-                                                               @if(is_array($txn->metadata))
+                                                               @php
+                                                                    $metadata = is_array($txn->metadata) ? $txn->metadata : json_decode($txn->metadata, true);
+                                                                @endphp
+
+                                                                @if(is_array($metadata))
                                                                     <div class="mb-2">
                                                                         <small class="text-muted">Account Number</small>
-                                                                        <p class="mb-0 fw-bold">{{ $txn->metadata['receiver_account_number'] ?? 'N/A' }}</p>
+                                                                        <p class="mb-0 fw-bold">{{ $metadata['receiver_account_number'] ?? 'N/A' }}</p>
 
                                                                         <small class="text-muted">Bank</small>
-                                                                        <p class="mb-0 fw-bold">{{ $txn->metadata['receiver_bank'] ?? 'N/A' }}</p>
+                                                                        <p class="mb-0 fw-bold">{{ $metadata['receiver_bank'] ?? 'N/A' }}</p>
                                                                     </div>
 
-                                                                    @if(!empty($txn->metadata['custom_fields']) && is_array($txn->metadata['custom_fields']))
+                                                                    @if(!empty($metadata['custom_fields']) && is_array($metadata['custom_fields']))
                                                                         <div class="mb-2">
-                                                                            <small class="text-muted">Additional Info</small>
+                                                                            <small class="text-muted">Custom Fields</small>
                                                                             <ul class="mb-0">
-                                                                                @foreach($txn->metadata['custom_fields'] as $field)
-                                                                                    <li>
-                                                                                        <strong>{{ $field['display_name'] ?? 'Field' }}:</strong> {{ $field['value'] ?? 'N/A' }}
-                                                                                    </li>
+                                                                                @foreach($metadata['custom_fields'] as $field)
+                                                                                    <li><strong>{{ $field['display_name'] ?? '' }}:</strong> {{ $field['value'] ?? '' }}</li>
                                                                                 @endforeach
                                                                             </ul>
                                                                         </div>
                                                                     @endif
                                                                 @endif
+
 
                                                                  {{-- <div class="mb-2">
                                                                     <small class="text-muted">Account Number</small>
