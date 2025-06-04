@@ -65,7 +65,7 @@
                                             <div class="transaction-detail mb-4 pb-4 border-bottom">
                                                 <div class="row mb-4">
                                                     <div class="col-md-6 text-md-end">
-                                                        <img src="{{ asset('assets/img/dohmaynlogo.png') }}" style="width:150px; height:40px" />
+                                                        <img src="{{ asset('assets/img/dohmaynlogo.png') }}" style="width:150px; height:30px" />
                                                     </div>
                                                     <div class="col-md-6">
                                                         {{-- <h5 class="text-primary">{{ config('app.name') }}</h5> --}}

@@ -15,24 +15,27 @@
 <body>
     <div class="receipt">
         <div class="header">
-            <h2>{{ config('app.name') }}</h2>
+            <h2>Dohmayn Technology Limited</h2>
             <h3>Transaction Receipt</h3>
         </div>
-        
+         
         <div class="details">
-            <div class="detail-row">
+            <div class="detail-row" style="align-items: center;">
                 <div class="detail-label">Transaction Reference:</div>
                 <div>{{ $transaction->reference }}</div>
             </div>
-            <div class="detail-row">
+            <div class="detail-row" style="align-items: center;">
                 <div class="detail-label">Date:</div>
                 <div>{{ $transaction->created_at->format('M d, Y g:i A') }}</div>
+                <div style="margin-left: auto; padding-left: 10px;">
+                    <img src="{{ public_path('assets/img/dohmaynlogo.png') }}" style="width: 100px; height: auto; display: block;" alt="Company Logo">
+                </div>
             </div>
             <div class="detail-row">
                 <div class="detail-label">Type:</div>
                 <div>
-                    @if (isset($transaction->payment_method) && strtolower($transaction->payment_method) === 'wallet')
-                        Deposit
+                    @if (isset($transaction->payment_method) && strtolower($transaction->payment_method) === 'dedicated_nuban')
+                        Wallet Deposit
                     @elseif(isset($transaction->payment_method))
                         {{ ucfirst($transaction->payment_method) }}
                     @else

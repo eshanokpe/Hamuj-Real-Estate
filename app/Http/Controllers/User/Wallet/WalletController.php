@@ -123,9 +123,9 @@ class WalletController extends Controller
     {
         $data['user'] = Auth::user();
 
-        $walletTransaction = WalletTransaction::where('id', $id)->first();
+        $walletTransaction = WalletTransaction::where('id', decrypt($id))->first();
 
-        $walletPaymentTransaction = Transaction::where('id', $id)
+        $walletPaymentTransaction = Transaction::where('id', decrypt($id) )
             ->where('payment_method', 'dedicated_nuban')
             ->first();
 
