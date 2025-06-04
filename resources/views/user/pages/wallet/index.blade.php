@@ -147,7 +147,11 @@
                                         </td>
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
-                                                -₦{{ number_format($transaction->amount, 2) }}
+                                                @if(is_object($transaction) && isset($transaction->amount))
+                                                    -₦{{ number_format($transaction->amount, 2) }}
+                                                @else
+                                                    N/A
+                                                @endif
                                             </span>
                                         </td>
                                         <td style="padding: 5px;">
