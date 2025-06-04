@@ -51,7 +51,7 @@ class WalletController extends Controller
 
         // Get regular transactions where payment method is wallet
         $walletPaymentTransactions = Transaction::where('user_id', $user->id)
-            ->where('payment_method', 'wallet')
+            ->where('payment_method', 'dedicated_nuban')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -67,7 +67,7 @@ class WalletController extends Controller
             'hasMoreReferrals' => $user->referralsMade()->count() > 6,
             'latestTransactions' => $latestTransaction
         ]; 
-         dd($data['latestTransactions']);
+        //  dd($data['latestTransactions']);
 
         return view('user.pages.wallet.index', $data); 
     }
