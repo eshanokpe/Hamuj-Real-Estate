@@ -50,7 +50,7 @@
                                                     <button onclick="window.print()" class="btn btn-light btn-sm">
                                                         <i class="fas fa-print me-1"></i> Print
                                                     </button>
-                                                    <a href="{{ route('user.transaction.download', $transaction->first()->id) }}" class="btn btn-light btn-sm">
+                                                    <a href="{{ route('user.transaction.download', $transaction->id) }}" class="btn btn-light btn-sm">
                                                         <i class="fas fa-download me-1"></i> Download
                                                     </a>
                                                     <button class="btn btn-light btn-sm" id="shareBtn" style="display: none;">

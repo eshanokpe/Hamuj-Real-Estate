@@ -147,35 +147,22 @@ class WalletController extends Controller
     public function show($id)
     {
         $data['user'] = Auth::user();
-        // Try to find in WalletTransactions first
 
-        // $data['transaction'] = WalletTransaction::find($id);
-        
-        // // If not found, try in Transactions
-        // if (!$data['transaction'] ) {
-        //     $transaction = Transaction::findOrFail($id);
-        // }
-         // Get wallet transactions
-        $walletTransactions = WalletTransaction::where('id', $id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-            
-        // Get regular transactions where payment method is wallet
-        $walletPaymentTransactions = Transaction::where('id', $id)
-            ->where('payment_method', 'wallet')
-            ->orderBy('created_at', 'desc')
-            ->get();
-    
-        // Combine and sort all transactions
-        $data['transaction'] = $walletTransactions->concat($walletPaymentTransactions)
-            ->sortByDesc('created_at')
-            ->first();
-        
+        // Try to find the transaction in WalletTransaction
+        $transaction = WalletTransaction::find($id);
+
+        // If not found, try to find it in Transaction table (remove strict 'wallet' check)
+        if (!$transaction) {
+            $transaction = Transaction::findOrFail($id);
+        }
+
+        $data['transaction'] = $transaction;
         $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
         $data['hasMoreReferrals'] = $data['user']->referralsMade()->count() > 6;
-        
+
         return view('user.pages.wallet.show', $data);
     }
+
 
     public function download($id)
     {
