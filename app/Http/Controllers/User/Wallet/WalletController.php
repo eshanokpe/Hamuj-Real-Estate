@@ -15,33 +15,37 @@ class WalletController extends Controller
 {
    
    
-    public function index() {
+    public function index()
+    {
         $user = Auth::user();
         
         // Get wallet transactions
         $walletTransactions = WalletTransaction::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                return $item->toArray();
+            });
 
-        // Get regular transactions where payment method is wallet
-        $walletPaymentTransactions = Transaction::where('user_id', $user->id)
+        $paymentTransactions = Transaction::where('user_id', $user->id)
             ->where('payment_method', 'dedicated_nuban')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                return $item->toArray();
+            });
 
-        // Combine and get the latest transaction only
-        $latestTransaction = $walletTransactions
-            ->concat($walletPaymentTransactions)
+        $transactions = $walletTransactions->concat($paymentTransactions)
             ->sortByDesc('created_at')
-            ->first();
-
+            ->take(5)
+            ->values();
+        
         $data = [
             'user' => $user,
             'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
             'hasMoreReferrals' => $user->referralsMade()->count() > 6,
-            'latestTransactions' => collect([$latestTransaction])
-        ]; 
-        // dd($data['latestTransactions']);
+            'transactions' => $transactions // Removed the array wrapper
+        ];
 
         return view('user.pages.wallet.index', $data); 
     }
@@ -87,15 +91,34 @@ class WalletController extends Controller
  
     public function paymentHistory(){
        $user = Auth::user();
-    
+        
+        // Get wallet transactions
+        $walletTransactions = WalletTransaction::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return $item->toArray();
+            });
+
+        $paymentTransactions = Transaction::where('user_id', $user->id)
+            ->where('payment_method', 'dedicated_nuban')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return $item->toArray();
+            });
+
+        $transactions = $walletTransactions->concat($paymentTransactions)
+            ->sortByDesc('created_at')
+            ->take(10)
+            ->values();
+       
+        
         $data = [
             'user' => $user,
             'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
             'hasMoreReferrals' => $user->referralsMade()->count() > 6,
-            'transactions' => WalletTransaction::where('user_id', $user->id)
-                ->orderBy('created_at', 'desc')
-                ->limit(10) // Increased to show more transactions
-                ->get()
+            'transactions' => $transactions
         ];
       
         return view('user.pages.wallet.payment.history', $data);
