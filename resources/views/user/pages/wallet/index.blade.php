@@ -156,7 +156,11 @@
                                         </td>
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
-                                                {{ $transaction->created_at->format('M d, Y g:i A') }}
+                                                @if(is_object($transaction) && !empty($transaction->created_at))
+                                                    {{ $transaction->created_at->format('M d, Y g:i A') }}
+                                                @else
+                                                    N/A
+                                                @endif
                                             </span>
                                         </td>
                                         <td style="padding: 5px;">
