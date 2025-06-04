@@ -114,7 +114,7 @@
 
                                         // Determine transaction nature for amount prefix (+/-)
                                         // A transaction is considered a deposit if its original type is 'deposit' or 'dedicated_nuban'.
-                                        $isDeposit = ($originalTransactionType === 'deposit' || $originalTransactionType === 'dedicated_nuban');
+                                        $isDeposit = ($originalTransactionType === 'dedicated_nuban');
                                         $isTransfer = ($originalTransactionType === 'transfer');
                                         
                                         // Determine display type string
