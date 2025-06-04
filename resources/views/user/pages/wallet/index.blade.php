@@ -110,12 +110,20 @@
                             <tbody>
                                 @forelse ($transactions as $transaction)
                                     @php
-                                        // Determine transaction type based on available fields
-                                        $isDeposit = isset($transaction['type']) && $transaction['type'] === 'deposit';
-                                        $isTransfer = isset($transaction['type']) && $transaction['type'] === 'transfer';
+                                        $originalTransactionType = $transaction['type'] ?? null;
+
+                                        // Determine transaction nature for amount prefix (+/-)
+                                        // A transaction is considered a deposit if its original type is 'deposit' or 'dedicated_nuban'.
+                                        $isDeposit = ($originalTransactionType === 'deposit' || $originalTransactionType === 'dedicated_nuban');
+                                        $isTransfer = ($originalTransactionType === 'transfer');
                                         
-                                        // Get fields based on data structure
-                                        $type = $transaction['type'] ?? ($transaction['payment_method'] ?? 'N/A');
+                                        // Determine display type string
+                                        if ($originalTransactionType === 'dedicated_nuban') {
+                                            $type = 'Deposit'; // Display 'dedicated_nuban' as 'Deposit'
+                                        } else {
+                                            // Use original type if set, otherwise fallback to payment_method
+                                            $type = $originalTransactionType ?? $transaction['payment_method'] ?? 'N/A';
+                                        }
                                         $description = $transaction['reason'] ?? ($transaction['description'] ?? null);
                                         $bankName = $transaction['bankName'] ?? ($transaction['bank_name'] ?? '');
                                         $accountName = $transaction['accountName'] ?? ($transaction['account_name'] ?? ($transaction['recipient_name'] ?? ''));

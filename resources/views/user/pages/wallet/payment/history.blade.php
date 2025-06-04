@@ -40,7 +40,16 @@
                                         $isTransfer = isset($transaction['type']) && $transaction['type'] === 'transfer';
                                         
                                         // Get fields based on data structure
-                                        $type = $transaction['type'] ?? ($transaction['payment_method'] ?? 'N/A');
+                                        $isDeposit = ($originalTransactionType === 'deposit' || $originalTransactionType === 'dedicated_nuban');
+                                        $isTransfer = ($originalTransactionType === 'transfer');
+                                        
+                                        // Determine display type string
+                                        if ($originalTransactionType === 'dedicated_nuban') {
+                                            $type = 'Deposit'; // Display 'dedicated_nuban' as 'Deposit'
+                                        } else {
+                                            // Use original type if set, otherwise fallback to payment_method
+                                            $type = $originalTransactionType ?? $transaction['payment_method'] ?? 'N/A';
+                                        }
                                         $description = $transaction['reason'] ?? ($transaction['description'] ?? null);
                                         $bankName = $transaction['bankName'] ?? ($transaction['bank_name'] ?? '');
                                         $accountName = $transaction['accountName'] ?? ($transaction['account_name'] ?? ($transaction['recipient_name'] ?? ''));
@@ -131,7 +140,7 @@
                                 @endforelse
                             </tbody>
                         </table>
-                        
+
                         <div class="accordion accordion-flush">
 
                             
