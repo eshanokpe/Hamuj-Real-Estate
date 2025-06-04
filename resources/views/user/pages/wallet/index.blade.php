@@ -180,7 +180,7 @@
                                             <span class="sales__report--body__text">
                                                 @if(isset($transaction['created_at']))
                                                     {{ \Carbon\Carbon::parse($transaction['created_at'])->format('M d, Y g:i A') }}
-                                                @else
+                                                @else 
                                                     N/A
                                                 @endif
                                             </span>
