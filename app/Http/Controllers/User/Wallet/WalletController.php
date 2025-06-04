@@ -37,7 +37,6 @@ class WalletController extends Controller
             'latestTransactions' => collect([$allTransactions])
         ]; 
         // dd($data['latestTransactions']);
-
         return view('user.pages.wallet.index', $data); 
     }
 
