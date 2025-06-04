@@ -72,7 +72,7 @@
 
                                                     </div>
                                                     <div class="col-md-6 text-md-end">
-                                                        <img src="{{ assets('assets/img/dohmaynlogo.png') }}" />
+                                                        <img src="{{ asset('assets/img/dohmaynlogo.png') }}" />
                                                     </div>
                                                 </div>
 
