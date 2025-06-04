@@ -13,7 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class WalletController extends Controller
 {
-    public function index() {
+    public function indexx() {
         $user = Auth::user();
         
         $walletTransactions = WalletTransaction::where('user_id', $user->id)
@@ -40,6 +40,38 @@ class WalletController extends Controller
 
         return view('user.pages.wallet.index', $data); 
     }
+
+    public function index() {
+        $user = Auth::user();
+        
+        // Get wallet transactions
+        $walletTransactions = WalletTransaction::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Get regular transactions where payment method is wallet
+        $walletPaymentTransactions = Transaction::where('user_id', $user->id)
+            ->where('payment_method', 'wallet')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Combine and get the latest transaction only
+        $latestTransaction = $walletTransactions
+            ->concat($walletPaymentTransactions)
+            ->sortByDesc('created_at')
+            ->first();
+
+        $data = [
+            'user' => $user,
+            'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
+            'hasMoreReferrals' => $user->referralsMade()->count() > 6,
+            'latestTransactions' => $latestTransaction
+        ]; 
+         dd($data['latestTransactions']);
+
+        return view('user.pages.wallet.index', $data); 
+    }
+
 
     public function topUp(){ 
         $data['user'] = Auth::user();
