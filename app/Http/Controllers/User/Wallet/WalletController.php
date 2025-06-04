@@ -169,7 +169,7 @@ class WalletController extends Controller
         // Combine and sort all transactions
         $data['transaction'] = $walletTransactions->concat($walletPaymentTransactions)
             ->sortByDesc('created_at')
-            ->take(15);
+            ->first();
         
         $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
         $data['hasMoreReferrals'] = $data['user']->referralsMade()->count() > 6;
