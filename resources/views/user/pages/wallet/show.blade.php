@@ -120,7 +120,7 @@
                                                         <div class="card border-0 bg-light">
                                                             <div class="card-body">
                                                                 <h6 class="card-title text-muted">Recipient Details</h6>
-                                                                {{$txn->metadata}}
+                                                                {{-- {{$txn->metadata}} --}}
                                                                @php
                                                                     $metadata = is_array($txn->metadata) ? $txn->metadata : json_decode($txn->metadata, true);
                                                                 @endphp
