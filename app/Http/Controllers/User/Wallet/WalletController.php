@@ -13,32 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class WalletController extends Controller
 {
-    public function indexx() {
-        $user = Auth::user();
-        
-        $walletTransactions = WalletTransaction::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        // Get regular transactions where payment method is wallet
-        $walletPaymentTransactions = Transaction::where('user_id', $user->id)
-            ->where('payment_method', 'wallet')
-            ->orderBy('created_at', 'desc')
-            ->get();
-    
-        // Combine and sort all transactions
-        $allTransactions = $walletTransactions->concat($walletPaymentTransactions)
-            ->sortByDesc('created_at')
-            ->first();
-        $data = [
-            'user' => $user,
-            'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
-            'hasMoreReferrals' => $user->referralsMade()->count() > 6,
-            'latestTransactions' => collect([$allTransactions])
-        ]; 
-        // dd($data['latestTransactions']);
-        return view('user.pages.wallet.index', $data); 
-    }
+   
    
     public function index() {
         $user = Auth::user();
@@ -153,7 +128,7 @@ class WalletController extends Controller
 
         // Get wallet-based regular transaction
         $walletPaymentTransaction = Transaction::where('id', $id)
-            ->where('payment_method', 'wallet')
+            ->where('payment_method', 'dedicated_nuban')
             ->first();
 
         // Combine the two into a collection for consistent Blade usage
