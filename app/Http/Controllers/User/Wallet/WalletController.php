@@ -39,7 +39,7 @@ class WalletController extends Controller
         // dd($data['latestTransactions']);
         return view('user.pages.wallet.index', $data); 
     }
-
+   
     public function index() {
         $user = Auth::user();
         
