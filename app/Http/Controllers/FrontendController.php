@@ -35,4 +35,8 @@ class FrontendController extends Controller
     public function contact(){
         return view('home.pages.contact'); 
     }
+
+    public function download(){
+        return view('home.pages.download'); 
+    }
 }

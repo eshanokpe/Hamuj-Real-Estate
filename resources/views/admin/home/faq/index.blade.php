@@ -49,7 +49,10 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($faqs as $faq)
-                                        @php $index = $loop->index; @endphp
+                                            @php $index = $loop->index; @endphp
+                                            {{-- @php $index = ($faqs->currentPage() - 1) * $faqs->perPage() + $loop->index + 1; @endphp --}}
+                                            
+
                                             <tr>
                                                 <td><strong>{{  $index + 1 }}</strong></td>
                                                 <td>{{ $faq->question ?? '' }}</td>
@@ -68,6 +71,11 @@
                                         @endforelse
                                     </tbody>
                                 </table><!--end /table-->
+                                {{--
+                                <div class="mt-3">
+                                    {{ $faqs->links() }}
+                                </div>
+                                --}}
                             </div><!--end /tableresponsive-->
                         </div><!--end card-body-->
                     </div><!--end card-->

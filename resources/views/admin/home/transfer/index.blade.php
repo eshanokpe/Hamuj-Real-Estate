@@ -53,8 +53,9 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($transfers as $transfer)
+                                            @php $index = ($transfers->currentPage() - 1) * $transfers->perPage() + $loop->index + 1; @endphp
                                             <tr>
-                                                <td><strong>{{ $loop->iteration }}</strong></td>
+                                                <td><strong>{{ $index }}</strong></td>
                                                 <td style="text-transform: uppercase;">
                                                     {{ $transfer->user->first_name ?? '' }} {{ $transfer->user->last_name ?? '' }}
                                                 </td>

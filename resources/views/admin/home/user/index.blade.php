@@ -46,9 +46,10 @@
                                     </thead>
                                     <tbody> 
                                         @forelse ($users as $user)
-                                        @php $index = $loop->index; @endphp
+                                            @php $index = ($users->currentPage() - 1) * $users->perPage() + $loop->index + 1; @endphp
+
                                             <tr>
-                                                <td><strong>{{  $index + 1 }}</strong></td>
+                                                <td><strong>{{  $index }}</strong></td>
                                                 <td>{{ $user->first_name . ' ' . $user->last_name }}</td>
                                                 <td>{{ $user->email ?? ''}}</td>
                                                 <td>₦{{ number_format($user->wallet->balance ?? 0, 2) }}</td>
@@ -70,6 +71,9 @@
                                         @endforelse
                                     </tbody>
                                 </table><!--end /table-->
+                                <div class="mt-3">
+                                    {{ $users->links() }}
+                                </div>
                             </div><!--end /tableresponsive-->
                         </div><!--end card-body-->
                     </div><!--end card-->

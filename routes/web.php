@@ -28,6 +28,7 @@ Route::get('/', [FrontendController::class, 'index'])->name('index');
 Route::get('/{page}', [PagesController::class, 'index'])->name('home.pages');
 
 Route::get('/contact', [FrontendController::class, 'contact'])->name('contact');
+Route::get('/download', [FrontendController::class, 'download'])->name('home.download');
 
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
 Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blog.details');

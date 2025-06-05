@@ -49,8 +49,10 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($sells as $sell)
+                                            @php $index = ($sells->currentPage() - 1) * $sells->perPage() + $loop->index + 1; @endphp
+
                                             <tr>
-                                                <td><strong>{{ $loop->iteration }}</strong></td>
+                                                <td><strong>{{ $index }}</strong></td>
                                                 <td style="text-transform: uppercase;">{{ $sell ->user->first_name. ' ' . $sell->user->last_name}}</td>
                                                 <td>{{ $sell->user_email }}</td>
                                                 <td>{{ $sell->property->name }}</td>

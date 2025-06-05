@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
     public function index(){
-        $users = User::latest()->paginate(20);
+        $users = User::latest()->paginate(10);
         return view('admin.home.user.index', compact('users'));
     }
 

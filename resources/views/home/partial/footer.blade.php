@@ -100,6 +100,7 @@
                             <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="{{ route('home.pages','about')}}">About</a></li>
                             <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="{{ route('home.pages','blog') }}">Blog</a></li>
                             <li class="footer__widget--menu__list"><a class="footer__widget--menu__text" href="{{ route('home.pages','properties') }}">Properties</a></li>
+                            
                         </ul>
                     </div>
                 </div>

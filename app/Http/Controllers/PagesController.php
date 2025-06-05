@@ -29,6 +29,8 @@ class PagesController extends Controller
             'faqs' => 'home.pages.faqs', 
             'terms-of-use' => 'home.pages.terms',
             'privacy-policy' => 'home.pages.privacy-policy',
+            'download' => 'home.pages.download',
+
         ];
     
         if (array_key_exists($slug, $pages)) {

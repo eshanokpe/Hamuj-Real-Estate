@@ -50,9 +50,10 @@
                                     </thead>
                                     <tbody> 
                                         @forelse ($walletTransactions as $walletTransaction)
-                                        @php $index = $loop->index; @endphp
+                                            @php $index = ($walletTransactions->currentPage() - 1) * $walletTransactions->perPage() + $loop->index + 1; @endphp
+
                                             <tr>
-                                                <td><strong>{{  $index + 1 }}</strong></td>                                             
+                                                <td><strong>{{  $index }}</strong></td>                                             
                                                 <td style="text-transform: uppercase;">{{ $walletTransaction ->user->first_name. ' ' . $walletTransaction->user->last_name}}</td>
                                                 <td>{{ $walletTransaction->type ?? ''}}</td>
                                                 <td>{{ $walletTransaction->accountName ?? ''}}</td>

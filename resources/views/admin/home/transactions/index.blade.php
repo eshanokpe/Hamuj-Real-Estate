@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="page-title-box">
-                        <h4 class="page-title">Wallet</h4>
+                        <h4 class="page-title">Transaction</h4>
                     </div>
                     <!--end page-title-box-->
                 </div>
@@ -50,9 +50,10 @@
                                     </thead>
                                     <tbody> 
                                         @forelse ($transactions as $transaction)
-                                        @php $index = $loop->index; @endphp
+                                            @php $index = ($transactions->currentPage() - 1) * $transactions->perPage() + $loop->index + 1; @endphp
+
                                             <tr>
-                                                <td><strong>{{  $index + 1 }}</strong></td>
+                                                <td><strong>{{  $index  }}</strong></td>
                                                 <td style="text-transform: uppercase;">{{ $transaction ->user->first_name. ' ' . $transaction->user->last_name}}</td>
                                                 <td>{{ $transaction->email ?? ''}}</td>
                                                 <td>{{ $transaction->reference ?? ''}}</td>
