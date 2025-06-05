@@ -119,9 +119,7 @@
                                         if ($originalTransactionType === 'dedicated_nuban') {
                                             $type = 'Deposit'; 
                                         } else {
-                                            // Use original type if set, otherwise fallback to payment_method
-                                            // $type = $originalTransactionType ?? $transaction['payment_method'] ?? 'N/A';
-                                            $type = 'N/A';
+                                            $type = $originalTransactionType ?? $transaction['payment_method'] ?? 'N/A';
                                         }
                                         $description = $transaction['reason'] ?? ($transaction['description'] ?? null);
                                         $bankName = $transaction['bankName'] ?? ($transaction['bank_name'] ?? '');
@@ -188,7 +186,7 @@
                                             <button class="btn btn-{{ $statusClass }} btn-sm">
                                                 {{ ucfirst($status) }}
                                             </button>
-                                        </td>
+                                        </td>   
                                         <td style="padding: 5px;">
                                             <div class="btn-group btn-group-sm">
                                                 <a href="{{ route('user.transaction.download', $transaction['id']) }}"

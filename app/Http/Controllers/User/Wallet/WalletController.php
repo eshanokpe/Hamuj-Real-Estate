@@ -110,7 +110,7 @@ class WalletController extends Controller
 
         $transactions = $walletTransactions->concat($paymentTransactions)
             ->sortByDesc('created_at')
-            ->take(10)
+            ->take(10 )
             ->values();
        
         
