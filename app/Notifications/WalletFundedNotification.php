@@ -78,7 +78,7 @@ class WalletFundedNotification extends Notification implements ShouldQueue
      * @return array
      */
     public function toArray($notifiable)
-    {
+    { 
         return [
             'notification_status' => 'walletFundedNotification',
             'subject' => 'Your Wallet Has Been Credited!',
