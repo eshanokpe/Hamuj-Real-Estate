@@ -21,7 +21,7 @@
                    
                     <div class="sales__report--section p-4">
                         <table class="sales__report--table table-responsive">
-                            <thead>
+                           <thead>
                                 <tr> 
                                     <th style="width: 5%; padding: 10px;">#</th>
                                     <th style="width: 20%; padding: 5px;">Type</th>
