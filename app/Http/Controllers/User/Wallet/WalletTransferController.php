@@ -55,10 +55,16 @@ class WalletTransferController extends Controller
             'account_number' => 'nullable',
         ]);
 
-        $user = Auth::user();  
+        $user = Auth::user();
         $userWallet = $user->wallet;
         
         if ($userWallet->balance < (float)$validated['amount']) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'message' => 'Account deactivated.',
+                    'error' => 'Your account has been deactivated. Please contact support.',
+                ], 400);
+            }
             return response()->json([
                 'status' => 'error',
                 'message' => 'Insufficient wallet balance.',
@@ -66,8 +72,6 @@ class WalletTransferController extends Controller
         } 
         
         $transferResponse = $this->processTransfer($validated); 
-        Log::info('Insufficient wallet balance', $transferResponse);
-
         if ($transferResponse['status'] === 'success') {
             
             $transferAmount = ($transferResponse['data']['amount'] ?? 0) / 100;
@@ -121,6 +125,12 @@ class WalletTransferController extends Controller
                 ]);
             } else {
                 Log::info('Insufficient wallet balance');
+                if ($request->wantsJson()) {
+                    return response()->json([
+                        'message' => 'Account deactivated.',
+                        'error' => 'Your account has been deactivated. Please contact support.',
+                    ], 400);
+                }
                 return response()->json(['status' => 'error', 'message' => 'Insufficient wallet balance.']);
             }
         } else {
