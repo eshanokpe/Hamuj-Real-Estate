@@ -25,25 +25,30 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($transactions as $index => $transaction)
+                           @forelse ($transactions as $index => $transaction)
                                 <tr>
                                     <td>
                                         {{ $loop->iteration }} <!-- This will display the row number -->
                                     </td>
                                     <td>
                                         @if(is_array($transaction->metadata) || is_object($transaction->metadata))
-                                        <div class="metadata-container">
-                                            <strong>Property:</strong> {{ $transaction->metadata['property_name'] ?? 'N/A' }}<br>
-                                            <strong>Size:</strong> {{ $transaction->metadata['selected_size_land'] ?? 'N/A' }} of 
-                                            {{ $transaction->metadata['remaining_size'] ?? 'N/A' }} SQM<br>
-                                            <strong>Amount:</strong> {{ number_format($transaction->amount, 2) }}<br>
-                                            <strong>Date:</strong> {{ \Carbon\Carbon::parse($transaction->paid_at)->format('M d, Y h:i A') }}
-                                        </div>
-                                    @else
-                                        {{ $transaction->metadata ?? 'No metadata available' }}
-                                    @endif
+                                            <div class="metadata-container">
+                                                @if(isset($transaction->metadata['custom_fields']))
+                                                    @foreach($transaction->metadata['custom_fields'] as $field)
+                                                        <strong>{{ $field['display_name'] }}:</strong> {{ $field['value'] ?? 'N/A' }}<br>
+                                                    @endforeach
+                                                @else
+                                                    <strong>Property:</strong> {{ $transaction->metadata['property_name'] ?? 'N/A' }}<br>
+                                                    <strong>Size:</strong> {{ $transaction->metadata['selected_size_land'] ?? 'N/A' }} of 
+                                                    {{ $transaction->metadata['remaining_size'] ?? 'N/A' }} SQM<br>
+                                                @endif
+                                                <strong>Amount:</strong> {{ number_format($transaction->amount, 2) }}<br>
+                                                <strong>Date:</strong> {{ \Carbon\Carbon::parse($transaction->paid_at)->format('M d, Y h:i A') }}
+                                            </div>
+                                        @else
+                                            {{ $transaction->metadata ?? 'No metadata available' }}
+                                        @endif
                                     </td>
-                                    {{-- <td>{{ $transaction->reference}}</td> --}}
                                     <td>
                                         @php
                                             $statusColors = [
