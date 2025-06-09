@@ -376,7 +376,7 @@
                                                         <h4>{{ $notification['data']['message'] ?? 'Transfer Notification' }}</h4>
                                                         <p>
                                                             Amount: ₦{{ number_format($notification['data']['amount'], 2) }}
-                                                            <small>New balance: ₦{{ number_format($notification['data']['new_balance'], 2) }}</small>
+                                                            <small>New balance: ₦{{ $notification['data']['message'] }}</small>
                                                         </p>
                                                     </div>
                                                 @else
