@@ -62,10 +62,12 @@ class WalletTransferController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Insufficient wallet balance.',
-            ], 400);
+            ]);
         } 
         
         $transferResponse = $this->processTransfer($validated); 
+        Log::info('Insufficient wallet balance', $transferResponse);
+
         if ($transferResponse['status'] === 'success') {
             
             $transferAmount = ($transferResponse['data']['amount'] ?? 0) / 100;
