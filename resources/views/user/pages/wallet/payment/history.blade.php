@@ -35,20 +35,16 @@
                             <tbody>
                                 @forelse ($transactions as $transaction)
                                     @php
-                                        // Determine transaction type based on available fields
-                                        $isDeposit = isset($transaction['type']) && $transaction['type'] === 'deposit';
-                                        $isTransfer = isset($transaction['type']) && $transaction['type'] === 'transfer';
-                                        
-                                        // Get fields based on data structure
-                                        $isDeposit = ($originalTransactionType === 'deposit' || $originalTransactionType === 'dedicated_nuban');
+                                        $originalTransactionType = $transaction['type'] ?? null;
+
+                                        $isDeposit = ($originalTransactionType === 'dedicated_nuban');
                                         $isTransfer = ($originalTransactionType === 'transfer');
                                         
                                         // Determine display type string
                                         if ($originalTransactionType === 'dedicated_nuban') {
-                                            $type = 'Deposit'; // Display 'dedicated_nuban' as 'Deposit'
+                                            $type = 'Deposit'; 
                                         } else {
-                                            // Use original type if set, otherwise fallback to payment_method
-                                            $type = $originalTransactionType ?? $transaction['payment_method'] ?? 'N/A';
+                                            $type = $originalTransactionType ?? 'Deposit' ?? 'N/A';
                                         }
                                         $description = $transaction['reason'] ?? ($transaction['description'] ?? null);
                                         $bankName = $transaction['bankName'] ?? ($transaction['bank_name'] ?? '');
@@ -96,17 +92,17 @@
                                                     N/A
                                                 @endif
                                             </span>
-                                        </td>
+                                        </td> 
                                         <td style="padding: 5px;">
-                                            <span class="sales__report--body__text {{ $isDeposit ? 'text-success' : 'text-danger' }}">
-                                                {{ $isDeposit ? '+' : ($isTransfer ? '-' : '') }}₦{{ $amountValue }}
+                                            <span class="sales__report--body__text {{ $isTransfer ? 'text-danger' : 'text-success' }}">
+                                                {{ $isTransfer ? '-' : ($isTransfer ? '-' : '+') }}₦{{ $amountValue }}
                                             </span>
                                         </td>
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text">
                                                 @if(isset($transaction['created_at']))
                                                     {{ \Carbon\Carbon::parse($transaction['created_at'])->format('M d, Y g:i A') }}
-                                                @else
+                                                @else 
                                                     N/A
                                                 @endif
                                             </span>
@@ -115,7 +111,7 @@
                                             <button class="btn btn-{{ $statusClass }} btn-sm">
                                                 {{ ucfirst($status) }}
                                             </button>
-                                        </td>
+                                        </td>   
                                         <td style="padding: 5px;">
                                             <div class="btn-group btn-group-sm">
                                                 <a href="{{ route('user.transaction.download', $transaction['id']) }}"

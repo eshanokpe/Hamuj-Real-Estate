@@ -6,67 +6,67 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\WalletTransaction;
 
-class WalletTransferNotification extends Notification
+class WalletTransferNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $amount;
-    protected $newBalance;
+    public $title;
+    public $message;
+    public $isSuccess;
+    public $transaction;
 
     /**
      * Create a new notification instance.
-     *
-     * @param float $amount
-     * @param float $newBalance
      */
-    public function __construct($amount, $newBalance)
+    public function __construct($title, $message, $isSuccess, $transaction = null)
     {
-        $this->amount = $amount;
-        $this->newBalance = $newBalance;
+        $this->title = $title;
+        $this->message = $message;
+        $this->isSuccess = $isSuccess;
+        $this->transaction = $transaction;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
-     * @return array
+     * @return array<int, string>
      */
-    public function via($notifiable)
+    public function via(object $notifiable): array
     {
-        return ['mail', 'database']; // Choose your preferred channels: 'mail', 'database', 'slack', etc.
+        return ['mail', 'database'];
     }
 
     /**
      * Get the mail representation of the notification.
-     *
-     * @param mixed $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Wallet Funded Successfully')
-            ->greeting('Hello ' . $notifiable->name . '!')
-            ->line('Your wallet has been credited with NGN ' . number_format($this->amount, 2) . '.')
-            ->line('Your new wallet balance is NGN ' . number_format($this->newBalance, 2) . '.')
-            ->line('Thank you for using our service!');
+                    ->subject($this->title)
+                    ->line($this->message)
+                    ->line('Amount: '.number_format($this->transaction?->amount ?? 0, 2))
+                    ->line('Recipient: '.($this->transaction?->accountName ?? 'N/A'))
+                    ->action('View Transaction', url('/wallet/transactions'))
+                    ->line('Thank you for using our service!');
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($notifiable)
+    public function toArray(object $notifiable): array
     {
         return [
-            'notification_status' => 'Wallet Transfer Notification',
-            'amount' => $this->amount,
-            'new_balance' => $this->newBalance,
-            'message' => 'Your wallet has been credited with NGN ' . number_format($this->amount, 2) .
-                '. Your new balance is NGN ' . number_format($this->newBalance, 2) . '.',
+            'title' => $this->title,
+            'message' => $this->message,
+            'is_success' => $this->isSuccess,
+            'transaction_id' => $this->transaction?->id,
+            'amount' => $this->transaction?->amount,
+            'recipient' => $this->transaction?->accountName,
+            'link' => '/wallet/transactions',
         ];
     }
 }

@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Wallet; // Import the Wallet model if not already done
 use App\Notifications\WalletFundedNotification;
-use App\Notifications\WalletTransferNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; 
 use App\Jobs\ProcessOrderWebhook;
