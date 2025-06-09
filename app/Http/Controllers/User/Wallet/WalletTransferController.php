@@ -55,7 +55,7 @@ class WalletTransferController extends Controller
             'account_number' => 'nullable',
         ]);
 
-        $user = Auth::user();
+        $user = Auth::user();  
         $userWallet = $user->wallet;
         
         if ($userWallet->balance < (float)$validated['amount']) {
