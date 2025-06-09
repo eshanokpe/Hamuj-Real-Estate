@@ -36,6 +36,8 @@
                                 @include('.user/pages/notifications/notificationDetails/walletFundedNotification')
                             @elseif ($notification->data['notification_status'] === 'new_referral'  )
                                 @include('.user/pages/notifications/notificationDetails/newReferral')
+                            @elseif ($notification->data['notification_status'] === 'referral_commission'  )
+                                @include('.user/pages/notifications/notificationDetails/referralCommission')
                             @elseif ($notification->data['notification_status'] === 'buyProperty'  )
                                 @include('.user/pages/notifications/notificationDetails/buyProperty')
                             @else 

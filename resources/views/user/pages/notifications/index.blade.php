@@ -57,6 +57,35 @@
                                         </div>
                                        
                                     @endif
+                                    @if($notification['data']['notification_status'] == 'referral_commission')
+                                        <div class="">
+                                            <div class="card-body">
+                                                <div class="row "> 
+                                                    <div class="col-9">
+                                                        <h3 class="card-title">{{ $notification['data']['subject'] ?? '🎉 New Referral Signup!' }}</h3>
+                                                        <p> 
+                                                            Congratulations! {{ $notification['data']['message'] }}.
+                                                            
+                                                        </p>
+                                        
+                                                        <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
+                                                            <small class="text-muted">Received {{ $notification->created_at->diffForHumans() }}</small>
+                                                        </div>
+                                                    </div>
+                                    
+                                                <div class="col-3">
+                                                        <div class="text-end">
+                                                            <a href="{{ route('user.notifications.show', encrypt($notification->id)) }}" class="btn btn-success btn-large">
+                                                                View More
+                                                            </a>
+                                                            
+                                                        </div> 
+                                                    </div>
+                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                     @if($notification['data']['notification_status'] == 'new_referral')
                                         <div class="">
                                             <div class="card-body">
