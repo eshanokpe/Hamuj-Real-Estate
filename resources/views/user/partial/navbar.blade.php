@@ -369,7 +369,7 @@
                                                     @include('.user/partial/notifications/walletFundedNotification')
                                                 @elseif($notification['data']['notification_status'] == 'buyProperty' )
                                                     @include('.user/partial/notifications/buyProperty')
-                                                  
+                                                   
                                                 @elseif($notification['data']['notification_status'] == 'walletTransferNotification')
                                                     <div class="notification__type--transfer">
                                                         <h4>{{ $notification['data']['message'] ?? 'Transfer Notification' }}</h4>

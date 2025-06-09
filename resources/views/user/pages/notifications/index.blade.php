@@ -22,6 +22,38 @@
                                 <!-- Notification Details -->
                                 <div class="notification-details flex-grow-1 ms-md-3">
                                     {{-- {{$notification['data']['notification_status']}} --}}
+                                    @if($notification['data']['notification_status'] == 'walletTransferNotification')
+                                        <div class="">
+                                            <div class="card-body">
+                                                <div class="row "> 
+                                                    <div class="col-9">
+                                                        <h3 class="card-title">{{ $notification['data']['subject'] ?? 'Your Wallet Transfer was Successful' }}</h3>
+                                                        @php
+                                                            $amountRaw = $notification['data']['amount'] ?? '0';
+
+                                                            $amount = (float) str_replace(',', '', $amountRaw);
+                                                        @endphp
+
+                                                        <p>
+                                                            ₦{{ number_format($amount, 2) }} received
+                                                        </p>
+
+                                                    </div>
+                                    
+                                                <div class="col-3">
+                                                        <div class="text-end">
+                                                            <a href="{{ route('user.notifications.show', encrypt($notification->id)) }}" class="btn btn-success btn-large">
+                                                                View More
+                                                            </a>
+                                                            
+                                                        </div> 
+                                                    </div>
+                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                    @endif
                                     @if($notification['data']['notification_status'] == 'WalletFundedNotification' || $notification['data']['notification_status'] == 'walletFundedNotification' || $notification['data']['notification_status'] == 'Wallet Funded Notification')
                                         <div class="">
                                             <div class="card-body">
