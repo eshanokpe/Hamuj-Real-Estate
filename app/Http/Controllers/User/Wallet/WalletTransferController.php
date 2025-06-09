@@ -118,8 +118,8 @@ class WalletTransferController extends Controller
                     'redirect_url' => route('user.wallet.index')
                 ]);
             } else {
-                Log::info('Wallet balance mismatch after transfer.');
-                return response()->json(['status' => 'error', 'message' => 'Insufficient wallet balance.'], 400);
+                Log::info('Insufficient wallet balance');
+                return response()->json(['status' => 'error', 'message' => 'Insufficient wallet balance.']);
             }
         } else {
             WalletTransaction::create([
