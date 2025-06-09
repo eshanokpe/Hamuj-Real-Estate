@@ -77,10 +77,10 @@ class WalletTransferController extends Controller
                 Log::info('Transfer successful. Wallet updated.', $transferResponse['data']);
 
                 // Log the transaction
-                $transaction = WalletTransaction::create([
+                WalletTransaction::create([
                     'user_id' => $user->id,
                     'wallet_id' => $userWallet->id,
-                    'type' => 'transfer',
+                    'type' => 'transfer', 
                     'currency' => $transferResponse['data']['currency'],
                     'accountName' => $validated['account_number']??'',
                     'transfer_code' => $validated['transfer_code']??'',
@@ -99,8 +99,8 @@ class WalletTransferController extends Controller
                 $user->notify(new WalletTransferNotification(
                     'Transfer Successful',
                     'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
-                    true,
-                    $transaction
+                    $validated['account_number']??'',
+                    $transferAmount
                 ));
 
                 return response()->json([

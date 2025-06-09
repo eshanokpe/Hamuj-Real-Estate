@@ -14,18 +14,18 @@ class WalletTransferNotification extends Notification implements ShouldQueue
 
     public $title;
     public $message;
-    public $isSuccess;
-    public $transaction;
+    public $accountNumber;
+    public $transferAmount;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($title, $message, $isSuccess, $transaction = null)
+    public function __construct($title, $message, $accountNumber, $transferAmount = null)
     {
         $this->title = $title;
         $this->message = $message;
-        $this->isSuccess = $isSuccess;
-        $this->transaction = $transaction;
+        $this->accountNumber = $accountNumber;
+        $this->transferAmount = $transferAmount;
     }
 
     /**
@@ -46,8 +46,8 @@ class WalletTransferNotification extends Notification implements ShouldQueue
         return (new MailMessage)
                     ->subject($this->title)
                     ->line($this->message)
-                    ->line('Amount: '.number_format($this->transaction?->amount ?? 0, 2))
-                    ->line('Recipient: '.($this->transaction?->accountName ?? 'N/A'))
+                    ->line('Amount: '.number_format($this->transferAmount ?? 0, 2))
+                    ->line('Recipient: '.($this->accountNumber ?? 'N/A'))
                     ->action('View Transaction', url('/user/wallet/index'))
                     ->line('Thank you for using our service!');
     }
@@ -71,8 +71,8 @@ class WalletTransferNotification extends Notification implements ShouldQueue
 
         return [
             'notification_status' => 'wallet_transfer_notification',
-            'amount' => $this->transaction?->amount,
-            'recipient' => $this->transaction?->accountName,
+            'amount' => $this->transferAmount ?? 0,
+            'recipient' => $this->accountNumber,
             'link' => '/user/wallet/index',
             'message' => 'You have made a transfer of NGN ' . number_format($this->transaction?->amount, 2),
         ];
