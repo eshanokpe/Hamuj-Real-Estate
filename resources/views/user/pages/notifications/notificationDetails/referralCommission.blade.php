@@ -5,7 +5,6 @@
     {{-- {{ $notification }} --}}
    
     <div class="mt-4">
-        {{$notification['data']}}
         {{$notification['data']['message']}}
         <div class="alert alert-info">
             {{ $notification['data']['subject'] ?? '🎉 Referral Commission!' }}
