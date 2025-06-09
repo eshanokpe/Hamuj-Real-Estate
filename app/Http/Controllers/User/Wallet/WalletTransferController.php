@@ -100,13 +100,7 @@ class WalletTransferController extends Controller
                 ]);
 
                 // Trigger the notification 
-                Log::info('Transfer successful', [
-                    'transaction_id' => $transaction->id,
-                    'amount' => $transferAmount,
-                    'recipient' => $validated['recipient_code'],
-                    'reference' => $transferResponse['data']['reference'],
-                    'wallet_balance' => $userWallet->balance
-                ]);
+               
 
                 // Send success notification
                 $user->notify(new WalletTransferNotification(
@@ -116,7 +110,8 @@ class WalletTransferController extends Controller
                     true,
                     $transaction
                 ));
-                Log::info('Notification.', $transaction);
+                 Log::info('Transfer successful');
+                // Log::info('Notification.', $transaction);
                  
 
                 return response()->json([
@@ -128,8 +123,7 @@ class WalletTransferController extends Controller
                 Log::info('Insufficient wallet balance');
                 if ($request->wantsJson()) {
                     return response()->json([
-                        'message' => 'Account deactivated.',
-                        'error' => 'Your account has been deactivated. Please contact support.',
+                        'message' => 'Insufficient wallet balance.',
                     ], 400);
                 }
                 return response()->json(['status' => 'error', 'message' => 'Insufficient wallet balance.']);

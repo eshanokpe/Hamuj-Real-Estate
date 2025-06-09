@@ -50,15 +50,16 @@ class WalletTransferNotification extends Notification implements ShouldQueue
     {
         return [
             'title' => $this->title,
-            'message' => $this->message,
+            'notification_status' => 'walletTransferNotification',
+            'message' => $this->message ?? '',
             'type' => 'transfer',
-            'transaction_id' => $this->transaction->id,
-            'amount' => $this->transaction->amount,
-            'recipient' => $this->transaction->accountName,
-            'bank' => $this->transaction->bankName,
-            'status' => $this->transaction->status,
+            'transaction_id' => $this->transaction->id ??'N/A',
+            'amount' => $this->transaction->amount ??'N/A',
+            'recipient' => $this->transaction->accountName ??'N/A',
+            'bank' => $this->transaction->bankName ??'N/A',
+            'status' => $this->transaction->status ??'N/A',
             'reference' => $this->transaction->metadata['reference'] ?? null,
-            'transfer_code' => $this->transaction->transfer_code,
+            'transfer_code' => $this->transaction->transfer_code ??'N/A',
             'link' => route('user.transaction.show', encrypt($this->transaction->id) ),
             'timestamp' => now()->toDateTimeString(),
         ];
