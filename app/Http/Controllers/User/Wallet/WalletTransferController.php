@@ -104,7 +104,7 @@ class WalletTransferController extends Controller
                     'transaction_id' => $transaction->id,
                     'amount' => $transferAmount,
                     'recipient' => $validated['recipient_code'],
-                    'reference' => $transferResponse['reference'],
+                    'reference' => $transferResponse['data']['reference'],
                     'wallet_balance' => $userWallet->balance
                 ]);
 
