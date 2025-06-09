@@ -52,7 +52,7 @@ class WalletTransferController extends Controller
             'reason' => 'nullable|string',
             'accountName' => 'required|string',
             'bankName' => 'required|string',
-            'account_number' => 'required|string',
+            'account_number' => 'required',
         ]);
 
         $user = Auth::user();
@@ -89,7 +89,7 @@ class WalletTransferController extends Controller
                     'wallet_id' => $userWallet->id,
                     'type' => 'transfer', 
                     'currency' => $transferResponse['currency'] ?? 'NGN', // Taken directly from response
-                    'accountName' => $validated['accountName'] ?? '', // Changed from account_number to accountName
+                    'accountName' => $validated['recipient_code'] ?? '', // Changed from account_number to accountName
                     'transfer_code' => $transferResponse['transfer_code'] ?? '', // From response, not validated
                     'bankName' => $validated['bankName'] ?? '',
                     'amount' => $transferAmount,
