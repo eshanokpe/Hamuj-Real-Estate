@@ -77,7 +77,7 @@ class WalletTransferController extends Controller
                 Log::info('Transfer successful. Wallet updated.', $transferResponse['data']);
 
                 // Log the transaction
-                WalletTransaction::create([
+                $transaction = WalletTransaction::create([
                     'user_id' => $user->id,
                     'wallet_id' => $userWallet->id,
                     'type' => 'transfer', 
@@ -99,9 +99,11 @@ class WalletTransferController extends Controller
                 // $user->notify(new WalletTransferNotification(
                 //     'Transfer Successful',
                 //     'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
-                //     $validated['account_number']??'',
-                //     $transferAmount
+                //     true,
+                //     $transaction
                 // ));
+                Log::error('Wallet balance mismatch after transfer.', $transaction);
+                 
 
                 return response()->json([
                     'status' => 'success', 
