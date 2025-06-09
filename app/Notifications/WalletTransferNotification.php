@@ -16,13 +16,16 @@ class WalletTransferNotification extends Notification implements ShouldQueue
     public $message;
     public $isSuccess;
     public $transaction;
+    public $newbalance;
 
-    public function __construct($title, $message, $isSuccess, WalletTransaction $transaction)
+    public function __construct($title, $message, $isSuccess, WalletTransaction $transaction, $newbalance)
     {
         $this->title = $title;
         $this->message = $message;
         $this->isSuccess = $isSuccess;
         $this->transaction = $transaction;
+        $this->newbalance = $newbalance;
+
     }
 
     public function via($notifiable)
@@ -47,12 +50,13 @@ class WalletTransferNotification extends Notification implements ShouldQueue
     }
 
     public function toArray($notifiable)
-    {
+    { 
         return [
             'title' => $this->title,
             'notification_status' => 'walletTransferNotification',
             'message' => $this->message ?? '',
-            'type' => 'transfer',
+            'newbalance'=>$this->newbalance,
+            'type' => 'wallet_transfer', 
             'transaction_id' => $this->transaction->id ??'N/A',
             'amount' => $this->transaction->amount ??'N/A',
             'recipient' => $this->transaction->accountName ??'N/A',

@@ -119,7 +119,7 @@ class WebhookController extends Controller
 
             // Update the wallet balance
             $wallet->increment('balance', $amount);
-
+ 
             // Log the transaction in your database
             $customerName = ($data->customer->first_name ?? '') . ' ' . ($data->customer->last_name ?? '');
             Transaction::create([

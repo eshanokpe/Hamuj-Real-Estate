@@ -100,15 +100,16 @@ class WalletTransferController extends Controller
                 ]);
 
                 // Trigger the notification 
-               
-
+                 
+                $newBalance = $userWallet->fresh()->balance;
                 // Send success notification
                 $user->notify(new WalletTransferNotification(
                     'Transfer Successful',
                     // 'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['account_number'].' was successful.',
                     'Your transfer of '.number_format($transferAmount, 2).'was successful.',
-                    true,
-                    $transaction
+                    true, 
+                    $transaction,
+                    $newBalance
                 ));
                  Log::info('Transfer successful');
                 // Log::info('Notification.', $transaction);
