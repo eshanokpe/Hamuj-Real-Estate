@@ -89,7 +89,7 @@ class WalletTransferController extends Controller
                     'wallet_id' => $userWallet->id,
                     'type' => 'transfer', 
                     'currency' => $transferResponse['currency'] ?? 'NGN', // Taken directly from response
-                    'accountName' => $validated['recipient_code'] ?? '', // Changed from account_number to accountName
+                    'accountName' => $validated['account_number'] ?? '', // Changed from account_number to accountName
                     'transfer_code' => $transferResponse['transfer_code'] ?? '', // From response, not validated
                     'bankName' => $validated['bankName'] ?? '',
                     'amount' => $transferAmount,
@@ -111,8 +111,8 @@ class WalletTransferController extends Controller
                 // Send success notification
                 $user->notify(new WalletTransferNotification(
                     'Transfer Successful',
-                    // 'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
-                    'Your transfer of '.number_format($transferAmount, 2).'was successful.',
+                    'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['account_number'].' was successful.',
+                    // 'Your transfer of '.number_format($transferAmount, 2).'was successful.',
                     true,
                     $transaction
                 ));
