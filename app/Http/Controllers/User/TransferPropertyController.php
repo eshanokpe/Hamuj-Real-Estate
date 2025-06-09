@@ -497,7 +497,7 @@ class TransferPropertyController extends Controller
         $sendWalletBalance = Transaction::where('user_id', $sender->id)
             ->where('email', $sender->email)
             ->where('status', 'success')
-            ->where('payment_method', 'wallet')
+            ->where('payment_method', 'transfer_property')
             ->sum('amount');
 
         $recipientWalletBalance = Transaction::where('user_id', $recipient->id)

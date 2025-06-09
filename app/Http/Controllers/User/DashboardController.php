@@ -25,14 +25,16 @@ class DashboardController extends Controller
         $user = Auth::user();
         $wallet = Auth::user()->wallet; 
         $balance = $wallet ? $wallet->balance : 0;
-        $data['transactions'] = Transaction::where('user_id', $user->id)->where('email', $user->email)->latest()->limit(6)->get();
+        $data['transactions'] = Transaction::where('user_id', $user->id)
+        ->where('email', $user->email)
+        ->whereIn('payment_method', ['transfer_property', 'buy_property'])
+        ->latest()->limit(5)->get();
          
         $data['totalWalletAmount'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
                                             ->where('transaction_type', 'wallet')
                                             ->sum('amount');
 
-        // For Property Transactions (has property_id)
         $data['totalPropertyAmount'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
                                             ->whereNotNull('property_id') // Property transactions have property_id
@@ -60,7 +62,7 @@ class DashboardController extends Controller
                 'totalAssets' => $data['totalTransactionsAssets'],
             ]);
         } 
-
+ 
         return view('user.dashboard', $data); 
     }
 

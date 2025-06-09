@@ -52,9 +52,31 @@ class WalletController extends Controller
 
 
     public function topUp(){ 
+        $user = Auth::user();
         $data['user'] = Auth::user();
         $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
         $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;
+        // Get wallet transactions
+        $walletTransactions = WalletTransaction::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return $item->toArray();
+            });
+
+        $paymentTransactions = Transaction::where('user_id', $user->id)
+            ->where('payment_method', 'dedicated_nuban')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return $item->toArray();
+            });
+
+        $data['transactions'] = $walletTransactions->concat($paymentTransactions)
+            ->sortByDesc('created_at')
+            ->take(10 )
+            ->values();
+
         return view('user.pages.wallet.topUp.index', $data); 
     }
 
@@ -111,9 +133,9 @@ class WalletController extends Controller
         $transactions = $walletTransactions->concat($paymentTransactions)
             ->sortByDesc('created_at')
             ->take(10 )
-            ->values();
+            ->values(); 
        
-        
+         
         $data = [
             'user' => $user,
             'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),

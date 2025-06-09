@@ -85,7 +85,7 @@ class SellPropertyController extends Controller
                 'reference' => $reference,
                 'total_price' => $amount,
                 'status' => 'pending',
-            ]);
+            ]); 
             $contactDetials = ContactDetials::first();
             // Notify the user
             $user->notify(new SellPropertyUserNotification($user, $propertyData, $sell, $contactDetials));

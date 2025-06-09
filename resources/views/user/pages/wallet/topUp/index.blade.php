@@ -239,44 +239,13 @@
                      <!-- Transaction Report Section -->
                      <div class="sales__report--section">
                         <div class="sales__report--heading d-flex align-items-center justify-content-between mb-30">
-                            <h2 class="sales__report--heading__title">Latest Transaction </h2>
-                            <div class="sales__report--short-by select">
+                            <h2 class="sales__report--heading__title">Wallet Transaction </h2>
+                            <a href="{{ route('user.payment.history') }}" class="sales__report--short-by select">
                                View all
-                            </div>
+                            </a>
                         </div>
-                        <table class="sales__report--table table-responsive">
-                            <thead>
-                                <tr> 
-                                    <th style="width: 5%; padding: 10px;">#</th> <!-- Minimal space for index -->
-                                    <th style="width: 20%; padding: 5px;">Transaction Ref</th>
-                                    <th style="width: 20%; padding: 5px;">Payment Method</th>
-                                    <th style="width: 15%; padding: 5px;">Amount</th>
-                                    <th style="width: 15%; padding: 5px;">Created</th>
-                                    <th style="width: 10%; padding: 5px;">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td style="padding: 10px;">1</td>
-                                    <td style="padding: 5px;">
-                                        <span class="sales__report--body__text"> Top up</span>
-                                    </td>
-                                    <td style="padding: 5px;">
-                                        <span class="sales__report--body__text">Card</span>
-                                    </td>
-                                    <td style="padding: 5px;">
-                                        <span class="sales__report--body__text">₦120,000.00</span>
-                                    </td>
-                                    <td style="padding: 5px;">
-                                        <span class="sales__report--body__text">date</span>
-                                    </td>
-                                    <td style="padding: 5px;">
-                                        <button class="btn btn-warning btn-sm">Success</button>
+                        @include('user.partial.walletTransactions')
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                     <!-- Transaction Report Section End -->
 

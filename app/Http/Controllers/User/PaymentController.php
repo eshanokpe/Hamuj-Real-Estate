@@ -25,7 +25,6 @@ class PaymentController extends Controller
 
     public function initializePayment(Request $request)
     {
-        // dd($request);
         $request->validate([
             'remaining_size' => 'required',
             'property_slug' => 'required',
@@ -48,7 +47,6 @@ class PaymentController extends Controller
             $finalAmountPayable = $finalAmountFromRequest;
         }
        
-        // 1. FIRST CHECK: Verify if PIN is required and set
         if (config('app.enable_transaction_pin')) {
             if (empty($user->transaction_pin)) {
                 return $this->errorResponse('Please set your transaction PIN first.', 403, [
@@ -118,7 +116,7 @@ class PaymentController extends Controller
             'reference' => $reference,
             'status' => 'completed',
             'source' => $request->is('api/*') ? 'mobile' : 'web',
-            'payment_method' => 'wallet',
+            'payment_method' => 'buy_property',
             'metadata' => [
                 'property_id' => $property->id,
                 'property_name' => $property->name,

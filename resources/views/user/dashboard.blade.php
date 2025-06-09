@@ -164,7 +164,7 @@
                    <!-- Transaction Report Section -->
                     <div class="sales__report--section">
                         <div class="sales__report--heading d-flex align-items-center justify-content-between mb-30">
-                            <h2 class="sales__report--heading__title">Transaction Report</h2>
+                            <h2 class="sales__report--heading__title">Property Transaction </h2>
                             <div class="sales__report--short-by select">
                                 <form method="GET" id="sortForm">
                                     <select name="filter" class="sales__report--short-by__select" onchange="document.getElementById('sortForm').submit();">
@@ -183,7 +183,7 @@
                                 <tr>
                                     <th style="width: 5%; padding: 10px;">#</th> <!-- Minimal space for index -->
                                     <th style="width: 20%; padding: 5px;">Transaction Ref</th>
-                                    <th style="width: 20%; padding: 5px;">Payment Method</th>
+                                    <th style="width: 20%; padding: 5px;">Property Status</th>
                                     <th style="width: 15%; padding: 5px;">Amount</th>
                                     <th style="width: 15%; padding: 5px;">Created</th>
                                     <th style="width: 10%; padding: 5px;">Status</th>
@@ -198,12 +198,14 @@
                                     </td>
                                     <td style="padding: 5px;">
                                         <span class="sales__report--body__text">
-                                            @if (strtolower($transaction->payment_method) === 'wallet')
-                                                Deposit 
+                                            @if (strtolower($transaction->payment_method) === 'transfer_property')
+                                                Transfer Property 
+                                            @elseif(strtolower($transaction->payment_method) === 'buy_property')
+                                                Buy Property
                                             @else
                                                 {{ ucfirst($transaction->payment_method) }}
                                             @endif
-                                        </span>
+                                        </span> 
                                     </td>  
                                     <td style="padding: 5px;">
                                         <span class="sales__report--body__text">₦{{ number_format($transaction->amount, 2) }}</span>
@@ -229,9 +231,7 @@
                             </tbody>
                         </table>
                         
-                        {{-- <div class="pagination">
-                            {{ $transactions->links() }}
-                        </div> --}}
+                       
                         @if($totalTransactionsAssets > 6)
                             <div class="text-center mt-3">
                                 <a class="welcome__content--btn solid__btn" href="{{ route('user.transactions') }}">View More Transactions</a>
