@@ -337,6 +337,7 @@
                             
                             <div class="notification__list p-3">
                                 @forelse ($notificationsBar as $notification)
+                                {{$notification->data['property_mode']}}
                                     <div class="notification__item {{ $notification->read_at ? 'unread' : '' }}">
                                         <a href="{{ route('user.notifications.show', encrypt($notification->id)) }}" 
                                             class="notification__link mark-as-read" 
