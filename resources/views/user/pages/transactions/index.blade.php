@@ -26,57 +26,57 @@
                         </thead>
                         <tbody>
                            @forelse ($transactions as $index => $transaction)
-    <tr>
-        <td>
-            {{ $loop->iteration }} <!-- This will display the row number -->
-        </td>
-        <td>
-            @if(is_array($transaction->metadata) || is_object($transaction->metadata))
-                <div class="metadata-container">
-                    @if(isset($transaction->metadata['custom_fields']))
-                        @foreach($transaction->metadata['custom_fields'] as $field)
-                            <strong>{{ $field['display_name'] }}:</strong> {{ $field['value'] ?? 'N/A' }}<br>
-                        @endforeach
-                    @else
-                        <strong>Property:</strong> {{ $transaction->metadata['property_name'] ?? 'N/A' }}<br>
-                        <strong>Size:</strong> {{ $transaction->metadata['selected_size_land'] ?? 'N/A' }} of 
-                        {{ $transaction->metadata['remaining_size'] ?? 'N/A' }} SQM<br>
-                    @endif
-                    <strong>Amount:</strong> {{ number_format($transaction->amount, 2) }}<br>
-                    <strong>Date:</strong> {{ \Carbon\Carbon::parse($transaction->paid_at)->format('M d, Y h:i A') }}
-                </div>
-            @else
-                {{ $transaction->metadata ?? 'No metadata available' }}
-            @endif
-        </td>
-        <td>
-            @php
-                $statusColors = [
-                    'pending' => '#f39c12',
-                    'completed' => '#28a745',
-                    'success' => '#28a745',
-                    'failed' => '#dc3545',
-                    'default' => '#6c757d'
-                ];
-                $statusColor = $statusColors[$transaction->status] ?? $statusColors['default'];
-            @endphp
-            <span class="status__btn pending2" style="background-color: {{ $statusColor }}; color:#fff">
-                {{ ucfirst($transaction->status) }}
-            </span>
-        </td> 
-        <td>
-            <span class="status__btn pending2">
-                <a href="{{ route('user.transaction.show', encrypt($transaction->id)) }}">
-                    View Receipt
-                </a>
-            </span>
-        </td>
-    </tr>
-@empty
-    <tr> 
-        <td colspan="7" class="text-center">No transactions available</td>
-    </tr>
-@endforelse
+                                <tr>
+                                    <td>
+                                        {{ $loop->iteration }} <!-- This will display the row number -->
+                                    </td>
+                                    <td>
+                                        @if(is_array($transaction->metadata) || is_object($transaction->metadata))
+                                            <div class="metadata-container">
+                                                @if(isset($transaction->metadata['custom_fields']))
+                                                    @foreach($transaction->metadata['custom_fields'] as $field)
+                                                        <strong>{{ $field['display_name'] }}:</strong> {{ $field['value'] ?? 'N/A' }}<br>
+                                                    @endforeach
+                                                @else
+                                                    <strong>Property:</strong> {{ $transaction->metadata['property_name'] ?? 'N/A' }}<br>
+                                                    <strong>Size:</strong> {{ $transaction->metadata['selected_size_land'] ?? 'N/A' }} of 
+                                                    {{ $transaction->metadata['remaining_size'] ?? 'N/A' }} SQM<br>
+                                                @endif
+                                                <strong>Amount:</strong> {{ number_format($transaction->amount, 2) }}<br>
+                                                <strong>Date:</strong> {{ \Carbon\Carbon::parse($transaction->paid_at)->format('M d, Y h:i A') }}
+                                            </div>
+                                        @else
+                                            {{ $transaction->metadata ?? 'No metadata available' }}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @php
+                                            $statusColors = [
+                                                'pending' => '#f39c12',
+                                                'completed' => '#28a745',
+                                                'success' => '#28a745',
+                                                'failed' => '#dc3545',
+                                                'default' => '#6c757d'
+                                            ];
+                                            $statusColor = $statusColors[$transaction->status] ?? $statusColors['default'];
+                                        @endphp
+                                        <span class="status__btn pending2" style="background-color: {{ $statusColor }}; color:#fff">
+                                            {{ ucfirst($transaction->status) }}
+                                        </span>
+                                    </td> 
+                                    <td>
+                                        <span class="status__btn pending2">
+                                            <a href="{{ route('user.transaction.show', encrypt($transaction->id)) }}">
+                                                View Receipt
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr> 
+                                    <td colspan="7" class="text-center">No transactions available</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
