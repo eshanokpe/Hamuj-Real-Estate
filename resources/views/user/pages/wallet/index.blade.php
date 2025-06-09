@@ -170,7 +170,7 @@
                                         </td>
                                         <td style="padding: 5px;">
                                             <span class="sales__report--body__text {{ $isTransfer ? 'text-danger' : 'text-success' }}">
-                                                {{ $isTransfer ? '-' : ($isTransfer ? '+' : '') }}₦{{ $amountValue }}
+                                                {{ $isTransfer ? '-' : ($isTransfer ? '-' : '+') }}₦{{ $amountValue }}
                                             </span>
                                         </td>
                                         <td style="padding: 5px;">
