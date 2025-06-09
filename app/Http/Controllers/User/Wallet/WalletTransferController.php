@@ -50,9 +50,9 @@ class WalletTransferController extends Controller
             'recipient_code' => 'required|string',
             'amount' => 'required|numeric|min:1',
             'reason' => 'nullable|string',
-            'accountName' => 'required|string',
-            'bankName' => 'required|string',
-            'account_number' => 'required',
+            'accountName' => 'nullable|string',
+            'bankName' => 'nullable|string',
+            'account_number' => 'nullable',
         ]);
 
         $user = Auth::user();
@@ -111,7 +111,8 @@ class WalletTransferController extends Controller
                 // Send success notification
                 $user->notify(new WalletTransferNotification(
                     'Transfer Successful',
-                    'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
+                    // 'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
+                    'Your transfer of '.number_format($transferAmount, 2).'was successful.',
                     true,
                     $transaction
                 ));
