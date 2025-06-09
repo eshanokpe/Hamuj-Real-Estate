@@ -96,12 +96,12 @@ class WalletTransferController extends Controller
                 //     $amount, $newBalance, $reference));
 
                 // Send success notification
-                $user->notify(new WalletTransferNotification(
-                    'Transfer Successful',
-                    'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
-                    $validated['account_number']??'',
-                    $transferAmount
-                ));
+                // $user->notify(new WalletTransferNotification(
+                //     'Transfer Successful',
+                //     'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
+                //     $validated['account_number']??'',
+                //     $transferAmount
+                // ));
 
                 return response()->json([
                     'status' => 'success', 
