@@ -17,7 +17,7 @@
                     <table class="properties__table--wrapper">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>No</th>
                                 <th>Property name</th>
                                 {{-- <th>Reference </th> --}}
                                 <th>Status</th>
