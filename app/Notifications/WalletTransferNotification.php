@@ -42,7 +42,7 @@ class WalletTransferNotification extends Notification implements ShouldQueue
             ->line('Bank: ' . $this->transaction->bankName)
             ->line('Reference: ' . ($this->transaction->metadata['reference'] ?? 'N/A'))
             ->line('Status: ' . ucfirst($this->transaction->status))
-            ->action('View Transaction', route('user.wallet.show', $this->transaction->id))
+            ->action('View Transaction', route('user.transaction.show', encrypt($this->transaction->id)))
             ->line('Thank you for using our service!');
     }
 
@@ -59,7 +59,7 @@ class WalletTransferNotification extends Notification implements ShouldQueue
             'status' => $this->transaction->status,
             'reference' => $this->transaction->metadata['reference'] ?? null,
             'transfer_code' => $this->transaction->transfer_code,
-            'link' => route('user.wallet.show', $this->transaction->id),
+            'link' => route('user.transaction.show', encrypt($this->transaction->id) ),
             'timestamp' => now()->toDateTimeString(),
         ];
     }
