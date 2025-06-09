@@ -109,7 +109,7 @@ class WalletTransferController extends Controller
                     true,
                     $transaction
                 ));
-                Log::error('Notification.', $transaction);
+                Log::info('Notification.', $transaction);
                  
 
                 return response()->json([
@@ -118,7 +118,7 @@ class WalletTransferController extends Controller
                     'redirect_url' => route('user.wallet.index')
                 ]);
             } else {
-                Log::error('Wallet balance mismatch after transfer.');
+                Log::info('Wallet balance mismatch after transfer.');
                 return response()->json(['status' => 'error', 'message' => 'Insufficient wallet balance.'], 400);
             }
         } else {
@@ -134,7 +134,7 @@ class WalletTransferController extends Controller
                 'status' => 'failed',
                 'metadata' => $transferResponse, // Store the Paystack response
             ]); 
-            Log::error('Transfer failed. Paystack response:', $transferResponse);
+            Log::info('Transfer failed. Paystack response:', $transferResponse);
             return response()->json(['status' => 'error', 'message' => $transferResponse['message']]);
         }
        
