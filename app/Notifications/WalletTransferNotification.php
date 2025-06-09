@@ -59,14 +59,22 @@ class WalletTransferNotification extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
+        // return [ 
+        //     'title' => $this->title,
+        //     'message' => $this->message,
+        //     'is_success' => $this->isSuccess,
+        //     'transaction_id' => $this->transaction?->id,
+        //     'amount' => $this->transaction?->amount,
+        //     'recipient' => $this->transaction?->accountName,
+        //     'link' => '/wallet/transactions',
+        // ];
+
         return [
-            'title' => $this->title,
-            'message' => $this->message,
-            'is_success' => $this->isSuccess,
-            'transaction_id' => $this->transaction?->id,
+            'notification_status' => 'wallet_transfer_notification',
             'amount' => $this->transaction?->amount,
             'recipient' => $this->transaction?->accountName,
             'link' => '/wallet/transactions',
+            'message' => 'You have made a transfer of NGN ' . number_format($this->transaction?->amount, 2),
         ];
     }
 }

@@ -44,7 +44,7 @@ class WalletTransferController extends Controller
         }
     }
 
-    public function initiateTransfer22(Request $request)
+    public function initiateTransfer(Request $request)
     {
         $validated = $request->validate([
             'recipient_code' => 'required|string',
@@ -80,7 +80,7 @@ class WalletTransferController extends Controller
                 WalletTransaction::create([
                     'user_id' => $user->id,
                     'wallet_id' => $userWallet->id,
-                    'type' => 'transfer',
+                    'type' => 'wallet_transfer',
                     'currency' => $transferResponse['data']['currency'],
                     'accountName' => $validated['account_number']??'',
                     'transfer_code' => $validated['transfer_code']??'',
@@ -91,6 +91,14 @@ class WalletTransferController extends Controller
                     'status' => 'success',
                     'metadata' => $transferResponse, // Store the Paystack response
                 ]);
+
+                // Send success notification
+                $user->notify(new WalletTransferNotification(
+                    'Transfer Successful',
+                    'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
+                    true,
+                    $transaction
+                ));
 
                 return response()->json([
                     'status' => 'success', 
@@ -127,7 +135,7 @@ class WalletTransferController extends Controller
         }
     }
 
-    public function initiateTransfer(Request $request)
+    public function initiateTransfer22(Request $request)
     {
         $validated = $request->validate([
             'recipient_code' => 'required|string',
