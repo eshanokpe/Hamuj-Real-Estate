@@ -48,7 +48,7 @@ class WalletTransferNotification extends Notification implements ShouldQueue
                     ->line($this->message)
                     ->line('Amount: '.number_format($this->transaction?->amount ?? 0, 2))
                     ->line('Recipient: '.($this->transaction?->accountName ?? 'N/A'))
-                    ->action('View Transaction', url('/wallet/transactions'))
+                    ->action('View Transaction', url('/user/wallet/index'))
                     ->line('Thank you for using our service!');
     }
 
@@ -73,7 +73,7 @@ class WalletTransferNotification extends Notification implements ShouldQueue
             'notification_status' => 'wallet_transfer_notification',
             'amount' => $this->transaction?->amount,
             'recipient' => $this->transaction?->accountName,
-            'link' => '/wallet/transactions',
+            'link' => '/user/wallet/index',
             'message' => 'You have made a transfer of NGN ' . number_format($this->transaction?->amount, 2),
         ];
     }

@@ -77,10 +77,10 @@ class WalletTransferController extends Controller
                 Log::info('Transfer successful. Wallet updated.', $transferResponse['data']);
 
                 // Log the transaction
-                WalletTransaction::create([
+                $transaction = WalletTransaction::create([
                     'user_id' => $user->id,
                     'wallet_id' => $userWallet->id,
-                    'type' => 'wallet_transfer',
+                    'type' => 'transfer',
                     'currency' => $transferResponse['data']['currency'],
                     'accountName' => $validated['account_number']??'',
                     'transfer_code' => $validated['transfer_code']??'',
@@ -90,7 +90,10 @@ class WalletTransferController extends Controller
                     'reason' => $validated['reason'],
                     'status' => 'success',
                     'metadata' => $transferResponse, // Store the Paystack response
-                ]);
+                ]); 
+                
+                // $user->notify(new WalletTransferNotification(
+                //     $amount, $newBalance, $reference));
 
                 // Send success notification
                 $user->notify(new WalletTransferNotification(
@@ -122,127 +125,12 @@ class WalletTransferController extends Controller
                 'status' => 'failed',
                 'metadata' => $transferResponse, // Store the Paystack response
             ]); 
-             // Send failed transfer notification
-            $this->sendTransferNotification(
-                $user,
-                'Transfer Failed',
-                'Your transfer of '.number_format($validated['amount'], 2).' failed. Reason: '.($transferResponse['message'] ?? 'Unknown error'),
-                'failed',
-                $transaction
-            );
             Log::error('Transfer failed. Paystack response:', $transferResponse);
             return response()->json(['status' => 'error', 'message' => $transferResponse['message']]);
         }
+       
     }
 
-    public function initiateTransfer22(Request $request)
-    {
-        $validated = $request->validate([
-            'recipient_code' => 'required|string',
-            'amount' => 'required|numeric|min:1',
-            'reason' => 'nullable|string',
-            'accountName' => 'nullable|string',
-            'bankName' => 'nullable|string',
-            'account_number' => 'nullable',
-        ]);
-
-        $user = Auth::user();
-        $userWallet = $user->wallet;
-        
-        if ($userWallet->balance < (float)$validated['amount']) {
-            // Notify user of insufficient balance
-            $user->notify(new WalletTransferNotification(
-                'Transfer Failed',
-                'Insufficient wallet balance for transfer.',
-                false
-            ));
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Insufficient wallet balance.',
-            ], 400);
-        } 
-        
-        $transferResponse = $this->processTransfer($validated); 
-        
-        if ($transferResponse['status'] === 'success') {
-            $transferAmount = ($transferResponse['data']['amount'] ?? 0) / 100;
-
-            if ($userWallet->balance >= $transferAmount) {
-                $userWallet->balance -= $transferAmount;
-                $userWallet->save();
-
-                // Create transaction record
-                $transaction = WalletTransaction::create([
-                    'user_id' => $user->id,
-                    'wallet_id' => $userWallet->id,
-                    'type' => 'wallet_transfer',
-                    'currency' => $transferResponse['data']['currency'],
-                    'accountName' => $validated['accountName'] ?? '',
-                    'transfer_code' => $transferResponse['data']['transfer_code'] ?? '',
-                    'bankName' => $validated['bankName'] ?? '',
-                    'amount' => $transferAmount,
-                    'recipient_code' => $validated['recipient_code'],
-                    'reason' => $validated['reason'],
-                    'status' => 'success',
-                    'metadata' => $transferResponse,
-                ]);
-
-                // Send success notification
-                $user->notify(new WalletTransferNotification(
-                    'Transfer Successful',
-                    'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
-                    true,
-                    $transaction
-                ));
-
-                Log::info('Transfer successful. Wallet updated.', $transferResponse['data']);
-
-                return response()->json([
-                    'status' => 'success', 
-                    'data' => $transferResponse['data'],
-                    'redirect_url' => route('user.wallet.index')
-                ]);
-            } else {
-                // Notify about wallet balance mismatch
-                $user->notify(new WalletTransferNotification(
-                    'Transfer Error',
-                    'Wallet balance mismatch after transfer.',
-                    false
-                ));
-
-                Log::error('Wallet balance mismatch after transfer.');
-                return response()->json(['status' => 'error', 'message' => 'Insufficient wallet balance.'], 400);
-            }
-        } else {
-            // Create failed transaction record
-            $transaction = WalletTransaction::create([
-                'user_id' => $user->id,
-                'wallet_id' => $userWallet->id,
-                'type' => 'transfer',
-                'accountName' => $validated['accountName'] ?? '',
-                'bankName' => $validated['bankName'] ?? '',
-                'amount' => (float)$validated['amount'],
-                'recipient_code' => $validated['recipient_code'],
-                'reason' => $validated['reason'],
-                'status' => 'failed',
-                'metadata' => $transferResponse,
-            ]);
-
-            // Send failure notification
-            $user->notify(new WalletTransferNotification(
-                'Transfer Failed',
-                $transferResponse['message'] ?? 'Transfer failed. Please try again.',
-                false,
-                $transaction
-            ));
-
-            Log::error('Transfer failed. Paystack response:', $transferResponse);
-            return response()->json(['status' => 'error', 'message' => $transferResponse['message']]);
-        }
-    }
-
-    
     public function processTransfer(array $validated)
     {
         $user = Auth::user();
