@@ -50,9 +50,9 @@ class WalletTransferController extends Controller
             'recipient_code' => 'required|string',
             'amount' => 'required|numeric|min:1',
             'reason' => 'nullable|string',
-            'accountName' => 'nullable|string',
-            'bankName' => 'nullable|string',
-            'account_number' => 'nullable',
+            'accountName' => 'required|string',
+            'bankName' => 'required|string',
+            'account_number' => 'required|string',
         ]);
 
         $user = Auth::user();
@@ -88,10 +88,10 @@ class WalletTransferController extends Controller
                     'user_id' => $user->id,
                     'wallet_id' => $userWallet->id,
                     'type' => 'transfer', 
-                    'currency' => $transferResponse['currency'] ?? 'NGN', // Taken directly from response
-                    'accountName' => $validated['recipient_code'] ?? '', // Changed from account_number to accountName
+                    'currency' => $transferResponse['data']['currency'] ?? 'NGN', // Taken directly from response data
+                    'accountName' => $validated['accountName'] ?? $validated['recipient_code'], // Use actual account name or fallback to recipient_code
                     'transfer_code' => $transferResponse['transfer_code'] ?? '', // From response, not validated
-                    'bankName' => $validated['bankName'] ?? '',
+                    'bankName' => $validated['bankName'] ?? null,
                     'amount' => $transferAmount,
                     'recipient_code' => $validated['recipient_code'],
                     'reason' => $validated['reason'] ?? 'Payment', // Default to 'Payment' if not provided
@@ -108,10 +108,11 @@ class WalletTransferController extends Controller
                     'wallet_balance' => $userWallet->balance
                 ]);
 
+                $recipientDisplayName = $validated['accountName'] ?? $validated['recipient_code'];
                 // Send success notification
                 $user->notify(new WalletTransferNotification(
                     'Transfer Successful',
-                    'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
+                    'Your transfer of '.number_format($transferAmount, 2).' to '.$recipientDisplayName.' was successful.',
                     true,
                     $transaction
                 ));
@@ -138,8 +139,8 @@ class WalletTransferController extends Controller
                 'user_id' => $user->id,
                 'wallet_id' => $userWallet->id,
                 'type' => 'transfer',
-                'accountName' => $validated['recipient_code'] ?? '',
-                'bankName' => $validated['bankName'],
+                'accountName' => $validated['accountName'] ?? $validated['recipient_code'],
+                'bankName' => $validated['bankName'] ?? null,
                 'amount' => (float)$validated['amount'],
                 'recipient_code' => $validated['recipient_code'],
                 'reason' => $validated['reason'],
@@ -166,7 +167,10 @@ class WalletTransferController extends Controller
         $data = $response->json();
 
         if ($response->successful()) {
-            return ['status' => 'success', 'data' => $data['data']];
+            // Ensure essential fields like currency are captured from the response
+            return ['status' => 'success', 
+                    'data' => $data['data'], 
+                    'currency' => $data['data']['currency'] ?? 'NGN'];
         } else {
             return ['status' => 'error', 'message' => $data['message']];
         }
