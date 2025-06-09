@@ -1,13 +1,14 @@
 <div class="card-body">
-    <h3 class="card-title mb-3">{{ $notification['data']['subject'] ?? '🎉 New Referral Signup!' }}</h3>
+    <h3 class="card-title mb-3">{{ $notification['data']['subject'] ?? '🎉  Referral Commission!' }}</h3>
  
     <p>Dear {{ auth()->user()->first_name }} {{ auth()->user()->last_name }},</p>
     {{-- {{ $notification }} --}}
    
     <div class="mt-4">
-        
+        {{$notification['data']}}
+        {{$notification['data']['message']}}
         <div class="alert alert-info">
-            {{ $notification['data']['subject'] ?? '🎉 New Referral Signup!' }}
+            {{ $notification['data']['subject'] ?? '🎉 Referral Commission!' }}
         </div>
         <h3 class="mb-2">Transaction Details</h3>
 
