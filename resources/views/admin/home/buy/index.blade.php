@@ -43,8 +43,10 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($buys as $buy)
+                                            @php $index = ($buys->currentPage() - 1) * $buys->perPage() + $loop->index + 1; @endphp
+
                                             <tr>
-                                                <td><strong>{{ $loop->iteration }}</strong></td>
+                                                <td><strong>{{ $index }}</strong></td>
                                                 <td class="text-uppercase">
                                                     {{ $buy->user->first_name . ' ' . $buy->user->last_name }}
                                                 </td>

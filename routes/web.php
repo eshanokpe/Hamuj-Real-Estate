@@ -47,7 +47,7 @@ Route::post('post/login', [LoginController::class, 'login'])->name('post.login')
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
 
 // Route::get('/user/register/referral/{referralCode}', [PagesController::class, 'index']);
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 
 

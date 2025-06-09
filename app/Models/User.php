@@ -38,7 +38,7 @@ class User extends Authenticatable
         'commission_balance',
         'hide_balance',
         'app_passcode', 
-        'active',
+        'active', 
         'is_active',
         'registration_source',
     ];
@@ -130,7 +130,7 @@ class User extends Authenticatable
         return Attribute::make(
             get: fn () => trim($this->first_name . ' ' . $this->last_name),
         );
-    }
+    } 
 
     protected function authMethod(): Attribute
     {

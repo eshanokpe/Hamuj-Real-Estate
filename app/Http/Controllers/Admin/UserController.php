@@ -11,6 +11,15 @@ class UserController extends Controller
     public function index(){
         $users = User::latest()->paginate(20);
         return view('admin.home.user.index', compact('users'));
+    } 
+
+    public function toggleActive(User $user)
+    {
+        $user->active = !$user->active; // Toggle the boolean value
+        $user->save();
+
+        $statusMessage = $user->active ? 'activated' : 'deactivated';
+        return redirect()->back()->with('success', "User {$statusMessage} successfully.");
     }
 
     public function edit($id)

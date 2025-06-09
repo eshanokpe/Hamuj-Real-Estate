@@ -119,7 +119,7 @@
                                         if ($originalTransactionType === 'dedicated_nuban') {
                                             $type = 'Deposit'; 
                                         } else {
-                                            $type = $originalTransactionType ?? $transaction['payment_method'] ?? 'N/A';
+                                            $type = $originalTransactionType ?? 'Deposit' ?? 'N/A';
                                         }
                                         $description = $transaction['reason'] ?? ($transaction['description'] ?? null);
                                         $bankName = $transaction['bankName'] ?? ($transaction['bank_name'] ?? '');

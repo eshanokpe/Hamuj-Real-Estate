@@ -43,17 +43,29 @@
                                             <th class="width80">#</th>
                                             <th>Full Name</th>
                                             <th>Email</th>
+                                            <th>Active</th>
                                             <th>DATE   </th>
                                             <th class="text-end">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody> 
                                         @forelse ($users as $user)
-                                        @php $index = $loop->index; @endphp
-                                            <tr>
-                                                <td><strong>{{  $index + 1 }}</strong></td>
+                                        @php $index = ($users->currentPage() - 1) * $users->perPage() + $loop->index + 1; @endphp
+                                            <tr> 
+                                                <td><strong>{{  $index  }}</strong></td>
                                                 <td>{{ $user->first_name . ' ' . $user->last_name }}</td>
                                                 <td>{{ $user->email ?? ''}}</td>
+                                                <td>
+                                                    <form action="{{ route('admin.users.toggle-active', $user->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        @if ($user->active)
+                                                            <button type="submit" class="btn badge bg-success" title="Status: Active. Click to Deactivate.">Active</button>
+                                                        @else
+                                                            <button type="submit" class="btn badge bg-danger" title="Status: Inactive. Click to Activate.">Inactive</button>
+                                                        @endif
+                                                    </form>
+                                                </td>
                                                 <td>{{ $user->created_at->format('d F Y') ??'' }}</td>
                                                 <td class="text-end">                                                       
                                                     <a class="btn btn-primary text-white" href="{{ route('admin.users.show', encrypt($user->id) )  }}" ><i class="las la-eye text-white font-16"></i></a>

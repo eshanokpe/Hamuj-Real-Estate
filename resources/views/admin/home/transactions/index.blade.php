@@ -50,9 +50,10 @@
                                     </thead>
                                     <tbody> 
                                         @forelse ($transactions as $transaction)
-                                        @php $index = $loop->index; @endphp
+                                        @php $index = ($transactions->currentPage() - 1) * $transactions->perPage() + $loop->index + 1; @endphp
+
                                             <tr>
-                                                <td><strong>{{  $index + 1 }}</strong></td>
+                                                <td><strong>{{  $index  }}</strong></td>
                                                 <td style="text-transform: uppercase;">{{ $transaction ->user->first_name. ' ' . $transaction->user->last_name}}</td>
                                                 <td>{{ $transaction->email ?? ''}}</td>
                                                 <td>{{ $transaction->reference ?? ''}}</td>

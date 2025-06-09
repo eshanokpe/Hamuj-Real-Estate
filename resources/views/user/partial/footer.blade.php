@@ -1,7 +1,7 @@
     <!-- Start footer section -->
     <footer class="footer footer__section">
         <div class="dashboard__footer--inner text-center">
-            <p class="copyright__content mb-0">Copyright © {{ date('Y') }} Powered By <span>Dohmayn</span>. Designed with  by <a class="copyright__content--link" target="_blank" href="#">Hamuj</a>  All Rights Reserved.</p>
+            <p class="copyright__content mb-0">Copyright © {{ date('Y') }} Powered By <span>Dohmayn</span></a>  All Rights Reserved.</p>
         </div>
     </footer>
     <!-- End footer section -->

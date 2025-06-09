@@ -1,23 +1,24 @@
+
+
 @extends('layouts.admin')
 @section('content') 
 
 <div class="page-wrapper">
 
-    <!-- Page Content-->
-    <div class="page-content-tab">
+    
 
-        <div class="container-fluid">
-            <!-- Page-Title -->
+    <!-- Page Content-->
+    <div class="page-content-tab ">
+        <div class="container-fluid ">
+             <!-- Page-Title -->
             <div class="row">
                 <div class="col-sm-12">
                     <div class="page-title-box">
                         <div class="float-end">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#">Unikit</a>
+                                <li class="breadcrumb-item"><a href="#">Dohmayn / </a>
                                 </li><!--end nav-item-->
-                                <li class="breadcrumb-item"><a href="#">Dashboard</a>
-                                </li><!--end nav-item-->
-                                <li class="breadcrumb-item active">Dashboard</li>
+                                <li class="active"> Dashboard</li>
                             </ol>
                         </div>
                         <h4 class="page-title">Dashboard</h4>
@@ -25,13 +26,15 @@
                 </div><!--end col-->
             </div>
             <!-- end page title end breadcrumb -->
-            
-            <div class="row">
-                <div class="col-md-12 col-lg-3 order-lg-1 order-md-2 order-sm-2">
+            <div class="row" style="margin-top:10px;">
+                <div class="col-md-12 col-lg-3  order-lg-1 order-md-2 order-sm-2">
                     <div class="card overflow-hidden">
                         <div class="card-body">
                             <div class="pt-3">
-                                <h3 class="text-dark text-center font-24 fw-bold line-height-lg">Users</h3>
+                                <h3 class="text-dark text-center font-24 fw-bold line-height-lg">
+                                    <i class="ti ti-users font-36 align-self-center text-dark"></i>
+                                     Users
+                                </h3>
                                 <div class="text-center text-muted font-16 fw-bold pt-3 pb-1">{{ $users }}</div>
                                
                                 <div class="text-center py-3 mb-3">
@@ -67,7 +70,7 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="card overflow-hidden">
                                 <div class="card-body">
-                                    <a href="#">
+                                    <a href="{{ route('admin.buy.index') }}">
                                         <div class="row d-flex">
                                             <div class="col-3">
                                                 <i class="ti ti-shopping-cart font-36 align-self-center text-dark"></i>
@@ -78,7 +81,7 @@
                                                 <br/>
                                             </div><!--end col-->
                                             <div class="col-12 ms-auto align-self-center">
-                                                <h3 class="text-dark my-0 font-22 fw-bold">0</h3>
+                                                <h3 class="text-dark my-0 font-22 fw-bold">{{ $buy }}</h3>
                                                 <p class="text-muted mb-0 fw-semibold">Buys</p>
                                             </div><!--end col-->
                                         </div><!--end row-->
@@ -89,7 +92,7 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="card overflow-hidden">
                                 <div class="card-body">
-                                    <a href="#">
+                                    <a href="{{ route('admin.sell.index') }}">
                                     <div class="row d-flex">
                                         <div class="col-3">
                                             <i class="ti ti-cash font-36 align-self-center text-dark"></i>
@@ -99,7 +102,7 @@
                                             <br/>
                                         </div><!--end col-->
                                         <div class="col-12 ms-auto align-self-center">
-                                            <h3 class="text-dark my-0 font-22 fw-bold">0</h3>
+                                            <h3 class="text-dark my-0 font-22 fw-bold">{{ $sell }}</h3>
                                             <p class="text-muted mb-0 fw-semibold">Sell</p>
                                         </div><!--end col-->
                                     </div><!--end row-->
@@ -112,7 +115,7 @@
                             <div class="card overflow-hidden">
                                 <div class="card-body">
                                     <div class="row d-flex">
-                                        <a href="#">
+                                         <a href="{{ route('admin.transfer.index') }}">
                                             <div class="col-3">
                                                 <i class="ti ti-repeat font-36 align-self-center text-dark"></i>
                                             </div><!--end col-->
@@ -122,7 +125,7 @@
                                                 <br/>
                                             </div><!--end col-->
                                             <div class="col-12 ms-auto align-self-center">
-                                                <h3 class="text-dark my-0 font-22 fw-bold">0</h3>
+                                                <h3 class="text-dark my-0 font-22 fw-bold">{{ $transfer }}</h3>
                                                 <p class="text-muted mb-0 fw-semibold">Transfer</p>
                                             </div><!--end col-->
                                         </a>
@@ -131,48 +134,23 @@
                             </div><!--end card-->                                     
                         </div> <!--end col-->                                                                   
                     </div><!--end row-->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="row align-items-center">
-                                        <div class="col">                      
-                                            <h4 class="card-title">Audience Overview</h4>                      
-                                        </div><!--end col-->
-                                        <div class="col-auto"> 
-                                            <div class="dropdown">
-                                                <a href="#" class="btn btn-sm btn-outline-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                   This Year<i class="las la-angle-down ms-1"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" href="#">Today</a>
-                                                    <a class="dropdown-item" href="#">Last Week</a>
-                                                    <a class="dropdown-item" href="#">Last Month</a>
-                                                    <a class="dropdown-item" href="#">This Year</a>
-                                                </div>
-                                            </div>               
-                                        </div><!--end col-->
-                                    </div>  <!--end row-->                                  
-                                </div><!--end card-header-->
-                                <div class="card-body">
-                                    <div class="">
-                                        <div id="ana_dash_1" class="apex-charts"></div>
-                                    </div> 
-                                </div><!--end card-body--> 
-                            </div><!--end card-->
-                        </div>
-                    </div> 
+                     
                 </div><!--end col-->                        
             </div><!--end row-->
+        </div><!-- container -->
 
+        <div class="container-fluid pt-10">
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-6">
                     <div class="card">
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col">                      
-                                    <h4 class="card-title">Browser Used & Traffic Reports</h4>                      
-                                </div><!--end col-->                                        
+                                    <h4 class="card-title">Wallet Transactions</h4>                      
+                                </div><!--end col-->  
+                                <div class="col text-end">                      
+                                    <a href="{{ route('admin.walletTransaction') }}">View More</a>                      
+                                </div><!--end col-->                                       
                             </div>  <!--end row-->                                  
                         </div><!--end card-header-->
                         <div class="card-body">
@@ -180,45 +158,38 @@
                                 <table class="table table-hover mb-0">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th class="border-top-0">Browser</th>
-                                            <th class="border-top-0">Sessions</th>
-                                            <th class="border-top-0">Bounce Rate</th>
-                                            <th class="border-top-0">Transactions</th>
+                                            <th class="border-top-0">User</th>
+                                            <th class="border-top-0">Type</th>
+                                            <th class="border-top-0">Amount</th>
+                                            <th class="border-top-0">Status</th>
                                         </tr><!--end tr-->
                                     </thead>
                                     <tbody>
-                                        <tr>  
-                                            <td><img src="assets/images/logos/chrome.png" alt="" height="20" class="me-2">Chrome</td> 
-                                            <td>10853<small class="text-muted">(52%)</small></td>                                   
-                                            <td> 52.80%</td>
-                                            <td>566<small class="text-muted">(92%)</small></td>
-                                        </tr><!--end tr-->     
-                                        <tr>                                                        
-                                            <td><img src="assets/images/logos/micro-edge.png" alt="" height="20" class="me-2">Microsoft Edge</td>
-                                            <td>2545<small class="text-muted">(47%)</small></td>                                   
-                                            <td> 47.54%</td>
-                                            <td>498<small class="text-muted">(81%)</small></td>
-                                        </tr><!--end tr-->    
-                                        <tr>                                                        
-                                            <td><img src="assets/images/logos/in-explorer.png" alt="" height="20" class="me-2">Internet-Explorer</td>
-                                            <td>1836<small class="text-muted">(38%)</small></td>                                   
-                                            <td> 41.12%</td>
-                                            <td>455<small class="text-muted">(74%)</small></td>
-                                        </tr><!--end tr-->    
-                                        <tr>                                                        
-                                            <td><img src="assets/images/logos/opera.png" alt="" height="20" class="me-2">Opera</td>
-                                            <td>1958<small class="text-muted">(31%)</small></td>                                   
-                                            <td> 36.82%</td>
-                                            <td>361<small class="text-muted">(61%)</small></td>
-                                        </tr><!--end tr-->    
-                                        <tr>                                                        
-                                            <td><img src="assets/images/logos/chrome.png" alt="" height="20" class="me-2">Chrome</td>
-                                            <td>10853<small class="text-muted">(52%)</small></td>                                   
-                                            <td> 52.80%</td>
-                                            <td>566<small class="text-muted">(92%)</small></td>
-                                        </tr><!--end tr-->                             
+                                        @forelse ($walletTransactions as $walletTransaction)
+                                            <tr>  
+                                                <td style="text-transform: uppercase;">{{ $walletTransaction ->user->first_name. ' ' . $walletTransaction->user->last_name}}</td>
+                                                <td style="text-transform: uppercase;">{{ $walletTransaction->type ?? ''}}</td>
+                                                
+                                                <td>₦{{ number_format($walletTransaction->amount ?? 0, 2) }}</td>                                  
+                                                <td>
+                                                    @if($walletTransaction->status === 'pending')
+                                                        <button class="btn btn-warning btn-sm">{{ ucfirst($walletTransaction->status) }}</button>
+                                                    @elseif($walletTransaction->status === 'completed' || $walletTransaction->status === 'success')
+                                                        <button class="btn btn-success btn-sm">{{ ucfirst($walletTransaction->status) }}</button>
+                                                    @elseif($walletTransaction->status === 'failed' || $walletTransaction->status === 'cancelled')
+                                                        <button class="btn btn-danger btn-sm">{{ ucfirst($walletTransaction->status) }}</button>
+                                                    @endif
+                                                </td>
+                                               
+                                            </tr><!--end tr-->
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center">No menu items found.</td>
+                                            </tr>
+                                        @endforelse                                 
                                     </tbody>
-                                </table> <!--end table-->                                               
+                                </table> <!--end table--> 
+                                                                             
                             </div><!--end /div--> 
                         </div><!--end card-body--> 
                     </div><!--end card--> 
@@ -226,8 +197,11 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col">                      
-                                    <h4 class="card-title">Browser Used & Traffic Reports</h4>                      
-                                </div><!--end col-->                                        
+                                    <h4 class="card-title">Transactions</h4>                      
+                                </div><!--end col--> 
+                                <div class="col text-end">                      
+                                    <a href="{{ route('admin.transaction') }}">View More</a>                      
+                                </div><!--end col-->                                       
                             </div>  <!--end row-->                                  
                         </div><!--end card-header-->
                         <div class="card-body">
@@ -235,108 +209,77 @@
                                 <table class="table mb-0">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th class="border-top-0">Channel</th>
-                                            <th class="border-top-0">Sessions</th>
-                                            <th class="border-top-0">Prev.Period</th>
-                                            <th class="border-top-0">% Change</th>
+                                            <th class="border-top-0">User</th>
+                                            <th class="border-top-0">Property Name</th>
+                                            <th class="border-top-0">Amount</th>
+                                            <th class="border-top-0">Status</th>
                                         </tr><!--end tr-->
                                     </thead>
                                     <tbody>
-                                        <tr>                                                        
-                                            <td><a href="#" class="text-primary">Organic search</a></td>
-                                            <td>10853<small class="text-muted">(52%)</small></td>
-                                            <td>566<small class="text-muted">(92%)</small></td>
-                                            <td> 52.80% <i class="fas fa-caret-up text-success font-16"></i></td>
-                                        </tr><!--end tr-->     
-                                        <tr>                                                        
-                                            <td><a href="#" class="text-primary">Direct</a></td>
-                                            <td>2545<small class="text-muted">(47%)</small></td>
-                                            <td>498<small class="text-muted">(81%)</small></td>
-                                            <td> -17.20% <i class="fas fa-caret-down text-danger font-16"></i></td>
-                                            
-                                        </tr><!--end tr-->    
-                                        <tr>                                                        
-                                            <td><a href="#" class="text-primary">Referal</a></td>
-                                            <td>1836<small class="text-muted">(38%)</small></td> 
-                                            <td>455<small class="text-muted">(74%)</small></td>
-                                            <td> 41.12% <i class="fas fa-caret-up text-success font-16"></i></td>
-                                            
-                                        </tr><!--end tr-->    
-                                        <tr>                                                        
-                                            <td><a href="#" class="text-primary">Email</a></td>
-                                            <td>1958<small class="text-muted">(31%)</small></td> 
-                                            <td>361<small class="text-muted">(61%)</small></td>
-                                            <td> -8.24% <i class="fas fa-caret-down text-danger font-16"></i></td>
-                                        </tr><!--end tr-->    
-                                        <tr>                                                        
-                                            <td><a href="#" class="text-primary">Social</a></td>
-                                            <td>1566<small class="text-muted">(26%)</small></td> 
-                                            <td>299<small class="text-muted">(49%)</small></td>
-                                            <td> 29.33% <i class="fas fa-caret-up text-success"></i></td>
-                                        </tr><!--end tr-->                            
+                                        @forelse ($transactions as $transaction)
+
+                                            <tr>                                                        
+                                                
+                                                <td style="text-transform: uppercase;">{{ $transaction ->user->first_name. ' ' . $transaction->user->last_name}}</td>
+                                                <td>{{ $transaction->property_name ?? ''}}</td>
+                                                <td>₦{{ number_format($transaction->amount ?? 0, 2) }}</td>
+                                                <td>
+                                                    @if($transaction->status === 'pending')
+                                                        <button class="btn btn-warning btn-sm">{{ ucfirst($transaction->status) }}</button>
+                                                    @elseif($transaction->status === 'completed' || $transaction->status === 'success')
+                                                        <button class="btn btn-success btn-sm">{{ ucfirst($transaction->status) }}</button>
+                                                    @elseif($transaction->status === 'failed' || $transaction->status === 'cancelled')
+                                                        <button class="btn btn-danger btn-sm">{{ ucfirst($transaction->status) }}</button>
+                                                    @endif
+                                                </td>
+                                                
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center">No menu items found.</td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
-                                </table> <!--end table-->                                               
+                                </table><!--end /table-->
+                                                                          
                             </div><!--end /div-->
                         </div><!--end card-body--> 
                     </div><!--end card--> 
                 </div> <!--end col--> 
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="card">
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col">                      
-                                    <h4 class="card-title">Sessions Device</h4>                      
+                                    <h4 class="card-title">Buy Properties</h4>                      
                                 </div><!--end col-->
-                                <div class="col-auto"> 
-                                    <div class="dropdown">
-                                        <a href="#" class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                           All<i class="las la-angle-down ms-1"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="#">Purchases</a>
-                                            <a class="dropdown-item" href="#">Emails</a>
-                                        </div>
-                                    </div>         
+                                <div class="col text-end">                      
+                                    <a href="{{ route('admin.properties.index') }}">View More</a>                      
                                 </div><!--end col-->
                             </div>  <!--end row-->                                  
                         </div><!--end card-header-->
-                        <div class="card-body">
-                            <div class="text-center">
-                                <div id="ana_device" class="apex-charts"></div>
-                                <h6 class="bg-light-alt py-3 px-2 mb-0">
-                                    <i data-feather="calendar" class="align-self-center icon-xs me-1"></i>
-                                    01 January 2020 to 31 December 2020
-                                </h6>
-                            </div>  
+                        <div class="card-body"> 
                             <div class="table-responsive mt-2">
-                                <table class="table border-dashed mb-0">
-                                    <thead>
-                                    <tr>
-                                        <th>Device</th>
-                                        <th class="text-end">Sassions</th>
-                                        <th class="text-end">Day</th>
-                                        <th class="text-end">Week</th>
-                                    </tr>
+                                <table class="table  mb-0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th >User</th>
+                                            <th >Properties</th>
+                                            <th >Amount</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>Dasktops</td>
-                                        <td class="text-end">1843</td>
-                                        <td class="text-end">-3</td>
-                                        <td class="text-end">-12</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tablets</td>
-                                        <td class="text-end">2543</td>
-                                        <td class="text-end">-5</td>
-                                        <td class="text-end">-2</td>                                                 
-                                    </tr>
-                                    <tr>
-                                        <td>Mobiles</td>
-                                        <td class="text-end">3654</td>
-                                        <td class="text-end">-5</td>
-                                        <td class="text-end">-6</td>
-                                    </tr>
+                                        @forelse ($buys as $buy)
+                                            <tr> 
+                                                <td style="text-transform: uppercase;">{{ $buy ->user->first_name. ' ' . $buy->user->last_name}}</td>
+                                                <td>{{ $buy->property->name }}</td>
+                                                <td>₦{{ number_format($buy->total_price, 2) }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" class="text-center">No properties found.</td>
+                                            </tr>
+                                        @endforelse
                                     
                                     </tbody>
                                 </table><!--end /table-->
@@ -344,24 +287,50 @@
                         </div><!--end card-body--> 
                     </div><!--end card--> 
                     <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <h3 class="m-0 align-self-center fw-bold font-22">80</h3>
-                                <div class="d-block ms-3 align-self-center">
-                                    <span class="badge bg-soft-primary px-2 py-1 font-11">Right now</span>
-                                    <h5 class="my-2">Traffic Sources</h5>
-                                    <p class="mb-2 text-muted">It is a long established fact that a reader will 
-                                        be of a page when looking at its layout.                                                
-                                    </p>
-                                    <a href="#" class="btn btn-primary">Read More <i class="las la-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div><!--end card-body-->
-                    </div><!--end card-->
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">                      
+                                    <h4 class="card-title">Sell Properties</h4>                      
+                                </div><!--end col-->
+                                <div class="col text-end">                      
+                                    <a href="{{ route('admin.properties.index') }}">View More</a>                      
+                                </div><!--end col-->
+                            </div>  <!--end row-->                                  
+                        </div><!--end card-header-->
+                        <div class="card-body"> 
+                            <div class="table-responsive mt-2">
+                                <table class="table  mb-0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th >User</th>
+                                            <th >Properties</th>
+                                            <th >Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($sells as $sell)
+                                            <tr> 
+                                                <td style="text-transform: uppercase;">{{ $sell ->user->first_name. ' ' . $sell->user->last_name}}</td>
+                                                <td>{{ $sell->property->name }}</td>
+                                                <td>₦{{ number_format($sell->total_price, 2) }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" class="text-center">No properties found.</td>
+                                            </tr>
+                                        @endforelse
+                                    
+                                    </tbody>
+                                </table><!--end /table-->
+                            </div><!--end /div-->                                 
+                        </div><!--end card-body--> 
+                    </div><!--end card--> 
+                    
                 </div> <!--end col-->
                 
             </div><!--end row-->
         </div><!-- container -->
+
 
         <!--Start Rightbar-->
         <!--Start Rightbar/offcanvas-->

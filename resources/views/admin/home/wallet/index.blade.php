@@ -45,9 +45,10 @@
                                     </thead>
                                     <tbody> 
                                         @forelse ($wallets as $wallet)
-                                        @php $index = $loop->index; @endphp
+                                         @php $index = ($wallets->currentPage() - 1) * $wallets->perPage() + $loop->index + 1; @endphp
+                                            
                                             <tr>
-                                                <td><strong>{{  $index + 1 }}</strong></td>
+                                                <td><strong>{{  $index  }}</strong></td>
                                                 <td style="text-transform: uppercase;">{{ trim((optional($wallet->user)->first_name ?? '') . ' ' . (optional($wallet->user)->last_name ?? '')) }}</td>
                                                 <td>{{ $wallet->user->email ?? ''}}</td>
                                                 <td>₦{{ number_format($wallet->balance ?? 0, 2) }}</td>

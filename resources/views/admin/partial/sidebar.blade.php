@@ -25,7 +25,7 @@
     <div class="border-end">
         <ul class="nav nav-tabs menu-tab nav-justified" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" href="{{ route('admin.index') }}" role="tab" aria-selected="true">M<span>ain</span></a>
+                <a class="nav-link active" href="{{ route('admin.index') }}" >M<span>ain</span></a>
             </li>
             
         </ul>
@@ -40,12 +40,19 @@
                 <ul class="navbar-nav tab-pane active" id="Main" role="tabpanel">
                     <li class="menu-label mt-0 text-primary font-12 fw-semibold">M<span>ain</span><br><span class="font-10 text-secondary fw-normal">Unique Dashboard</span></li>                    
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.index')}}" role="button"
+                            aria-expanded="false" aria-controls="sidebarAnalytics">
+                            <i class="ti ti-stack menu-icon"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.users')}}" role="button"
                             aria-expanded="false" aria-controls="sidebarAnalytics">
                             <i class="ti ti-stack menu-icon"></i>
                             <span>Users</span>
                         </a>
-                    </li><!--end nav-item-->
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.properties.index') }}" >

@@ -32,6 +32,13 @@ class HomeController extends Controller
         return view('home',compact('properties')); 
     } 
 
+    public function Properties()
+    { 
+        $properties = Property::inRandomOrder()->paginate(10);;
+        dd($propertie);
+        return view('home.pages.properties.properties', compact('properties')); 
+    } 
+
     public function showProperties($slug)
     {
         try {   

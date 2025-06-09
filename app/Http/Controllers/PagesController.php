@@ -44,8 +44,11 @@ class PagesController extends Controller
                 }
                 $property->transaction = $transaction;
             } 
+            if($slug == "properties"){
+                $properties = Property::inRandomOrder()->paginate(6);
+            }
             return view($pages[$slug],compact('properties'));
-        }
+        } 
          // Handle referral links
          if (strpos($slug, 'referral/') == 0) {
             $referralCode = explode('/', $slug);

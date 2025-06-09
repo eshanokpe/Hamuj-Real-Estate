@@ -204,6 +204,7 @@ Route::prefix('admin')->group(function () {
             Route::get('user/{id}/show', [UserController::class, 'edit'])->name('users.show');
             Route::put('user/{id}/', [UserController::class, 'update'])->name('users.update');
             Route::get('user/delete/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+            Route::patch('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active');
         });
 
        Route::get('buy/index', [BuyController::class, 'index'])->name('admin.buy');

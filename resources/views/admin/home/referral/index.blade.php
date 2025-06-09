@@ -50,9 +50,10 @@
                                     </thead>
                                     <tbody> 
                                         @forelse ($referrals as $referral)
-                                        @php $index = $loop->index; @endphp
+                                        @php $index = ($referrals->currentPage() - 1) * $referrals->perPage() + $loop->index + 1; @endphp
+
                                             <tr>
-                                                <td><strong>{{  $index + 1 }}</strong></td>
+                                                <td><strong>{{  $index }}</strong></td>
                                                 <!-- Referrer (the one who referred someone) -->
                                                 <td style="text-transform: uppercase;">
                                                     {{ $referral->referrer->first_name ?? '' }} {{ $referral->referrer->last_name ?? '' }}
