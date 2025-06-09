@@ -337,7 +337,7 @@
                             
                             <div class="notification__list p-3">
                                 @forelse ($notificationsBar as $notification)
-                                {{$notification['data']['notification_status']}}
+                                {{-- {{$notification['data']['notification_status']}} --}}
                                     <div class="notification__item {{ $notification->read_at ? 'unread' : '' }}">
                                         <a href="{{ route('user.notifications.show', encrypt($notification->id)) }}" 
                                             class="notification__link mark-as-read" 
@@ -362,6 +362,8 @@
                                                     @include('.user/partial/notifications/referralConnection')
                                                 @elseif($notification['data']['notification_status'] == 'recipientSubmittedNotification' || $notification['data']['notification_status'] == 'Recipient Submitted Notification')
                                                     @include('.user/partial/notifications/recipientSubmittedNotification')
+                                                @elseif($notification['data']['notification_status'] == 'referral_commission' || $notification['data']['notification_status'] == 'Recipient Submitted Notification')
+                                                    @include('.user/partial/notifications/referralCommission')
                                                 @elseif($notification['data']['notification_status'] == 'new_referral')
                                                     @include('.user/partial/notifications/new_referral')
                                                 @elseif($notification['data']['notification_status'] == 'WalletFundedNotification' || $notification['data']['notification_status'] == 'walletFundedNotification' || $notification['data']['notification_status'] == 'Wallet Funded Notification')
