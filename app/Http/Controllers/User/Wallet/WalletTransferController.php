@@ -70,7 +70,7 @@ class WalletTransferController extends Controller
                 'message' => 'Insufficient wallet balance.',
             ]);
         } 
-        
+           
         $transferResponse = $this->processTransfer($validated); 
         if ($transferResponse['status'] === 'success') {
             
