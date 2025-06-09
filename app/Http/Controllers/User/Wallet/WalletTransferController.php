@@ -77,32 +77,36 @@ class WalletTransferController extends Controller
                 Log::info('Transfer successful. Wallet updated.', $transferResponse['data']);
 
                 // Log the transaction
+                // Log the transaction
                 $transaction = WalletTransaction::create([
                     'user_id' => $user->id,
                     'wallet_id' => $userWallet->id,
                     'type' => 'transfer', 
-                    'currency' => $transferResponse['data']['currency'],
-                    'accountName' => $validated['account_number']??'',
-                    'transfer_code' => $validated['transfer_code']??'',
-                    'bankName' => $validated['bankName']??'',
+                    'currency' => $transferResponse['currency'] ?? 'NGN', // Taken directly from response
+                    'accountName' => $validated['accountName'] ?? '', // Changed from account_number to accountName
+                    'transfer_code' => $transferResponse['transfer_code'] ?? '', // From response, not validated
+                    'bankName' => $validated['bankName'] ?? '',
                     'amount' => $transferAmount,
                     'recipient_code' => $validated['recipient_code'],
-                    'reason' => $validated['reason'],
-                    'status' => 'success',
-                    'metadata' => $transferResponse, // Store the Paystack response
-                ]); 
+                    'reason' => $validated['reason'] ?? 'Payment', // Default to 'Payment' if not provided
+                    'status' => $transferResponse['status'] ?? 'success', // Use status from response
+                    'metadata' => $transferResponse,
+                ]);
+
+                // Trigger the notification 
                 
                 // $user->notify(new WalletTransferNotification(
                 //     $amount, $newBalance, $reference));
+                Log::error('Wallet  transfer success.', $transaction);
 
                 // Send success notification
-                // $user->notify(new WalletTransferNotification(
-                //     'Transfer Successful',
-                //     'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
-                //     true,
-                //     $transaction
-                // ));
-                Log::error('Wallet balance mismatch after transfer.', $transaction);
+                $user->notify(new WalletTransferNotification(
+                    'Transfer Successful',
+                    'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['accountName'].' was successful.',
+                    true,
+                    $transaction
+                ));
+                Log::error('Notification.', $transaction);
                  
 
                 return response()->json([
