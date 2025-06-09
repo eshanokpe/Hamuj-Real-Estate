@@ -346,8 +346,8 @@
                                             data-property-mode="{{ $notification->data['property_mode'] ?? '' }}">
             
                                             <div class="notification__content">
-                                                {{$notification['data']['notification_status']}}
-                                                @if(in_array($notification['data']['notification_status'], ['PropertyValuationNotification', 'PropertyValuationPredictionNotification','propertyValuationPredictionNotification']))
+                                                {{-- {{$notification['data']['notification_status']}} --}}
+                                                @if(in_array($notification['data']['notification_status'], ['PropertyValuationNotification', 'PropertyValuationPredictionNotification','propertyValuationPredictionNotification','walletTransferNotification']))
                                                     @include('.user/partial/notifications/propertyValuationPredictionNotification')
  
                                                 @elseif($notification['data']['notification_status'] == 'sellPropertyUserNotification')
