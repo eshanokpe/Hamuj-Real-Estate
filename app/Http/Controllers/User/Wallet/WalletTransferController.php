@@ -94,10 +94,13 @@ class WalletTransferController extends Controller
                 ]);
 
                 // Trigger the notification 
-                
-                // $user->notify(new WalletTransferNotification(
-                //     $amount, $newBalance, $reference));
-                Log::error('Wallet  transfer success.', $transaction);
+                Log::info('Transfer successful', [
+                    'transaction_id' => $transaction->id,
+                    'amount' => $transferAmount,
+                    'recipient' => $validated['accountName'],
+                    'reference' => $transferResponse['reference'],
+                    'wallet_balance' => $userWallet->balance
+                ]);
 
                 // Send success notification
                 $user->notify(new WalletTransferNotification(
