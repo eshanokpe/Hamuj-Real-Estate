@@ -28,7 +28,7 @@
                                     <th style="width: 20%; padding: 5px;">Details</th>
                                     <th style="width: 15%; padding: 5px;">Amount</th>
                                     <th style="width: 15%; padding: 5px;">Date</th>
-                                    <th style="width: 10%; padding: 5px;">Status</th>
+                                    {{-- <th style="width: 10%; padding: 5px;">Status</th> --}}
                                     <th style="width: 10%; padding: 5px;">Action</th>
                                 </tr>
                             </thead>
@@ -107,11 +107,11 @@
                                                 @endif
                                             </span>
                                         </td>
-                                        <td style="padding: 5px;">
+                                        {{-- <td style="padding: 5px;">
                                             <button class="btn btn-{{ $statusClass }} btn-sm">
                                                 {{ ucfirst($status) }}
                                             </button>
-                                        </td>   
+                                        </td>    --}}
                                         <td style="padding: 5px;">
                                             <div class="btn-group btn-group-sm">
                                                 <a href="{{ route('user.transaction.download', $transaction['id']) }}"
