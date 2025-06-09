@@ -94,13 +94,13 @@ class WalletTransferController extends Controller
                 ]);
 
                 // Trigger the notification 
-                Log::info('Transfer successful', [
-                    'transaction_id' => $transaction->id,
-                    'amount' => $transferAmount,
-                    'recipient' => $validated['accountName'],
-                    'reference' => $transferResponse['reference'],
-                    'wallet_balance' => $userWallet->balance
-                ]);
+                // Log::info('Transfer successful', [
+                //     'transaction_id' => $transaction->id,
+                //     'amount' => $transferAmount,
+                //     'recipient' => $validated['accountName'],
+                //     'reference' => $transferResponse['reference'],
+                //     'wallet_balance' => $userWallet->balance
+                // ]);
 
                 // Send success notification
                 $user->notify(new WalletTransferNotification(
@@ -109,7 +109,7 @@ class WalletTransferController extends Controller
                     true,
                     $transaction
                 ));
-                Log::info('Notification.', $transaction);
+                // Log::info('Notification.', $transaction);
                  
 
                 return response()->json([
@@ -118,7 +118,7 @@ class WalletTransferController extends Controller
                     'redirect_url' => route('user.wallet.index')
                 ]);
             } else {
-                Log::info('Wallet balance mismatch after transfer.');
+                // Log::info('Wallet balance mismatch after transfer.');
                 return response()->json(['status' => 'error', 'message' => 'Insufficient wallet balance.'], 400);
             }
         } else {
