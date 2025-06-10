@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\WalletController  as PayStackWalletController;
 use Illuminate\Support\Facades\Http;
 use App\Services\TransferService;
+use App\Models\Transaction;
 use App\Notifications\WalletTransferNotification;
 
 class WalletTransferController extends Controller
