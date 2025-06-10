@@ -111,7 +111,7 @@ class WalletController extends Controller
         return response()->json(['account_name' => $validated['bank_code'] ]); // Example
     }
  
-    public function paymentHistory(){
+    public function paymentHistory(Request $request){
        $user = Auth::user();
         
         // Get wallet transactions
