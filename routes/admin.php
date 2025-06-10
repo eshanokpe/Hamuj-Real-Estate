@@ -197,7 +197,7 @@ Route::prefix('admin')->group(function () {
                 Route::get('/sociallinks/index', [SociallinkController::class, 'index'])->name('socialLink.index');
                 Route::post('/settings/store/social-links', [SociallinkController::class, 'storeSocialLinks'])->name('settings.storeSocialLinks');
                 Route::put('/settings/update/social-links/{id}', [SociallinkController::class, 'updateSocialLinks'])->name('settings.updateSocialLinks');
-        });
+        }); 
 
         Route::name('admin.')->group(function () {
             Route::get('user/index', [UserController::class, 'index'])->name('users');

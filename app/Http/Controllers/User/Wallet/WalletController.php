@@ -16,7 +16,7 @@ class WalletController extends Controller
    
    
     public function index()
-    {
+    { 
         $user = Auth::user();
         
         // Get wallet transactions
@@ -144,7 +144,7 @@ class WalletController extends Controller
         ];
       
         return view('user.pages.wallet.payment.history', $data);
-    }
+    } 
 
     public function resolveAccount(Request $request) 
     {

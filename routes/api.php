@@ -15,7 +15,7 @@ use App\Http\Controllers\Api\PasscodeController;
 use App\Http\Controllers\Api\AuthMethodController;
 use App\Http\Controllers\Api\BuyPropertyController;
 use App\Http\Controllers\User\SecurityController;
-use App\Http\Controllers\User\Wallet\WalletTransferController;
+use App\Http\Controllers\User\Wallet\WalletTransferController; 
 use App\Http\Controllers\User\Wallet\WalletController;
 use App\Http\Controllers\Api\PropertyController as APIPropertyController;
 use App\Http\Controllers\Api\TransactionController as APITransactionController;
@@ -98,7 +98,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('create/recipient', [WalletTransferController::class, 'createRecipient']);
     Route::post('initiate/transfer', [WalletTransferController::class, 'initiateTransfer']);
     Route::get('get/wallet/transactions', [WalletTransferController::class, 'getWalletTransactions']);
-
+ 
     //Referral
     Route::get('get/referral', [ReferralController::class, 'index']); 
 
