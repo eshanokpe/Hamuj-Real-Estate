@@ -23,11 +23,11 @@ class TransactionController extends Controller
 
     public function index(Request $request){ 
         $user = Auth::user();
-
+  
         $data['transactions'] = Transaction::where('user_id', $user->id)
-        ->with('user') 
-        ->latest()
-        ->paginate(10);
+            ->where('email', $user->email)
+            ->whereIn('payment_method', ['transfer_property', 'buy_property'])
+            ->latest()->limit(5)->get();
 
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json([
@@ -46,8 +46,8 @@ class TransactionController extends Controller
             $paymentDetails = $this->paystack->transaction->verify([
                 'reference' => $request->get('reference'),
                 'trxref' => $request->get('trxref'),
-            ]);
-            dd($paymentDetails->data);
+            ]); 
+            // dd($paymentDetails->data);
             $property = Property::find($paymentDetails->data->property_id);
             if (!$property) {
                 return redirect()->back()->with('error', 'Property not found.');

@@ -10,7 +10,7 @@ use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\PropertyController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\NotificationController; 
-use App\Http\Controllers\User\TransactionController;
+use App\Http\Controllers\User\TransactionController; 
 use App\Http\Controllers\Api\PasscodeController;
 use App\Http\Controllers\Api\AuthMethodController;
 use App\Http\Controllers\Api\BuyPropertyController;

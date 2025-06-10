@@ -60,9 +60,10 @@ class DashboardController extends Controller
                 'totalAmount' => $data['totalPropertyAmount'], 
                 'totalPropertyAmount' => $data['totalPropertyAmount'],
                 'totalAssets' => $data['totalTransactionsAssets'],
-            ]);
-        } 
- 
+                'transactions' => $data['transactions'],
+            ]); 
+        }  
+  
         return view('user.dashboard', $data); 
     }
 

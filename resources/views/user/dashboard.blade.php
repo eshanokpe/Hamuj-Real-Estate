@@ -196,7 +196,7 @@
                                     <td style="padding: 5px;">
                                         <span class="sales__report--body__text">{{ ucfirst($transaction->reference) }}</span>
                                     </td>
-                                    <td style="padding: 5px;">
+                                    <td style="padding: 5px;"> 
                                         <span class="sales__report--body__text">
                                             @if (strtolower($transaction->payment_method) === 'transfer_property')
                                                 Transfer Property 

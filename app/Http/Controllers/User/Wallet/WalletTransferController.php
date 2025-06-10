@@ -213,33 +213,7 @@ class WalletTransferController extends Controller
     //     ], 400);
     // }
 
-    public function getWalletTransactions(Request $request)
-    {
-        $user = $request->user(); 
-        // $transactions = $user->walletTransactions()->latest()->get();
-        // Get wallet transactions
-        $walletTransactions = WalletTransaction::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($item) {
-                return $item->toArray();
-            });
-
-        $paymentTransactions = Transaction::where('user_id', $user->id)
-            ->where('payment_method', 'dedicated_nuban')
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($item) {
-                return $item->toArray();
-            });
-
-        $transactions = $walletTransactions->concat($paymentTransactions)
-            ->sortByDesc('created_at')
-            ->take(10 )
-            ->values(); 
-
-        return response()->json($transactions);
-    } 
+   
 
    
 }
