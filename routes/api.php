@@ -97,7 +97,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('create/recipient', [WalletTransferController::class, 'createRecipient']);
     Route::post('initiate/transfer', [WalletTransferController::class, 'initiateTransfer']);
-    Route::get('get/wallet/transactions', [WalletTransferController::class, 'getWalletTransactions']);
+    Route::get('get/wallet/transactions', [WalletController::class, 'paymentHistory']);
  
     //Referral
     Route::get('get/referral', [ReferralController::class, 'index']); 

@@ -142,7 +142,10 @@ class WalletController extends Controller
             'hasMoreReferrals' => $user->referralsMade()->count() > 6,
             'transactions' => $transactions
         ];
-      
+        if ($request->wantsJson()) {
+            return response()->json($transactions);
+        }
+        
         return view('user.pages.wallet.payment.history', $data);
     } 
 
