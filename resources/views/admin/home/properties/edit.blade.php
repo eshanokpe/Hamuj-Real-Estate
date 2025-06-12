@@ -112,17 +112,17 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="launchPrice">Launch Price</label>
-                                    <input type="number" class="form-control" id="launchPrice" name="lunch_price" placeholder="Enter Launch Price" value="{{ $property->lunch_price ?? '' }}" required>
+                                    <input type="text" class="form-control" id="launchPrice" name="lunch_price" placeholder="Enter Launch Price" value="{{ $property->lunch_price ?? '' }}" required>
                                     @error('lunch_price')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
-                                
+                                  
                                 <div class="mb-3">
                                     <label for="currentPrice">Current Price</label>
-                                    <input type="number" class="form-control" id="currentPrice" name="price" placeholder="Enter Current Price" value="{{ $property->price ?? '' }}" required>
+                                    <input type="text" class="form-control" id="currentPrice" name="price" placeholder="Enter Current Price" value="{{ $property->price ?? '' }}" required>
                                     @error('price')
                                         <div class="invalid-feedback">
                                             {{ $message }}

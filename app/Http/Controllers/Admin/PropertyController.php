@@ -15,7 +15,7 @@ use App\Models\PropertyValuationPrediction;
 use App\Notifications\PropertyValuationNotification;
 use App\Notifications\PropertyValuationPredictionNotification;
 
- 
+  
 class PropertyController extends Controller
 {
      
@@ -316,11 +316,12 @@ class PropertyController extends Controller
             'brochure' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',
             'land_survey' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',
             'contract_deed' => 'nullable|file|image|mimes:jpeg,pdf,png,jpg|max:5048',
-            'video_link' => 'required|url|max:255',
-            'google_map' => 'required|url',
+            'video_link' => 'nullable|url|max:255', // Made nullable if it's optional
+            'google_map' => 'nullable|url',         // Made nullable if it's optional
             'status' => 'required|in:available,sold',
+            'updated_year' => 'required|digits:4|integer|min:1900|max:'.(date('Y')), // Added validation for year
         ]);
-        
+
         $year = $request->input('updated_year', Carbon::now()->year);
         $lunchPrice = $request->input('lunch_price');
         $newPrice = $request->input('price');
@@ -358,8 +359,9 @@ class PropertyController extends Controller
             'video_link' => $request->input('video_link'),
             'google_map' => $request->input('google_map'),
             'status' => $request->input('status'),
+            'year' => $request->input('updated_year'), // Ensure property's year attribute is updated
         ]);
-        
+
         if ($request->hasFile('property_images')) {
             if ($property->property_images && file_exists(public_path($property->property_images))) {
                 unlink(public_path($property->property_images));
