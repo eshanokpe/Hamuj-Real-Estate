@@ -154,7 +154,12 @@ class PropertyController extends Controller
         $data['marketValueSum'] = $data['valueSum']['marketValueSum'];
         $percentage_value = 0;
         if ($data['initialValueSum'] > 0) {
-            $percentage_value = ceil((($data['marketValueSum'] - $data['initialValueSum']) / $data['initialValueSum']) * 100);
+            $calculated_percentage = (($data['marketValueSum'] - $data['initialValueSum']) / $data['initialValueSum']) * 100;
+            $percentage_value = ceil($calculated_percentage);
+            // Correct -0.0 (negative zero) to 0.0 (positive zero)
+            if ($percentage_value === -0.0) {
+                $percentage_value = 0.0;
+            }
         }
         $data['percentageIncrease'] = $percentage_value;
 
@@ -180,7 +185,7 @@ class PropertyController extends Controller
     
         $data['valuationData'] = $valuationData;
         return view('user.pages.properties.valuation', $data);
-    }
+    } 
     
     private function calculateValuationSums($propertyValuations)
     {
