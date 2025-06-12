@@ -132,10 +132,14 @@
                                         <p>Start Monetizing Your Castle Today!</p>
                                         <div class="row">
                                             <div class="col-4">
-                                                <img class="https://apps.apple.com/us/app/dohmayn-technologies-limited/id6745321723" src="{{ asset('assets/img/button/AppStore2.png') }}" alt="APPSTORE" >
+                                                <a href="https://apps.apple.com/us/app/dohmayn-technologies-limited/id6745321723">
+                                                    <img class="" src="{{ asset('assets/img/button/AppStore2.png') }}" alt="APPSTORE" >
+                                                </a>
                                             </div>
                                             <div class="col-4">
-                                                <img class="https://play.google.com/store/apps/details?id=com.dohmayntechnologieslimited.dohmayn" src="{{ asset('assets/img/button/GooglePlay2.png') }}" alt="PlaySTORE" >
+                                                <a href="https://play.google.com/store/apps/details?id=com.dohmayntechnologieslimited.dohmayn">
+                                                    <img class="" src="{{ asset('assets/img/button/GooglePlay2.png') }}" alt="PlaySTORE" >
+                                                </a>
                                             </div>
                                         </div>
                                     </div>

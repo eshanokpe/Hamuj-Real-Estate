@@ -14,7 +14,7 @@
                 <div class="row add__property--heading mb-30">
                     <h2 class="add__property--heading__title text-start">Show Property</h2>
                     <div class="add__property--heading__title text-end">
-                        <a  
+                        <a   
                         style="max-width: 100%; width:200px; object-fit:contain"
                         href="{{ route('user.properties.history', encrypt($property->id)) }}"  class="mb-3 solid__btn add__property--btn ">
                             Property history

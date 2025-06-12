@@ -80,6 +80,7 @@
                                 @forelse ($propertyValuationPrediction as $item)
                                     <div class="row mb-3 d-flex justify-content-center">                                                
                                         <div class="col">
+                                            <p class="text-dark mb-1 fw-semibold"> {{  \Carbon\Carbon::parse($item->future_date)->format('d F, Y') }} </p>
                                             <p class="text-dark mb-1 fw-semibold">{{ $item->valuation_type }}</p>
                                             <h3 class="font-22 fw-bold">₦{{ number_format($item->future_market_value, 2) }}</h3> 
                                         </div>
@@ -90,7 +91,6 @@
                                                     <path d="M12 4l8 8h-6v8h-4v-8H4l8-8z"/>
                                                 </svg>
                                             </h3> 
-                                            <p class="text-dark mb-1 fw-semibold"> {{  \Carbon\Carbon::parse($item->created_at)->format('d F, Y') }} </p>
 
                                         </div>
                                     </div>
