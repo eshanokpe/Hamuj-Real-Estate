@@ -44,7 +44,7 @@
                          
                         <!-- Buy Properties Section -->
                         <li class="sidebar__dropdown--menu__items">
-                            <a class="sidebar__dropdown--menu__link" href="{{ route('user.properties') }}">Buy Properties</a>
+                            <a class="sidebar__dropdown--menu__link" href="{{ route('user.properties') }}">Buy Property</a>
                         </li>
                         <!-- Sell Property Section -->
                         <li class="sidebar__dropdown--menu__items">

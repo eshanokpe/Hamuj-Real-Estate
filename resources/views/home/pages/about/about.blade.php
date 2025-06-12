@@ -119,6 +119,40 @@
                     </div>
                 </div>
             </section>
+
+            <section class="contact__section ">
+            <div class="container">
+                <div class="contact__inner">
+                    <div class="contact__wrapper mt-50 mb-50 d-flex justify-content-center ">
+                        <div class="contact__us--map aos-init aos-animate " data-aos="fade-up" data-aos-duration="1200" data-aos-delay="150">
+                            <div class="accordion accordion-flush " id="accordionFlushExample">
+                            <div class="row align-items-center ">
+                                    <div class="col-6">
+                                        <h2>The One Property Investment You Truly Need!</h2>
+                                        <p>Start Monetizing Your Castle Today!</p>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <img class="https://apps.apple.com/us/app/dohmayn-technologies-limited/id6745321723" src="{{ asset('assets/img/button/AppStore2.png') }}" alt="APPSTORE" >
+                                            </div>
+                                            <div class="col-4">
+                                                <img class="https://play.google.com/store/apps/details?id=com.dohmayntechnologieslimited.dohmayn" src="{{ asset('assets/img/button/GooglePlay2.png') }}" alt="PlaySTORE" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <img class="" src="{{ asset('assets/img/button/AppMockUp.png') }}" alt="DOHMAYN APP" >
+
+                                    </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                </div>
+            </div>
+        </section>
             
         
             <!-- Testimonial section -->
