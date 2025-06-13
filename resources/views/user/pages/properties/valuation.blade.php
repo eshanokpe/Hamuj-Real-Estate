@@ -147,7 +147,7 @@
                             const diffMonths = Math.floor(diffDays / 30);
                             const diffYears = Math.floor(diffDays / 365);
 
-                            if (diffYears > 0) return `${diffYears} year${diffYears > 1 ? 's' : ''} ago`;
+                            if (diffYears > 0) return `${diffYears} yr${diffYears > 1 ? 's' : ''} ago`;
                             if (diffMonths > 0) return `${diffMonths} month${diffMonths > 1 ? 's' : ''} ago`;
                             return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
                         }
