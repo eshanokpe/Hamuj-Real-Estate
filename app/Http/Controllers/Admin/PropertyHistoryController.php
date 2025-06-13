@@ -31,6 +31,7 @@ class PropertyHistoryController extends Controller
         return view('admin.home.properties.propertyHistory.propertyHistory', $data);
     }
 
+
     public function store(Request $request)
     {
         // Validate the request
@@ -39,31 +40,31 @@ class PropertyHistoryController extends Controller
             'updated_price' => 'required|string|min:1',
         ]);
 
-        // Fetch the property and its most recent history
+        // Fetch the property and most recent price update
         $property = Property::findOrFail($validatedData['property_id']);
         $previous = $property->history()->latest()->first();
 
         // Clean and parse the updated price
         $updatedPrice = (float) str_replace(',', '', $validatedData['updated_price']);
 
-        // Set previous price and year
+        // Set previous price and date
         if ($previous) {
             $previousPriceValue = $previous->updated_price;
-            $previousYear = Carbon::parse($previous->updated_year)->year;
+            $previousYear = Carbon::parse($previous->updated_year)->toDateString(); // full date
         } else {
             $previousPriceValue = 0.00;
-            $previousYear = now()->subYear()->year;
+            $previousYear = now()->subYear()->startOfYear()->toDateString(); // e.g., '2023-01-01'
         }
 
-        // Calculate the percentage increase safely
+        // Calculate percentage increase
         $percentageIncrease = $previousPriceValue > 0
             ? (($updatedPrice - $previousPriceValue) / $previousPriceValue) * 100
             : 0;
 
-        // Use the current year or override if provided (ensure it's an integer)
-        $updatedYear = (int) $request->input('previous_year', now()->year);
+        // Use a full date (e.g., today)
+        $updatedYear = now()->toDateString(); // or $request->input('updated_year')
 
-        // Create the price update record
+        // Create the record
         PropertyPriceUpdate::create([
             'property_id' => $validatedData['property_id'],
             'previous_price' => $previousPriceValue,
@@ -73,12 +74,10 @@ class PropertyHistoryController extends Controller
             'updated_year' => $updatedYear,
         ]);
 
-        // Redirect back with success message
         return redirect()
             ->back()
             ->with('success', 'Property history updated successfully!');
     }
-
 
     public function destroy($id)
     {
