@@ -140,7 +140,7 @@ class PropertyController extends Controller
     {
         $propertyId = decrypt($id); 
         $data['property'] = Property::findOrFail($propertyId);
-        $data['propertyValuation'] = PropertyValuation::where('property_id', $data['property']->id)
+        $data['propertyValuation'] = PropertyValuation::where('property_id', 1)
         ->when(request('filter'), function ($query) {
             if ($year = request('filter')) {
                 return $query->whereYear('created_at', $year);
