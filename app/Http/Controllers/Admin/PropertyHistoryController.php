@@ -31,7 +31,6 @@ class PropertyHistoryController extends Controller
         return view('admin.home.properties.propertyHistory.propertyHistory', $data);
     }
 
-
     public function store(Request $request)
     {
         // Validate the request
