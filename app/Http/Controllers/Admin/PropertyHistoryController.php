@@ -37,35 +37,40 @@ class PropertyHistoryController extends Controller
         $validatedData = $request->validate([
             'property_id' => 'required|exists:properties,id',
             'updated_price' => 'required|string|min:1',
-        ]); 
+        ]);
 
-        // Fetch the property and previous price
+        // Fetch the property and its most recent history
         $property = Property::findOrFail($validatedData['property_id']);
         $previous = $property->history()->latest()->first();
 
+        // Clean and parse the updated price
         $updatedPrice = (float) str_replace(',', '', $validatedData['updated_price']);
 
+        // Set previous price and year
         if ($previous) {
-            $previousPriceValue = $previous->updated_price;  // Assuming "updated_price" is the previous price
-            $previousYear = $previous->updated_year;
+            $previousPriceValue = $previous->updated_price;
+            $previousYear = Carbon::parse($previous->updated_year)->year;
         } else {
             $previousPriceValue = 0.00;
             $previousYear = now()->subYear()->year;
         }
-        // Safely calculate percentage increase
-        $percentageIncrease = $previousPriceValue > 0
-        ? (($updatedPrice - $previousPriceValue) / $previousPriceValue) * 100
-        : 0;
-        $year = $request->input('previous_year', Carbon::now()->year);
 
-        
+        // Calculate the percentage increase safely
+        $percentageIncrease = $previousPriceValue > 0
+            ? (($updatedPrice - $previousPriceValue) / $previousPriceValue) * 100
+            : 0;
+
+        // Use the current year or override if provided (ensure it's an integer)
+        $updatedYear = (int) $request->input('previous_year', now()->year);
+
+        // Create the price update record
         PropertyPriceUpdate::create([
             'property_id' => $validatedData['property_id'],
             'previous_price' => $previousPriceValue,
             'previous_year' => $previousYear,
             'updated_price' => $updatedPrice,
             'percentage_increase' => $percentageIncrease,
-            'updated_year' => $year,
+            'updated_year' => $updatedYear,
         ]);
 
         // Redirect back with success message
@@ -73,6 +78,7 @@ class PropertyHistoryController extends Controller
             ->back()
             ->with('success', 'Property history updated successfully!');
     }
+
 
     public function destroy($id)
     {
