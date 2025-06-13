@@ -146,9 +146,11 @@ class PropertyController extends Controller
                 return $query->whereYear('created_at', $year);
             }
             return $query;
-        })
+        }) 
         ->orderBy('created_at', 'asc') 
         ->get(); 
+        dd($data['propertyValuation']);
+
         $data['initialValueSum'] = PropertyValuationSummary::where('property_id', $propertyId)->value('initial_value_sum') ?? 0;
         $data['valueSum'] = $this->calculateValuationSums($data['propertyValuation']);
         $data['marketValueSum'] = $data['valueSum']['marketValueSum'];
