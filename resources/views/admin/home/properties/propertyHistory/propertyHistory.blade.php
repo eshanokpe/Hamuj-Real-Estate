@@ -152,7 +152,7 @@
                                                 <input type="data" class="form-control" 
                                                     {{-- value="₦{{ number_format($actualPreviousPrice, 2) }}"  --}}
                                                     id="previous_price_display"
-                                                    name="previous_year" disabled>
+                                                    name="previous_year" >
                                                 {{-- <select name="previous_year" id="previous_year" class="form-select" required>
                                                     @php
                                                         $currentYear = now()->year;
