@@ -57,7 +57,7 @@
                                                 <div class="row">
                                                     <div class="mb-3">
                                                         <label for="exampleInputEmail1">Enter Year</label>
-                                                        <input type="date" class="form-control" name="updated_year" value="{{ $propertyHistory->updated_year}}" placeholder="Enter Year" min="1900" max="2099" step="1" required>
+                                                        <input type="number" class="form-control" name="updated_year" value="{{ $propertyHistory->updated_year}}" placeholder="Enter Year" min="1900" max="2099" step="1" required>
                                                         @error('updated_year')
                                                             <div class="invalid-feedback">
                                                                 {{ $message }}
