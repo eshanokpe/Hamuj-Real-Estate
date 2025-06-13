@@ -63,7 +63,7 @@ class PropertyController extends Controller
                 'neighborhoods' => $data['neighborhoods'],
                 'propertyValuation' => $data['propertyValuation'],
                 'propertyValuationPrediction' => $data['propertyValuationPrediction'],
-                'price_updates' => $data['property']->priceUpdates,
+                'property_history' => $data['property']->priceUpdates,
                 'valuationChatData' => $data['valuationData'],
               
             ]);
