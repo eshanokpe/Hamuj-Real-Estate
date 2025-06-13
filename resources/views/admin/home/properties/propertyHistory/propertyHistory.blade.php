@@ -149,7 +149,7 @@
                                         <div class="row"> 
                                             <div class="mb-3">
                                                 <label for="previous_year">Previous Year</label>
-                                                <input type="data" class="form-control" 
+                                                <input type="date" class="form-control" 
                                                     {{-- value="₦{{ number_format($actualPreviousPrice, 2) }}"  --}}
                                                     id="previous_price_display"
                                                     name="previous_year" >
