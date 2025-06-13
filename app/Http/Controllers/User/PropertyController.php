@@ -141,12 +141,9 @@ class PropertyController extends Controller
         $propertyId = decrypt($id); 
         $data['property'] = Property::findOrFail($propertyId);
         $data['propertyValuation'] = PropertyValuation::where('property_id', $data['property']->id)
-        // ->when(request('filter'), function ($query) {
-        //     if ($year = request('filter')) {
-        //         return $query->whereYear('created_at', $year);
-        //     }
-        //     return $query;
-        // }) 
+        ->when(request('filter'), function ($query, $yearFilter) {
+            return $query->whereYear('created_at', $yearFilter);
+        })
         ->orderBy('created_at', 'asc') 
         ->get(); 
         dd($data['propertyValuation']);
