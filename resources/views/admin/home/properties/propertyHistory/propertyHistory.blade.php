@@ -85,8 +85,8 @@
                                                     <div class="">
                                                         <td> 
                                                             <div class="p-2">
-                                                                <span class="apartment__info--title">{{ $item->updated_year}}</span>
-                                                                </div>
+                                                                <span class="apartment__info--title">{{ \Carbon\Carbon::parse($item->updated_year)->format('d F, Y')  }}</span>
+                                                                </div> 
                                                         </td>
                                                         <td>
                                                             <div  style="padding-left: 20px">

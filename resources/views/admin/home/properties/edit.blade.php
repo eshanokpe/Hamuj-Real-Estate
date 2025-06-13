@@ -19,7 +19,7 @@
                     <!--end page-title-box-->
                 </div>
                 <!--end col-->
-            </div>
+            </div> 
             <!-- end page title end breadcrumb -->
             <div class="card">
                 <div class="card-header">
