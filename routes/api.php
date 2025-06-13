@@ -27,7 +27,7 @@ use App\Http\Controllers\User\HelpSupportController;
 use App\Http\Controllers\User\RevolutPaymentController;
 use App\Http\Controllers\User\CartController;
 
-
+ 
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -70,8 +70,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
  
 
-    Route::get('/properties/{id}', [APIPropertyController::class, 'propertiesShow']);
-
+    Route::get('/properties/{id}', [APIPropertyController::class, 'propertiesShow']); 
+ 
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::get('/wallet/balance', [APIWalletController::class, 'getBalance']);
     Route::post('/wallet/deduct', [APIWalletController::class, 'deductBalance']);

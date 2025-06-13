@@ -141,16 +141,9 @@ class PropertyController extends Controller
         $propertyId = decrypt($id); 
         $data['property'] = Property::findOrFail($propertyId);
         $data['propertyValuation'] = PropertyValuation::where('property_id', $data['property']->id)
-        // ->when(request('filter'), function ($query) {
-        //     if ($year = request('filter')) {
-        //         return $query->whereYear('created_at', $year);
-        //     }
-        //     return $query;
-        // }) 
         ->orderBy('created_at', 'asc') 
         ->get(); 
-        // dd($data['propertyValuation']);
-
+     
         $data['initialValueSum'] = PropertyValuationSummary::where('property_id', $propertyId)->value('initial_value_sum') ?? 0;
         $data['valueSum'] = $this->calculateValuationSums($data['propertyValuation']);
         $data['marketValueSum'] = $data['valueSum']['marketValueSum'];
@@ -168,26 +161,19 @@ class PropertyController extends Controller
        
 
         $data['propertyValuationPrediction'] = PropertyValuationPrediction::where('property_id', $data['property']->id)
-        // ->when(request('filter'), function ($query) {
-        //     if ($year = request('filter')) {
-        //         return $query->whereYear('created_at', $year);
-        //     }
-        //     return $query;
-        // })
         ->orderBy('created_at', 'asc') 
         ->get();
     
     
-
         // Prepare the data for the chart
         $valuationData = $data['property']->priceUpdates->sortBy('created_at'); // Sort chronologically
-
+ 
         $chartData = $valuationData->map(function ($update) {
             return [
                 'date' => $update->updated_year, // e.g., "2024-Dec-03"
                 'price' => number_format((float)$update->updated_price, 2, '.', ','),
             ];
-        })->values();
+        })->values(); 
 
         $data['valuationData'] = $chartData;
         

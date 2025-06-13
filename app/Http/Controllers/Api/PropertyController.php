@@ -30,14 +30,15 @@ class PropertyController extends Controller
         }); 
 
         $data['propertyValuation'] = PropertyValuation::where('property_id', $data['property']->id)
-        ->when(request('filter'), function ($query) {
-             if ($year = request('filter')) {
-                return $query->whereYear('created_at', $year);
-            }
-            return $query;
-        })
+        // ->when(request('filter'), function ($query) {
+        //      if ($year = request('filter')) {
+        //         return $query->whereYear('created_at', $year);
+        //     }
+        //     return $query;
+        // })
         ->orderBy('created_at', 'asc') 
         ->get(); 
+        
         $data['propertyValuationPrediction'] = PropertyValuationPrediction::where('property_id', $data['property']->id)
         ->when(request('filter'), function ($query) {
             if ($year = request('filter')) {
@@ -48,7 +49,7 @@ class PropertyController extends Controller
         ->orderBy('created_at', 'asc') 
         ->get();
  
-        if (request()->wantsJson()) {
+        if (request()->wantsJson()) { 
             return response()->json([
                 'property' => $data['property'],
                 'valuation_summary' => $data['property']->valuationSummary,

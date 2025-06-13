@@ -96,7 +96,6 @@ class PropertyHistoryController extends Controller
     }
 
     public function update(Request $request, $id){
-        // dd($request->all());
         $validatedData = $request->validate([
             'updated_year' =>'required|string',
             'previous_price' => 'required|string',
