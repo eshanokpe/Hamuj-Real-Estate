@@ -149,18 +149,21 @@
                                         <div class="row"> 
                                             <div class="mb-3">
                                                 <label for="previous_year">Previous Year</label>
-                                                <select name="previous_year" id="previous_year" class="form-select" required>
+                                                <input type="data" class="form-control" 
+                                                    {{-- value="₦{{ number_format($actualPreviousPrice, 2) }}"  --}}
+                                                    id="previous_price_display"
+                                                    name="previous_year" disabled>
+                                                {{-- <select name="previous_year" id="previous_year" class="form-select" required>
                                                     @php
                                                         $currentYear = now()->year;
                                                         $startYear = 2004;
                                                     @endphp
-                                            
                                                     @for ($year = $startYear; $year <= $currentYear; $year++)
                                                         <option value="{{ $year }}" {{ $year == $actualPreviousYear ? 'selected' : '' }}>
                                                             {{ $year }}
                                                         </option>
                                                     @endfor
-                                                </select>
+                                                </select> --}}
                                             
                                                 @error('previous_year')
                                                     <div class="invalid-feedback">
