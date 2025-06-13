@@ -175,9 +175,9 @@ class PropertyController extends Controller
             ];
         })->values(); 
 
-        $data['valuationData'] = $chartData;
+        $data['valuationData'] = $chartData; 
         
-
+        
         return view('user.pages.properties.valuation', $data);
     } 
     

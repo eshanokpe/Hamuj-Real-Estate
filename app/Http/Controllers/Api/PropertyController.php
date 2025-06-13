@@ -30,15 +30,10 @@ class PropertyController extends Controller
         }); 
 
         $data['propertyValuation'] = PropertyValuation::where('property_id', $data['property']->id)
-        // ->when(request('filter'), function ($query) {
-        //      if ($year = request('filter')) {
-        //         return $query->whereYear('created_at', $year);
-        //     }
-        //     return $query;
-        // })
+      
         ->orderBy('created_at', 'asc') 
         ->get(); 
-        
+
         $data['propertyValuationPrediction'] = PropertyValuationPrediction::where('property_id', $data['property']->id)
         ->when(request('filter'), function ($query) {
             if ($year = request('filter')) {
@@ -47,7 +42,19 @@ class PropertyController extends Controller
             return $query;
         })
         ->orderBy('created_at', 'asc') 
-        ->get();
+        ->get(); 
+
+        // Prepare the data for the chart
+        $valuationData = $data['property']->priceUpdates->sortBy('created_at'); // Sort chronologically
+ 
+        $chartData = $valuationData->map(function ($update) {
+            return [
+                'date' => $update->updated_year, // e.g., "2024-Dec-03"
+                'price' => number_format((float)$update->updated_price, 2, '.', ','),
+            ];
+        })->values(); 
+
+        $data['valuationData'] = $chartData; 
  
         if (request()->wantsJson()) { 
             return response()->json([
@@ -56,7 +63,9 @@ class PropertyController extends Controller
                 'neighborhoods' => $data['neighborhoods'],
                 'propertyValuation' => $data['propertyValuation'],
                 'propertyValuationPrediction' => $data['propertyValuationPrediction'],
-                'price_updates' => $data['property']->priceUpdates 
+                'price_updates' => $data['property']->priceUpdates,
+                'valuationChatData' => $data['valuationData'],
+              
             ]);
         }
     }
