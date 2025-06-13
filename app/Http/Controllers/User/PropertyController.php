@@ -153,7 +153,7 @@ class PropertyController extends Controller
         $data['valueSum'] = $this->calculateValuationSums($data['propertyValuation']);
         $data['marketValueSum'] = $data['valueSum']['marketValueSum'];
         $percentage_value = 0;
-        if ($data['initialValueSum'] > 0) {
+        if ($data['initialValueSum'] > 0) { 
             $calculated_percentage = (($data['marketValueSum'] - $data['initialValueSum']) / $data['initialValueSum']) * 100;
             $percentage_value = ceil($calculated_percentage);
             // Correct -0.0 (negative zero) to 0.0 (positive zero)
@@ -175,15 +175,20 @@ class PropertyController extends Controller
         ->orderBy('created_at', 'asc') 
         ->get();
     
-        // Prepare the data for the chart
-        $valuationData = $data['propertyValuation']->map(function ($valuation) {
-            return [
-                'date' => $valuation->created_at->format('M, d'), 
-                'price' => number_format((float)$valuation->market_value, 2, '.', ','),
-            ];
-        });
     
-        $data['valuationData'] = $valuationData;
+
+        // Prepare the data for the chart
+        $valuationData = $data['property']->priceUpdates->sortBy('created_at'); // Sort chronologically
+
+        $chartData = $valuationData->map(function ($update) {
+            return [
+                'date' => $update->updated_year, // e.g., "2024-Dec-03"
+                'price' => number_format((float)$update->updated_price, 2, '.', ','),
+            ];
+        })->values();
+
+        $data['valuationData'] = $chartData;
+
         return view('user.pages.properties.valuation', $data);
     } 
     

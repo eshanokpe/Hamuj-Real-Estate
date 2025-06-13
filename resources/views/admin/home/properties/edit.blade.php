@@ -119,7 +119,7 @@
                                         </div>
                                     @enderror
                                 </div>
-                                  
+                                   
                                 <div class="mb-3">
                                     <label for="currentPrice">Current Price</label>
                                     <input type="text" class="form-control" id="currentPrice" name="price" placeholder="Enter Current Price" value="{{ $property->price ?? '' }}" required>
