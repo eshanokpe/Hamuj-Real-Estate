@@ -168,12 +168,12 @@ class PropertyController extends Controller
        
 
         $data['propertyValuationPrediction'] = PropertyValuationPrediction::where('property_id', $data['property']->id)
-        ->when(request('filter'), function ($query) {
-            if ($year = request('filter')) {
-                return $query->whereYear('created_at', $year);
-            }
-            return $query;
-        })
+        // ->when(request('filter'), function ($query) {
+        //     if ($year = request('filter')) {
+        //         return $query->whereYear('created_at', $year);
+        //     }
+        //     return $query;
+        // })
         ->orderBy('created_at', 'asc') 
         ->get();
     
