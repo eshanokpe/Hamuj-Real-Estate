@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <title>{{  $contactDetials->company_name }}</title>
   <meta name="description" content="">
+  @auth
+      <meta name="user-id" content="{{ auth()->id() }}">
+  @endauth
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -13,7 +17,6 @@
   <link rel="stylesheet" href="assets/css/plugins/swiper-bundle.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  
   <!-- Plugin css -->
   <link rel="stylesheet" href="{{ asset('assets/css/vendor/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{ asset('assets/css/plugins/swiper-bundle.min.css')}}">
@@ -23,15 +26,17 @@
   <!-- Custom Style CSS -->
   <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">
   <link rel="stylesheet" href="{{ asset('assets/css/rtl.css')}}">
+  <link rel="stylesheet" href="{{ asset('assets/css/chatWidget.css')}}">
 
-    <!-- Scripts -->
-    @viteReactRefresh
-    @vite('resources/js/app.jsx')
-    <!-- Add Toastr CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+  <!-- Scripts -->
+  @viteReactRefresh
+  @vite('resources/js/app.jsx')
+  <!-- Add Toastr CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 </head>
 
@@ -42,6 +47,7 @@
     @yield('content')
    
     @include('home.partial.footer')
+    @include('layouts.chatWidgetContainer')
     
 </body>
 </html>

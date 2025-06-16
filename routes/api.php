@@ -2,10 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\WalletController  as APIWalletController;
 use App\Http\Controllers\Auth\LoginController; 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\PropertyController;
 use App\Http\Controllers\User\DashboardController;
@@ -50,7 +50,7 @@ Route::post('deactivate-account', [AuthMethodController::class, 'deactivateAccou
  
 // Protected routes (authentication required)
 Route::middleware('auth:sanctum')->group(function () {
-     
+    // Route::post('/conversations/messages', [MessageController::class, 'store']);
     Route::get('/properties', [PropertyController::class, 'index']);
     Route::get('/buy/assets', [PropertyController::class, 'buy']);
     Route::get('/sell/assets', [SellPropertyController::class, 'index']);
@@ -120,7 +120,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/index', [HelpSupportController::class, 'contactSupport']);
     }); 
   
-    Route::post('logout', [AuthController::class, 'logout']);
     Route::get('/user-status/{id}', [DashboardController::class, 'checkStatus']);
 
     // Example of other protected routes

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Property;
 use App\Models\Neighborhood;
 use App\Models\Transaction;
+use App\Models\GuestUser;
 use Auth;
 
 class HomeController extends Controller
@@ -35,7 +36,7 @@ class HomeController extends Controller
     public function Properties()
     { 
         $properties = Property::inRandomOrder()->paginate(10);;
-        dd($propertie);
+        // dd($propertie);
         return view('home.pages.properties.properties', compact('properties')); 
     } 
 
@@ -61,6 +62,24 @@ class HomeController extends Controller
             return redirect()->route('home')->with('error', 'An unexpected error occurred.'.$e->getMessage());
         }
     }
+
+    public function guestInfo(Request $request)
+    {
+        $validated = $request->validate([
+            'session_id' => 'required|string',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255'
+        ]);
+        
+        $guest = GuestUser::updateOrCreate(
+            ['session_id' => $validated['session_id']],
+            $validated
+        );
+        
+        return response()->json($guest);
+    }
+
+    
 
     
 }

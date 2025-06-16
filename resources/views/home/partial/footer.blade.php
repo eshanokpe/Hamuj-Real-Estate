@@ -416,6 +416,8 @@
 
 <!-- Customscript js -->
 <script src="{{ asset('assets/js/script.js')}}"></script>
+<script src="{{ asset('assets/js/chat-widget.js')}}"></script>
+
 <style>
     /* Increase font size of Toastr */
     #toast-container > .toast {

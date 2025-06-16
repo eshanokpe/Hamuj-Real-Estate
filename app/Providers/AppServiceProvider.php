@@ -9,6 +9,7 @@ use Illuminate\Notifications\DatabaseNotification;
 
 use Auth;
 use App\Models\User;
+use App\Models\GuestUser;
 use App\Models\Faqs;
 use App\Models\Post;
 use App\Models\About;
@@ -19,7 +20,7 @@ use App\Models\Sociallink;
 use App\Models\MenuItem; 
 use App\Models\VisionMission;
 use App\Models\ContactDetials;
-
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,6 +42,26 @@ class AppServiceProvider extends ServiceProvider
      */ 
     public function boot() 
     {    
+        Relation::enforceMorphMap([
+            'guest' => \App\Models\GuestUser::class,
+            'registered' => \App\Models\User::class,
+        ]); 
+        // Fetch the latest conversation with related messages, user, and admin
+        $conversation = \App\Models\Conversation::with([
+            'messages' => function($query) {
+            $query->orderBy('created_at', 'asc');
+            },
+            'user',
+            'admin'
+        ])->latest()->first();
+
+        View::share('conversation', $conversation);
+
+        $availableAdmins = User::where('is_admin', true)
+        ->where('id', '!=', optional($conversation->admin)->id)
+        ->get();
+        View::share('availableAdmins', $availableAdmins);
+
         View::share('menuItems', MenuItem::with('dropdownItems')->get()); 
         View::share('faqs', Faqs::all());  
         View::share('posts', Post::latest()->paginate(20)); 

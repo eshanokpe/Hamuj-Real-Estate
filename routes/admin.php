@@ -1,7 +1,10 @@
 <?php 
 
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Admin\AdminSupportController;
 use App\Http\Controllers\Admin\WalletController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\WalletTransactionController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\ReferralController;
@@ -22,8 +25,9 @@ use App\Http\Controllers\Admin\PropertyHistoryController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 
     
-Route::redirect('/admin/dashboard', '/admin');
-// Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.index');
+Route::redirect('/admin', '/admin/dashboard');
+
+Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.index');
 
 Route::prefix('admin')->group(function () { 
     Route::get('/login', [AdminLoginController::class, 'showLogin'])->name('admin.login');
@@ -150,7 +154,7 @@ Route::prefix('admin')->group(function () {
             Route::put('{id}/transfer', [TransferController::class, 'update'])->name('transfer.update');
             Route::delete('{id}/transfer', [TransferController::class, 'destroy'])->name('transfer.destroy');
         });
-
+ 
         Route::name('admin.')->group(function () {
             Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
             Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
@@ -199,13 +203,30 @@ Route::prefix('admin')->group(function () {
                 Route::put('/settings/update/social-links/{id}', [SociallinkController::class, 'updateSocialLinks'])->name('settings.updateSocialLinks');
         }); 
 
-        Route::name('admin.')->group(function () {
+        Route::name('admin.')->group(function () { 
             Route::get('user/index', [UserController::class, 'index'])->name('users');
             Route::get('user/{id}/show', [UserController::class, 'edit'])->name('users.show');
             Route::put('user/{id}/', [UserController::class, 'update'])->name('users.update');
             Route::get('user/delete/{id}', [UserController::class, 'destroy'])->name('users.destroy');
             Route::patch('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active');
         });
+
+       
+        // Support routes 
+        Route::get('/support', [AdminSupportController::class, 'index'])->name('admin.support.index');
+        Route::get('/support/{conversation}', [AdminSupportController::class, 'show'])->name('admin.support.show');
+        
+        // Conversation routes - removed the nested prefix
+        Route::get('/conversations', [AdminSupportController::class, 'index'])->name('admin.conversations.index');
+        Route::get('/conversations/{conversation}', [AdminSupportController::class, 'show'])->name('admin.conversations.show');
+        Route::post('/conversations/{conversation}/messages', [AdminSupportController::class, 'storeMessage'])->name('admin.conversations.messages.store');
+        
+        Route::post('/conversations/{conversation}/assign', [AdminSupportController::class, 'assignAdmin'])
+        ->name('admin.conversations.assign');
+
+        Route::patch('/conversations/{conversation}/close', [AdminSupportController::class, 'closeConversation'])->name('admin.conversations.close');
+        Route::patch('/conversations/{conversation}/reopen', [AdminSupportController::class, 'reopenConversation'])->name('admin.conversations.reopen');
+        
 
        Route::get('buy/index', [BuyController::class, 'index'])->name('admin.buy');
        Route::get('transfer/index', [Transferontroller::class, 'index'])->name('admin.transfer');

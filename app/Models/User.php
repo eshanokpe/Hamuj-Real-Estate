@@ -12,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
- 
+  
     public const AUTH_METHOD_PIN = 'pin';
     public const AUTH_METHOD_BIOMETRIC = 'biometric';
     public const AUTH_METHOD_BOTH = 'both';
@@ -54,6 +54,8 @@ class User extends Authenticatable
         'hide_balance' => 'boolean',
         'last_login_at' => 'datetime',
         'dob' => 'date',
+        'is_admin' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public function isOnline()
@@ -61,6 +63,16 @@ class User extends Authenticatable
         return Cache::has('user-is-online-' . $this->id);
     }
 
+    public function scopeAdmins($query)
+    {
+        return $query->where('is_admin', true)->where('is_active', true);
+    }
+
+    public function isAdministrator(): bool
+    {
+        return $this->is_admin && $this->is_active;
+    }
+ 
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
