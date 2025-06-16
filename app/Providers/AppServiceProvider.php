@@ -62,10 +62,13 @@ class AppServiceProvider extends ServiceProvider
 
         View::share('conversation', $conversation);
 
-        
-        $availableAdmins = User::where('is_admin', true)
-        ->where('id', '!=', optional($conversation->admin)->id)
-        ->get();
+        if ($conversation && $conversation->admin) {
+            $availableAdmins = User::where('is_admin', true)
+                ->where('id', '!=', $conversation->admin->id)
+                ->get();
+        } else {
+            $availableAdmins = User::where('is_admin', true)->get();
+        }
          
         View::share('availableAdmins', $availableAdmins);
 
