@@ -62,9 +62,14 @@ class AppServiceProvider extends ServiceProvider
 
         View::share('conversation', $conversation);
 
-        $availableAdmins = User::where('is_admin', true)
-        ->where('id', '!=', optional($conversation->admin)->id)
-        ->get();
+        if (\Schema::hasTable('conversations')) {
+            $availableAdmins = User::where('is_admin', true)
+            ->where('id', '!=', optional($conversation->admin)->id)
+            ->get();
+         } else {
+            $conversation = null;
+            $availableAdmins = null;
+        }
         View::share('availableAdmins', $availableAdmins);
 
         View::share('menuItems', MenuItem::with('dropdownItems')->get()); 
