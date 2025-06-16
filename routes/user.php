@@ -41,7 +41,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/transactions', [DashboardController::class, 'transactionReport'])->name('transactions');
 
     Route::get('/transaction/report', [TransactionController::class, 'index'])->name('transactions.index');
-    // Route::get('/transaction/show/{id}', [TransactionController::class, 'show'])->name('transaction.show');
+    Route::get('/transaction/show/{id}', [TransactionController::class, 'show'])->name('transaction.show');
     Route::get('/transaction/{id}/download', [WalletController::class, 'download'])->name('transaction.download'); 
     Route::get('/transactions/{id}', [WalletController::class, 'show'])->name('transaction.show');
     
