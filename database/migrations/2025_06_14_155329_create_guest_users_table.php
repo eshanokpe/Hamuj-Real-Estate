@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('guest_users', function (Blueprint $table) {
-            $table->string('session_id')->primary();
+            $table->string('session_id', 191)->primary();
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('ip_address')->nullable();
