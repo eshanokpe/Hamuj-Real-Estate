@@ -66,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
         //     $availableAdmins = User::where('is_admin', true)
         //     ->where('id', '!=', optional($conversation->admin)->id)
         //     ->get();
-        //  } else {
+        //  } else {  
         //     $conversation = null;
         //     $availableAdmins = null;
         // }
