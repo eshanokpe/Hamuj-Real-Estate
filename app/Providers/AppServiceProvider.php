@@ -46,14 +46,19 @@ class AppServiceProvider extends ServiceProvider
             'guest' => \App\Models\GuestUser::class,
             'registered' => \App\Models\User::class,
         ]); 
+
         // Fetch the latest conversation with related messages, user, and admin
-        $conversation = \App\Models\Conversation::with([
-            'messages' => function($query) {
-            $query->orderBy('created_at', 'asc');
-            },
-            'user',
-            'admin'
-        ])->latest()->first();
+        if (\Schema::hasTable('conversations')) {
+            $conversation = \App\Models\Conversation::with([
+                'messages' => function($query) {
+                    $query->orderBy('created_at', 'asc');
+                },
+                'user',
+                'admin'
+            ])->latest()->first();
+        } else {
+            $conversation = null;
+        }
 
         View::share('conversation', $conversation);
 
