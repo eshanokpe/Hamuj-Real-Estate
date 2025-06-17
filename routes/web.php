@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\MessageController;
@@ -24,7 +25,7 @@ use App\Http\Controllers\Auth\VerificationController;
 require __DIR__.'/admin.php';
 require __DIR__.'/user.php';
  
-  
+Broadcast::routes(['middleware' => ['web']]);
 Route::get('/', [FrontendController::class, 'index'])->name('index');
 Route::get('/{page}', [PagesController::class, 'index'])->name('home.pages');
 

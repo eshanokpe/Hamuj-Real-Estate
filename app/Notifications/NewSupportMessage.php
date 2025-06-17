@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-
+ 
 class NewSupportMessage extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -23,7 +23,18 @@ class NewSupportMessage extends Notification implements ShouldQueue
 
     public function via($notifiable)
     {
-        return ['database', 'broadcast'];
+        return ['database', 'broadcast','mail'];
+    }
+
+    public function toMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+            ->subject('New Support Message Received')
+            ->line('You have received a new support message.')
+            ->line('From: ' . $this->getSenderName())
+            ->line('Message: ' . $this->message->content)
+            ->action('View Conversation', $this->getConversationUrl())
+            ->line('Thank you for using our application!');
     }
 
     public function toDatabase($notifiable)
@@ -47,8 +58,30 @@ class NewSupportMessage extends Notification implements ShouldQueue
         ]);
     }
 
-    public function toArray($notifiable)
+    public function toArray(object $notifiable): array
     {
-        return $this->toDatabase($notifiable);
+        return [
+            'message_id' => $this->message->id,
+            'conversation_id' => $this->message->conversation_id,
+            'content' => Str::limit($this->message->content, 100),
+            'sender_type' => $this->message->user_type,
+            'sender_name' => $this->getSenderName(),
+            'link' => $this->getConversationUrl(),
+            'created_at' => $this->message->created_at->toDateTimeString()
+        ];
+    }
+
+     protected function getSenderName(): string
+    {
+        if ($this->message->user_type === 'guest') {
+            return 'Guest User';
+        }
+
+        return $this->message->user->name ?? 'Registered User';
+    }
+
+    protected function getConversationUrl(): string
+    {
+        return route('admin.conversations.show', $this->message->conversation_id);
     }
 }

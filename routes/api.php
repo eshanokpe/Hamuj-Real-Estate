@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\Api\WalletController  as APIWalletController;
 use App\Http\Controllers\Auth\LoginController; 
 use App\Http\Controllers\Auth\RegisterController;
@@ -39,6 +40,7 @@ use App\Http\Controllers\User\CartController;
 |
 */
 
+Broadcast::routes(['middleware' => ['api']]);
 // Public routes (no authentication required)
 Route::post('register', [RegisterController::class, 'register']);
 Route::get('/check/email', [RegisterController::class, 'checkEmail']);

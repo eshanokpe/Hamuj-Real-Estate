@@ -25,7 +25,8 @@
             @if(isset($activeConversation))
                 @foreach($activeConversation->messages as $message)
                     <div class="message {{ ($message->user_type === 'guest' && $message->user_id === session()->getId()) || 
-                                      ($message->user_type === 'registered' && $message->user_id === auth()->id()) ? 'sent' : 'received' }}">
+                                      ($message->user_type === 'registered' && $message->user_id === auth()->id()) ? 'sent' : 'received' }}"
+                         data-message-id="{{ $message->id }}">
                         <div class="message-content">{{ $message->content }}</div>
                         <span class="message-time">{{ $message->created_at->format('h:i A') }}</span>
                     </div>
@@ -58,7 +59,7 @@
         
         <!-- Message Input -->
         <div class="chat-input-container">
-            <form id="chatWidgetForm" class="chat-widget-form" style="{{ auth()->check() ? '' : 'display: none;' }}">
+            <form id="chatWidgetForm" class="chat-widget-form" style="{{ auth()->check() || isset($activeConversation) ? '' : 'display: none;' }}">
                 @csrf
                 <div class="input-group">
                     <input type="text" id="chatMessageInput" class="form-control chat-message-input" 
@@ -81,7 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // State management
     const state = {
         isOpen: false,
-        isSubmitting: false
+        isSubmitting: false,
+        conversationId: @json($activeConversation->id ?? null)
     };
 
     // DOM elements
@@ -93,17 +95,26 @@ document.addEventListener('DOMContentLoaded', function() {
         messages: document.getElementById('chatMessages'),
         form: document.getElementById('chatWidgetForm'),
         input: document.getElementById('chatMessageInput'),
-        sendBtn: document.querySelector('.chat-send-button')
+        sendBtn: document.querySelector('.chat-send-button'),
+        guestName: document.getElementById('guestName'),
+        guestEmail: document.getElementById('guestEmail'),
+        saveGuestBtn: document.getElementById('saveGuestInfo')
     };
 
-    // Initialize Pusher if available
-    let pusher = null;
-    if (typeof Pusher !== 'undefined') {
-        pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
-            cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
-            forceTLS: true
-        });
-    }
+    // Initialize Pusher
+    const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
+        cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
+        forceTLS: true,
+        authEndpoint: '/broadcasting/auth',
+        auth: {
+            headers: {
+                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+                'X-Session-ID': '{{ session()->getId() }}' // For guest users
+            }
+        }
+    });
+
+   
 
     // User information
     const user = {
@@ -143,19 +154,21 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.location.hash === '#chat') {
             openChat();
         }
+        
+        // Auto-scroll to bottom on load
+        if (elements.messages) {
+            elements.messages.scrollTop = elements.messages.scrollHeight;
+        }
     }
 
     // Handle guest information
     function initGuestForm() {
         if (!user.isGuest) return;
 
-        const saveBtn = document.getElementById('saveGuestInfo');
-        if (!saveBtn) return;
-
-        saveBtn.addEventListener('click', function(e) {
+        elements.saveGuestBtn?.addEventListener('click', function(e) {
             e.preventDefault();
-            const name = document.getElementById('guestName').value.trim();
-            const email = document.getElementById('guestEmail').value.trim();
+            const name = elements.guestName.value.trim();
+            const email = elements.guestEmail.value.trim();
             const errorContainer = document.getElementById('guestValidationErrors');
             errorContainer.innerHTML = '';
             
@@ -197,6 +210,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function submitGuestInfo(name, email) {
         try {
+            elements.saveGuestBtn.disabled = true;
+            elements.saveGuestBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            
             const response = await fetch('/guest/info', {
                 method: 'POST',
                 headers: {
@@ -214,21 +230,41 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const data = await response.json();
             document.querySelector('.guest-info-prompt').style.display = 'none';
-            document.getElementById('chatWidgetForm').style.display = 'block';
+            elements.form.style.display = 'block';
+            
+            // Initialize conversation if we got one
+            if (data.conversation) {
+                state.conversationId = data.conversation.id;
+                initRealTimeUpdates();
+            }
+            
             openChat();
         } catch (error) {
             document.getElementById('guestValidationErrors').innerHTML = 
                 `<div class="error-item"><i class="fas fa-exclamation-circle"></i> Failed to save information. Please try again.</div>`;
             console.error('Error:', error);
+        } finally {
+            if (elements.saveGuestBtn) {
+                elements.saveGuestBtn.disabled = false;
+                elements.saveGuestBtn.innerHTML = 'Continue Chat';
+            }
         }
     }
 
     // Message handling
-    function addMessage(content, isSent, createdAt = null) {
+    function addMessage(content, isSent, createdAt = null, messageId = null) {
         if (!elements.messages) return;
+        
+        // Check if message already exists
+        if (messageId && document.querySelector(`[data-message-id="${messageId}"]`)) {
+            return;
+        }
         
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+        if (messageId) {
+            messageDiv.setAttribute('data-message-id', messageId);
+        }
         
         const displayTime = formatMessageTime(createdAt);
         
@@ -248,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         }
         
-        if (timestamp.includes('AM') || timestamp.includes('PM')) {
+        if (typeof timestamp === 'string' && (timestamp.includes('AM') || timestamp.includes('PM'))) {
             return timestamp;
         }
         
@@ -267,7 +303,9 @@ document.addEventListener('DOMContentLoaded', function() {
             state.isSubmitting = true;
             setSubmitState(true);
             
-            addMessage(messageContent, true);
+            // Add message optimistically
+            const tempMessageId = 'temp-' + Date.now();
+            addMessage(messageContent, true, new Date(), tempMessageId);
             
             const response = await fetch('/conversations/messages', {
                 method: 'POST',
@@ -278,17 +316,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({
                     content: messageContent,
-                    session_id: user.isGuest ? user.sessionId : null
+                    session_id: user.isGuest ? user.sessionId : null,
+                    conversation_id: state.conversationId
                 })
             });
             
-            if (!response.ok) throw new Error('Failed to send message');
+           if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to send message');
+            }
             
             const data = await response.json();
             elements.input.value = '';
+            
+            // Update conversation ID if this was the first message
+            if (data.conversation && !state.conversationId) {
+                state.conversationId = data.conversation.id;
+                initRealTimeUpdates();
+            }
+            // Remove temporary message and add the real one when Pusher event comes through
+            const tempMessage = document.querySelector(`[data-message-id="${tempMessageId}"]`);
+            if (tempMessage) {
+                tempMessage.remove();
+            }
         } catch (error) {
             console.error('Error:', error);
-            // Optionally show error to user
+        
+            // Show error to user
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'alert alert-danger mt-2';
+            errorMessage.textContent = error.message;
+            
+            // Remove any existing error messages
+            document.querySelectorAll('.alert.alert-danger').forEach(el => el.remove());
+            
+            // Insert after the form
+            elements.form.parentNode.insertBefore(errorMessage, elements.form.nextSibling);
+            
+            // Scroll to show error
+            errorMessage.scrollIntoView({ behavior: 'smooth' });
+            // Show error to user (could add a retry button)
+            alert('Failed to send message. Please try again.');
         } finally {
             state.isSubmitting = false;
             setSubmitState(false);
@@ -297,37 +365,43 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function setSubmitState(isSubmitting) {
-        elements.input.disabled = isSubmitting;
-        elements.sendBtn.disabled = isSubmitting;
-        elements.sendBtn.innerHTML = isSubmitting 
-            ? '<i class="fas fa-spinner fa-spin"></i>' 
-            : '<i class="fas fa-paper-plane"></i>';
+        if (elements.input) elements.input.disabled = isSubmitting;
+        if (elements.sendBtn) {
+            elements.sendBtn.disabled = isSubmitting;
+            elements.sendBtn.innerHTML = isSubmitting 
+                ? '<i class="fas fa-spinner fa-spin"></i>' 
+                : '<i class="fas fa-paper-plane"></i>';
+        }
     }
 
     // Real-time updates
-    function initRealTimeUpdates() {
-        if (!pusher) return;
+     function initRealTimeUpdates() {
+        if (!pusher || !state.conversationId) return;
 
-        // User-specific channel
-        const userChannelName = user.isGuest 
-            ? `private-guest.${user.sessionId}`
-            : `private-user.${user.id}`;
-        
-        if (userChannelName) {
-            const userChannel = pusher.subscribe(userChannelName);
-            userChannel.bind('admin-replied', function(data) {
-                addMessage(data.message.content, false, data.message.created_at);
+        try {
+            const channel = pusher.subscribe(`private-conversation.${state.conversationId}`);
+            
+            channel.bind('pusher:subscription_error', (status) => {
+                console.error('Subscription failed:', status);
+                // Implement retry logic or user notification here
             });
+
+            channel.bind('pusher:subscription_succeeded', () => {
+                console.log('Successfully subscribed to channel');
+            });
+
+            channel.bind('App\\Events\\NewMessage', (data) => {
+                // Handle incoming messages
+                const message = data.message;
+                const isSent = (message.user_type === 'guest' && message.user_id === user.sessionId) || 
+                            (message.user_type === 'registered' && message.user_id === user.id);
+                
+                addMessage(message.content, isSent, message.created_at, message.id);
+            });
+
+        } catch (error) {
+            console.error('Channel subscription error:', error);
         }
-        
-        // Conversation channel
-        @if(isset($activeConversation))
-            const convChannel = pusher.subscribe(`conversation.{{ $activeConversation->id }}`);
-            convChannel.bind('new-message', function(data) {
-                if (data.message.user_type !== 'admin') return;
-                addMessage(data.message.content, false, data.message.created_at);
-            });
-        @endif
     }
 
     // Initialize everything
@@ -339,7 +413,9 @@ document.addEventListener('DOMContentLoaded', function() {
             elements.form.addEventListener('submit', handleMessageSubmit);
         }
         
-        initRealTimeUpdates();
+        if (state.conversationId) {
+            initRealTimeUpdates();
+        }
     }
 
     init();
@@ -347,7 +423,120 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
+.chat-widget-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    max-width: 100%;
+    z-index: 1000;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
 
+.chat-widget-header {
+    background: #4361ee;
+    color: white;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.chat-widget-title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.chat-widget-toggle, .chat-widget-close {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.chat-widget-body {
+    display: none;
+    height: 400px;
+    flex-direction: column;
+    background: #fff;
+}
+
+.chat-widget-body-header {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+}
+
+.chat-widget-body-header h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f9fbfd;
+}
+
+.message {
+    margin-bottom: 15px;
+    max-width: 80%;
+}
+
+.message-content {
+    padding: 10px 15px;
+    border-radius: 18px;
+    display: inline-block;
+    word-wrap: break-word;
+}
+
+.message-time {
+    display: block;
+    font-size: 11px;
+    color: #999;
+    margin-top: 5px;
+}
+
+.sent .message-content {
+    background: #4361ee;
+    color: white;
+    float: right;
+    border-bottom-right-radius: 0;
+}
+
+.received .message-content {
+    background: white;
+    color: #333;
+    float: left;
+    border-bottom-left-radius: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.chat-input-container {
+    padding: 10px;
+    border-top: 1px solid #eee;
+    background: #fff;
+}
+
+.chat-widget-form {
+    display: flex;
+}
+
+.input-group {
+    width: 100%;
+}
 
 .chat-message-input {
     border-radius: 20px !important;
@@ -368,8 +557,19 @@ document.addEventListener('DOMContentLoaded', function() {
     cursor: not-allowed;
 }
 
+.guest-info-prompt {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
 .guest-info-form {
     margin-top: 15px;
+}
+
+.form-group {
+    margin-bottom: 10px;
 }
 
 .validation-errors {

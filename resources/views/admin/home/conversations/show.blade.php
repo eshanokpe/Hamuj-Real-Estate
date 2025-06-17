@@ -98,7 +98,7 @@
                             <!-- Chat Container -->
                             <div class="chat-container p-4" style="height: 60vh; overflow-y: auto;" id="chatContainer">
                                 @foreach($conversation->messages as $message)
-                                    <div class="message-wrapper d-flex mb-4 {{ $message->user_type === 'admin' ? 'justify-content-end' : 'justify-content-start' }}">
+                                    <div class="message-wrapper d-flex mb-4 {{ $message->user_type === 'admin' ? 'justify-content-end' : 'justify-content-start' }}" data-message-id="{{ $message->id }}">
                                         <div class="message {{ $message->user_type === 'admin' ? 'admin-message' : 'user-message' }}" style="max-width: 75%;">
                                             <div class="message-header d-flex {{ $message->user_type === 'admin' ? 'justify-content-end' : 'justify-content-start' }} mb-2">
                                                 @if($message->user_type !== 'admin')
@@ -111,7 +111,7 @@
                                                 <div>
                                                     <strong class="me-2">
                                                         @if($message->user_type === 'admin')
-                                                            You
+                                                            Admin
                                                         @else
                                                             {{ $message->user->name ?? 'Customer' }}
                                                         @endif
@@ -163,7 +163,6 @@
                             </div>
 
                             <!-- Reply Form -->
-                           <!-- Reply Form -->
                             @if($conversation->is_open)
                             <div class="border-top p-4 bg-white">
                                 <form id="messageForm" onsubmit="sendMessage(event)">
@@ -192,108 +191,6 @@
                                 </form>
                             </div>
                             @endif
-
-                            <script>
-                            function sendMessage(event) {
-                                event.preventDefault(); // Prevent default form submission
-                                
-                                const form = event.target;
-                                const button = form.querySelector('#sendButton');
-                                const messageInput = document.getElementById('messageInput');
-                                const originalButtonText = button.innerHTML;
-                                
-                                // Show loading state
-                                button.disabled = true;
-                                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                                
-                                // Get form data
-                                const formData = new FormData(form);
-                                
-                                // Add CSRF token
-                                formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
-                                
-                                fetch("{{ route('admin.conversations.messages.store', $conversation) }}", {
-                                    method: 'POST',
-                                    body: formData,
-                                    headers: {
-                                        'Accept': 'application/json',
-                                        'X-Requested-With': 'XMLHttpRequest'
-                                    }
-                                })
-                                .then(response => {
-                                    if (!response.ok) {
-                                        throw new Error('Network response was not ok');
-                                    }
-                                    return response.json();
-                                })
-                                .then(data => {
-                                    console.error('message:', data.message);
-                                    console.error('content:', data.content);
-
-                                    // Clear input on success
-                                    messageInput.value = '';
-                                    
-                                    // Optionally add the message to the chat immediately
-                                    // This is redundant if you're using Pusher, but can be helpful
-                                    if (data.message) {
-                                        addMessageToChat(data.message, true);
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                    alert('Failed to send message. Please try again.');
-                                })
-                                .finally(() => {
-                                    button.disabled = false;
-                                    button.innerHTML = originalButtonText;
-                                    messageInput.focus();
-                                });
-                            }
-
-                            // Helper function to add message to chat (optional)
-                            function addMessageToChat(message, isAdmin) {
-                                const container = document.getElementById('chatContainer');
-                                const messageTime = new Date(message.created_at);
-                                const formattedTime = messageTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                                
-                                const messageHtml = `
-                                    <div class="message-wrapper d-flex mb-4 ${isAdmin ? 'justify-content-end' : 'justify-content-start'}">
-                                        <div class="message ${isAdmin ? 'admin-message' : 'user-message'}" style="max-width: 75%;">
-                                            <div class="message-header d-flex ${isAdmin ? 'justify-content-end' : 'justify-content-start'} mb-2">
-                                                ${!isAdmin ? `
-                                                    <div class="avatar-xs me-2">
-                                                        <span class="avatar-title bg-light text-dark rounded-circle">
-                                                            ${message.user?.name ? message.user.name.charAt(0) : 'C'}
-                                                        </span>
-                                                    </div>
-                                                ` : ''}
-                                                <div>
-                                                    <strong class="me-2">
-                                                        ${isAdmin ? 'You' : (message.user?.name || 'Customer')}
-                                                    </strong>
-                                                    <small class="text-muted">
-                                                        ${formattedTime}
-                                                    </small>
-                                                </div>
-                                            </div>
-                                            <div class="message-body p-3 position-relative">
-                                                ${message.content.replace(/\n/g, '<br>')}
-                                                <div class="position-absolute top-0 ${isAdmin ? 'end-0' : 'start-0'} translate-middle">
-                                                    <div class="bg-${isAdmin ? 'primary' : 'light'} px-1">
-                                                        <i class="fas fa-caret-down text-${isAdmin ? 'primary' : 'light'}"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                                
-                                container.insertAdjacentHTML('beforeend', messageHtml);
-                                container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
-                            }
-                            </script>
-
-
                         </div>
                     </div>
                 </div>
@@ -314,7 +211,7 @@
                 <p>Are you sure you want to close this conversation? You can reopen it later if needed.</p>
                 <div class="mb-3">
                     <label class="form-label">Resolution Notes (Optional)</label>
-                    <textarea class="form-control" rows="2" placeholder="Add any final notes..."></textarea>
+                    <textarea name="resolution_notes" class="form-control" rows="2" placeholder="Add any final notes..."></textarea>
                 </div>
             </div>
             <div class="modal-footer border-top-0">
@@ -395,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Subscribe to conversation channel
-    const channel = pusher.subscribe('conversation.{{ $conversation->id }}');
+    const channel = pusher.subscribe('private-conversation.{{ $conversation->id }}');
 
     // Listen for new messages
     channel.bind('App\\Events\\NewMessage', function(data) {
@@ -404,52 +301,49 @@ document.addEventListener('DOMContentLoaded', function() {
         const isAdmin = message.user_type === 'admin';
         const container = document.getElementById('chatContainer');
         
-        // Format time
-        const messageTime = new Date(message.created_at);
-        const formattedTime = messageTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        // Check if message already exists to prevent duplicates
+        const messageExists = document.querySelector(`[data-message-id="${message.id}"]`) !== null;
         
-        // Create message HTML
-        const messageHtml = `
-            <div class="message-wrapper d-flex mb-4 ${isAdmin ? 'justify-content-end' : 'justify-content-start'}">
-                <div class="message ${isAdmin ? 'admin-message' : 'user-message'}" style="max-width: 75%;">
-                    <div class="message-header d-flex ${isAdmin ? 'justify-content-end' : 'justify-content-start'} mb-2">
-                        ${!isAdmin ? `
-                            <div class="avatar-xs me-2">
-                                <span class="avatar-title bg-light text-dark rounded-circle">
-                                    ${message.user?.name ? message.user.name.charAt(0) : 'C'}
-                                </span>
+        if (!messageExists) {
+            const messageTime = new Date(message.created_at);
+            const formattedTime = messageTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            const messageHtml = `
+                <div class="message-wrapper d-flex mb-4 ${isAdmin ? 'justify-content-end' : 'justify-content-start'}" data-message-id="${message.id}">
+                    <div class="message ${isAdmin ? 'admin-message' : 'user-message'}" style="max-width: 75%;">
+                        <div class="message-header d-flex ${isAdmin ? 'justify-content-end' : 'justify-content-start'} mb-2">
+                            ${!isAdmin ? `
+                                <div class="avatar-xs me-2">
+                                    <span class="avatar-title bg-light text-dark rounded-circle">
+                                        ${message.user?.name ? message.user.name.charAt(0) : 'C'}
+                                    </span>
+                                </div>
+                            ` : ''}
+                            <div>
+                                <strong class="me-2">
+                                    ${isAdmin ? 'Admin' : (message.user?.name || 'Customer')}
+                                </strong>
+                                <small class="text-muted">
+                                    ${formattedTime}
+                                    ${message.read && !isAdmin ? '<i class="fas fa-check-circle text-success ms-1"></i>' : ''}
+                                </small>
                             </div>
-                        ` : ''}
-                        <div>
-                            <strong class="me-2">
-                                ${isAdmin ? 'You' : (message.user?.name || 'Customer')}
-                            </strong>
-                            <small class="text-muted">
-                                ${formattedTime}
-                                ${message.read && !isAdmin ? '<i class="fas fa-check-circle text-success ms-1"></i>' : ''}
-                            </small>
                         </div>
-                    </div>
-                    <div class="message-body p-3 position-relative">
-                        ${message.content.replace(/\n/g, '<br>')}
-                        <div class="position-absolute top-0 ${isAdmin ? 'end-0' : 'start-0'} translate-middle">
-                            <div class="bg-${isAdmin ? 'primary' : 'light'} px-1">
-                                <i class="fas fa-caret-down text-${isAdmin ? 'primary' : 'light'}"></i>
+                        <div class="message-body p-3 position-relative">
+                            ${message.content.replace(/\n/g, '<br>')}
+                            <div class="position-absolute top-0 ${isAdmin ? 'end-0' : 'start-0'} translate-middle">
+                                <div class="bg-${isAdmin ? 'primary' : 'light'} px-1">
+                                    <i class="fas fa-caret-down text-${isAdmin ? 'primary' : 'light'}"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
-        
-        // Append new message
-        container.insertAdjacentHTML('beforeend', messageHtml);
-        
-        // Scroll to bottom
-        container.scrollTo({
-            top: container.scrollHeight,
-            behavior: 'smooth'
-        });
+            `;
+            
+            container.insertAdjacentHTML('beforeend', messageHtml);
+            container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+        }
 
         // If message is from user, mark as read
         if (message.user_type !== 'admin' && !message.read) {
@@ -465,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Debugging: Log subscription events
     channel.bind('pusher:subscription_succeeded', function() {
-        console.log('Successfully subscribed to channel');
+        console.log('Successfully subscribed to conversation channel');
     });
 
     channel.bind('pusher:subscription_error', function(status) {
@@ -474,48 +368,87 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Auto-scroll to bottom on load
     const container = document.getElementById('chatContainer');
-    container.scrollTop = container.scrollHeight;
+    if (container) {
+        container.scrollTop = container.scrollHeight;
+    }
     
     @if($conversation->is_open)
-    document.getElementById('messageInput').focus();
+    document.getElementById('messageInput')?.focus();
     @endif
 
     // Enhanced message submission
-    const messageForm = document.getElementById('messageForm');
-    if (messageForm) {
-        messageForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const form = this;
-            const button = form.querySelector('#sendButton');
-            const originalButtonText = button.innerHTML;
-            const messageInput = document.getElementById('messageInput');
-            
-            // Show loading state
-            button.disabled = true;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: new FormData(form),
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) throw new Error('Failed to send message');
-                
-                // Clear input
-                messageInput.value = '';
-            } catch (error) {
-                console.error(error);
-                alert('Failed to send message. Please try again.');
-            } finally {
-                button.disabled = false;
-                button.innerHTML = originalButtonText;
-                messageInput.focus();
+    function sendMessage(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const button = form.querySelector('#sendButton');
+        const messageInput = document.getElementById('messageInput');
+        const originalButtonText = button.innerHTML;
+        
+        // Show loading state
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        
+        // Get form data
+        const formData = new FormData(form);
+        
+        fetch("{{ route('admin.conversations.messages.store', $conversation) }}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Clear input on success
+            messageInput.value = '';
+            
+            // If we have the message data, add it to the chat immediately
+            if (data.message) {
+                const container = document.getElementById('chatContainer');
+                const messageTime = new Date(data.message.created_at);
+                const formattedTime = messageTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                const messageHtml = `
+                    <div class="message-wrapper d-flex mb-4 justify-content-end" data-message-id="${data.message.id}">
+                        <div class="message admin-message" style="max-width: 75%;">
+                            <div class="message-header d-flex justify-content-end mb-2">
+                                <div>
+                                    <strong class="me-2">Admin</strong>
+                                    <small class="text-muted">${formattedTime}</small>
+                                </div>
+                            </div>
+                            <div class="message-body p-3 position-relative">
+                                ${data.message.content.replace(/\n/g, '<br>')}
+                                <div class="position-absolute top-0 end-0 translate-middle">
+                                    <div class="bg-primary px-1">
+                                        <i class="fas fa-caret-down text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.insertAdjacentHTML('beforeend', messageHtml);
+                container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to send message. Please try again.');
+        })
+        .finally(() => {
+            button.disabled = false;
+            button.innerHTML = originalButtonText;
+            messageInput.focus();
         });
     }
 });
