@@ -41,7 +41,7 @@ use App\Http\Controllers\User\CartController;
 */
 
 // Broadcast::routes(['middleware' => ['api']]);
-roadcast::routes(['middleware' => ['api', 'auth:sanctum']]);
+Broadcast::routes(['middleware' => ['api', 'auth:sanctum']]);
 
 // Public routes (no authentication required)
 Route::post('register', [RegisterController::class, 'register']);
