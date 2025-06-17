@@ -38,7 +38,7 @@
             <div class="main__logo logo-desktop-block">
                <a class="main__logo--link" href="{{ route('user.dashboard') }}">
                     <img class="main__logo--img desktop light__logo" src="{{ asset('assets/img/logo/nav-log.png')}}" alt="logo-img">
-                    <img class="main__logo--img desktop dark__logo" src="{{ asset('assets/img/logo/nav-log-white.png')}}" alt="logo-img">
+                    <img class="main__logo--img desktop dark__logo" src="{{ asset('assets/img/logo/nav-log.png')}}" alt="logo-img">
                     <img class="main__logo--img mobile" src="{{ asset('assets/img/logo/logo-mobile.png')}}" alt="logo-img">
                 </a>
             </div>
