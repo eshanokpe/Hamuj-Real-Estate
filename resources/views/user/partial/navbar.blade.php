@@ -12,7 +12,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="ionicon offcanvas__header--menu__open--svg" viewBox="0 0 512 512"><path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 160h352M80 256h352M80 352h352"/></svg>
                     <span class="visually-hidden">Offcanvas Menu Open</span>
                 </a>
-            </div>
+            </div> 
             <div class="search__box"> 
                 <form class="search__box--form laptop__hidden" action="#">
                     <input class="search__box--input__field" placeholder="Search for ...." type="text">
@@ -346,31 +346,32 @@
                                             data-property-mode="{{ $notification->data['property_mode'] ?? '' }}">
             
                                             <div class="notification__content">
-                                                @if(in_array($notification['data']['notification_status'], ['PropertyValuationNotification', 'PropertyValuationPredictionNotification','propertyValuationPredictionNotification']))
+                                                {{-- {{$notification['data']}} --}}
+                                                @if(isset($notification['data']['notification_status']) && in_array($notification['data']['notification_status'], ['PropertyValuationNotification', 'PropertyValuationPredictionNotification','propertyValuationPredictionNotification']))
                                                     @include('.user/partial/notifications/propertyValuationPredictionNotification')
  
-                                                @elseif($notification['data']['notification_status'] == 'sellPropertyUserNotification')
+                                                @elseif(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'sellPropertyUserNotification')
                                                     @include('.user/partial/notifications/sellPropertyUserNotification')
-                                                @elseif($notification['data']['notification_status'] == 'senderTransferNotification' || $notification['data']['notification_status'] == 'Sender Transfer Notification')
+                                                @elseif(isset($notification['data']['notification_status']) && ($notification['data']['notification_status'] == 'senderTransferNotification' || $notification['data']['notification_status'] == 'Sender Transfer Notification'))
                                                     @include('.user/partial/notifications/senderTransferNotification')
-                                                @elseif($notification['data']['notification_status'] == 'transferNotification')
+                                                @elseif(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'transferNotification')
                                                     @include('.user/partial/notifications/transferNotification')
-                                                @elseif($notification['data']['notification_status'] == 'propertyValuationNotification' || $notification['data']['notification_status'] == 'Property Valuation Notification')
+                                                @elseif(isset($notification['data']['notification_status']) && ($notification['data']['notification_status'] == 'propertyValuationNotification' || $notification['data']['notification_status'] == 'Property Valuation Notification'))
                                                     @include('.user/partial/notifications/propertyValuationNotification')
-                                                @elseif($notification['data']['notification_status'] == 'referral_connection')
+                                                @elseif(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'referral_connection')
                                                     @include('.user/partial/notifications/referralConnection')
-                                                @elseif($notification['data']['notification_status'] == 'recipientSubmittedNotification' || $notification['data']['notification_status'] == 'Recipient Submitted Notification')
+                                                @elseif(isset($notification['data']['notification_status']) && ($notification['data']['notification_status'] == 'recipientSubmittedNotification' || $notification['data']['notification_status'] == 'Recipient Submitted Notification'))
                                                     @include('.user/partial/notifications/recipientSubmittedNotification')
-                                                @elseif($notification['data']['notification_status'] == 'referral_commission' || $notification['data']['notification_status'] == 'Recipient Submitted Notification')
+                                                @elseif(isset($notification['data']['notification_status']) && ($notification['data']['notification_status'] == 'referral_commission' || $notification['data']['notification_status'] == 'Recipient Submitted Notification'))
                                                     @include('.user/partial/notifications/referralCommission')
-                                                @elseif($notification['data']['notification_status'] == 'new_referral')
+                                                @elseif(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'new_referral')
                                                     @include('.user/partial/notifications/new_referral')
-                                                @elseif($notification['data']['notification_status'] == 'WalletFundedNotification' || $notification['data']['notification_status'] == 'walletFundedNotification' || $notification['data']['notification_status'] == 'Wallet Funded Notification')
+                                                @elseif(isset($notification['data']['notification_status']) && ($notification['data']['notification_status'] == 'WalletFundedNotification' || $notification['data']['notification_status'] == 'walletFundedNotification' || $notification['data']['notification_status'] == 'Wallet Funded Notification'))
                                                     @include('.user/partial/notifications/walletFundedNotification')
-                                                @elseif($notification['data']['notification_status'] == 'buyProperty' )
+                                                @elseif(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'buyProperty' )
                                                     @include('.user/partial/notifications/buyProperty')
                                                    
-                                                @elseif($notification['data']['notification_status'] == 'walletTransferNotification')
+                                                @elseif(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'walletTransferNotification')
                                                     <div class="notification__type--transfer">
                                                         <h4>{{ $notification['data']['message'] ?? 'Transfer Notification' }}</h4>
                                                         <p>
