@@ -22,7 +22,7 @@
                                 <!-- Notification Details -->
                                 <div class="notification-details flex-grow-1 ms-md-3">
                                     {{-- {{$notification['data']['notification_status']}} --}}
-                                    @if($notification['data']['notification_status'] == 'walletTransferNotification')
+                                    @if(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'walletTransferNotification')
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row "> 
