@@ -40,7 +40,9 @@ use App\Http\Controllers\User\CartController;
 |
 */
 
-Broadcast::routes(['middleware' => ['api']]);
+// Broadcast::routes(['middleware' => ['api']]);
+roadcast::routes(['middleware' => ['api', 'auth:sanctum']]);
+
 // Public routes (no authentication required)
 Route::post('register', [RegisterController::class, 'register']);
 Route::get('/check/email', [RegisterController::class, 'checkEmail']);
