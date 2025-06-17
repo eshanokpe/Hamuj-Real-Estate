@@ -54,7 +54,11 @@
                                         </div>
                                        
                                     @endif
-                                    @if($notification['data']['notification_status'] == 'WalletFundedNotification' || $notification['data']['notification_status'] == 'walletFundedNotification' || $notification['data']['notification_status'] == 'Wallet Funded Notification')
+                                    @if(isset($notification['data']['notification_status']) && (
+                                        $notification['data']['notification_status'] == 'WalletFundedNotification' ||
+                                        $notification['data']['notification_status'] == 'walletFundedNotification' ||
+                                        $notification['data']['notification_status'] == 'Wallet Funded Notification'
+                                    ))
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row "> 
@@ -89,7 +93,7 @@
                                         </div>
                                        
                                     @endif
-                                    @if($notification['data']['notification_status'] == 'referral_commission')
+                                    @if(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'referral_commission')
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row "> 
@@ -118,7 +122,7 @@
                                             </div>
                                         </div>
                                     @endif
-                                    @if($notification['data']['notification_status'] == 'new_referral')
+                                    @if(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'new_referral')
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row "> 
@@ -149,7 +153,7 @@
                                     @endif
                                         
                                     
-                                    @if($notification['data']['notification_status'] == 'recipientSubmittedNotification' || $notification['data']['notification_status'] == 'Recipient Submitted Notification')
+                                    @if(isset($notification['data']['notification_status']) && ($notification['data']['notification_status'] == 'recipientSubmittedNotification' || $notification['data']['notification_status'] == 'Recipient Submitted Notification'))
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row "> 
@@ -186,7 +190,7 @@
                                             
                                         </div>
                                     @endif
-                                    @if($notification['data']['notification_status'] == 'PropertyValuationNotification' || $notification['data']['notification_status'] == 'Property Valuation Notification')
+                                    @if(isset($notification['data']['notification_status']) && ($notification['data']['notification_status'] == 'PropertyValuationNotification' || $notification['data']['notification_status'] == 'Property Valuation Notification'))
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row ">
@@ -214,7 +218,7 @@
                                         </div>
                                     @endif
 
-                                    @if($notification['data']['notification_status'] == 'senderTransferNotification' || $notification['data']['notification_status'] == 'Sender Transfer Notification' )
+                                    @if(isset($notification['data']['notification_status']) && ($notification['data']['notification_status'] == 'senderTransferNotification' || $notification['data']['notification_status'] == 'Sender Transfer Notification'))
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row ">
@@ -251,7 +255,7 @@
                                         </div>
                                     @endif
                                     
-                                    @if($notification['data']['notification_status'] == 'sellPropertyUserNotification' )
+                                    @if(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'sellPropertyUserNotification' )
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row ">
@@ -281,7 +285,7 @@
                                         </div>
                                     @endif
 
-                                    @if($notification['data']['notification_status'] == 'transferNotification')
+                                    @if(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'transferNotification')
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row ">
@@ -310,7 +314,7 @@
                                         
                                         </div>
                                     @endif
-                                    @if($notification['data']['notification_status'] == 'PropertyValuationPredictionNotification' || $notification['data']['notification_status'] == 'propertyValuationPredictionNotification')
+                                    @if(isset($notification['data']['notification_status']) && ($notification['data']['notification_status'] == 'PropertyValuationPredictionNotification' || $notification['data']['notification_status'] == 'propertyValuationPredictionNotification'))
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row ">
@@ -340,7 +344,7 @@
                                         </div>
                                     @endif
 
-                                    @if($notification['data']['notification_status'] == 'buyProperty')
+                                    @if(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'buyProperty')
                                         <div class="">
                                             <div class="card-body">
                                                 <div class="row "> 
