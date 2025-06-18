@@ -44,6 +44,7 @@ body {
     position: fixed;
     margin-left: auto;
     flex-basis: 400px;
+    z-index: 9999;
     /* height: 60%; */
     height: 80vh;
     padding: 16px;
