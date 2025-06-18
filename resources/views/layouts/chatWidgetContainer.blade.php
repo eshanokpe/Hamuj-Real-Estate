@@ -109,7 +109,8 @@ document.addEventListener('DOMContentLoaded', function() {
         auth: {
             headers: {
                 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-                'X-Session-ID': '{{ session()->getId() }}' // For guest users
+                'X-Session-ID': '{{ session()->getId() }}',
+                'Authorization': user.isAuthenticated ? `Bearer ${getAuthToken()}` : null
             }
         }
     });

@@ -21,7 +21,7 @@
                 
                                 <!-- Notification Details -->
                                 <div class="notification-details flex-grow-1 ms-md-3">
-                                    {{-- {{$notification['data']['notification_status']}} --}}
+                                    {{-- {{$notification}} --}}
                                     @if(isset($notification['data']['notification_status']) && $notification['data']['notification_status'] == 'walletTransferNotification')
                                         <div class="">
                                             <div class="card-body">
@@ -399,7 +399,7 @@
                                                 <path d="M10.583 20.5832L0.999675 10.9998L10.583 1.4165" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
                                         </span>
-                                    </li>
+                                    </li> 
                                 @else
                                     <li class="pagination__menu--items pagination__arrow">
                                         <a href="{{ $notifications->previousPageUrl() }}" class="pagination__arrow-icon link">

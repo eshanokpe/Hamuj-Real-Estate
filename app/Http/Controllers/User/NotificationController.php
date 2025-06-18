@@ -9,7 +9,7 @@ use App\Models\CustomNotification;
 
 class NotificationController extends Controller
 { 
-    
+     
     public function index(Request $request)
     { 
         $user = auth()->user();
@@ -23,8 +23,7 @@ class NotificationController extends Controller
                 'unread_count' => $unreadCount,
             ]);
         }
-
-
+  
         return view('user.pages.notifications.index', compact('notifications'));
     }
 

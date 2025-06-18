@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 class TransferController extends Controller
 {
-     
+      
     public function initiateTransfer(Request $request, PaystackService $paystackService)
     { 
         $validated = $request->validate([

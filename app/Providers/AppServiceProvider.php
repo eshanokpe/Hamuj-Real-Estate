@@ -48,29 +48,29 @@ class AppServiceProvider extends ServiceProvider
         ]); 
 
         // Fetch the latest conversation with related messages, user, and admin
-        if (\Schema::hasTable('conversations')) {
-            $conversation = \App\Models\Conversation::with([
-                'messages' => function($query) {
-                    $query->orderBy('created_at', 'asc');
-                },
-                'user',
-                'admin'
-            ])->latest()->first();
-        } else {
-            $conversation = null;
-        }
+        // if (\Schema::hasTable('conversations')) {
+        //     $conversation = \App\Models\Conversation::with([
+        //         'messages' => function($query) {
+        //             $query->orderBy('created_at', 'asc');
+        //         },
+        //         'user',
+        //         'admin'
+        //     ])->latest()->first();
+        // } else {
+        //     $conversation = null;
+        // }
 
-        View::share('conversation', $conversation);
+        // View::share('conversation', $conversation);
 
-        if ($conversation && $conversation->admin) {
-            $availableAdmins = User::where('is_admin', true)
-                ->where('id', '!=', $conversation->admin->id)
-                ->get();
-        } else {
-            $availableAdmins = User::where('is_admin', true)->get();
-        }
+        // if ($conversation && $conversation->admin) {
+        //     $availableAdmins = User::where('is_admin', true)
+        //         ->where('id', '!=', $conversation->admin->id)
+        //         ->get();
+        // } else {
+        //     $availableAdmins = User::where('is_admin', true)->get();
+        // }
          
-        View::share('availableAdmins', $availableAdmins);
+        // View::share('availableAdmins', $availableAdmins);
 
         View::share('menuItems', MenuItem::with('dropdownItems')->get()); 
         View::share('faqs', Faqs::all());  

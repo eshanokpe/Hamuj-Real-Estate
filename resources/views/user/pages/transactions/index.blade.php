@@ -11,7 +11,7 @@
             <div class="reviews__heading mb-30">
                 <h2 class="reviews__heading--title">Property Transaction</h2>
                 <p class="reviews__heading--desc">We are glad to see you again!</p>
-            </div> 
+            </div>  
             <div class="properties__wrapper"> 
                 <div class="properties__table table-responsive">
                     <table class="properties__table--wrapper">
@@ -44,6 +44,7 @@
                                                 @endif
                                                 <strong>Amount:</strong> {{ number_format($transaction->amount, 2) }}<br>
                                                 <strong>Date:</strong> {{ \Carbon\Carbon::parse($transaction->paid_at)->format('M d, Y h:i A') }}
+                                                {{-- <strong>payment_method:</strong> {{ $transaction->payment_method }}</strong> --}}
                                             </div>
                                         @else
                                             {{ $transaction->metadata ?? 'No metadata available' }}

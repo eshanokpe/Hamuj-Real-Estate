@@ -10,5 +10,5 @@ return [
         'enable_client_messages' => true,
         'enable_statistics' => true,
     ],
-]
+] 
 ];

@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\MessageController;
@@ -11,6 +10,11 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\VerificationController;
+use Ilmedova\Chattle\app\Http\Controllers\Chat\AdminController;
+use Ilmedova\Chattle\app\Http\Controllers\Chat\CreateController;
+use Ilmedova\Chattle\app\Http\Controllers\Chat\GetMessagesController;
+use Ilmedova\Chattle\app\Http\Controllers\Chat\GetChatsController;
+use Ilmedova\Chattle\app\Http\Controllers\Chat\PostMessageController;
 
 /* 
 |--------------------------------------------------------------------------
@@ -25,7 +29,6 @@ use App\Http\Controllers\Auth\VerificationController;
 require __DIR__.'/admin.php';
 require __DIR__.'/user.php';
  
-Broadcast::routes(['middleware' => ['web']]);
 Route::get('/', [FrontendController::class, 'index'])->name('index');
 Route::get('/{page}', [PagesController::class, 'index'])->name('home.pages');
 
@@ -63,4 +66,12 @@ Route::prefix('home')->name('home.')->group(function () {
     Route::get('/properties/{slug}', [HomeController::class, 'showProperties'])->name('properties.show');
 
 
+});
+Route::prefix('chattle')->group(function () {
+    Route::view('chat', 'chattle::chat');
+    Route::post('create-chat', CreateController::class);
+    Route::post('post-message', PostMessageController::class);
+    Route::get('get-messages', GetMessagesController::class);
+    Route::get('chat-admin', AdminController::class);
+    Route::get('get-chats', GetChatsController::class);
 });

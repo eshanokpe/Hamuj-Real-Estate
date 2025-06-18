@@ -26,13 +26,13 @@ class TransactionController extends Controller
   
         $data['transactions'] = Transaction::where('user_id', $user->id)
             ->where('email', $user->email)
-            ->whereIn('payment_method', ['transfer_property', 'buy_property'])
-            ->latest()->limit(5)->get();
+            ->whereIn('payment_method', ['transfer_property', 'buy_property','wallet'])
+            ->latest()->paginate(15);
 
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json([
                 'transactions' => $data['transactions'],
-            ]);
+            ]); 
         } 
 
         return view('user.pages.transactions.index', $data); 
@@ -110,6 +110,7 @@ class TransactionController extends Controller
     }
 
     public function show($id){
+        
         $transaction = Transaction::where('id',  decrypt($id))->first();
         return view('user.pages.transactions.show', compact('transaction')); 
     }

@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "@revolut/checkout": "^1.1.21",
+        "laravel-echo-server": "^1.6.3",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-router-dom": "^7.6.0"

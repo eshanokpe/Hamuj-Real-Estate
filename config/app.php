@@ -182,6 +182,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Ilmedova\Chattle\ChatServiceProvider::class,
 
         /*
          * Package Service Providers...

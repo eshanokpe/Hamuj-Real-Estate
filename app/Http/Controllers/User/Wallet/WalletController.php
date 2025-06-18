@@ -8,7 +8,7 @@ use App\Http\Controllers\WalletController  as PayStackWalletController;
 use Illuminate\Support\Facades\Http;
 use App\Models\Transaction;
 use App\Models\WalletTransaction;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf; 
 
 
 class WalletController extends Controller
@@ -46,7 +46,7 @@ class WalletController extends Controller
             'hasMoreReferrals' => $user->referralsMade()->count() > 6,
             'transactions' => $transactions // Removed the array wrapper
         ];
-
+        // dd('user');
         return view('user.pages.wallet.index', $data); 
     }
 
@@ -170,7 +170,7 @@ class WalletController extends Controller
     public function show($id)
     {
         $data['user'] = Auth::user();
-
+        // dd($id);
         $walletTransaction = WalletTransaction::where('id', decrypt($id))->first();
 
         $walletPaymentTransaction = Transaction::where('id', decrypt($id) )

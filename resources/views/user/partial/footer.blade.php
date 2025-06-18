@@ -1,10 +1,10 @@
-    <!-- Start footer section -->
-    <footer class="footer footer__section">
-        <div class="dashboard__footer--inner text-center">
-            <p class="copyright__content mb-0">Copyright © {{ date('Y') }} Powered By <span>Dohmayn</span></a>  All Rights Reserved.</p>
-        </div>
-    </footer>
-    <!-- End footer section -->
+<!-- Start footer section -->
+<footer class="footer footer__section">
+    <div class="dashboard__footer--inner text-center">
+        <p class="copyright__content mb-0">Copyright © {{ date('Y') }} Powered By <span>Dohmayn</span></a>  All Rights Reserved.</p>
+    </div>
+</footer>
+<!-- End footer section -->
 
  <!-- Scroll top bar --> 
  <button id="scroll__top"><svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round"  stroke-width="48" d="M112 244l144-144 144 144M256 120v292"/></svg></button>

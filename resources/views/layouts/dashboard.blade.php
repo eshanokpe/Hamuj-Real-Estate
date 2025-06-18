@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token --> 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset($contactDetials->favicon) }}">
     
     <!-- ======= All CSS Plugins here ======== -->
@@ -52,66 +53,71 @@
     </script>
     <script src="https://merchant.revolut.com/checkout.js"></script>
 
-<style>
-    .dashboard__chart--box__inner {
-        height: 317px;
-        padding-left: 0px;
-    }
-    .sold-out__progress-bar__field {
-        max-width: 200px;
-        width: 100%;
-    }
-    html, body {
-        height: 100%;
-        margin: 0;
-    }
-    .dashboard__page--wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    }
+    <style>
+        .dashboard__chart--box__inner {
+            height: 317px;
+            padding-left: 0px;
+        }
+        .sold-out__progress-bar__field {
+            max-width: 200px;
+            width: 100%;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .dashboard__page--wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        }
 
-    footer {
-        margin-top: auto; /* Pushes the footer to the bottom */
-    }
+        footer {
+            margin-top: auto; /* Pushes the footer to the bottom */
+        }
 
-    .copy-success {
-        font-size: 14px;
-        color: #28a745;
-        margin-left: 8px;
-        animation: fadeInOut 3s forwards;
-    }
+        .copy-success {
+            font-size: 14px;
+            color: #28a745;
+            margin-left: 8px;
+            animation: fadeInOut 3s forwards;
+        }
 
-    .copy-fail {
-        font-size: 14px;
-        color: #dc3545;
-        margin-left: 8px;
-        animation: fadeInOut 3s forwards;
-    }
-    .referral-code {
-        word-break: break-word; /* Ensure long text breaks into the next line */
-        overflow-wrap: break-word; /* Allow content to wrap within the container */
-    }
+        .copy-fail {
+            font-size: 14px;
+            color: #dc3545;
+            margin-left: 8px;
+            animation: fadeInOut 3s forwards;
+        }
+        .referral-code {
+            word-break: break-word; /* Ensure long text breaks into the next line */
+            overflow-wrap: break-word; /* Allow content to wrap within the container */
+        }
 
-    .referral_code {
-        display: block; /* Force the referral code to start on a new line */
-        margin-bottom: 10px; /* Add space below the referral code */
-        font-size: 14px; /* Adjust font size if needed */
-        color: #333; /* Optional: Set a text color */
-        max-width: 100%; /* Prevent it from exceeding the container width */
-    }
+        .referral_code {
+            display: block; /* Force the referral code to start on a new line */
+            margin-bottom: 10px; /* Add space below the referral code */
+            font-size: 14px; /* Adjust font size if needed */
+            color: #333; /* Optional: Set a text color */
+            max-width: 100%; /* Prevent it from exceeding the container width */
+        }
 
 
-    @keyframes fadeInOut {
-        0% { opacity: 0; }
-        10% { opacity: 1; }
-        90% { opacity: 1; }
-        100% { opacity: 0; }
-    }
-    .toast {
-        font-size: 16px; /* Adjust the font size as needed */
-    }
-</style>
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .toast {
+            font-size: 16px; /* Adjust the font size as needed */
+        }
+
+        /* Ensure the main page remains scrollable when chat widget is present */
+        body, html {
+            overflow-y: auto !important; 
+        }
+    </style>
 
 
 </head>
@@ -126,10 +132,14 @@
         @yield('content') 
     
         @include('user.partial.footer')
-
+        
+        <div style=" top: 200px; ">
+            @include('chattle::chat')
+        </div>
         
     </div>
-
   
+
 </body>
+
 </html>

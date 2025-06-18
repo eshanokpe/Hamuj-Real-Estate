@@ -25,9 +25,7 @@
  
     @yield('content')
     
-
-
     @include('admin.partial.footer')
-
+ 
  </body> 
 </html>
