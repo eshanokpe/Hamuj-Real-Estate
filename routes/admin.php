@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Admin\AdminSupportController;
 use App\Http\Controllers\Admin\WalletController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\WalletTransactionController;
@@ -23,6 +22,7 @@ use App\Http\Controllers\Admin\SociallinkController;
 use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\PropertyHistoryController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
+use Ilmedova\Chattle\app\Http\Controllers\Chat\AdminController as AdminChatController;
 
     
 Route::redirect('/admin', '/admin/dashboard');
@@ -211,26 +211,13 @@ Route::prefix('admin')->group(function () {
             Route::patch('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active');
         });
 
-       
-        // Support routes 
-        Route::get('/support', [AdminSupportController::class, 'index'])->name('admin.support.index');
-        Route::get('/support/{conversation}', [AdminSupportController::class, 'show'])->name('admin.support.show');
-        
-        // Conversation routes - removed the nested prefix
-        Route::get('/conversations', [AdminSupportController::class, 'index'])->name('admin.conversations.index');
-        Route::get('/conversations/{conversation}', [AdminSupportController::class, 'show'])->name('admin.conversations.show');
-        Route::post('/conversations/{conversation}/messages', [AdminSupportController::class, 'storeMessage'])->name('admin.conversations.messages.store');
-        
-        Route::post('/conversations/{conversation}/assign', [AdminSupportController::class, 'assignAdmin'])
-        ->name('admin.conversations.assign');
-
-        Route::patch('/conversations/{conversation}/close', [AdminSupportController::class, 'closeConversation'])->name('admin.conversations.close');
-        Route::patch('/conversations/{conversation}/reopen', [AdminSupportController::class, 'reopenConversation'])->name('admin.conversations.reopen');
-        
-
        Route::get('buy/index', [BuyController::class, 'index'])->name('admin.buy');
        Route::get('transfer/index', [Transferontroller::class, 'index'])->name('admin.transfer');
        Route::get('sell/index', [SellController::class, 'index'])->name('admin.sell');
+
+        Route::prefix('support')->name('admin.')->group(function () {
+            Route::get('chat-admin', AdminChatController::class)->name('chat.index');
+        });
 
     });  
 }); 

@@ -4,9 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>{{  $contactDetials->company_name }}</title>
+    <!-- App favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset($contactDetials->favicon) }}">
     <link rel="stylesheet" href="{{ asset('css/chattle_admin.css') }}">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        .back-to-dashboard-link {
+            width: 60%;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 20px;
+            padding: 8px 18px;
+            background: #f5f7fa;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #2d3748;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(60, 60, 60, 0.04);
+            transition: background 0.2s, color 0.2s;
+            border: 1px solid #e2e8f0;
+            font-size: 15px;
+            gap: 8px;
+        }
+        .back-to-dashboard-link:hover {
+            background: #e6f7f1;
+            color: #1a7f5a;
+            border-color: #b7e4d8;
+        }
+        .back-to-dashboard-link span {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+   
 </head>
 <body data-theme="indigo">
     <div class="app-container">
@@ -28,9 +58,12 @@
                 <img style="margin: 15px 0px" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
                     alt="profile">
                 <div class="app-profile-box-name">
-                    Hello Mahri!
+                    Hello Dohmayn!
                 </div>
             </div>
+            <a href="{{ route('admin.index') }}" class="back-to-dashboard-link">
+                <span>&#8592; Back to Dashboard</span>
+            </a>
             <div class="chat-list-wrapper">
                 <ul id="chat-list" class="chat-list">
                     @foreach ($chats as $chat)
@@ -47,6 +80,9 @@
                 <button id="loading" class="load-more-btn">
                     Load more
                 </button>
+
+              
+                
             </div>
         </div>
         <form id="messageForm" style="width: 100%">

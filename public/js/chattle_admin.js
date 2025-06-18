@@ -4,8 +4,8 @@ Pusher.logToConsole = true;
 // Initialize Pusher
 const pusher = new Pusher('5499ff5cb459223302e7', {
     wsHost: window.location.hostname,  // Changed from origin to hostname
-    wsPort: 6002,
-    wssPort: 6002,
+    wsPort: 6001,
+    wssPort: 6001,
     disableStats: true,
     enabledTransports: ['ws', 'wss'],
     cluster: 'mt1',

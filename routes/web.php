@@ -10,11 +10,6 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\VerificationController;
-use Ilmedova\Chattle\app\Http\Controllers\Chat\AdminController;
-use Ilmedova\Chattle\app\Http\Controllers\Chat\CreateController;
-use Ilmedova\Chattle\app\Http\Controllers\Chat\GetMessagesController;
-use Ilmedova\Chattle\app\Http\Controllers\Chat\GetChatsController;
-use Ilmedova\Chattle\app\Http\Controllers\Chat\PostMessageController;
 
 /* 
 |--------------------------------------------------------------------------
@@ -43,10 +38,11 @@ Route::post('/post/comment', [BlogController::class, 'storeComment'])->name('com
 Auth::routes(); 
 
 Route::get('/user/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::get('user/login', [LoginController::class, 'showLoginForm'])->name('login'); 
+
 Route::get('/user/register/referral/{referralCode}', [RegisterController::class, 'showRegistrationForm'])->name('register.referral');
 
 Route::post('post/register', [RegisterController::class, 'register'])->name('post.register');
-Route::get('user/login', [LoginController::class, 'showLoginForm'])->name('login'); 
 Route::post('post/login', [LoginController::class, 'login'])->name('post.login');
 
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
@@ -66,12 +62,4 @@ Route::prefix('home')->name('home.')->group(function () {
     Route::get('/properties/{slug}', [HomeController::class, 'showProperties'])->name('properties.show');
 
 
-});
-Route::prefix('chattle')->group(function () {
-    Route::view('chat', 'chattle::chat');
-    Route::post('create-chat', CreateController::class);
-    Route::post('post-message', PostMessageController::class);
-    Route::get('get-messages', GetMessagesController::class);
-    Route::get('chat-admin', AdminController::class);
-    Route::get('get-chats', GetChatsController::class);
 });

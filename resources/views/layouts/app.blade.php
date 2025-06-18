@@ -48,8 +48,9 @@
     @yield('content')
    
     @include('home.partial.footer')
-    @include('chattle::chat')
-    {{-- @include('layouts.chatWidgetContainer') --}}
+    {{-- <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;"> --}}
+      @include('chattle::chat')
+    {{-- </div> --}}
     
 </body>
 </html>

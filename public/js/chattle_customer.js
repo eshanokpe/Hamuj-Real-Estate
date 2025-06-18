@@ -136,8 +136,8 @@ $(document).ready(function(){
         Pusher.logToConsole = true;
         const pusher = new Pusher('5499ff5cb459223302e7', {
             wsHost: '127.0.0.1',
-            wsPort: 6002,
-            wssPort: 6002,
+            wsPort: 6001,
+            wssPort: 6001,
             forceTLS: false,
             disableStats: true,
             enabledTransports: ['ws'],

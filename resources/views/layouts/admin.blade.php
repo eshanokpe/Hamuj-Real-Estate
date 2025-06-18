@@ -28,4 +28,4 @@
     @include('admin.partial.footer')
  
  </body> 
-</html>
+</html>  

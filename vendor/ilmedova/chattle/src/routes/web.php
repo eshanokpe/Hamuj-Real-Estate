@@ -12,6 +12,8 @@ Route::prefix('chattle')->group(function () {
     Route::post('create-chat', CreateController::class);
     Route::post('post-message', PostMessageController::class);
     Route::get('get-messages', GetMessagesController::class);
-    Route::get('chat-admin', AdminController::class);
     Route::get('get-chats', GetChatsController::class);
+});
+Route::middleware('auth')->prefix('admin/support')->name('admin.')->group(function () {
+
 });

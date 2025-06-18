@@ -47,10 +47,10 @@
                         </a>
                     </li>
                      <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.support.index')}}" role="button"
+                        <a class="nav-link" target="_blank" href="{{ route('admin.chat.index')}}" role="button"
                             aria-expanded="false" aria-controls="sidebarAnalytics">
                             <i class="ti ti-stack menu-icon"></i>
-                            <span>Users Support</span>
+                            <span>Chat Support</span> 
                         </a>
                     </li>
                     <li class="nav-item">
