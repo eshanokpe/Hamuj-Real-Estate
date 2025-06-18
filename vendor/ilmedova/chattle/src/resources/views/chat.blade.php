@@ -1,5 +1,5 @@
 
-<title>Welcome to chat!</title>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="{{ asset('/css/chattle_style.css') }}">
 
@@ -69,7 +69,18 @@
     </div>
     {{-- CHAT HTML SNIPPET END --}}
 </div>
-
+<script>
+        // Basic toggle functionality for the chat
+        document.querySelector('.chat-button').addEventListener('click', function() {
+            document.querySelector('.right-side').classList.toggle('show');
+        });
+        
+        // Ensure input field gets focus when clicked
+        document.querySelector('.chat-input').addEventListener('touchstart', function(e) {
+            this.focus();
+            e.preventDefault();
+        }, {passive: false});
+    </script>
 <script src="/js/pusher.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
 <script src="/js/jquery-cookie.js"></script>
