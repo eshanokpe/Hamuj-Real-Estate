@@ -45,25 +45,20 @@ body {
     margin-left: auto;
     flex-basis: 400px;
     /* height: 60%; */
-    max-height: 80vh;
+    height: 80vh;
     padding: 16px;
-    z-index: 9999;
     /* position: absolute; */
-    /* transition: all 300ms cubic-bezier(0.19, 1, 0.56, 1); */
+    transition: all 300ms cubic-bezier(0.19, 1, 0.56, 1);
     right: 0px;
     bottom: 0px;
     width: 350px;
     font-family: "DM Sans", sans-serif;
     transition: 0.2s;
-    visibility: hidden;
 }
 
 .right-side.show {
-    /* display: block; */
-    /* transform: translateX(0); */
-    transform: translateX(0) translateZ(0); /* Bring it back on-screen. Includes hardware acceleration. */
-    visibility: visible; /* Make visible and interactive when shown */
-    transition: transform 0.2s ease-out, visibility 0s linear 0s; /* Visibility is made visible IMMEDIATELY when transform starts */
+    display: block;
+    transform: translateX(0);
 }
 
 .chat-container {
