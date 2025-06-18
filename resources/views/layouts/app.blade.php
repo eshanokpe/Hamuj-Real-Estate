@@ -27,7 +27,7 @@
   <!-- Custom Style CSS -->
   <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">
   <link rel="stylesheet" href="{{ asset('assets/css/rtl.css')}}">
-  <link rel="stylesheet" href="{{ asset('assets/css/chatWidget.css')}}">
+  {{-- <link rel="stylesheet" href="{{ asset('assets/css/chatWidget.css')}}"> --}}
 
   <!-- Scripts -->
   @viteReactRefresh
