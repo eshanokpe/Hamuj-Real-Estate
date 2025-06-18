@@ -1,12 +1,16 @@
-/* Reset for mobile touch issues */
 * {
     box-sizing: border-box;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 
-
-
+.right-side {
+    /* position: fixed; */
+    /* width: 100%; */
+    /* height: 100vh; */
+    /* margin: 0; */
+    /* padding: 0; */
+    /* overflow: hidden;  */
+}
  
 button {
     outline: none;
@@ -37,22 +41,29 @@ body {
 }
 
 .right-side {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    width: 350px;
-    max-width: 90%; /* For smaller screens */
-    height: auto;
+    /* position: fixed; */
+    margin-left: auto;
+    flex-basis: 400px;
+    /* height: 60%; */
     max-height: 80vh;
     padding: 16px;
+     z-index: 9999;
+    /* position: absolute; */
+    /* transition: all 300ms cubic-bezier(0.19, 1, 0.56, 1); */
+    right: 0px;
+    bottom: 0px;
+    width: 350px;
     font-family: "DM Sans", sans-serif;
     transition: 0.2s;
-    z-index: 9999; /* Very high to ensure it's on top */
-    transform: translateZ(0); /* Force hardware acceleration */
+    visibility: hidden;
 }
+
 .right-side.show {
-    display: block;
-    transform: translateX(0);
+    /* display: block; */
+    /* transform: translateX(0); */
+    transform: translateX(0) translateZ(0); /* Bring it back on-screen. Includes hardware acceleration. */
+    visibility: visible; /* Make visible and interactive when shown */
+    transition: transform 0.2s ease-out, visibility 0s linear 0s; /* Visibility is made visible IMMEDIATELY when transform starts */
 }
 
 .chat-container {
@@ -60,9 +71,8 @@ body {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: calc(100% - 72px);
     box-shadow: var(--chat-box-shadow);
-    position: relative;
 }
 
 .chat-header {
@@ -204,17 +214,12 @@ body {
     padding: 16px;
 }
 
-/* .chat-typing-area {
+.chat-typing-area {
     display: flex;
     border-radius: 10px;
     padding: 8px;
     box-shadow: var(--navigation-box-shadow);
     background-color: var(--message-bg);
-} */
- /* Ensure no other elements are blocking */
-.chat-typing-area {
-    position: relative;
-    z-index: 1;
 }
 
 .dark .chat-typing-area {
@@ -316,23 +321,7 @@ body {
     background: #00ff9526;
     color: #4cc794;
 }
-/* Ensure inputs are interactive */
-.chat-input, .form-input {
-    border: none;
-    font-size: 14px;
-    line-height: 24px;
-    outline: none;
-    color: var(--message-text);
-    flex: 1;
-    background-color: transparent;
-    width: 100%;
-    padding: 8px 12px;
-    -webkit-appearance: none; /* Remove iOS styling */
-    touch-action: manipulation;
-    pointer-events: auto;
-    position: relative;
-    z-index: 10000;
-}
+
 
 @keyframes pulse-red {
     0% {
@@ -350,31 +339,3 @@ body {
       box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
     }
   }
-
-  /* For mobile devices */
-@media (max-width: 768px) {
-    .right-side {
-        width: calc(100% - 40px);
-        max-width: 100%;
-        height: 60vh;
-        right: 20px;
-        bottom: 20px;
-    }
-    
-    .chat-typing-area {
-        min-height: 48px; /* Ensure enough touch area */
-    }
-    
-    .chat-input, .form-input {
-        font-size: 16px; /* Larger font for mobile */
-        padding: 12px 16px;
-    }
-}
-
-/* Fix for iOS specifically */
-@supports (-webkit-touch-callout: none) {
-    .chat-input, .form-input {
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-    }
-} 
