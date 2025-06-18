@@ -331,7 +331,7 @@
     right: auto;
 }
 [dir="rtl"] #scroll__top{
-    left: 2rem;
+    left: 2rem; 
     right: auto;
 }
 

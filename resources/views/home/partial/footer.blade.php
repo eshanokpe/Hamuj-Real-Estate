@@ -11,7 +11,7 @@
                             <svg class="footer__widget--title__arrowdown--icon" xmlns="http://www.w3.org/2000/svg" width="12.355" height="8.394" viewBox="0 0 10.355 6.394">
                                 <path d="M15.138,8.59l-3.961,3.952L7.217,8.59,6,9.807l5.178,5.178,5.178-5.178Z" transform="translate(-6 -8.59)" fill="currentColor"></path>
                             </svg>
-                        </h2>
+                        </h2> 
                         <div class="footer__widget--inner">
                             <div class="footer__logo" >
                                 <a class="footer__logo--link display-block" href="{{ url('/') }}" style="background-color: #fff; padding:8px; margin-right:50%; object-fit: cover;">
@@ -404,7 +404,10 @@
 <!-- Quickview Wrapper End -->
 
 <!-- Scroll top bar -->
-<button id="scroll__top"><svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round"  stroke-width="48" d="M112 244l144-144 144 144M256 120v292"/></svg></button>
+<button id="scroll__top"> 
+    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+    <path fill="none" stroke="currentColor" stroke-linecap="round"  stroke-width="48" d="M112 244l144-144 144 144M256 120v292"/></svg>
+</button>
 
 <!-- All Script JS Plugins here  -->
 <script src="{{ asset('assets/js/vendor/popper.js')}}" defer="defer"></script>
