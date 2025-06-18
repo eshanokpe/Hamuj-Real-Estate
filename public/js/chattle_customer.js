@@ -135,7 +135,7 @@ $(document).ready(function(){
         //listen to pusher channel
         Pusher.logToConsole = true;
         const pusher = new Pusher('5499ff5cb459223302e7', {
-            wsHost: '127.0.0.1',
+            wsHost: 'https://dohmayn.com/',
             wsPort: 6001,
             wssPort: 6001,
             forceTLS: false,
