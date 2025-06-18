@@ -65,9 +65,9 @@ $(document).ready(function(){
                         //listen to pusher
                         Pusher.logToConsole = true;
                         const pusher = new Pusher('zehinliQazwsx12', {
-                            wsHost: '127.0.0.1',
-                            wsPort: 6002,
-                            wssPort: 6002,
+                            wsHost: 'https://dohmayn.com/',
+                            wsPort: 6001,
+                            wssPort: 6001,
                             disableStats: true,
                             enabledTransports: ['ws', 'wss'],
                             cluster: 'mt1',
