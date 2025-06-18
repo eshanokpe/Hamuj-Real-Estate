@@ -120,7 +120,7 @@
                                                     <i class="fas fa-download"></i>
                                                 </a>
                                                 <a href="{{ route('user.transaction.show', encrypt($transaction['id'])) }}"
-                                                class="btn btn-info"
+                                                class="btn btn-info" 
                                                 title="View Details">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
