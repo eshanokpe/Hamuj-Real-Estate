@@ -49,7 +49,7 @@
    
     @include('home.partial.footer')
     
-    {{-- @include('chattle::chat')  --}}
+    @include('chattle::chat') 
     
     
 </body>

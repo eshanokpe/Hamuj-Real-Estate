@@ -1,175 +1,248 @@
-$("#messageForm").on('submit', function (e) {
-    e.preventDefault();
-    console.log('sent ajax form');
+// Global variables
+let lastMessageId = 0;
+let isPollingActive = true;
+let currentChatId = $.cookie("ch");
+let currentUserName = $.cookie("nm");
+let pollTimeout = null;
+
+// ========== CORE FUNCTIONS ==========
+
+function loadExistingChat(chatId) {
     $.ajax({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        type: "GET",
+        url: "/chattle/get-messages",
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: { chat_id: chatId },
+        success: function(response) {
+            console.log("Chat loaded:", response);
+            $('#messagesContainer').empty();
+            if (response.length > 0) {
+                appendMessages(response);
+                lastMessageId = response[response.length - 1].id;
+            }
+            showChatWindow();
+            pollMessages(); // Start polling after loading chat
         },
-        type: "POST", 
-        url: "/chattle/post-message",
-        data: {
-            message: $('#message').val(),
-            chat_id: $.cookie("ch"),
-            sender: 'customer'
-        },
-        cache: false,
-        success: function (response) {
-            $('#message').val("");
-            console.log("sent ajax form");
-            console.log(response);
-            $('#messagesContainer').finish().animate({
-                scrollTop: $('#messagesContainer').prop("scrollHeight")
-            }, 250);
-        },
-        error: function (xhr, status, error) {
-            console.error("Error sending message:", xhr.responseText);
-            alert("An error occurred: " + xhr.responseText);
+        error: function(xhr) {
+            console.error("Error loading chat:", xhr.responseText);
         }
     });
-});
-$(document).ready(function(){
-    var ch = $.cookie("ch");
-    if(ch == null){
+}
 
-        $('.close-button').on('click', function(){
-            $('.chat-container').css("display","none");
-            $('.chat-button').css("display","block");
-        });
+function createNewChat() {
+    $.ajax({
+        type: "POST",
+        url: "/chattle/create-chat",
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            name: $('#name').val(),
+            email: $('#email').val()
+        },
+        success: function(response) {
+            console.log("New chat created:", response);
+            currentChatId = response.id;
+            currentUserName = response.name;
+            $.cookie("ch", currentChatId, { expires: 1 });
+            $.cookie("nm", currentUserName, { expires: 1 });
+            loadExistingChat(currentChatId);
+        },
+        error: function(xhr) {
+            console.error("Error creating chat:", xhr.responseText);
+        }
+    });
+}
 
-        $('.chat-button').on('click', function(){
-            if($.cookie("ch") == null){
-                $('#messagesContainer').css("display","none");
-                $('#inputContainer').css("display","none");
-                $('#chatContactContainer').css("display","block");
-                $('.chat-button').css("display","none");
-                $('.chat-container').css("display","flex");
-                $("#contactForm").on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: "POST",
-                    url: "/chattle/create-chat",
-                    data: {
-                        'name': $('#name').val(),
-                        'email': $('#email').val()
-                    },
-                    cache: false,
-                    success: function (response) {
-                        console.log("sent ajax form");
-                        console.log(response);
-                        $.cookie("ch", response.id, { expires : 1 });
-                        $.cookie("nm", response.name, { expires : 1 });
+// ========== UI FUNCTIONS ==========
 
-                        //listen to pusher
-                        Pusher.logToConsole = true;
-                        const pusher = new Pusher('zehinliQazwsx12', {
-                            wsHost: 'https://dohmayn.com/',
-                            wsPort: 6001,
-                            wssPort: 6001,
-                            disableStats: true,
-                            enabledTransports: ['ws', 'wss'],
-                            cluster: 'mt1',
-                        });
-                        var channel = pusher.subscribe('chat'+response.id);
-                        channel.bind('my-messages', function (response) {
-                            console.log(response);
-                            if(response.message.sender == 'admin'){
-                                $('#messagesContainer').append('<div class="message-wrapper"><div class="profile-picture"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="message-content"><p class="name">Admin</p><div class="message">' + response.message.message + '</div></div></div>');
-                            }
-                            else{
-                                $('#messagesContainer').append('<div class="message-wrapper reverse"><div class="profile-picture"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="message-content"><p class="name">' + $.cookie('nm') + '</p><div class="message">' + response.message.message + '</div></div></div>');
-                            }
-                            $('#messagesContainer').finish().animate({
-                                scrollTop: $('#messagesContainer').prop("scrollHeight")
-                            }, 250);
-                        });
+function showContactForm() {
+    $('#messagesContainer, #inputContainer').hide();
+    $('#chatContactContainer').show();
+    $('.chat-button').hide();
+    $('.chat-container').css("display", "flex");
+}
 
-                        //display messages
-                        $('#chatContactContainer').css("display","none");
-                        $('#messagesContainer').css("display","block");
-                        $('#inputContainer').css("display","block");
-                        $('.chat-button').css("display","none");
-                        $('.chat-container').css("display","flex");
-                    }
-                });
-            });
-            }
-            else{
-                $('#chatContactContainer').css("display","none");
-                $('#messagesContainer').css("display","block");
-                $('#inputContainer').css("display","block");
-                $('.chat-button').css("display","none");
-                $('.chat-container').css("display","flex");
-            }
-        });
+function showChatWindow() {
+    $('#chatContactContainer').hide();
+    $('#messagesContainer, #inputContainer').show();
+    $('.chat-button').hide();
+    $('.chat-container').css("display", "flex");
+    scrollToBottom();
+}
+
+function scrollToBottom() {
+    $('#messagesContainer').stop().animate({
+        scrollTop: $('#messagesContainer')[0].scrollHeight
+    }, 300); 
+}
+
+// ========== MESSAGE FUNCTIONS ==========
+
+function pollMessages() {
+    if (!isPollingActive || !currentChatId) {
+        pollTimeout = setTimeout(pollMessages, 2000);
+        return;
     }
-    else{
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: "GET",
-            url: "/chattle/get-messages",
+
+    $.ajax({
+        type: "GET",
+        url: "/chattle/get-messages",
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            chat_id: currentChatId,
+            last_message_id: lastMessageId
+        },
+        cache: false,
+        timeout: 5000,
+        success: function(response) {
+            console.log("Polling response:", response);
+
+            const messages = Array.isArray(response) ? response : response.messages;
+
+            if (messages && messages.length > 0) {
+                lastMessageId = messages[messages.length - 1].id;
+                appendMessages(messages);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Polling error:", status, error);
+        },
+        complete: function() {
+            if (pollTimeout) clearTimeout(pollTimeout);
+            pollTimeout = setTimeout(pollMessages, 1000);
+        }
+    });
+}
+
+function appendMessages(messages) {
+    const $container = $('#messagesContainer');
+    const fragment = document.createDocumentFragment();
+
+    messages.forEach(msg => {
+        if ($(`[data-message-id="${msg.id}"]`).length > 0) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = `message-wrapper ${msg.sender === 'admin' ? '' : 'reverse'}`;
+        wrapper.dataset.messageId = msg.id;
+        wrapper.innerHTML = `
+            <div class="profile-picture">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                    <circle cx="12" cy="7" r="4" fill="gray"></circle>
+                </svg>
+            </div>
+            <div class="message-content">
+                <p class="name">${msg.sender === 'admin' ? 'Admin' : (currentUserName || 'User')}</p>
+                <div class="message">${msg.message}</div>
+            </div>
+        `;
+        fragment.appendChild(wrapper);
+    });
+
+    if (fragment.children.length > 0) {
+        $container.append(fragment);
+        scrollToBottom();
+    }
+}
+
+async function sendMessage() {
+    const $messageInput = $('#message');
+    const messageText = $messageInput.val().trim();
+
+    if (!messageText || !currentChatId) return;
+
+    const tempId = 'temp-' + Date.now();
+    addTempMessage(tempId, messageText);
+    $messageInput.val('').focus();
+
+    try {
+        const response = await $.ajax({
+            type: "POST",
+            url: "/chattle/post-message",
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
             data: {
-                'chat_id': $.cookie("ch"),
+                chat_id: currentChatId,
+                sender: 'customer',
+                message: messageText
             },
-            cache: false,
-            success: function (response) {
-                console.log("sent ajax form");
-                console.log(response);
-                for(var i=0; i < response.length; i++){
-                    if(response[i].sender == 'admin'){
-                        $('#messagesContainer').append('<div class="message-wrapper"><div class="profile-picture"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="message-content"><p class="name">Admin</p><div class="message">' + response[i].message + '</div></div></div>');
-                    }
-                    else{
-                        $('#messagesContainer').append('<div class="message-wrapper reverse"><div class="profile-picture"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="message-content"><p class="name">' + $.cookie('nm') + '</p><div class="message">' + response[i].message + '</div></div></div>');
-                    }
-                }
-                $('#messagesContainer').finish().animate({
-                    scrollTop: $('#messagesContainer').prop("scrollHeight")
-                }, 250);
-            }
-        });
-        //listen to pusher channel
-        Pusher.logToConsole = true;
-        const pusher = new Pusher('5499ff5cb459223302e7', {
-            wsHost: 'https://dohmayn.com/',
-            wsPort: 6001,
-            wssPort: 6001,
-            forceTLS: false,
-            disableStats: true,
-            enabledTransports: ['ws'],
-        });
-        var channel = pusher.subscribe('chat'+ $.cookie("ch"));
-        channel.bind('my-messages', function (response) {
-            console.log(response);
-            if(response.message.sender == 'admin'){
-                $('#messagesContainer').append('<div class="message-wrapper"><div class="profile-picture"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="message-content"><p class="name">Admin</p><div class="message">' + response.message.message + '</div></div></div>');
-            }
-            else{
-                $('#messagesContainer').append('<div class="message-wrapper reverse"><div class="profile-picture"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="message-content"><p class="name">' + $.cookie('nm') + '</p><div class="message">' + response.message.message + '</div></div></div>');
-            }
-            $('#messagesContainer').finish().animate({
-                scrollTop: $('#messagesContainer').prop("scrollHeight")
-            }, 250);
+            timeout: 5000
         });
 
-        $('.close-button').on('click', function(){
-            $('.chat-container').css("display","none");
-            $('.chat-button').css("display","block");
-        });
-
-        $('.chat-button').on('click', function(){
-            $('#chatContactContainer').css("display","none");
-            $('#messagesContainer').css("display","block");
-            $('#inputContainer').css("display","block");
-            $('.chat-button').css("display","none");
-            $('.chat-container').css("display","flex");
-            $('#messagesContainer').finish().animate({
-                scrollTop: $('#messagesContainer').prop("scrollHeight")
-            }, 250);
-        });
+        $(`[data-message-id="${tempId}"]`).attr('data-message-id', response.id);
+        if (response.id > lastMessageId) lastMessageId = response.id;
+    } catch (error) {
+        console.error("Message send error:", error);
+        $(`[data-message-id="${tempId}"]`).remove();
+        alert('Failed to send message. Please try again.');
     }
+}
+
+function addTempMessage(tempId, messageText) {
+    $('#messagesContainer').append(`
+        <div class="message-wrapper reverse" data-message-id="${tempId}">
+            <div class="profile-picture">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                    <circle cx="12" cy="7" r="4" fill="gray"></circle>
+                </svg>
+            </div>
+            <div class="message-content">
+                <p class="name">${currentUserName || 'You'}</p>
+                <div class="message">${messageText}</div>
+            </div>
+        </div>
+    `);
+    scrollToBottom();
+}
+
+// ========== INITIALIZATION ==========
+
+function initializeChat() {
+    if (currentChatId) {
+        loadExistingChat(currentChatId);
+    } else {
+        showContactForm();
+    }
+}
+
+function cleanup() {
+    isPollingActive = false;
+    if (pollTimeout) clearTimeout(pollTimeout);
+    $(window).off('beforeunload');
+}
+
+$(document).ready(function() {
+    // Setup event handlers
+    $("#messageForm").on('submit', function(e) {
+        e.preventDefault();
+        sendMessage();
+    });
+
+    $("#contactForm").on('submit', function(e) {
+        e.preventDefault();
+        userName = $('#name').val();
+        userEmail = $('#email').val();
+
+        if (!userName || !userEmail) {
+            alert("Please enter your name and email.");
+            return;
+        }
+        $('#chatContactContainer').hide();
+        $('#messagesContainer').show();
+        $(".submit-button").prop("disabled", true).text("Connecting...");
+
+        createNewChat();
+    });
+
+    $('.close-button').on('click', function() {
+        $('.chat-container').hide();
+        $('.chat-button').show();
+    });
+
+    $('.chat-button').on('click', function() {
+        currentChatId ? showChatWindow() : showContactForm();
+    });
+
+    // Initialize chat
+    initializeChat();
+
+    // Cleanup on page unload
+    $(window).on('beforeunload', cleanup);
 });

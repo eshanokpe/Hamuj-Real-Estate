@@ -15,7 +15,7 @@ use App\Models\Sell;
 use App\Models\Transfer;
 use App\Models\WalletTransaction;
 use App\Models\Transaction;
-
+ 
  
 class AdminController extends Controller
 {
@@ -38,7 +38,7 @@ class AdminController extends Controller
             'walletTransactions' => WalletTransaction::with('user')->latest()->paginate(3), 
             'transactions' => Transaction::with('user')->latest()->paginate(3),
         ];
-
+ 
         return view('admin.home.index', $data);
     }
 

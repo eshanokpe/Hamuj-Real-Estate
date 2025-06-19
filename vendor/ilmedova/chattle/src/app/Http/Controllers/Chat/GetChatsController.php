@@ -8,8 +8,17 @@ use Ilmedova\Http\Request;
 
 class GetChatsController extends Controller
 {
-    public function __invoke(){
+    // public function __invoke(){
+    //     $chats = Chat::withCount('unseen_messages')->orderBy('unseen_messages_count', 'desc')->paginate(10);
+    //     return response()->json($chats, 200);
+    // }
+ 
+    public function getChats(Request $request)
+    { 
         $chats = Chat::withCount('unseen_messages')->orderBy('unseen_messages_count', 'desc')->paginate(10);
         return response()->json($chats, 200);
     }
+
+  
+
 }

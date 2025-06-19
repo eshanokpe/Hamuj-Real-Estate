@@ -209,15 +209,15 @@ Route::prefix('admin')->group(function () {
             Route::put('user/{id}/', [UserController::class, 'update'])->name('users.update');
             Route::get('user/delete/{id}', [UserController::class, 'destroy'])->name('users.destroy');
             Route::patch('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active');
-        });
+        }); 
 
        Route::get('buy/index', [BuyController::class, 'index'])->name('admin.buy');
        Route::get('transfer/index', [TransferController::class, 'index'])->name('admin.transfer');
        Route::get('sell/index', [SellController::class, 'index'])->name('admin.sell');
-
+ 
         Route::prefix('support')->name('admin.')->group(function () {
-            Route::get('chat-admin', AdminChatController::class)->name('chat.index');
-        });
+            Route::get('chat-admin', [AdminChatController::class, 'index'])->name('chat.index');
+        }); 
 
     });  
 }); 

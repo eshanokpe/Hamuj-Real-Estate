@@ -93,7 +93,7 @@ php artisan serve
 ```
 
 Admin dashboard for chatting with customers available at http://your-domain/chattle/chat-admin 
-
+ 
 ## <a name="todo"></a> What's next 🚀
 
 - Realtime typing effect in chatboxes for users to let know that user or admin is typing

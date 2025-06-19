@@ -1,15 +1,16 @@
 $("#messageForm").on('submit', function (e) {
     e.preventDefault();
+    console.log('sent ajax form');
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        type: "POST",
+        type: "POST", 
         url: "/chattle/post-message",
         data: {
-            'message': $('#message').val(),
-            'chat_id': $.cookie("ch"),
-            'sender': 'customer'
+            message: $('#message').val(),
+            chat_id: $.cookie("ch"),
+            sender: 'customer'
         },
         cache: false,
         success: function (response) {
@@ -19,6 +20,10 @@ $("#messageForm").on('submit', function (e) {
             $('#messagesContainer').finish().animate({
                 scrollTop: $('#messagesContainer').prop("scrollHeight")
             }, 250);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error sending message:", xhr.responseText);
+            alert("An error occurred: " + xhr.responseText);
         }
     });
 });
@@ -59,14 +64,14 @@ $(document).ready(function(){
 
                         //listen to pusher
                         Pusher.logToConsole = true;
-                        const pusher = new Pusher('zehinliQazwsx12', {
-                            wsHost: '127.0.0.1',
+                        const pusher = new Pusher('5499ff5cb459223302e7', {
+                            wsHost: 'https://dohmayn.com/',
                             wsPort: 6001,
                             wssPort: 6001,
                             disableStats: true,
                             enabledTransports: ['ws', 'wss'],
                             cluster: 'mt1',
-                        }); 
+                        });
                         var channel = pusher.subscribe('chat'+response.id);
                         channel.bind('my-messages', function (response) {
                             console.log(response);
@@ -75,7 +80,7 @@ $(document).ready(function(){
                             }
                             else{
                                 $('#messagesContainer').append('<div class="message-wrapper reverse"><div class="profile-picture"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="message-content"><p class="name">' + $.cookie('nm') + '</p><div class="message">' + response.message.message + '</div></div></div>');
-                            }
+                            } 
                             $('#messagesContainer').finish().animate({
                                 scrollTop: $('#messagesContainer').prop("scrollHeight")
                             }, 250);
@@ -129,13 +134,13 @@ $(document).ready(function(){
         });
         //listen to pusher channel
         Pusher.logToConsole = true;
-        const pusher = new Pusher('zehinliQazwsx12', {
-            wsHost: '127.0.0.1',
+        const pusher = new Pusher('5499ff5cb459223302e7', {
+            wsHost: 'https://dohmayn.com/',
             wsPort: 6001,
             wssPort: 6001,
+            forceTLS: false,
             disableStats: true,
-            enabledTransports: ['ws', 'wss'],
-            cluster: 'mt1',
+            enabledTransports: ['ws'],
         });
         var channel = pusher.subscribe('chat'+ $.cookie("ch"));
         channel.bind('my-messages', function (response) {
