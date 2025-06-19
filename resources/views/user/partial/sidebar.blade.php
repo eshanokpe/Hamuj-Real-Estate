@@ -77,7 +77,7 @@
                     </svg>
                     <span class="sidebar__menu--text">Transaction</span>
                 </a> 
-            </li>
+            </li> 
 
             <li class="sidebar__menu--items">
                 <a class="sidebar__menu--link" href="{{ route('user.notifications.index') }}">

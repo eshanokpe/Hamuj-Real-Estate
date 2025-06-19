@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-
+ 
 class WalletController extends Controller
 { 
     public function getWalletBalance($userId = null)
@@ -12,7 +12,7 @@ class WalletController extends Controller
         $userId = $userId ?? auth()->id();
         return User::find($userId)->wallet_balance;
     }
-    
+     
     // Create Customer  
     public function createVirtualAccountCustomer($user)
     {

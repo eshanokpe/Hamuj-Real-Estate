@@ -212,7 +212,7 @@ Route::prefix('admin')->group(function () {
         });
 
        Route::get('buy/index', [BuyController::class, 'index'])->name('admin.buy');
-       Route::get('transfer/index', [Transferontroller::class, 'index'])->name('admin.transfer');
+       Route::get('transfer/index', [TransferController::class, 'index'])->name('admin.transfer');
        Route::get('sell/index', [SellController::class, 'index'])->name('admin.sell');
 
         Route::prefix('support')->name('admin.')->group(function () {

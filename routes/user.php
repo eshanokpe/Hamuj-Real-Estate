@@ -36,14 +36,13 @@ use App\Http\Controllers\User\Wallet\WalletTransferController;
 Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
 
     Route::post('/revolut-payment/make', [OrderController::class, 'makePayment'])->name('revolutPayment.make');
-     
+      
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/transactions', [DashboardController::class, 'transactionReport'])->name('transactions');
 
     Route::get('/transaction/report', [TransactionController::class, 'index'])->name('transactions.index');
     Route::get('/transaction/show/{id}', [TransactionController::class, 'show'])->name('transaction.show');  
-    Route::get('/transaction/{id}/download', [WalletController::class, 'download'])->name('transaction.download'); 
-    Route::get('/wallet/{id}', [WalletController::class, 'show'])->name('transaction.show');
+
     
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties');
      
@@ -120,24 +119,29 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('referral/index', [ReferralController::class, 'index'])->name('referral.index');
     Route::get('referral/show', [ReferralController::class, 'show'])->name('referrals.show');
     
-    Route::get('/wallet/index', [WalletController::class, 'index'])->name('wallet.index'); 
+
+    Route::get('transaction/{id}/download', [WalletController::class, 'download'])->name('transaction.download'); 
+    Route::get('wallet/index', [WalletController::class, 'index'])->name('wallet.index'); 
+    
+    Route::get('wallet/show/{id}', [WalletController::class, 'show'])->name('wallet.show');
     Route::get('wallet/top-up', [WalletController::class, 'topUp'])->name('wallet.topUp'); 
     Route::get('wallet/with-draw', [WalletController::class, 'withDraw'])->name('wallet.withdraw');
     Route::get('wallet/transfer-post', [WalletController::class, 'transferPost'])->name('wallet.transferPost');
+    Route::get('resolve-account', [WalletController::class, 'resolveAccount'])->name('wallet.resolve.account');
+    Route::get('payment/history', [WalletController::class, 'paymentHistory'])->name('payment.history');
     
+
     Route::get('/wallet/exchange/{from}', [ExchangeController::class, 'index'])->name('wallet.exchange'); 
     Route::post('/wallet/exchange/gbp-to-ngn', [ExchangeController::class, 'exchangeGbpToNgn'])->name('wallet.exchange-gbp-to-ngn');
     Route::post('/wallet/exchange/ngn-to-gbp', [ExchangeController::class, 'exchangeNgnToGbp'])->name('wallet.exchange-ngn-to-gbp');
     Route::post('/wallet/exchange/success', [ExchangeController::class, 'exchangeSuccess'])->name('exchange.success');
 
     
-    Route::get('resolve-account', [WalletController::class, 'resolveAccount'])->name('wallet.resolve.account');
  
     Route::post('create-recipient', [WalletTransferController::class, 'createRecipient'])->name('wallet.createRecipient');
     Route::post('initiate-transfer', [WalletTransferController::class, 'initiateTransfer'])->name('wallet.initiateTransfer');
     Route::post('verifyOtp', [WalletTransferController::class, 'verifyOtp'])->name('wallet.verifyOtp');
   
-    Route::get('payment/history', [WalletController::class, 'paymentHistory'])->name('payment.history');
 
     
     Route::get('/help-support', [HelpSupportController::class, 'index'])->name('support');

@@ -170,14 +170,20 @@ class WalletController extends Controller
     public function show($id)
     {
         $data['user'] = Auth::user();
-        // dd($id);
-        $walletTransaction = WalletTransaction::where('id', decrypt($id))->first();
 
-        $walletPaymentTransaction = Transaction::where('id', decrypt($id) )
+        try {
+            $decryptedId = ($id);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            abort(404, 'Invalid or corrupted transaction reference.');
+        } 
+
+        $walletTransaction = WalletTransaction::where('id', $decryptedId)->first();
+
+        $walletPaymentTransaction = Transaction::where('id', $decryptedId)
             ->where('payment_method', 'dedicated_nuban')
             ->first();
 
-         $data['transaction'] = collect([
+        $data['transaction'] = collect([
             $walletTransaction,
             $walletPaymentTransaction
         ])->filter(); 

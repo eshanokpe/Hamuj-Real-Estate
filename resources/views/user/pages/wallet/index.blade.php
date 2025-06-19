@@ -60,7 +60,7 @@
                                                             </a>
                                                             <a href="{{ route('user.wallet.withdraw') }}" class="btn d-flex flex-column align-items-center justify-content-center text-center">
                                                                 <img src="{{ asset('assets/admin/img/dashboard/withdrawn.png')}}" alt="Sell" class="me-2 mb-2" width="50">
-                                                                <snap style="font-size: 14px">Withdraw </snap>
+                                                                <snap style="font-size: 14px">Transfer </snap>
                                                             </a> 
                                                              
                                                             <a href="{{ route('user.payment.history') }}" class="btn d-flex flex-column align-items-center justify-content-center text-center">

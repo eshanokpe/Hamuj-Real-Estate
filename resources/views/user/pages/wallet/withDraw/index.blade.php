@@ -434,11 +434,28 @@
                                             }),
                                             success: function (transferResponse) {
                                                 if (transferResponse.status === 'success') {
-                                                    toastr.success('The transfer has been completed successfully.', 'Success');
+                                                    // Show success modal
+                                                    $('body').append(`
+                                                        <div class="modal fade" id="transferSuccessModal" tabindex="-1">
+                                                            <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title text-success">Transfer Successful</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body text-center">
+                                                                        <svg width="60" height="60" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#28a745"/><path d="M7 13l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                                        <p class="mt-3 mb-0">The transfer has been completed successfully.</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    `);
+                                                    var modal = new bootstrap.Modal(document.getElementById('transferSuccessModal'));
+                                                    modal.show();
                                                     setTimeout(() => { 
                                                         window.location.href = transferResponse.redirect_url;
-                                                    }, 1500);
-
+                                                    }, 2000);
                                                 } else {
                                                     toastr.error('Transfer failed: ' + transferResponse.message, 'Error');
                                                 }
