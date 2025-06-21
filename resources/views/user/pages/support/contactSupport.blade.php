@@ -1,6 +1,8 @@
 @extends('layouts.dashboard')
 
-
+<div style=" top: 200px; ">
+    @include('chattle::chat')
+</div> 
 
 @section('content')
 
@@ -117,8 +119,6 @@
             </div>
         </div>
         <!-- dashboard container .\ -->
-
-       
     </main>
 </div>
 

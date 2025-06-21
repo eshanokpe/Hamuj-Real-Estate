@@ -223,7 +223,7 @@ $(document).ready(function() {
         if (!userName || !userEmail) {
             alert("Please enter your name and email.");
             return;
-        }
+        } 
         $('#chatContactContainer').hide();
         $('#messagesContainer').show();
         $(".submit-button").prop("disabled", true).text("Connecting...");

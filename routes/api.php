@@ -26,6 +26,11 @@ use App\Http\Controllers\User\ReferralController;
 use App\Http\Controllers\User\HelpSupportController; 
 use App\Http\Controllers\User\RevolutPaymentController;
 use App\Http\Controllers\User\CartController;
+//chattle
+use Ilmedova\Chattle\app\Http\Controllers\Chat\AdminController;
+use Ilmedova\Chattle\app\Http\Controllers\Chat\CreateController;
+use Ilmedova\Chattle\app\Http\Controllers\Chat\GetMessagesController;
+use Ilmedova\Chattle\app\Http\Controllers\Chat\PostMessageController;
 
  
 /*
@@ -125,5 +130,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Example of other protected routes
     // Route::post('/webhook/paystack', [WebhookController::class, 'handlePaystackWebhook']);
+
+    Route::prefix('chattle')->group(function () {
+        Route::view('chat', 'chattle::chat'); 
+        Route::post('/create-chat', [CreateController::class, 'createChat']);
+        Route::post('/post-message', [PostMessageController::class, 'postMessage']);
+
+        Route::get('/get-messages', [GetMessagesController::class, 'getMessages']);
+
+    }); 
 });
 
+ 

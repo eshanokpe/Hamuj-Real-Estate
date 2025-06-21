@@ -133,9 +133,7 @@
     
         @include('user.partial.footer')
         
-        <div style=" top: 200px; ">
-            @include('chattle::chat')
-        </div> 
+       
         
     </div>
   
