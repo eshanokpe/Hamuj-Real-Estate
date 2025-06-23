@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Console\\Commands\\WebSocketServer' => $baseDir . '/app/Console/Commands/WebSocketServer.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\Admin\\AdminController' => $baseDir . '/app/Http/Controllers/Admin/AdminController.php',
@@ -82,6 +83,7 @@ return array(
     'App\\Mail\\VerificationEmail' => $baseDir . '/app/Mail/VerificationEmail.php',
     'App\\Models\\About' => $baseDir . '/app/Models/About.php',
     'App\\Models\\Admin' => $baseDir . '/app/Models/Admin.php',
+    'App\\Models\\Beneficiary' => $baseDir . '/app/Models/Beneficiary.php',
     'App\\Models\\Buy' => $baseDir . '/app/Models/Buy.php',
     'App\\Models\\Comment' => $baseDir . '/app/Models/Comment.php',
     'App\\Models\\ContactDetials' => $baseDir . '/app/Models/ContactDetials.php',
@@ -139,6 +141,7 @@ return array(
     'App\\Services\\RevolutService' => $baseDir . '/app/Services/RevolutService.php',
     'App\\Services\\TransferService' => $baseDir . '/app/Services/TransferService.php',
     'App\\Services\\WalletService' => $baseDir . '/app/Services/WalletService.php',
+    'App\\WebSockets\\Chat' => $baseDir . '/app/WebSockets/Chat.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'Barryvdh\\DomPDF\\Facade\\Pdf' => $vendorDir . '/barryvdh/laravel-dompdf/src/Facade/Pdf.php',
     'Barryvdh\\DomPDF\\PDF' => $vendorDir . '/barryvdh/laravel-dompdf/src/PDF.php',

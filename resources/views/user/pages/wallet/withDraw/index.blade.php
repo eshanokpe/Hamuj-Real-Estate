@@ -44,6 +44,17 @@
     .resolved-account-display .status-message { color: #007bff; /* Blue for neutral/verifying messages */ }
     .resolved-account-display .status-message.error { color: #dc3545; /* Red for error messages */ }
 
+    .beneficiary-option {
+        display: flex;
+        justify-content: space-between;
+    }
+    .beneficiary-account {
+        font-weight: bold;
+    }
+    .beneficiary-bank {
+        color: #666;
+        font-size: 0.9em;
+    }
 </style>
 
 @section('content')
@@ -69,6 +80,24 @@
                                                 <div class="setting__profile--inner">
                                                     <div class="add__listing--form">
                                                         @csrf
+                                                        <!-- Beneficiary Selection -->
+                                                        <div class="add__listing--input__box mb-20">
+                                                            <label class="add__listing--input__label">Select from saved beneficiaries</label>
+                                                            <select id="savedBeneficiaries" class="add__listing--input__field w-100">
+                                                                <option value="">Select a saved beneficiary</option>
+                                                                @foreach($beneficiaries as $beneficiary)
+                                                                    <option 
+                                                                        value="{{ $beneficiary->id }}"
+                                                                        data-account-number="{{ $beneficiary->account_number }}"
+                                                                        data-bank-code="{{ $beneficiary->bank_code }}"
+                                                                        data-account-name="{{ $beneficiary->account_name }}"
+                                                                        data-bank-name="{{ $beneficiary->bank_name }}">
+                                                                        {{ $beneficiary->account_name }} - {{ $beneficiary->account_number }} ({{ $beneficiary->bank_name }})
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        
                                                         <!-- Account Number Input -->
                                                         <div class="add__listing--input__box mb-20">
                                                             <label class="add__listing--input__label" for="name">Recipient Account Number</label>
@@ -119,7 +148,7 @@
                                                             />
                                                         </div>
                                                     
-                                                        <!-- Submit Button -->
+                                                        <!-- Next Button -->
                                                         <button type="button" class="solid__btn add__property--btn" id="next-button" data-bs-toggle="modal" data-bs-target="#modaladdcontact" aria-label="popup button" disabled>
                                                             Next
                                                         </button>
@@ -279,7 +308,7 @@
                         </div>
                         <div class="modal__contact--form__input mb-20">
                             <label class="modal__contact--input__label" for="name">Bank Name</label>
-                            <input name="bank_name" class="modal__contact--input__field" id="modal-bank-name"  type="text" readonly>
+                            <input name="modal-account-name" class="modal__contact--input__field" id="modal-bank-name"  type="text" readonly>
                             <input name="modal-bankCode" class="modal__contact--input__field" id="modal-bankCode"  type="hidden" readonly>
                         </div>
                         <div class="modal__contact--form__input mb-20">
@@ -287,12 +316,19 @@
                             <input name="modal-amount" class="modal__contact--input__field" id="modal-amount" type="text" readonly>
                         </div>
                         <div class="modal__contact--form__input mb-20">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="saveAsBeneficiary" checked>
+                                <label class="form-check-label" for="saveAsBeneficiary">
+                                    Save this account as beneficiary for future transfers
+                                </label>
+                            </div>
+                        </div>
+                        <div class="modal__contact--form__input mb-20">
                             <label class="modal__contact--input__label" for="name"> Enter 4-digit Transaction PIN</label>
                             <input name="modal-pin" class="modal__contact--input__field"  maxlength="4"  inputmode="numeric"
                                    pattern="\d{4}"
                                    placeholder="****" id="transactionPin" type="password" required>
                         </div>
-                       
                         <div class="modal__contact--footer">
                             <button class="solid__btn border-0" id="process-transfer" type="submit">
                                 <span class="button-text">Process Transfer</span>
@@ -309,68 +345,113 @@
 </div> 
 
 
-
-    
 <script>
     @auth
         @if (!auth()->user()->transaction_pin)
             window.location.href = "{{ route('user.transaction.pin') }}"; 
         @endif
     @endauth 
-    document.addEventListener("DOMContentLoaded", function () {
-        const amountInput = document.getElementById("amount");
 
-        amountInput.addEventListener("input", function () {
-            let value = amountInput.value.replace(/,/g, ""); // Remove existing commas
-            if (!isNaN(value) && value) {
-                amountInput.value = new Intl.NumberFormat().format(value); // Add commas
-            } else if (!value) {
-                amountInput.value = ""; // Clear the field if input is invalid
-            }
-        });
-    });
     $(document).ready(function() {
         $('.js-bank-select').select2({
             placeholder: "Select a bank",
-            allowClear: false,
-            // width: '100%',
+            allowClear: false
         });
-    });
-    $(document).ready(function () {
-        const $accountNumber = $('#number');
-        const $bankSelect = $('#bank');
-        const $nextButton = $('#next-button');
 
-        function toggleNextButton() {
-            const isAccountNumberValid = $accountNumber.val().length === 10;
-            const isBankSelected = $bankSelect.val() !== '';
-            $nextButton.prop('disabled', !(isAccountNumberValid && isBankSelected));
-        }
-
-        // Listen for input changes
-        $accountNumber.on('input', function () {
-            const currentValue = $accountNumber.val();
-            if (currentValue.length > 10) {
-                $accountNumber.val(currentValue.slice(0, 10)); 
+        // Handle beneficiary selection
+        $('#savedBeneficiaries').on('change', function() {
+            const selectedOption = $(this).find('option:selected');
+            if (selectedOption.val()) {
+                $('#number').val(selectedOption.data('account-number')).trigger('input');
+                $('#bank').val(selectedOption.data('bank-code')).trigger('change');
+                $('#resolved_account_info_display').html(
+                    `<span class="account-name">${selectedOption.data('account-name')}</span>
+                     <span class="bank-name">${selectedOption.data('bank-name')}</span>`
+                );
+                $('#amount-container').show();
+                $('#next-button').prop('disabled', false);
             }
-            toggleNextButton();
         });
-        $bankSelect.on('change', toggleNextButton);
-    });
 
-    $(document).ready(function () {
-        $('#create-recipient-form').on('submit', function (e) {
-            e.preventDefault(); // Prevent form submission
+        // Account verification logic
+        $('#bank, #number, #amount_display').on('input change', function() {
+            const accountNumber = $('#number').val().trim();
+            const bankCode = $('#bank').val();
+            const amount = $('#amount_display').val();
+
+            if (accountNumber.length === 10 && bankCode) {
+                $('#resolved_account_info_display').html('<span class="status-message">Verifying...</span>');
+                $('#next-button').prop('disabled', true);
+
+                $.ajax({
+                    url: "{{ route('user.wallet.resolve.account') }}", 
+                    method: "GET",
+                    data: {
+                        account_number: accountNumber,
+                        bank_code: bankCode,
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            const data = response.data;
+                            const selectedBankName = $('#bank option:selected').text();
+                            $('#resolved_account_info_display').html(
+                                '<span class="account-name">' + data.account_name + '</span>' +
+                                '<span class="bank-name">' + selectedBankName + '</span>'
+                            );
+
+                            // Populate modal fields
+                            $('#modal-account-name').val(data.account_name);
+                            $('#modal-account-number').val(data.account_number);
+                            $('#modal-bank-name').val(selectedBankName);
+                            $('#modal-amount').val(amount);
+                            $('#modal-bankCode').val(bankCode);
+
+                            $('#amount-container').show();
+
+                            if (amount && parseFloat(amount) > 0) {
+                                $('#next-button').prop('disabled', false);
+                            } else {
+                                $('#next-button').prop('disabled', true);
+                            }
+                        } else {
+                            $('#resolved_account_info_display').html('<span class="status-message error">' + (response.message || 'Account details not found.') + '</span>');
+                            $('#amount-container').hide();
+                            $('#next-button').prop('disabled', true);
+                        }
+                    },
+                    error: function() {
+                        $('#next-button').prop('disabled', true);
+                        $('#resolved_account_info_display').html('<span class="status-message error">Unable to verify account. Please try again.</span>');
+                    },
+                });
+            } else {
+                $('#resolved_account_info_display').html('<span class="status-message">Details will appear here upon verification.</span>');
+                $('#next-button').prop('disabled', true);
+            }
+        });
+
+        // Amount validation
+        $('#amount_display').on('input', function() {
+            const amount = $(this).val();
+            $('#next-button').prop('disabled', !(amount && parseFloat(amount) > 0));
+        });
+
+        // Transfer form submission
+        $('#create-recipient-form').on('submit', function(e) {
+            e.preventDefault();
              
-            // Collect form data
             const accountNumber = $('#modal-account-number').val();
             const accountName = $('#modal-account-name').val();
             const bankCode = $('#modal-bankCode').val();
             const amount = $('#modal-amount').val();
             const $button = $('#process-transfer');
             const transactionPin = $('#transactionPin').val();
-            // Check if Transaction PIN is empty
-           
+            const saveAsBeneficiary = $('#saveAsBeneficiary').is(':checked');
+
+            if (!transactionPin) {
+                toastr.error('Please enter your transaction PIN', 'Error');
+                return;
+            }
 
             // Show loading state
             $button.prop('disabled', true);
@@ -386,113 +467,168 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 data: JSON.stringify({ 
-                    entered_pin: $('#transactionPin').val().trim(),
+                    entered_pin: transactionPin,
                     user_id: {{ auth()->id() }}
                 }),
                 success: function(response) {
-                    resetButtonState($button);
-                    if (response.status === 'success') {
-                        console.log("Complete pin_match:", response.pin_match);
-
-                        if (response.pin_match) {
-                            // PIN is correct, proceed to create recipient
-                            $button.find('.button-text').text('Processing Transfer...');
-                            // Step 2: Create Recipient 
-                            $.ajax({
-                                url: "{{ route('user.wallet.createRecipient') }}", 
-                                method: "POST",
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                }, 
-                                data: JSON.stringify({
-                                    _token: $('meta[name="csrf-token"]').attr('content'),
-                                    name: accountName,
-                                    account_number: accountNumber,
-                                    bank_code: bankCode
-                                }),
-                                success: function (response) {
-                                    if (response.status === 'success') {
-                                        const recipientCode = response.recipient_code;
-                                        // Step 3: Initiate Transfer
-                                        $.ajax({
-                                            url: "{{ route('user.wallet.initiateTransfer') }}",
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                            }, 
-                                            data: JSON.stringify({
-                                                _token: $('meta[name="csrf-token"]').attr('content'),
-                                                name: accountName, 
-                                                account_number: accountNumber,
-                                                bank_code: bankCode,
-                                                recipient_code: recipientCode,
-                                                amount: amount,
-                                                reason: 'Payment', 
-                                                transfer_reference: generateUUID()
-                                            }),
-                                            success: function (transferResponse) {
-                                                if (transferResponse.status === 'success') {
-                                                    // Show success modal
-                                                    $('body').append(`
-                                                        <div class="modal fade" id="transferSuccessModal" tabindex="-1">
-                                                            <div class="modal-dialog modal-dialog-centered">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title text-success">Transfer Successful</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body text-center">
-                                                                        <svg width="60" height="60" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#28a745"/><path d="M7 13l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                                                        <p class="mt-3 mb-0">The transfer has been completed successfully.</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    `);
-                                                    var modal = new bootstrap.Modal(document.getElementById('transferSuccessModal'));
-                                                    modal.show();
-                                                    setTimeout(() => { 
-                                                        window.location.href = transferResponse.redirect_url;
-                                                    }, 2000);
-                                                } else {
-                                                    toastr.error('Transfer failed: ' + transferResponse.message, 'Error');
-                                                }
-                                            },
-                                            error: function () {
-                                                // toastr.error('An error occurred during the transfer process.', 'Error');
-                                            },
-                                            complete: function () {
-                                                resetButtonState($button);
-                                            }
-                                        });
-                                    } else {
-                                        toastr.error('Recipient creation failed: '+ response.message, 'Error');
-                                        resetButtonState($button);
+                    if (response.status === 'success' && response.pin_match) {
+                        $button.find('.button-text').text('Processing Transfer...');
+                        
+                        // Step 2: Create Recipient 
+                        $.ajax({
+                            url: "{{ route('user.wallet.createRecipient') }}", 
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }, 
+                            data: JSON.stringify({
+                                name: accountName,
+                                account_number: accountNumber,
+                                bank_code: bankCode
+                            }),
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    const recipientCode = response.recipient_code;
+                                    
+                                    // Save beneficiary if checkbox is checked
+                                    if (saveAsBeneficiary) {
+                                        saveBeneficiary(accountName, accountNumber, bankCode, $('#bank option:selected').text(), recipientCode);
                                     }
-                                },
-                                error: function () {
-                                    toastr.error('An error occurred while creating the recipient.', 'Error');
+
+                                    // Step 3: Initiate Transfer
+                                    initiateTransfer(accountName, accountNumber, bankCode, recipientCode, amount, $button);
+                                } else {
+                                    toastr.error('Recipient creation failed: '+ response.message, 'Error');
                                     resetButtonState($button);
                                 }
-                            });
-                        } else {
-                            toastr.error('The PIN you entered is incorrect.', 'PIN Mismatch');
-                            resetButtonState($button);
-                        }
-                    } else if (response.status === 'error') {
-                        // PIN is incorrect
-                        toastr.error(response.message || 'Invalid transaction PIN.', 'PIN Verification Failed');
+                            },
+                            error: function() {
+                                toastr.error('An error occurred while creating the recipient.', 'Error');
+                                resetButtonState($button);
+                            }
+                        });
+                    } else {
+                        toastr.error('The PIN you entered is incorrect.', 'PIN Mismatch');
                         resetButtonState($button);
                     }
                 },
-                error: function () {
+                error: function() {
                     toastr.error('An error occurred while verifying PIN. Please try again.', 'Error');
                     resetButtonState($button);
                 }
             });
         });
+
+        function saveBeneficiary(accountName, accountNumber, bankCode, bankName, recipientCode) {
+            $.ajax({
+                url: "{{ route('user.wallet.saveBeneficiary') }}",
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                data: JSON.stringify({
+                    account_name: accountName,
+                    account_number: accountNumber,
+                    bank_code: bankCode,
+                    bank_name: bankName,
+                    recipient_code: recipientCode
+                }),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Refresh beneficiary dropdown
+                        loadBeneficiaries();
+                    }
+                },
+                error: function(error) {
+                    console.error('Error saving beneficiary:', error);
+                }
+            });
+        }
+
+        function initiateTransfer(accountName, accountNumber, bankCode, recipientCode, amount, $button) {
+            $.ajax({
+                url: "{{ route('user.wallet.initiateTransfer') }}",
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }, 
+                data: JSON.stringify({
+                    name: accountName, 
+                    account_number: accountNumber,
+                    bank_code: bankCode,
+                    recipient_code: recipientCode,
+                    amount: amount,
+                    reason: 'Payment', 
+                    transfer_reference: generateUUID()
+                }), 
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Show success modal
+                        $('#modaladdcontact').modal('hide');
+                        $('body').append(`
+                            <div class="modal fade" id="transferSuccessModal" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-success">Transfer Successful</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <svg width="60" height="60" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#28a745"/><path d="M7 13l3 3 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            <p class="mt-3 mb-0">The transfer has been completed successfully.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                        var modal = new bootstrap.Modal(document.getElementById('transferSuccessModal'));
+                        modal.show();
+                        setTimeout(() => { 
+                            window.location.href = response.redirect_url || "{{ route('user.transactions') }}";
+                        }, 2000);
+                    } else {
+                        toastr.error('Transfer failed: ' + response.message, 'Error');
+                    }
+                },
+                error: function() {
+                    toastr.error('An error occurred during the transfer process.', 'Error');
+                },
+                complete: function() {
+                    resetButtonState($button);
+                }
+            });
+        }
+
+        function loadBeneficiaries() {
+            $.ajax({
+                url: "{{ route('user.beneficiaries.index') }}",
+                method: "GET",
+                success: function(response) {
+                    const $select = $('#savedBeneficiaries');
+                    $select.empty().append('<option value="">Select a saved beneficiary</option>');
+                    
+                    response.data.forEach(beneficiary => {
+                        $select.append(
+                            `<option 
+                                value="${beneficiary.id}" 
+                                data-account-number="${beneficiary.account_number}"
+                                data-bank-code="${beneficiary.bank_code}"
+                                data-account-name="${beneficiary.account_name}"
+                                data-bank-name="${beneficiary.bank_name}">
+                                ${beneficiary.account_name} - ${beneficiary.account_number} (${beneficiary.bank_name})
+                            </option>`
+                        );
+                    });
+                }
+            });
+        }
+
         function resetButtonState($button) {
             $button.prop('disabled', false);
             $button.find('.button-text').text('Process Transfer');
@@ -505,86 +641,16 @@
                 return v.toString(16);
             });
         }
+
+        // Copy referral link function
+        function copyReferralLink() {
+            const referralLink = document.querySelector('.referral_code').textContent;
+            navigator.clipboard.writeText(referralLink).then(() => {
+                toastr.success('Referral link copied to clipboard!');
+            }).catch(err => {
+                toastr.error('Failed to copy referral link');
+            });
+        }
     });
-
-   
-    $(document).ready(function () {
-        $('#bank, #number, #amount_display').on('input change', function () {
-            const accountNumber = $('#number').val().trim();
-            const bankCode = $('#bank').val();
-            const amount = $('#amount_display').val();
-
-            if (accountNumber.length === 10 && bankCode) {
-                $('#resolved_account_info_display').html('<span class="status-message">Verifying...</span>');
-                $('#next-button').prop('disabled', true);
-
-                // Send AJAX request
-                $.ajax({
-                    url: "{{ route('user.wallet.resolve.account') }}", 
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }, 
-                    data: {
-                        account_number: accountNumber,
-                        bank_code: bankCode,
-                    },
-                    success: function (response) {
-                        if (response.status === 'success') {
-                            const data = response.data;
-                            const selectedBankName = $('#bank option:selected').text();
-                            $('#resolved_account_info_display').html(
-                                '<span class="account-name">' + data.account_name + '</span>' +
-                                '<span class="bank-name">' + selectedBankName + '</span>'
-                            );
-
-                            $('#modal-account-name').val(data.account_name);
-
-                            $('#account_number').text(data.account_number); 
-                            $('#modal-account-number').val(data.account_number); 
-
-                            $('#modal-bank-name').val($('#bank option:selected').text());
-                            $('#modal-amount').val(amount);
-                            $('#modal-bankCode').val(bankCode);
-
-                            $('#amount').prop('disabled', false);
-                            $('#amount-container').show();
-
-                            if (amount && parseFloat(amount) > 0) {
-                                $('#next-button').prop('disabled', false);
-                            } else {
-                                $('#next-button').prop('disabled', true);
-                            }
-                        } else {
-                            $('#resolved_account_info_display').html('<span class="status-message error">' + (response.message || 'Account details not found.') + '</span>');
-                            $('#amount').prop('disabled', true);
-                            $('#amount-container').hide();
-                            $('#next-button').prop('disabled', true);
-                        }
-                    },
-                    error: function () {
-                        $('#next-button').prop('disabled', true);
-                        $('#resolved_account_info_display').html('<span class="status-message error">Unable to verify account. Please try again.</span>');
-                    },
-                });
-            } else {
-                $('#resolved_account_info_display').html('<span class="status-message">Details will appear here upon verification.</span>');
-                $('#next-button').prop('disabled', true); // Ensure button remains disabled
-            }
-        });
-        // Additional event listener to ensure button enables when `amount_display` is filled
-        $('#amount_display').on('input', function () {
-            const amount = $(this).val();
-
-            if (amount && parseFloat(amount) > 0) {
-                $('#next-button').prop('disabled', false);
-            } else {
-                $('#next-button').prop('disabled', true);
-            }
-        });
-    });
-
-
 </script>
-@endsection 
+@endsection

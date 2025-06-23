@@ -20,6 +20,8 @@ use App\Http\Controllers\User\TransferPropertyController;
 use App\Http\Controllers\User\Wallet\ExchangeController;
 use App\Http\Controllers\User\Wallet\WalletController;
 use App\Http\Controllers\User\Wallet\WalletTransferController;
+use App\Http\Controllers\User\Wallet\BeneficiaryController;
+
  
 
 /*
@@ -141,6 +143,11 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::post('create-recipient', [WalletTransferController::class, 'createRecipient'])->name('wallet.createRecipient');
     Route::post('initiate-transfer', [WalletTransferController::class, 'initiateTransfer'])->name('wallet.initiateTransfer');
     Route::post('verifyOtp', [WalletTransferController::class, 'verifyOtp'])->name('wallet.verifyOtp');
+
+    Route::prefix('beneficiaries')->group(function () {
+        Route::post('/', [BeneficiaryController::class, 'store'])->name('wallet.saveBeneficiary');
+        Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiaries.index');
+    });
   
 
     

@@ -702,6 +702,7 @@ class ComposerStaticInitffdab87688986358a321b0eef150dca0
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\WebSocketServer' => __DIR__ . '/../..' . '/app/Console/Commands/WebSocketServer.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Admin\\AdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AdminController.php',
@@ -778,6 +779,7 @@ class ComposerStaticInitffdab87688986358a321b0eef150dca0
         'App\\Mail\\VerificationEmail' => __DIR__ . '/../..' . '/app/Mail/VerificationEmail.php',
         'App\\Models\\About' => __DIR__ . '/../..' . '/app/Models/About.php',
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
+        'App\\Models\\Beneficiary' => __DIR__ . '/../..' . '/app/Models/Beneficiary.php',
         'App\\Models\\Buy' => __DIR__ . '/../..' . '/app/Models/Buy.php',
         'App\\Models\\Comment' => __DIR__ . '/../..' . '/app/Models/Comment.php',
         'App\\Models\\ContactDetials' => __DIR__ . '/../..' . '/app/Models/ContactDetials.php',
@@ -835,6 +837,7 @@ class ComposerStaticInitffdab87688986358a321b0eef150dca0
         'App\\Services\\RevolutService' => __DIR__ . '/../..' . '/app/Services/RevolutService.php',
         'App\\Services\\TransferService' => __DIR__ . '/../..' . '/app/Services/TransferService.php',
         'App\\Services\\WalletService' => __DIR__ . '/../..' . '/app/Services/WalletService.php',
+        'App\\WebSockets\\Chat' => __DIR__ . '/../..' . '/app/WebSockets/Chat.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Barryvdh\\DomPDF\\Facade\\Pdf' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/Facade/Pdf.php',
         'Barryvdh\\DomPDF\\PDF' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/PDF.php',

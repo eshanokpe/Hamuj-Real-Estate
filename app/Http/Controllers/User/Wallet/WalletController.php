@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\WalletController  as PayStackWalletController;
 use Illuminate\Support\Facades\Http;
 use App\Models\Transaction;
+use App\Models\Beneficiary;
 use App\Models\WalletTransaction;
 use Barryvdh\DomPDF\Facade\Pdf; 
 
@@ -45,7 +46,7 @@ class WalletController extends Controller
             'referralsMade' => $user->referralsMade()->with('user', 'referrer')->take(6)->get(),
             'hasMoreReferrals' => $user->referralsMade()->count() > 6,
             'transactions' => $transactions // Removed the array wrapper
-        ];
+        ]; 
         // dd('user');
         return view('user.pages.wallet.index', $data); 
     }
@@ -89,14 +90,17 @@ class WalletController extends Controller
         $data['user'] = Auth::user();
         $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
         $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;
-
-       
-
+        
+        $beneficiaries = Beneficiary::where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+ 
         return view('user.pages.wallet.withDraw.index', [ 
             'banks' => $data['banks'],
             'user' => $data['user'],
             'referralsMade' => $data['referralsMade'],
             'hasMoreReferrals' => $data['hasMoreReferrals'],
+            'beneficiaries' => $beneficiaries
         ]);
     }
 
