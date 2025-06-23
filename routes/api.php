@@ -139,8 +139,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get-messages', [GetMessagesController::class, 'getMessages']);
     }); 
     Route::prefix('beneficiaries')->group(function () {
-        Route::post('/', [BeneficiaryController::class, 'store'])->name('wallet.saveBeneficiary');
-        Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiaries.index');
+        Route::post('/', [BeneficiaryController::class, 'store']);
+        Route::get('/', [BeneficiaryController::class, 'index']);
     });
 });
 
