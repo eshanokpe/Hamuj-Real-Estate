@@ -26,6 +26,7 @@ use App\Http\Controllers\User\ReferralController;
 use App\Http\Controllers\User\HelpSupportController; 
 use App\Http\Controllers\User\RevolutPaymentController;
 use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\Wallet\BeneficiaryController;
 //chattle
 use Ilmedova\Chattle\app\Http\Controllers\Chat\AdminController;
 use Ilmedova\Chattle\app\Http\Controllers\Chat\CreateController;
@@ -135,10 +136,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::view('chat', 'chattle::chat'); 
         Route::post('/create-chat', [CreateController::class, 'createChat']);
         Route::post('/post-message', [PostMessageController::class, 'postMessage']);
-
         Route::get('/get-messages', [GetMessagesController::class, 'getMessages']);
-
     }); 
+    Route::prefix('beneficiaries')->group(function () {
+        Route::post('/', [BeneficiaryController::class, 'store'])->name('wallet.saveBeneficiary');
+        Route::get('/', [BeneficiaryController::class, 'index'])->name('beneficiaries.index');
+    });
 });
 
  
