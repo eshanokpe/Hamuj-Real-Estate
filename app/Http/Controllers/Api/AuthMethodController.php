@@ -20,7 +20,6 @@ class AuthMethodController extends Controller
             ],
             'biometric_types' => [
                 'required_if:auth_method,biometric',
-                'array',
             ],
         ]);
 
