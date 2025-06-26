@@ -119,7 +119,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('biometric')->group(function () {
         Route::get('/show', [AuthMethodController::class, 'show']);
-        Route::put('/update', [AuthMethodController::class, 'update']);
+        Route::put('/update', [AuthMethodController::class, 'update']); 
         Route::get('/biometric-support', [AuthMethodController::class, 'checkBiometricSupport']);
     });
 
