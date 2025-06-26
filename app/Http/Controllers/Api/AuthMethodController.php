@@ -18,14 +18,10 @@ class AuthMethodController extends Controller
                 'string',
                 Rule::in([User::AUTH_METHOD_PIN, User::AUTH_METHOD_BIOMETRIC, User::AUTH_METHOD_BOTH])
             ],
-            'biometric_types.*' => [
-                'string',
-                Rule::in([
-                    User::BIOMETRIC_FACE,
-                    User::BIOMETRIC_FINGERPRINT,
-                    User::BIOMETRIC_IRIS
-                ])
-            ]
+            'biometric_types' => [
+                'required_if:auth_method,biometric',
+                'array',
+            ],
         ]);
 
         $user = auth()->user();
