@@ -41,6 +41,7 @@ class User extends Authenticatable
         'active', 
         'is_active',
         'registration_source',
+        'biometric_types',
     ];
 
     protected $hidden = [
@@ -224,7 +225,7 @@ class User extends Authenticatable
             'auth_method' => $this->auth_method,
             'has_passcode' => !empty($this->app_passcode),
             'biometric_available' => $this->canUseBiometric(),
-            'supported_biometric_types' => $this->supportedBiometricTypes(),
+            'biometric_types' => $this->supportedBiometricTypes(),
             'biometric_enabled' => $this->hasBiometricEnabled(),
         ];
     }

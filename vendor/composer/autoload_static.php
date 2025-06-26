@@ -755,6 +755,7 @@ class ComposerStaticInitffdab87688986358a321b0eef150dca0
         'App\\Http\\Controllers\\User\\TransactionController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/TransactionController.php',
         'App\\Http\\Controllers\\User\\TransferController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/TransferController.php',
         'App\\Http\\Controllers\\User\\TransferPropertyController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/TransferPropertyController.php',
+        'App\\Http\\Controllers\\User\\Wallet\\BeneficiaryController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/Wallet/BeneficiaryController.php',
         'App\\Http\\Controllers\\User\\Wallet\\ExchangeController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/Wallet/ExchangeController.php',
         'App\\Http\\Controllers\\User\\Wallet\\WalletController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/Wallet/WalletController.php',
         'App\\Http\\Controllers\\User\\Wallet\\WalletTransferController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/Wallet/WalletTransferController.php',

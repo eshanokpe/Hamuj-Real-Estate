@@ -59,6 +59,7 @@ return array(
     'App\\Http\\Controllers\\User\\TransactionController' => $baseDir . '/app/Http/Controllers/User/TransactionController.php',
     'App\\Http\\Controllers\\User\\TransferController' => $baseDir . '/app/Http/Controllers/User/TransferController.php',
     'App\\Http\\Controllers\\User\\TransferPropertyController' => $baseDir . '/app/Http/Controllers/User/TransferPropertyController.php',
+    'App\\Http\\Controllers\\User\\Wallet\\BeneficiaryController' => $baseDir . '/app/Http/Controllers/User/Wallet/BeneficiaryController.php',
     'App\\Http\\Controllers\\User\\Wallet\\ExchangeController' => $baseDir . '/app/Http/Controllers/User/Wallet/ExchangeController.php',
     'App\\Http\\Controllers\\User\\Wallet\\WalletController' => $baseDir . '/app/Http/Controllers/User/Wallet/WalletController.php',
     'App\\Http\\Controllers\\User\\Wallet\\WalletTransferController' => $baseDir . '/app/Http/Controllers/User/Wallet/WalletTransferController.php',
