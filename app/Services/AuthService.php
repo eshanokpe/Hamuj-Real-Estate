@@ -4,7 +4,7 @@ namespace App\Services;
 use Mail; 
 use App\Http\Controllers\WalletController;
 use App\Models\User;
-use App\Models\ReferralLog;
+use App\Models\ReferralLog; 
 use App\Models\VirtualAccount;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -15,9 +15,12 @@ use Illuminate\Http\Request;
 use App\Mail\VerificationEmail;
 use Illuminate\Validation\Rules\Password;
 use App\Services\AuthService;
+use App\Services\OtpService;
 use Illuminate\Validation\ValidationException;
 use App\Notifications\NewReferralSignupNotification;
 use App\Notifications\ReferralConnectionNotification;
+use App\Notifications\EmailOtpNotification;
+use App\Notifications\SmsOtpNotification;
  
 class AuthService
 {
@@ -44,13 +47,14 @@ class AuthService
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'registration_source' => $data['registration_source'],
-            'dob' => $data['dob'],
+            // 'dob' => $data['dob']?? null, 
             'phone' => $data['phone'],
             'recipient_id' => $recipientId,
             'password' => Hash::make($data['password']),
             'profile_image' => null,
             'referral_code' => $this->generateReferralCode(),
             'referred_by' => $referrer ? $referrer->id : null,
+            'otp_verified_at' => null, 
         ]);
 
         // Create referral log if referrer exists
@@ -73,8 +77,20 @@ class AuthService
             // Notify new user about successful referral connection
             $user->notify(new ReferralConnectionNotification($referrer));
         }
-        
+        // Generate and send OTPs
+        $otpService = app(OtpService::class);
+        $otps = $otpService->generateOtp($user);
 
+        // Send email OTP
+        $user->notify(new EmailOtpNotification($otps['otp']));
+
+        // Send SMS OTP (you'll need to implement your SMS service)
+        // try{
+        //     $user->notify(new SmsOtpNotification($otps['phone_otp']));
+        // } catch (\Exception $e) {
+        //     // Handle SMS sending failure (log it, notify admin, etc.)
+        //     \Log::error('SMS OTP sending failed: ' . $e->getMessage());
+        // }
 
         // Create a virtual account
         $customerId = $walletController->createVirtualAccountCustomer($user);
@@ -114,6 +130,8 @@ class AuthService
                 return [ 
                     'user' => $user,
                     'token' => $token, 
+                    'otp_sent' => true,
+                    'message' => 'Registration successful. Please verify your email and phone with the OTPs sent.'
                 ];
             }
         }

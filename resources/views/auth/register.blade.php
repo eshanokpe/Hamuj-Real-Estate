@@ -81,7 +81,7 @@
                                 </span>
                             @enderror
                         </div>
-                        <div class="account__form--input mb-20">
+                        {{-- <div class="account__form--input mb-20">
                             <label class="account__form--input__label mb-12" for="email">Date of birth</label>
                             <input id="dob"  type="date" class="account__form--input__field  @error('dob') is-invalid @enderror" name="dob" value="{{ old('dob') }}" required autocomplete="phone">
                             @error('dob')
@@ -89,7 +89,7 @@
                                     <strong>{{ $message }}</strong> 
                                 </span>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <div class="account__form--input mb-20">
                             <label class="account__form--input__label mb-12" for="email">Phone number</label>

@@ -73,7 +73,9 @@
             <p>To complete your registration and gain access to your exclusive property dashboard, please verify your email address by clicking the button below:</p>
             
             <p style="text-align: center;">
-                <a href="{{ $verifyUrl }}" target="_blank" class="button">Verify Your Email</a>
+                {{-- <a href="{{ $verifyUrl }} " target="_blank" class="button">Verify Your Email</a> --}}
+                <a href="{{ route('verification.notice', ['user_id' => encrypt($user_id)]) }} " target="_blank" class="button">Verify Your Account</a>
+                
             </p>
             
             <p>This link will expire in 24 hours, so please verify your email promptly to continue exploring our available properties and services.</p>

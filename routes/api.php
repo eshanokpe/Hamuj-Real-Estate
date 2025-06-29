@@ -25,6 +25,7 @@ use App\Http\Controllers\User\SellPropertyController;
 use App\Http\Controllers\User\ReferralController;
 use App\Http\Controllers\User\HelpSupportController; 
 use App\Http\Controllers\User\RevolutPaymentController;
+use App\Http\Controllers\User\KycController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\Wallet\BeneficiaryController;
 //chattle
@@ -142,6 +143,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [BeneficiaryController::class, 'store']);
         Route::get('/', [BeneficiaryController::class, 'index']);
     });
+    Route::prefix('kyc')->group(function () {
+        Route::post('/', [KycController::class, 'store']);
+        Route::get('/', [KycController::class, 'show']);
+    });
+    
 });
 
  

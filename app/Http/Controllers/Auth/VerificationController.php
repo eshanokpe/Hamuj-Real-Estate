@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use App\Models\OtpVerification;
 
 class VerificationController extends Controller
 { 
@@ -47,5 +50,55 @@ class VerificationController extends Controller
         }
         $user->markEmailAsVerified();
         return redirect()->route('login')->with('success', '🎉 Congratulations, ! You have successfully registered.');
+    } 
+
+    public function notice(Request $request, $user_id)
+    {
+
+        return view('auth.verify-otp', [
+            'email' => session('email'),
+            'phone' => session('phone'),
+            'user_id' => $user_id ? decrypt($user_id) : null,
+        ]);
+    }
+
+   public function verifyOtp(Request $request)
+    {
+        // Validate input
+        $validated = $request->validate([
+            'otp' => 'required|digits:6',
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        // Find user and stored OTP
+        $user = User::findOrFail($validated['user_id']);
+        $storedOtp = OtpVerification::where('user_id', $user->id)->first();
+
+        // Check if OTP exists
+        if (!$storedOtp) {
+            return back()->withErrors(['otp' => 'OTP expired or not found.']);
+        }
+
+        // Check if OTP matches
+        if ($validated['otp'] !== $storedOtp->otp) {
+            return back()->withErrors(['otp' => 'Invalid OTP code.']);
+        }
+
+        // Check if OTP is expired (optional)
+        if ($storedOtp->expires_at && now()->gt($storedOtp->expires_at)) {
+            return back()->withErrors(['otp' => 'OTP has expired.']);
+        }
+
+        // Mark user as verified
+        $user->update([
+            'otp_verified_at' => now(),
+        ]);
+
+        // Delete the used OTP (optional, for security)
+        $storedOtp->delete();
+
+        
+
+        return redirect()->route('login')->with('success', 'OTP verified successfully!');
     }
 }

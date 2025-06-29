@@ -54,7 +54,6 @@ class LoginController extends Controller
             // Check if the user account is active
             if (!$user->active) {
                 Auth::logout();
-
                 if ($request->wantsJson()) {
                     return response()->json([
                         'message' => 'Account deactivated.',
@@ -111,11 +110,11 @@ class LoginController extends Controller
             // For API response
             return response()->json([
                 'message' => 'Login failed',
-                'error' => 'Your account has not been verified. Please check your email to verify your account.',
+                'error' => 'Your account has not been verified. Please check your email or sms for the OTP code.',
             ], 401); // Unauthorized
         }
         throw ValidationException::withMessages([
-            $this->username() => 'Your account has not been verified. Please check your email to verify your account.',
+            $this->username() => 'Your account has not been verified. Please check your email or sms for the OTP code.',
         ]);
     }
 

@@ -41,10 +41,11 @@ class VerificationEmail extends Mailable
             ['id' => $this->user->id, 'hash' => sha1($this->user->email)]
         );
         return $this->from('info@rabmotlicensing.com', 'Dohmayn')
-        ->subject('Verify Your Email - Dohmayn')
+        ->subject('Notification Email - Dohmayn')
         ->markdown('emails.verify-email')->with([
             'first_name' => $this->user->first_name, 
             'last_name' => $this->user->last_name, 
+            'user_id' => $this->user->id, 
             'referralCode' => $this->referralLink, 
             'verifyUrl' => $verificationUrl,
 

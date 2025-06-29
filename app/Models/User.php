@@ -42,6 +42,7 @@ class User extends Authenticatable
         'is_active',
         'registration_source',
         'biometric_types',
+        'otp_verified_at',
     ];
 
     protected $hidden = [
@@ -57,6 +58,7 @@ class User extends Authenticatable
         'dob' => 'date',
         'is_admin' => 'boolean',
         'is_active' => 'boolean',
+        'otp_verified_at' => 'datetime',
     ];
 
     public function isOnline()
@@ -243,6 +245,34 @@ class User extends Authenticatable
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    // Methods to check verification status
+    public function hasVerifiedEmail()
+    {
+        // return !is_null($this->email_verified_at);
+        return !is_null($this->otp_verified_at);
+    }
+
+    public function hasVerifiedPhone()
+    {
+        return !is_null($this->phone_verified_at);
+    }
+
+    public function isFullyVerified()
+    {
+        return $this->hasVerifiedEmail() && $this->hasVerifiedPhone();
+    }
+
+    // Route notifications for the SMS channel
+    public function routeNotificationForSms()
+    {
+        return $this->phone; 
+    }
+
+    public function hasVerifiedOtp()
+    {
+        return !is_null($this->otp_verified_at);
     }
 }
  

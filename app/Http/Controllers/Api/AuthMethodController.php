@@ -71,7 +71,7 @@ class AuthMethodController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => [
-                'biometric_available' => $user->canUseBiometric(),
+                // 'biometric_available' => $user->canUseBiometric(),
                 'supported_types' => $user->supportedBiometricTypes(),
                 'is_configured' => $user->hasBiometricEnabled()
             ]

@@ -46,6 +46,8 @@ Route::post('post/register', [RegisterController::class, 'register'])->name('pos
 Route::post('post/login', [LoginController::class, 'login'])->name('post.login');
 
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+Route::get('otp/verify/{user_id}', [VerificationController::class, 'notice'])->name('verification.notice');
+Route::post('/verify/otp', [VerificationController::class, 'verifyOTP'])->name('verification.otp');
 
 // Route::get('/user/register/referral/{referralCode}', [PagesController::class, 'index']);
 Route::get('/home', [HomeController::class, 'index'])->name('home');

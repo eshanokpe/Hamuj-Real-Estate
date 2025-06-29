@@ -46,5 +46,10 @@ return [
             return 1 / config('services.exchange.gbp_to_ngn');
         }
     ],
+    'twilio' => [
+        'sid' => env('TWILIO_SID'),
+        'token' => env('TWILIO_AUTH_TOKEN'),
+        'from' => env('TWILIO_FROM_NUMBER'),
+    ],
 
 ];
