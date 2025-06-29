@@ -107,7 +107,7 @@ class LoginController extends Controller
     protected function sendFailedLoginResponse(Request $request)
     {
         if ($request->wantsJson()) {
-            // For API response
+            // For API response. 
             return response()->json([
                 'message' => 'Login failed',
                 'error' => 'Your account has not been verified. Please check your email or sms for the OTP code.',
