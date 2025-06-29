@@ -83,7 +83,8 @@ class RegisterController extends Controller
         }
 
         try {
-            // Call AuthService register method
+            // Call AuthService register method.   
+            
             $result = app(AuthService::class)->register($request->all(), $walletController);
             return $this->handleRegistrationSuccess($request, $result);
         } catch (ValidationException $e) { 
