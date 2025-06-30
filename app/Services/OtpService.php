@@ -20,7 +20,7 @@ class OtpService
         $expiry = Carbon::now()->addMinutes(15);
 
         // Create or update OTP record
-        OtpVerification::updateOrCreate(
+        OtpVerification::updateOrCreate( 
             ['user_id' => $user->id],
             [
                 'otp' => $otp,

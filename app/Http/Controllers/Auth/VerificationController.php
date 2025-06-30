@@ -95,8 +95,7 @@ class VerificationController extends Controller
             'otp_verified_at' => now(),
         ]);
 
-        // Delete the used OTP (optional, for security)
-        $storedOtp->delete();
+        
 
         
 
