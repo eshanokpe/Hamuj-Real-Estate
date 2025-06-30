@@ -6,7 +6,7 @@
     <div class="container">
         <div class="breadcrumb__content text-center">
             <h1 class="breadcrumb__title h2">
-                <span>Biometric </span>Registration
+                <span> </span>Registration
             </h1>
             <ul class="breadcrumb__menu d-flex justify-content-center">
                 <li class="breadcrumb__menu--items">
@@ -43,7 +43,7 @@
             </div>
             <div class="account__form--wrapper">
                 <div class="account__header text-center mb-30">
-                    <h2 class="account__title">Secure Biometric Registration</h2>
+                    <h2 class="account__title">Secure  Registration</h2>
                     <p class="account__desc">Complete your profile with facial recognition for enhanced security</p>
                 </div>
                 
