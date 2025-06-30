@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Validation\ValidationException;
+use App\Services\OtpService;
+use App\Notifications\SmsOtpNotification;
+use App\Notifications\EmailOtpNotification;
 
 class LoginController extends Controller
 {
@@ -106,13 +109,43 @@ class LoginController extends Controller
     
     protected function sendFailedLoginResponse(Request $request)
     {
+        $user = Auth::getProvider()->retrieveByCredentials($this->credentials($request));
         if ($request->wantsJson()) {
             // For API response. 
             return response()->json([
                 'message' => 'Login failed',
                 'error' => 'Your account has not been verified. Please check your email or sms for the OTP code.',
+                'user_id' => $user ? $user->id : null,
+                'phone' => $user ? $user->phone : null,
             ], 401); // Unauthorized
         }
+
+        // For web response, redirect to verify.otp with the email
+         if ($user && !$user->hasVerifiedEmail()) {
+             \Log::error('hasVerifiedEmail:');
+             // Generate and send OTPs
+            $otpService = app(OtpService::class);
+            $otps = $otpService->generateOtp($user);
+            
+            // Send email OTP
+            try {
+                $user->notify(new EmailOtpNotification($otps['otp']));
+                \Log::info('Email OTP sent successfully to ' . $user->email);
+            } catch (\Exception $e) {
+                \Log::error('Email OTP sending failed: ' . $e->getMessage());
+            }
+
+            // Send SMS OTP (you'll need to implement your SMS service)
+            try {
+                $user->notify(new SmsOtpNotification($otps['phone_otp']));
+            } catch (\Exception $e) {
+                \Log::error('SMS OTP sending failed: ' . $e->getMessage());
+            }
+            return redirect()->route('verification.notice', ['user_id' => encrypt($user->id)])
+                ->with('email', $user->email);
+        }
+    
+
         throw ValidationException::withMessages([
             $this->username() => 'Your account has not been verified. Please check your email or sms for the OTP code.',
         ]);

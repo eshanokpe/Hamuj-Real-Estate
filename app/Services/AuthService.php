@@ -82,7 +82,12 @@ class AuthService
         $otps = $otpService->generateOtp($user);
 
         // Send email OTP
-        $user->notify(new EmailOtpNotification($otps['otp']));
+        try {
+            $user->notify(new EmailOtpNotification($otps['otp']));
+            \Log::info('Email OTP sent successfully to ' . $user->email);
+        } catch (\Exception $e) {
+            \Log::error('Email OTP sending failed: ' . $e->getMessage());
+        }
 
         // Send SMS OTP (you'll need to implement your SMS service)
         // try{

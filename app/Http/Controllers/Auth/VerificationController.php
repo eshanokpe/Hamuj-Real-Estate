@@ -64,6 +64,7 @@ class VerificationController extends Controller
 
    public function verifyOtp(Request $request)
     {
+        // dd($request->all());
         // Validate input
         $validated = $request->validate([
             'otp' => 'required|digits:6',

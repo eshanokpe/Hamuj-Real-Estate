@@ -74,7 +74,7 @@
             
             <p style="text-align: center;">
                 {{-- <a href="{{ $verifyUrl }} " target="_blank" class="button">Verify Your Email</a> --}}
-                <a href="{{ route('verification.notice', ['user_id' => encrypt($user_id)]) }} " target="_blank" class="button">Verify Your Account</a>
+                {{-- <a href="{{ route('verification.notice', ['user_id' => encrypt($user_id)]) }} " target="_blank" class="button">Verify Your Account</a> --}}
                 
             </p>
             
