@@ -45,11 +45,12 @@ return [
         'ngn_to_gbp' => function() {
             return 1 / config('services.exchange.gbp_to_ngn');
         }
-    ],
+    ],  
     'twilio' => [
         'sid' => env('TWILIO_SID'),
-        'token' => env('TWILIO_AUTH_TOKEN'),
-        'from' => env('TWILIO_FROM_NUMBER'),
+        'token' => env('TWILIO_TOKEN'),
+        'from' => env('TWILIO_FROM'),
+        'messagingServiceSid' => env('TWILIO_MESSAGING_SERVICE_SID'),
     ],
 
 ];

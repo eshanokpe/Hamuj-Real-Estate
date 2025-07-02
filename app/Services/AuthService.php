@@ -46,7 +46,7 @@ class AuthService
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'registration_source' => $data['registration_source'],
+            // 'registration_source' => $data['registration_source'],
             // 'dob' => $data['dob']?? null, 
             'phone' => $data['phone'],
             'recipient_id' => $recipientId,
@@ -80,9 +80,10 @@ class AuthService
         // Generate and send OTPs
         $otpService = app(OtpService::class);
         $otps = $otpService->generateOtp($user);
-
+ 
         // Send email OTP
         try {
+            // Connection could not be established with host "ssl://business104.web-hosting.com:465": stream_socket_client(): Unable to connect to ssl://business104.web-hosting.com:465 (Operation timed out)
             $user->notify(new EmailOtpNotification($otps['otp']));
             \Log::info('Email OTP sent successfully to ' . $user->email);
         } catch (\Exception $e) {
@@ -90,12 +91,17 @@ class AuthService
         }
 
         // Send SMS OTP (you'll need to implement your SMS service)
-        // try{
-        //     $user->notify(new SmsOtpNotification($otps['phone_otp']));
-        // } catch (\Exception $e) {
-        //     // Handle SMS sending failure (log it, notify admin, etc.)
-        //     \Log::error('SMS OTP sending failed: ' . $e->getMessage());
-        // }
+        try{
+            $user->notify(new SmsOtpNotification($otps['phone_otp']));
+        } catch (\Exception $e) { 
+            // Handle SMS sending failure (log it, notify admin, etc.)
+            \Log::error('SMS OTP sending failed', [
+                'error' => $e->getMessage(),
+                'user_id' => $user->id,
+                'phone' => $user->phone, // or relevant field
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
 
         // Create a virtual account
         $customerId = $walletController->createVirtualAccountCustomer($user);
@@ -128,8 +134,12 @@ class AuthService
 
                 // Send verification email and referral link
                 $referralLink = "https://dohmayn.com/user/register/referral/{$user->referral_code}";
-                Mail::to($user->email)->send(new VerificationEmail($user, $referralLink, $virtualAccountData));
- 
+                 try {
+                    Mail::to($user->email)->send(new VerificationEmail($user, $referralLink, $virtualAccountData));
+                    \Log::info('VerificationEmail sent successfully');
+                } catch (\Exception $e) {
+                    \Log::error('VerificationEmail sending failed: ' . $e->getMessage());
+                }
                 // Return the user and token for API
                 $token = $user->createToken('authToken')->plainTextToken;
                 return [ 

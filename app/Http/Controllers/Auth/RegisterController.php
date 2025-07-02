@@ -56,8 +56,8 @@ class RegisterController extends Controller
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'email' => 'required|string|email|max:50|unique:users,email',
-            'phone' => 'required|string',
-            'registration_source' => 'nullable|string',
+            'phone' => 'required|string', 
+            // 'registration_source' => 'nullable|string',
             'password' => 'required|confirmed|min:8', // At least 8 characters, letters and numbers
             // 'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
             'referral_code' => 'nullable|string|exists:users,referral_code',

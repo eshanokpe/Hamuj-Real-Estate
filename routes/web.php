@@ -24,6 +24,10 @@ use App\Http\Controllers\Auth\VerificationController;
 require __DIR__.'/admin.php';
 require __DIR__.'/user.php';
  
+use App\Http\Controllers\SmsController;
+
+Route::get('/create-messaging-service', [SmsController::class, 'createMessagingService']);
+
 Route::get('/', [FrontendController::class, 'index'])->name('index');
 Route::get('/{page}', [PagesController::class, 'index'])->name('home.pages');
 

@@ -14,7 +14,7 @@ class SmsChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        try{
+        try{ 
                 $message = $notification->toSms($notifiable);
                 
                 // Get user's phone number (defined in User model)
@@ -42,12 +42,21 @@ class SmsChannel
         $sid = config('services.twilio.sid');
         $token = config('services.twilio.token');
         $from = config('services.twilio.from');
+        $messagingServiceSid = config('services.twilio.messagingServiceSid');
 
-        $client = new \Twilio\Rest\Client($sid, $token);
+        $twilio = new Client($sid, $token);
         
-        $client->messages->create($to, [
-            'from' => $from,
-            'body' => $message
-        ]);
+        // $twilio->messages->create($to, [
+        //     'from' => $from,
+        //     'body' => $message
+        // ]); 
+       
+         $twilio->messages->create(
+            $to, 
+            [
+                'body' => $message,
+                'messagingServiceSid' => $messagingServiceSid
+            ]
+        );
     }
 }
