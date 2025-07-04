@@ -86,7 +86,7 @@ class AuthService
             // Connection could not be established with host "ssl://business104.web-hosting.com:465": stream_socket_client(): Unable to connect to ssl://business104.web-hosting.com:465 (Operation timed out)
             $user->notify(new EmailOtpNotification($otps['otp']));
             \Log::info('Email OTP sent successfully to ' . $user->email);
-        } catch (\Exception $e) {
+        } catch (\Exception $e) { 
             \Log::error('Email OTP sending failed: ' . $e->getMessage());
         }
 

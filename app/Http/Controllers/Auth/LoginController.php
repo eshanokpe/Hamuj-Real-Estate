@@ -137,7 +137,7 @@ class LoginController extends Controller
 
             // Send SMS OTP (you'll need to implement your SMS service)
             try {
-                $user->notify(new SmsOtpNotification($otps['phone_otp']));
+                $user->notify(new SmsOtpNotification($otps['otp']));
             } catch (\Exception $e) {
                 \Log::error('SMS OTP sending failed: ' . $e->getMessage());
             }
