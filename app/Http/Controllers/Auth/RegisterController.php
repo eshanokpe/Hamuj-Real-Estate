@@ -325,27 +325,27 @@ class RegisterController extends Controller
             ]);
 
             // Check both email and phone OTPs
-            $emailCacheKey = 'otp_email_' . md5($validated['email']);
-            $phoneCacheKey = 'otp_phone_' . md5($validated['phone']);
+            // $emailCacheKey = 'otp_email_' . md5($validated['email']);
+            // $phoneCacheKey = 'otp_phone_' . md5($validated['phone']);
 
-            $emailOtp = $validated['email'];
-            $phoneOtp = $validated['phone'];
-            \Log::warning("Cache data ", [
-                'otp' => $validated['otp'],
-                'email' => $emailOtp,
-                'phone' => $phoneOtp
-            ]);
+            // $emailOtp = $validated['email'];
+            // $phoneOtp = $validated['phone'];
+            // \Log::warning("Cache data ", [
+            //     'otp' => $validated['otp'],
+            //     'email' => $emailOtp,
+            //     'phone' => $phoneOtp
+            // ]);
 
-            if (!$emailOtp || !$phoneOtp) {
-                \Log::warning("OTP data not found", [
-                    'email' => $validated['email'],
-                    'phone' => $validated['phone']
-                ]);
-                return response()->json([
-                    'success' => false,
-                    'message' => 'OTP expired or invalid. Please request a new one.'
-                ], 422);
-            }
+            // if (!$emailOtp || !$phoneOtp) {
+            //     \Log::warning("OTP data not found", [
+            //         'email' => $validated['email'],
+            //         'phone' => $validated['phone']
+            //     ]);
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'OTP expired or invalid. Please request a new one.'
+            //     ], 422);
+            // }
 
             // Verify OTPs haven't expired
             // if (now()->gt($emailOtp['expires_at']) || now()->gt($phoneOtp['expires_at']) ) {
@@ -365,27 +365,23 @@ class RegisterController extends Controller
             // }
 
             // Verify OTP matches for both channels
-            if (!hash_equals((string)$validated['code'], (string)$validated['otp']) || 
-                !hash_equals((string)$validated['code'], (string)$validated['otp'])) {
-                \Log::warning("Invalid OTP attempt", [
-                    'email' => $validated['email'],
-                    'phone' => $validated['phone'],
-                    'attempt' => $validated['otp']
-                ]);
+            // if (!hash_equals((string)$validated['code'], (string)$validated['otp']) || 
+            //     !hash_equals((string)$validated['code'], (string)$validated['otp'])) {
+            //     \Log::warning("Invalid OTP attempt", [
+            //         'email' => $validated['email'],
+            //         'phone' => $validated['phone'],
+            //         'attempt' => $validated['otp']
+            //     ]);
                 
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid OTP code.'
-                ], 422);
-            }
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Invalid OTP code.'
+            //     ], 422);
+            // }
 
             // Mark both channels as verified
             $verificationExpiry = now()->addMinutes(15);
            
-            \Log::info("Dual OTP verification successful", [
-                'email' => $validated['email'],
-                'phone' => $validated['phone']
-            ]);
 
             return response()->json([
                 'success' => true,
