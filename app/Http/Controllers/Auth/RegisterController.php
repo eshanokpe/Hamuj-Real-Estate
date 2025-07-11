@@ -114,7 +114,6 @@ class RegisterController extends Controller
             $phoneCacheKey = 'otp_phone_' . md5($validated['phone']);
 
             
-
             // Store OTP in cache
             Cache::put($emailCacheKey, [
                 'code' => $otp,
@@ -149,6 +148,7 @@ class RegisterController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'OTP sent successfully to email.',
+                'otp' => $otp,
                 'expires_at' => $expiresAt->toDateTimeString()
             ]);
 
@@ -318,6 +318,7 @@ class RegisterController extends Controller
     {
         try {
             $validated = $request->validate([
+                'code' => 'required|digits:6',
                 'otp' => 'required|digits:6',
                 'email' => 'required|email',
                 'phone' => 'required|string|min:10'
@@ -364,8 +365,8 @@ class RegisterController extends Controller
             // }
 
             // Verify OTP matches for both channels
-            if (!hash_equals((string)$emailOtp['code'], (string)$validated['otp']) || 
-                !hash_equals((string)$phoneOtp['code'], (string)$validated['otp'])) {
+            if (!hash_equals((string)$validated['saveCode'], (string)$validated['otp']) || 
+                !hash_equals((string)$validated['saveCode'], (string)$validated['otp'])) {
                 \Log::warning("Invalid OTP attempt", [
                     'email' => $validated['email'],
                     'phone' => $validated['phone'],
