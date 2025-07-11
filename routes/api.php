@@ -48,6 +48,11 @@ use Ilmedova\Chattle\app\Http\Controllers\Chat\PostMessageController;
 
 
 // Public routes (no authentication required)
+Route::post('/send-otp', [RegisterController::class, 'sendOtp']);
+Route::post('/verify-bvn', [RegisterController::class, 'verifyBvn']);
+Route::post('/verify-nin', [RegisterController::class, 'verifyNin']);
+Route::post('/verify-otp', [RegisterController::class, 'verifyOtp']);
+
 Route::post('register', [RegisterController::class, 'register']);
 Route::get('/check/email', [RegisterController::class, 'checkEmail']);
 Route::post('login', [LoginController::class, 'login']);

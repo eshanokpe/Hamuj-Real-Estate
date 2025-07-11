@@ -72,7 +72,7 @@ Route::prefix('home')->name('home.')->group(function () {
 });
 
 Route::post('/send-otp', [RegisterController::class, 'sendOtp'])->name('send-otp');
- 
+  
 Route::post('/verify-bvn', [RegisterController::class, 'verifyBvn'])->name('verify-bvn');
 
 Route::post('/verify-face', [RegisterController::class, 'verifyBvnFace'])->name('verify-face');
