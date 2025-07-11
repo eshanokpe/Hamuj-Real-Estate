@@ -69,7 +69,7 @@ class LoginController extends Controller
                 ])->onlyInput('email');
             }
             if (Auth::user()->hasVerifiedEmail()) {
-                $user->update([
+                $user->update([ 
                     'last_login_at' => now(),
                     'last_login_ip' => $request->ip(),
                 ]);
