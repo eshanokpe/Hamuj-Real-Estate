@@ -356,7 +356,7 @@ class RegisterController extends Controller
             if (isset($validated['firstname']) && isset($validated['lastname'])) {
                 $bvnFirstName = strtolower($data['data']['firstName']);
                 $bvnLastName = strtolower($data['data']['lastName']);
-                $inputFirstName = strtolower($validated['firstname']);
+                $inputFirstName = strtolower($validated['lastname']);
                 $inputLastName = strtolower($validated['lastname']);
 
                 if ($bvnFirstName !== $inputFirstName || $bvnLastName !== $inputLastName) {

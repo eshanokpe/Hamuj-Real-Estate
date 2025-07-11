@@ -341,16 +341,16 @@ class RegisterController extends Controller
             }
 
             // Verify names match if provided
-            // if (isset($validated['email'])) {
-            //     $bvnEmail = strtolower($data['data']['email']);
-            //     $inputEmail = strtolower($validated['email']);
-            //     if ($bvnEmail !== $inputEmail) {
-            //         return response()->json([
-            //             'status' => false,
-            //             'message' => 'Email do not match BVN records'
-            //         ], 422);
-            //     }
-            // }
+            if (isset($validated['email'])) {
+                $bvnEmail = strtolower($data['data']['email']);
+                $inputEmail = strtolower($validated['email']);
+                if ($bvnEmail !== $inputEmail) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Email do not match BVN records'
+                    ], 422);
+                }
+            }
 
             // Verify names match if provided
             if (isset($validated['firstname']) && isset($validated['lastname'])) {
