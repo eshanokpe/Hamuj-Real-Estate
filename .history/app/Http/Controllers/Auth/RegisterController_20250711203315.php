@@ -212,11 +212,10 @@ class RegisterController extends Controller
 
             $emailOtp = Cache::get($emailCacheKey);
             $phoneOtp = Cache::get($phoneCacheKey);
-            \Log::warning("Cache data ", [
-                'otp' => $validated['otp'],
-                'email' => $emailOtp,
-                'phone' => $phoneOtp
-            ]);
+            \Log::warning("OTP data not found", [
+                    'email' => $validated['email'],
+                    'phone' => $validated['phone']
+                ]);
 
             if (!$emailOtp || !$phoneOtp) {
                 \Log::warning("OTP data not found", [

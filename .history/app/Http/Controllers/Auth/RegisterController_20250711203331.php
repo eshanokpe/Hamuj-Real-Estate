@@ -213,9 +213,8 @@ class RegisterController extends Controller
             $emailOtp = Cache::get($emailCacheKey);
             $phoneOtp = Cache::get($phoneCacheKey);
             \Log::warning("Cache data ", [
-                'otp' => $validated['otp'],
                 'email' => $emailOtp,
-                'phone' => $phoneOtp
+                'phone' => $validated['phone']
             ]);
 
             if (!$emailOtp || !$phoneOtp) {
