@@ -14,7 +14,7 @@ class SmsChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        try{ 
+        try{  
                 $message = $notification->toSms($notifiable);
                 
                 // Get user's phone number (defined in User model)
@@ -46,12 +46,8 @@ class SmsChannel
 
         $twilio = new Client($sid, $token);
         
-        // $twilio->messages->create($to, [
-        //     'from' => $from,
-        //     'body' => $message
-        // ]); 
        
-         $twilio->messages->create(
+        $twilio->messages->create(
             $to, 
             [
                 'body' => $message,

@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <!-- Google tag (gtag.js) -->
@@ -47,6 +48,13 @@
 
     gtag('config', 'G-E9JFRZR724');
   </script>
+  <style>
+    /* Add to your CSS */
+    input:disabled {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+    }
+  </style>
 </head>
 
 <body>

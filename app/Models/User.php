@@ -43,6 +43,14 @@ class User extends Authenticatable
         'registration_source',
         'biometric_types',
         'otp_verified_at',
+        'otp_method',
+        'otp',
+        'otp_expires_at',
+        'verification_method',
+        'bvn',
+        'nin',
+        'terms',
+        'verified_at'
     ];
 
     protected $hidden = [
@@ -249,7 +257,7 @@ class User extends Authenticatable
 
     // Methods to check verification status
     public function hasVerifiedEmail()
-    {
+    { 
         // return !is_null($this->email_verified_at);
         return !is_null($this->otp_verified_at);
     }

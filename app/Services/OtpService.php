@@ -24,8 +24,8 @@ class OtpService
             ['user_id' => $user->id],
             [
                 'otp' => $otp,
-                'email_otp' => $emailOtp,
-                'phone_otp' => $phoneOtp,
+                'email_otp' => null,
+                'phone_otp' => null,
                 'email_otp_expires_at' => $expiry,
                 'phone_otp_expires_at' => $expiry,
                 'email_verified' => false,

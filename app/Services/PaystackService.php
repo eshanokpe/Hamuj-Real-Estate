@@ -18,7 +18,7 @@ class PaystackService
     public function getBalance(){
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . env('PAYSTACK_SECRET_KEY'),
-        ])->get( env('PAYSTACK_BASE_URL').'/balance');
+        ])->get( env('PAYSTACK_BASE_URL').'/balance'); 
 
         if ($response->successful()) {
             $balance = $response->json()['data'][0]['balance'];

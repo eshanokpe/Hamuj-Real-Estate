@@ -62,7 +62,7 @@ class VerificationController extends Controller
         ]);
     }
 
-   public function verifyOtp(Request $request)
+    public function verifyOtp(Request $request)
     {
         // dd($request->all());
         // Validate input
@@ -94,10 +94,6 @@ class VerificationController extends Controller
         $user->update([
             'otp_verified_at' => now(),
         ]);
-
-        
-
-        
 
         return redirect()->route('login')->with('success', 'OTP verified successfully!');
     }

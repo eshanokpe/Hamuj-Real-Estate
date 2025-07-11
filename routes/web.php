@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FaceTecController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\MessageController;
@@ -22,7 +23,7 @@ use App\Http\Controllers\Auth\VerificationController;
 |
 */
 require __DIR__.'/admin.php';
-require __DIR__.'/user.php';
+require __DIR__.'/user.php'; 
  
 use App\Http\Controllers\SmsController;
 
@@ -68,4 +69,34 @@ Route::prefix('home')->name('home.')->group(function () {
     Route::get('/properties/{slug}', [HomeController::class, 'showProperties'])->name('properties.show');
 
 
+});
+
+Route::post('/send-otp', [RegisterController::class, 'sendOtp'])->name('send-otp');
+ 
+Route::post('/verify-bvn', [RegisterController::class, 'verifyBvn'])->name('verify-bvn');
+
+Route::post('/verify-face', [RegisterController::class, 'verifyBvnFace'])->name('verify-face');
+
+Route::post('/verify-nin', [RegisterController::class, 'verifyNin'])->name('verify-nin');
+
+Route::post('/verify-otp', [RegisterController::class, 'verifyOtp'])->name('verify-otp');
+
+Route::post('/verify-privacy', [RegisterController::class, 'verifyOtp'])->name('privacy');
+
+
+// Face Verification Routes
+Route::get('app/facetac', [FaceTecController::class, 'index']);
+Route::get('/face-verification', [FaceVerificationController::class, 'show'])->name('face.verification');
+Route::post('/face-verification/submit', [FaceVerificationController::class, 'submit'])->name('verification.submit');
+
+// FaceTec API Routes
+Route::get('/api/facetec/session', [FaceTecController::class, 'createSession'])->name('facetec.session');
+Route::post('/api/facetec/verify', [FaceTecController::class, 'verifySession'])->name('facetec.verify');
+
+Route::get('app/identity-verification', function() {
+    $file = public_path('facetec/index.html');
+    if (file_exists($file)) {
+        return response()->file($file);
+    } 
+    abort(404, 'File not found'); 
 });

@@ -53,4 +53,18 @@ return [
         'messagingServiceSid' => env('TWILIO_MESSAGING_SERVICE_SID'),
     ],
 
+    'prembly' => [ 
+        'base_url' => env('PREMBLY_API_BASE_URL'),
+        'api_key' => env('PREMBLY_API_KEY'),
+        'sandbox_mode' => env('PREMBLY_SANDBOX_MODE', true),
+        'bvn_validation_url' => '/identitypass/verification/bvn_validation',
+        'nin_validation_url' => '/identitypass/verification/vnin',
+        'app_id' => env('PREMBLY_APP_ID'),
+    ],
+   'facetec' => [
+        'device_key' => env('FACETEC_DEVICE_KEY'),
+        'public_key' => env('FACETEC_PUBLIC_KEY'),
+        'api_key' => env('FACETEC_API_KEY'),
+    ],
+
 ];

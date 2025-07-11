@@ -39,7 +39,7 @@ class VerificationEmail extends Mailable
             'verification.verify',
             now()->addMinutes(60),
             ['id' => $this->user->id, 'hash' => sha1($this->user->email)]
-        );
+        ); 
         return $this->from('info@rabmotlicensing.com', 'Dohmayn')
         ->subject('Notification Email - Dohmayn')
         ->markdown('emails.verify-email')->with([

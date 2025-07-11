@@ -416,6 +416,8 @@
 <script src="{{ asset('assets/js/plugins/glightbox.min.js')}}"></script>
 <script src="{{ asset('assets/js/plugins/aos.js')}}"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Customscript js -->
 <script src="{{ asset('assets/js/script.js')}}"></script>
@@ -424,7 +426,7 @@
 <style>
     /* Increase font size of Toastr */
     #toast-container > .toast {
-        font-size: 22px; /* You can change 18px to any size you want */
+        font-size: 20px; /* You can change 18px to any size you want */
     } 
 </style>
 
@@ -455,7 +457,7 @@
             @endforeach
         @endif
     });
-</script>
+</script> 
 {{-- https://risingtheme.com/html/demo-newvilla/newvilla/contact.html --}}
 
 

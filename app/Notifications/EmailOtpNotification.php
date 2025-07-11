@@ -31,4 +31,4 @@ class EmailOtpNotification extends Notification
             ->line('This OTP will expire in 15 minutes.')
             ->line('If you did not request this, please ignore this email.');
     }
-}
+} 

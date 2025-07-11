@@ -31,7 +31,7 @@ class SmsOtpNotification extends Notification implements ShouldQueue
              . "Valid for 15 minutes. Do not share to anyone!.\n"
              . config('app.name');  // Adds your app name for identification
     } 
-    // {$this->otp}
+    // {$this->otp} 
     // Optional: For Laravel's on-demand notifications
     public function toArray($notifiable): array
     {

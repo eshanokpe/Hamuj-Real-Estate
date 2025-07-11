@@ -2,6 +2,7 @@
 
 namespace App\Services;
 use Mail; 
+use Log;
 use App\Http\Controllers\WalletController;
 use App\Models\User;
 use App\Models\ReferralLog; 
@@ -25,13 +26,13 @@ use App\Notifications\SmsOtpNotification;
 class AuthService
 {
     // Register a user
+    // AuthService.php (unchanged namespace and use statements)
+
     public function register(array $data, $walletController)
     {
-        // Generate the recipient ID
         $recipientId = $this->createRecipientId();
         $referrer = null;
 
-        // Check if referral code is provided and valid
         if (!empty($data['referral_code'])) {
             $referrer = User::where('referral_code', $data['referral_code'])->first();
             if (!$referrer) {
@@ -41,120 +42,117 @@ class AuthService
             }
         }
 
-        // Create the user
         $user = User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            // 'registration_source' => $data['registration_source'],
-            // 'dob' => $data['dob']?? null, 
-            'phone' => $data['phone'],
+            'first_name' => $data['firstname'] ?? null,
+            'last_name' => $data['lastname'] ?? null,
+            'email' => $data['email'] ?? null,
+            'registration_source' => 'web',
+            'phone' => $data['phone'] ?? null,
             'recipient_id' => $recipientId,
-            'password' => Hash::make($data['password']),
+            'password' => isset($data['password']) ? Hash::make($data['password']) : null,
             'profile_image' => null,
             'referral_code' => $this->generateReferralCode(),
-            'referred_by' => $referrer ? $referrer->id : null,
-            'otp_verified_at' => null, 
+            'referred_by' => $referrer?->id,
+            'otp_verified_at' => now(),
+            'otp_method' => $data['otp_method'] ?? null,
+            'otp' => $data['otp'] ?? null,
+            'otp_expires_at' => $data['otp_expires_at'] ?? null,
+            'verification_method' => $data['verification_method'] ?? null,
+            'bvn' => $data['bvn'] ?? null,
+            'nin' => $data['nin'] ?? null,
+            'terms' => isset($data['terms']),
+            'verified_at' => null,
         ]);
 
-        // Create referral log if referrer exists
+        // ✅ Assign "user" role if exists
+        if (\Spatie\Permission\Models\Role::where('name', 'user')->exists()) {
+            $user->assignRole('user');
+        }
+
+        // ✅ Referral Logic
         if ($referrer) {
             ReferralLog::create([
                 'referrer_id' => $referrer->id,
                 'referred_id' => $user->id,
                 'referral_code' => $data['referral_code'],
                 'referred_at' => now(),
-                'commission_amount' => 0, 
+                'commission_amount' => 0,
                 'commission_paid' => false,
                 'commission_paid_at' => null,
-                'status' => 'registered', 
+                'status' => 'registered',
                 'property_id' => null,
                 'transaction_id' => null,
             ]);
-            // Notify referrer about new referral signup
-            $referrer->notify(new NewReferralSignupNotification($user));
 
-            // Notify new user about successful referral connection
+            $referrer->notify(new NewReferralSignupNotification($user));
             $user->notify(new ReferralConnectionNotification($referrer));
         }
-        // Generate and send OTPs
-        $otpService = app(OtpService::class);
-        $otps = $otpService->generateOtp($user);
- 
-        // Send email OTP
-        try {
-            // Connection could not be established with host "ssl://business104.web-hosting.com:465": stream_socket_client(): Unable to connect to ssl://business104.web-hosting.com:465 (Operation timed out)
-            $user->notify(new EmailOtpNotification($otps['otp']));
-            \Log::info('Email OTP sent successfully to ' . $user->email);
-        } catch (\Exception $e) { 
-            \Log::error('Email OTP sending failed: ' . $e->getMessage());
-        }
 
-        // Send SMS OTP (you'll need to implement your SMS service)
-        try{
-            $user->notify(new SmsOtpNotification($otps['otp']));  
-        } catch (\Exception $e) { 
-            // Handle SMS sending failure (log it, notify admin, etc.)
-            \Log::error('SMS OTP sending failed', [
-                'error' => $e->getMessage(),
-                'user_id' => $user->id,
-                'phone' => $user->phone, // or relevant field
-                'trace' => $e->getTraceAsString()
+        // ✅ Create Paystack Customer
+        $customer = $walletController->createVirtualAccountCustomer($user);
+
+        if (!$customer || empty($customer['customer_code'])) {
+            $user->delete();
+            throw ValidationException::withMessages([
+                'wallet' => ['Failed to create Paystack customer.'],
             ]);
         }
 
-        // Create a virtual account
-        $customerId = $walletController->createVirtualAccountCustomer($user);
+        Log::debug('Paystack customer created', ['customer' => $customer]);
+        $customerCode = $customer['customer_code'];
 
-        if ($customerId) {
-            $virtualAccountResponse = $walletController->createDedicatedAccount($customerId);
- 
-            if ($virtualAccountResponse['status'] === true) {
-                $virtualAccountData = $virtualAccountResponse['data'];
+        // ✅ Create Dedicated Virtual Account
+        $virtualAccountResponse = $walletController->createDedicatedAccount($customerCode);
+        Log::debug('createDedicatedAccount', ['virtualAccountResponse' => $virtualAccountResponse]);
 
-                VirtualAccount::create([
-                    'user_id' => $user->id,
-                    'user_email' => $user->email,
-                    'bank_name' => $virtualAccountData['bank']['name'],
-                    'account_name' => $virtualAccountData['account_name'],
-                    'account_number' => $virtualAccountData['account_number'],
-                    'currency' => $virtualAccountData['currency'],
-                    'customer_code' => $virtualAccountData['customer']['customer_code'],
-                    'is_active' => true,
-                ]);
+        if (is_array($virtualAccountResponse) && isset($virtualAccountResponse['account_number'])) {
+            $virtualAccountData = $virtualAccountResponse;
 
-                // Create wallet for the user
-                $user->wallet()->create([
-                    'user_id' => $user->id,
-                    'user_email' => $user->email,
-                    'balance' => 0.00,
-                    // 'balance' => 500000.00,
-                    'currency' => $virtualAccountData['currency'] ?? 'NGN',
-                ]);
+            VirtualAccount::create([
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'bank_name' => $virtualAccountData['bank']['name'],
+                'account_name' => $virtualAccountData['account_name'],
+                'account_number' => $virtualAccountData['account_number'],
+                'currency' => $virtualAccountData['currency'],
+                'customer_code' => $virtualAccountData['customer']['customer_code'],
+                'is_active' => true,
+            ]);
 
-                // Send verification email and referral link
-                $referralLink = "https://dohmayn.com/user/register/referral/{$user->referral_code}";
-                 try {
-                    Mail::to($user->email)->send(new VerificationEmail($user, $referralLink, $virtualAccountData));
-                    \Log::info('VerificationEmail sent successfully');
-                } catch (\Exception $e) {
-                    \Log::error('VerificationEmail sending failed: ' . $e->getMessage());
-                }
-                // Return the user and token for API
-                $token = $user->createToken('authToken')->plainTextToken;
-                return [ 
-                    'user' => $user,
-                    'token' => $token, 
-                    'otp_sent' => true,
-                    'message' => 'Registration successful. Please verify your email and phone with the OTPs sent.'
-                ];
+            $user->wallet()->create([
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'balance' => 0.00,
+                'currency' => $virtualAccountData['currency'] ?? 'NGN',
+            ]);
+
+            // ✅ Send verification email
+            $referralLink = "https://dohmayn.com/user/register/referral/{$user->referral_code}";
+            try {
+                Mail::to($user->email)->send(new VerificationEmail($user, $referralLink, $virtualAccountData));
+                \Log::info('VerificationEmail sent successfully');
+            } catch (\Exception $e) {
+                \Log::error('VerificationEmail sending failed: ' . $e->getMessage());
             }
+
+            $token = $user->createToken('authToken')->plainTextToken;
+
+            return [
+                'user' => $user,
+                'token' => $token,
+                'otp_sent' => true,
+                'message' => 'Registration successful. Please verify your email and phone with the OTPs sent.',
+            ];
         }
- 
+
+        // ❌ Final fallback error if virtual account not created
+        $user->delete();
         throw ValidationException::withMessages([
             'wallet' => ['Unable to register with Paystack. Please try again later.'],
         ]);
     }
+
+
 
     // Generate a unique recipient ID
     public function createRecipientId()
