@@ -365,8 +365,8 @@ class RegisterController extends Controller
             // }
 
             // Verify OTP matches for both channels
-            if (!hash_equals((string)$validated['code'], (string)$validated['otp']) || 
-                !hash_equals((string)$validated['code'], (string)$validated['otp'])) {
+            if (!hash_equals((string)$validated['saveCode'], (string)$validated['otp']) || 
+                !hash_equals((string)$validated['saveCode'], (string)$validated['otp'])) {
                 \Log::warning("Invalid OTP attempt", [
                     'email' => $validated['email'],
                     'phone' => $validated['phone'],
@@ -381,7 +381,17 @@ class RegisterController extends Controller
 
             // Mark both channels as verified
             $verificationExpiry = now()->addMinutes(15);
-           
+            
+            $emailVerificationKey = 'otp_verified_email_' . md5($validated['email']);
+            $phoneVerificationKey = 'otp_verified_phone_' . md5($validated['phone']);
+            
+            Cache::put($emailVerificationKey, [
+                'verified_at' => now(),
+                'contact' => $validated['email']
+            ], $verificationExpiry);
+
+        
+
             \Log::info("Dual OTP verification successful", [
                 'email' => $validated['email'],
                 'phone' => $validated['phone']

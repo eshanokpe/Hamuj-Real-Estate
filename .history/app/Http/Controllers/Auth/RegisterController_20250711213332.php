@@ -366,7 +366,7 @@ class RegisterController extends Controller
 
             // Verify OTP matches for both channels
             if (!hash_equals((string)$validated['code'], (string)$validated['otp']) || 
-                !hash_equals((string)$validated['code'], (string)$validated['otp'])) {
+                !hash_equals((string)$validated['saveCode'], (string)$validated['otp'])) {
                 \Log::warning("Invalid OTP attempt", [
                     'email' => $validated['email'],
                     'phone' => $validated['phone'],
