@@ -386,7 +386,7 @@ class RegisterController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'OTP verified successfully',
-                'verified_email' => $request->all(),
+                'verified_email' => $request-all(),
                 'verified_phone' => $request('phone'),
                 'expires_at' => $verificationExpiry->toDateTimeString()
             ]);

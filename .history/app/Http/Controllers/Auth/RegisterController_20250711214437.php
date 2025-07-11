@@ -317,12 +317,12 @@ class RegisterController extends Controller
     public function verifyOTPAPI(Request $request): JsonResponse
     {
         try {
-            // $validated = $request->validate([
-            //     'code' => 'required|digits:6',
-            //     'otp' => 'required|digits:6',
-            //     'email' => 'required|email',
-            //     'phone' => 'required|string|min:10'
-            // ]);
+            $validated = $request->validate([
+                'code' => 'required|digits:6',
+                'otp' => 'required|digits:6',
+                'email' => 'required|email',
+                'phone' => 'required|string|min:10'
+            ]);
 
             // Check both email and phone OTPs
             // $emailCacheKey = 'otp_email_' . md5($validated['email']);
@@ -386,8 +386,8 @@ class RegisterController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'OTP verified successfully',
-                'verified_email' => $request->all(),
-                'verified_phone' => $request('phone'),
+                'verified_email' => $validated['email'],
+                'verified_phone' => $validated['phone'],
                 'expires_at' => $verificationExpiry->toDateTimeString()
             ]);
 

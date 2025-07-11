@@ -3,11 +3,35 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 6,
             "patches": [
                 {
                     "date": 1752266600341,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1752266677174,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -317,9 +317,9 @@\n     public function verifyOTPAPI(Request $request): JsonResponse\n     {\n         try {\n             $validated = $request->validate([\n-                // 'code' => 'required|digits:6',\n+                'code' => 'required|digits:6',\n                 'otp' => 'required|digits:6',\n                 'email' => 'required|email',\n                 'phone' => 'required|string|min:10'\n             ]);\n"
+                },
+                {
+                    "date": 1752266689022,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -316,9 +316,9 @@\n \n     public function verifyOTPAPI(Request $request): JsonResponse\n     {\n         try {\n-            $validated = $request->validate([\n+            // $validated = $request->validate([\n                 'code' => 'required|digits:6',\n                 'otp' => 'required|digits:6',\n                 'email' => 'required|email',\n                 'phone' => 'required|string|min:10'\n"
+                },
+                {
+                    "date": 1752266703838,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -317,13 +317,13 @@\n     public function verifyOTPAPI(Request $request): JsonResponse\n     {\n         try {\n             // $validated = $request->validate([\n-                'code' => 'required|digits:6',\n-                'otp' => 'required|digits:6',\n-                'email' => 'required|email',\n-                'phone' => 'required|string|min:10'\n-            ]);\n+            //     'code' => 'required|digits:6',\n+            //     'otp' => 'required|digits:6',\n+            //     'email' => 'required|email',\n+            //     'phone' => 'required|string|min:10'\n+            // ]);\n \n             // Check both email and phone OTPs\n             // $emailCacheKey = 'otp_email_' . md5($validated['email']);\n             // $phoneCacheKey = 'otp_phone_' . md5($validated['phone']);\n@@ -385,9 +385,9 @@\n \n             return response()->json([\n                 'success' => true,\n                 'message' => 'OTP verified successfully',\n-                'verified_email' => $validated['email'],\n+                'verified_email' => $request-,\n                 'verified_phone' => $validated['phone'],\n                 'expires_at' => $verificationExpiry->toDateTimeString()\n             ]);\n \n"
+                },
+                {
+                    "date": 1752266713542,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -385,10 +385,10 @@\n \n             return response()->json([\n                 'success' => true,\n                 'message' => 'OTP verified successfully',\n-                'verified_email' => $request-,\n-                'verified_phone' => $validated['phone'],\n+                'verified_email' => $request-all(),\n+                'verified_phone' => $request['phone'],\n                 'expires_at' => $verificationExpiry->toDateTimeString()\n             ]);\n \n         } catch (ValidationException $e) {\n"
+                },
+                {
+                    "date": 1752266722080,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -386,9 +386,9 @@\n             return response()->json([\n                 'success' => true,\n                 'message' => 'OTP verified successfully',\n                 'verified_email' => $request-all(),\n-                'verified_phone' => $request['phone'],\n+                'verified_phone' => $request('phone'),\n                 'expires_at' => $verificationExpiry->toDateTimeString()\n             ]);\n \n         } catch (ValidationException $e) {\n"
+                },
+                {
+                    "date": 1752266728371,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -385,9 +385,9 @@\n \n             return response()->json([\n                 'success' => true,\n                 'message' => 'OTP verified successfully',\n-                'verified_email' => $request-all(),\n+                'verified_email' => $request->all(),\n                 'verified_phone' => $request('phone'),\n                 'expires_at' => $verificationExpiry->toDateTimeString()\n             ]);\n \n"
                 }
             ],
             "date": 1752266600341,
