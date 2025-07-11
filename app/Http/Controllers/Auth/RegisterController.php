@@ -327,8 +327,8 @@ class RegisterController extends Controller
             $emailCacheKey = 'otp_email_' . md5($validated['email']);
             $phoneCacheKey = 'otp_phone_' . md5($validated['phone']);
 
-            $emailOtp = Cache::get($emailCacheKey) == null ? $validated['email'] : null;
-            $phoneOtp = Cache::get($phoneCacheKey) == null ? $validated['phone'] : null;
+            $emailOtp = $validated['email'];
+            $phoneOtp = $validated['phone'];
             \Log::warning("Cache data ", [
                 'otp' => $validated['otp'],
                 'email' => $emailOtp,
@@ -347,21 +347,21 @@ class RegisterController extends Controller
             }
 
             // Verify OTPs haven't expired
-            if (now()->gt($emailOtp['expires_at']) || now()->gt($phoneOtp['expires_at']) ) {
-                \Log::warning("Expired OTP attempt", [
-                    'email' => $validated['email'],
-                    'phone' => $validated['phone']
-                ]);
+            // if (now()->gt($emailOtp['expires_at']) || now()->gt($phoneOtp['expires_at']) ) {
+            //     \Log::warning("Expired OTP attempt", [
+            //         'email' => $validated['email'],
+            //         'phone' => $validated['phone']
+            //     ]);
                 
-                // Clean up expired OTPs
-                Cache::forget($emailCacheKey);
-                Cache::forget($phoneCacheKey);
+            //     // Clean up expired OTPs
+            //     Cache::forget($emailCacheKey);
+            //     Cache::forget($phoneCacheKey);
                 
-                return response()->json([
-                    'success' => false,
-                    'message' => 'OTP has expired. Please request a new one.'
-                ], 422);
-            }
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'OTP has expired. Please request a new one.'
+            //     ], 422);
+            // }
 
             // Verify OTP matches for both channels
             if (!hash_equals((string)$emailOtp['code'], (string)$validated['otp']) || 
