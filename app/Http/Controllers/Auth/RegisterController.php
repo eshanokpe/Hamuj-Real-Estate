@@ -354,10 +354,10 @@ class RegisterController extends Controller
 
             // Verify names match if provided
             if (isset($validated['firstname']) && isset($validated['lastname'])) {
-                $bvnFirstName = strtolower($data['data']['firstName']);
-                $bvnLastName = strtolower($data['data']['lastName']);
-                $inputFirstName = strtolower($validated['firstname']);
-                $inputLastName = strtolower($validated['lastname']);
+                $bvnFirstName = strtolower(trim($data['data']['firstName']));
+                $bvnLastName = strtolower(trim($data['data']['lastName']));
+                $inputFirstName = strtolower(trim($validated['firstname']));
+                $inputLastName = strtolower(trim($validated['lastname']));
 
                 if ($bvnFirstName !== $inputFirstName || $bvnLastName !== $inputLastName) {
                     return response()->json([

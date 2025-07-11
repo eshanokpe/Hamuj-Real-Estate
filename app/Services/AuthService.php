@@ -61,7 +61,7 @@ class AuthService
             'bvn' => $data['bvn'] ?? null,
             'nin' => $data['nin'] ?? null,
             'terms' => isset($data['terms']),
-            'verified_at' => null,
+            'verified_at' => now(),
         ]);
 
         // ✅ Assign "user" role if exists
