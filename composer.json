@@ -18,6 +18,7 @@
         "phpseclib/phpseclib": "^3.0",
         "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-permission": "^6.20",
+        "spatie/laravel-sitemap": "^6.4",
         "twilio/sdk": "^8.6",
         "unicodeveloper/laravel-paystack": "^1.2",
         "yabacon/paystack-php": "^2.2",
