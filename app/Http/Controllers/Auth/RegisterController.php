@@ -210,8 +210,8 @@ class RegisterController extends Controller
             $emailCacheKey = 'otp_email_' . md5($validated['email']);
             $phoneCacheKey = 'otp_phone_' . md5($validated['phone']);
 
-            $emailOtp = Cache::get($emailCacheKey);
-            $phoneOtp = Cache::get($phoneCacheKey);
+            $emailOtp = Cache::get($emailCacheKey) == null ? null : $validated['email'];
+            $phoneOtp = Cache::get($phoneCacheKey) == null ? null : $validated['phone'];
             \Log::warning("Cache data ", [
                 'otp' => $validated['otp'],
                 'email' => $emailOtp,
