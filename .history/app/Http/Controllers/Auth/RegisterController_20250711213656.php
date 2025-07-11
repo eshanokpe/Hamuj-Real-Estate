@@ -318,7 +318,7 @@ class RegisterController extends Controller
     {
         try {
             $validated = $request->validate([
-                // 'code' => 'required|digits:6',
+                'code' => 'required|digits:6',
                 'otp' => 'required|digits:6',
                 'email' => 'required|email',
                 'phone' => 'required|string|min:10'
