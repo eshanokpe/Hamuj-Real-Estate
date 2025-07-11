@@ -230,7 +230,7 @@ class RegisterController extends Controller
             }
 
             // Verify OTPs haven't expired
-            if (now()->gt($emailOtp['expires_at']) || now()->gt($phoneOtp['expires_at']) || $validated['email']) {
+            if (now()->gt($emailOtp['expires_at']) || now()->gt($phoneOtp['expires_at'] )) {
                 \Log::warning("Expired OTP attempt", [
                     'email' => $validated['email'],
                     'phone' => $validated['phone']
