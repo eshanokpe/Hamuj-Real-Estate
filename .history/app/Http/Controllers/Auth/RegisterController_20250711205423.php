@@ -314,7 +314,7 @@ class RegisterController extends Controller
         }
     }
 
-    public function verifyOTPAPI(Request $request): JsonResponse
+    public function verifyOtp(Request $request): JsonResponse
     {
         try {
             $validated = $request->validate([

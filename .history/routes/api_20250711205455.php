@@ -52,7 +52,7 @@ Route::post('/send-otp', [RegisterController::class, 'sendOtp']);
 Route::post('/verify-bvn', [RegisterController::class, 'verifyBvn']);
 Route::post('/verify-nin', [RegisterController::class, 'verifyNin']);
 Route::post('/verify-otp', [RegisterController::class, 'verifyOtp']);
-Route::post('/verify-OTPAPI', [RegisterController::class, 'verifyOTPAPI']);
+Route::post('/verify-otp', [RegisterController::class, 'verifyOtp']);verifyOTPAPI
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::get('/check/email', [RegisterController::class, 'checkEmail']);
