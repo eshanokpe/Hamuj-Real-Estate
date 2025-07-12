@@ -227,7 +227,8 @@ class RegisterController extends Controller
             Log::error('OTP sending failed: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to send OTP. Please try again.'
+                'message' => 'Failed to send OTP. Please try again.',
+                'error' => env('APP_DEBUG') ? $e->getMessage() : 'Please try again later'
             ], 500);
         }
     }
