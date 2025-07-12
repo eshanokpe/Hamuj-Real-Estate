@@ -173,6 +173,66 @@ class RegisterController extends Controller
         }
     }
 
+    public function sendOTPAPI(Request $request): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'email' => 'required|email|max:255',
+                'phone' => 'required|string|min:10|max:15',
+            ]);
+
+            // Generate cryptographically secure OTP
+            $otp = random_int(100000, 999999);
+            $expiresAt = now()->addMinutes(15);
+            $otpHash = hash('sha256', $otp); // Store hashed version
+
+            // Cache keys
+            $emailCacheKey = 'otp:email:' . md5($validated['email']);
+            $phoneCacheKey = 'otp:phone:' . md5($validated['phone']);
+
+            // Store hashed OTP with expiration
+            Cache::put($emailCacheKey, [
+                'code_hash' => $otpHash,
+                'expires_at' => $expiresAt,
+                'attempts' => 0 // Track verification attempts
+            ], $expiresAt);
+
+            Cache::put($phoneCacheKey, [
+                'code_hash' => $otpHash,
+                'expires_at' => $expiresAt,
+                'attempts' => 0
+            ], $expiresAt);
+
+            // Send OTP via both channels
+            $emailSent = $this->sendEmailOtp($validated['email'], $otp);
+
+            if (!$emailSent || !$smsSent) {
+                throw new \Exception('Failed to deliver OTP to one or more channels');
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'OTP sent successfully',
+                'expires_at' => $expiresAt->toDateTimeString()
+            ]);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            Log::error('OTP sending failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send OTP. Please try again.'
+            ], 500);
+        }
+    }
+
+
     protected function sendEmailOtp(string $email, int $otp): void
     {
         Mail::to($email)->send(new OtpMail($otp));
