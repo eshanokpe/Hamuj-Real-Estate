@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 use Cache;
+use Log;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WalletController;

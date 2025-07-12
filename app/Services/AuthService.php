@@ -26,8 +26,6 @@ use App\Notifications\SmsOtpNotification;
 class AuthService
 {
     // Register a user
-    // AuthService.php (unchanged namespace and use statements)
-
     public function register(array $data, $walletController)
     {
         $recipientId = $this->createRecipientId();
@@ -58,7 +56,7 @@ class AuthService
             'otp' => $data['otp'] ?? null,
             'otp_expires_at' => $data['otp_expires_at'] ?? null,
             'verification_method' => $data['verification_method'] ?? null,
-            'bvn' => $data['bvn'] ?? null,
+            'bvn' => $data['bvn'] ?? null, 
             'nin' => $data['nin'] ?? null,
             'terms' => isset($data['terms']),
             'verified_at' => now(),
