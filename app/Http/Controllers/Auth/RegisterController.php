@@ -204,11 +204,26 @@ class RegisterController extends Controller
             ], $expiresAt);
 
             // Send OTP via both channels
-            $emailSent = $this->sendEmailOtp($validated['email'], $otp);
+            // Send email OTP
+            try {
+                Log::debug('Generated OTP for email', [
+                    'email' => $validated['email'],
+                    'otp' => $otp
+                ]);
+                $this->sendEmailOtp($validated['email'], $otp);
+            } catch (\Exception $e) {
+                Log::error('Email OTP sending failed', [
+                    'email' => $validated['email'],
+                    'error' => $e->getMessage()
+                ]);
 
-            if (!$emailSent) {
-                throw new \Exception('Failed to deliver OTP to one or more channels');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to send OTP to email.',
+                    'error' => env('APP_DEBUG') ? $e->getMessage() : 'Please try again.'
+                ], 500);
             }
+
 
             return response()->json([
                 'success' => true,
