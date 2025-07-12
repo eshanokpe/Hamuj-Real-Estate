@@ -558,7 +558,7 @@ class RegisterController extends Controller
     public function verifyNin(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'bvn' => 'required|digits:11', // Note: You're validating 'bvn' but using NIN endpoint
+            'nin' => 'required|digits:11', // Note: You're validating 'bvn' but using NIN endpoint
             'firstname' => 'sometimes|string|max:50',
             'lastname' => 'sometimes|string|max:50',
             'email' => 'sometimes|string|email|max:50',
@@ -572,7 +572,7 @@ class RegisterController extends Controller
                 'app-id' => config('services.prembly.app_id'),
             ])
             ->post(config('services.prembly.base_url').config('services.prembly.nin_validation_url'), [
-                'number_nin' => $request->bvn, // Note: Field name should match API expectation
+                'number_nin' => $request->nin, // Note: Field name should match API expectation
             ]);
 
             $data = $response->json();
@@ -593,7 +593,7 @@ class RegisterController extends Controller
             }
 
             // Store NIN verification data
-            $request->session()->put('nin_data', $data['nin_data'] ?? $data['data']);
+            // $request->session()->put('nin_data', $data['nin_data'] ?? $data['data']);
             
             return response()->json([
                 'status' => true,

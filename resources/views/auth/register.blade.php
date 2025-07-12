@@ -465,7 +465,7 @@
                             method: 'POST',
                             data: {
                                 _token: '{{ csrf_token() }}',
-                                bvn: bvn,
+                                nin: bvn,
                                 firstname: firstName,
                                 lastname: lastName
                             },
