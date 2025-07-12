@@ -224,7 +224,6 @@ class RegisterController extends Controller
                 ], 500);
             }
 
-
             return response()->json([
                 'success' => true,
                 'message' => 'OTP sent successfully',
@@ -550,7 +549,8 @@ class RegisterController extends Controller
             Log::error('BVN verification error:', ['error' => $e->getMessage()]);
             return response()->json([
                 'status' => false,
-                'message' => 'Error connecting to BVN service'
+                'message' => 'Error connecting to BVN service',
+                'error' => $e->getMessage()
             ], 500);
         }
     }
