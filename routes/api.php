@@ -50,6 +50,8 @@ use Ilmedova\Chattle\app\Http\Controllers\Chat\PostMessageController;
 // Public routes (no authentication required)
 
 
+Route::post('/verify-bvn', [RegisterController::class, 'verifyBvn']);
+Route::post('/verify-nin', [RegisterController::class, 'verifyNin']);
 
 Route::post('/send-otpapi', [RegisterController::class, 'sendOTPAPI']);
 Route::post('/verify-otpapi', [RegisterController::class, 'verifyOTPAPI']);
@@ -64,8 +66,7 @@ Route::post('deactivate-account', [AuthMethodController::class, 'deactivateAccou
  
 // Protected routes (authentication required)
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/verify-bvn', [RegisterController::class, 'verifyBvn']);
-    Route::post('/verify-nin', [RegisterController::class, 'verifyNin']);
+
     
     Route::get('/properties', [PropertyController::class, 'index']);
     Route::get('/buy/assets', [PropertyController::class, 'buy']);

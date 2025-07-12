@@ -537,7 +537,7 @@ class RegisterController extends Controller
                 }
             }
             // Store BVN verification data
-            $request->session()->put('bvn_verification', $data);
+            // $request->session()->put('bvn_verification', $data);
             
             return response()->json([
                 'status' => true,
