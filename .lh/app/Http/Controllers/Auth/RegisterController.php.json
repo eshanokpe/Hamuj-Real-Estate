@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 4,
             "patches": [
                 {
                     "date": 1752283782555,
@@ -16,6 +16,14 @@
                 {
                     "date": 1752283797924,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -227,9 +227,9 @@\n             Log::error('OTP sending failed: ' . $e->getMessage());\n             return response()->json([\n                 'success' => false,\n                 'message' => 'Failed to send OTP. Please try again.',\n-                'error' = \n+                'error' => env('APP_DEBUG') ? $e->getMessage() : 'Please try again later'\n             ], 500);\n         }\n     }\n \n"
+                },
+                {
+                    "date": 1752283956173,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -205,9 +205,9 @@\n \n             // Send OTP via both channels\n             $emailSent = $this->sendEmailOtp($validated['email'], $otp);\n \n-            if (!$emailSent || !$smsSent) {\n+            if (!$emailSent || ) {\n                 throw new \\Exception('Failed to deliver OTP to one or more channels');\n             }\n \n             return response()->json([\n"
+                },
+                {
+                    "date": 1752283962080,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -205,9 +205,9 @@\n \n             // Send OTP via both channels\n             $emailSent = $this->sendEmailOtp($validated['email'], $otp);\n \n-            if (!$emailSent || ) {\n+            if (!$emailSent) {\n                 throw new \\Exception('Failed to deliver OTP to one or more channels');\n             }\n \n             return response()->json([\n"
                 }
             ],
             "date": 1752283782555,

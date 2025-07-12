@@ -206,7 +206,7 @@ class RegisterController extends Controller
             // Send OTP via both channels
             $emailSent = $this->sendEmailOtp($validated['email'], $otp);
 
-            if (!$emailSent) {
+            if (!$emailSent || ) {
                 throw new \Exception('Failed to deliver OTP to one or more channels');
             }
 
