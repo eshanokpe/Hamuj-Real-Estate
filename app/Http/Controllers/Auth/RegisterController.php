@@ -66,7 +66,7 @@ class RegisterController extends Controller
     {
         $response = [
             'status' => false,
-            'message' => $e->getMessage(),
+            'message' => $e instanceof ValidationException ? 'Validation failed' : $e->getMessage(),
             'error' => $this->getErrorDetails($e),
             'code' => $statusCode,
             'timestamp' => now()->toISOString(),
@@ -74,7 +74,6 @@ class RegisterController extends Controller
 
         if ($e instanceof ValidationException) {
             $response['errors'] = $e->errors();
-            $response['message'] = 'Validation failed';
         }
 
         if ($request->wantsJson()) {
@@ -106,6 +105,8 @@ class RegisterController extends Controller
                 'message' => 'Registration successful',
                 'user' =>  $result['user'],
                 'token' => $result['token'],
+                'token_type' => 'Bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60
             ], 201);
         }
         Log::error('Registration success:', ['user' => $result]);

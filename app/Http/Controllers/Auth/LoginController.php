@@ -86,7 +86,7 @@ class LoginController extends Controller
                 if ($request->wantsJson()) {
                     return response()->json([ 
                         'message' => 'Login successful',
-                        'user' => $user,
+                        'user' => $user, 
                         'token' => Auth::user()->createToken('dohmayn')->plainTextToken, // For API Token
                     ], 200);
                 } 

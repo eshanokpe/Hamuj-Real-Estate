@@ -52,6 +52,7 @@ class AuthService
             'referral_code' => $this->generateReferralCode(),
             'referred_by' => $referrer?->id,
             'otp_verified_at' => now(),
+            'email_verified_at' => now(),
             'otp_method' => $data['otp_method'] ?? null,
             'otp' => $data['otp'] ?? null,
             'otp_expires_at' => $data['otp_expires_at'] ?? null,
@@ -133,8 +134,8 @@ class AuthService
                 \Log::error('VerificationEmail sending failed: ' . $e->getMessage());
             }
 
-            $token = $user->createToken('authToken')->plainTextToken;
-
+            $token = $user->createToken('dohmayn')->plainTextToken;
+ 
             return [
                 'user' => $user,
                 'token' => $token,
