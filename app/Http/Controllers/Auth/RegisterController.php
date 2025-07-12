@@ -106,7 +106,6 @@ class RegisterController extends Controller
                 'user' =>  $result['user'],
                 'token' => $result['token'],
                 'token_type' => 'Bearer',
-                'expires_in' => auth()->factory()->getTTL() * 60
             ], 201);
         }
         Log::error('Registration success:', ['user' => $result]);
