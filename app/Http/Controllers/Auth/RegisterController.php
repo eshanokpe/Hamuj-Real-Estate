@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 use Cache;
-use Log;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\WalletController;
@@ -65,16 +64,38 @@ class RegisterController extends Controller
 
     private function handleExceptionError(Request $request, \Exception $e, int $statusCode)
     {
+        $response = [
+            'status' => false,
+            'message' => $e->getMessage(),
+            'error' => $this->getErrorDetails($e),
+            'code' => $statusCode,
+            'timestamp' => now()->toISOString(),
+        ];
+
+        if ($e instanceof ValidationException) {
+            $response['errors'] = $e->errors();
+            $response['message'] = 'Validation failed';
+        }
+
         if ($request->wantsJson()) {
-            return response()->json([
-                'message' => 'Registration failed',
-                'error' => $e->getMessage(),
-            ], $statusCode);
+            return response()->json($response, $statusCode);
         }
 
         return redirect()->back()
             ->with('error', $e->getMessage())
             ->withInput();
+    }
+
+    private function getErrorDetails(\Exception $e): array
+    {
+        return [
+            'type' => get_class($e),
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            // Only include trace in non-production environments
+            'trace' => config('app.env') !== 'production' ? $e->getTrace() : null,
+        ];
     }
 
     private function handleRegistrationSuccess(Request $request, $result)
