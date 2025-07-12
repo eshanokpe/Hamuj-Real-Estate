@@ -173,7 +173,6 @@ class RegisterController extends Controller
         }
     }
 
-
     protected function sendEmailOtp(string $email, int $otp): void
     {
         Mail::to($email)->send(new OtpMail($otp));
@@ -317,96 +316,90 @@ class RegisterController extends Controller
     public function verifyOTPAPI(Request $request): JsonResponse
     {
         try {
-            // $validated = $request->validate([
-            //     'code' => 'required|digits:6',
-            //     'otp' => 'required|digits:6',
-            //     'email' => 'required|email',
-            //     'phone' => 'required|string|min:10'
-            // ]);
+            $validated = $request->validate([
+                'otp' => 'required|digits:6',
+                'email' => 'required|email',
+                'phone' => 'required|string|min:10'
+            ]);
 
-            // Check both email and phone OTPs
-            // $emailCacheKey = 'otp_email_' . md5($validated['email']);
-            // $phoneCacheKey = 'otp_phone_' . md5($validated['phone']);
+            $emailCacheKey = 'otp:email:' . md5($validated['email']);
+            $phoneCacheKey = 'otp:phone:' . md5($validated['phone']);
 
-            // $emailOtp = $validated['email'];
-            // $phoneOtp = $validated['phone'];
-            // \Log::warning("Cache data ", [
-            //     'otp' => $validated['otp'],
-            //     'email' => $emailOtp,
-            //     'phone' => $phoneOtp
-            // ]);
+            $emailOtpData = Cache::get($emailCacheKey);
+            $phoneOtpData = Cache::get($phoneCacheKey);
 
-            // if (!$emailOtp || !$phoneOtp) {
-            //     \Log::warning("OTP data not found", [
-            //         'email' => $validated['email'],
-            //         'phone' => $validated['phone']
-            //     ]);
-            //     return response()->json([
-            //         'success' => false,
-            //         'message' => 'OTP expired or invalid. Please request a new one.'
-            //     ], 422);
-            // }
+            // Check if OTP exists
+            if (!$emailOtpData || !$phoneOtpData) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'OTP expired or invalid'
+                ], 422);
+            }
 
-            // Verify OTPs haven't expired
-            // if (now()->gt($emailOtp['expires_at']) || now()->gt($phoneOtp['expires_at']) ) {
-            //     \Log::warning("Expired OTP attempt", [
-            //         'email' => $validated['email'],
-            //         'phone' => $validated['phone']
-            //     ]);
-                
-            //     // Clean up expired OTPs
-            //     Cache::forget($emailCacheKey);
-            //     Cache::forget($phoneCacheKey);
-                
-            //     return response()->json([
-            //         'success' => false,
-            //         'message' => 'OTP has expired. Please request a new one.'
-            //     ], 422);
-            // }
+            // Check attempts limit (max 5 attempts)
+            if ($emailOtpData['attempts'] >= 5 || $phoneOtpData['attempts'] >= 5) {
+                Cache::forget($emailCacheKey);
+                Cache::forget($phoneCacheKey);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Too many attempts. Please request a new OTP.'
+                ], 429);
+            }
 
-            // Verify OTP matches for both channels
-            // if (!hash_equals((string)$validated['code'], (string)$validated['otp']) || 
-            //     !hash_equals((string)$validated['code'], (string)$validated['otp'])) {
-            //     \Log::warning("Invalid OTP attempt", [
-            //         'email' => $validated['email'],
-            //         'phone' => $validated['phone'],
-            //         'attempt' => $validated['otp']
-            //     ]);
-                
-            //     return response()->json([
-            //         'success' => false,
-            //         'message' => 'Invalid OTP code.'
-            //     ], 422);
-            // }
+            // Verify expiration
+            if (now()->gt($emailOtpData['expires_at'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'OTP has expired'
+                ], 422);
+            }
 
-            // Mark both channels as verified
-            $verificationExpiry = now()->addMinutes(15);
-           
+            // Verify OTP (timing-safe comparison)
+            $otpHash = hash('sha256', $validated['otp']);
+            if (!hash_equals($emailOtpData['code_hash'], $otpHash)) {
+                // Increment attempts
+                Cache::increment("{$emailCacheKey}.attempts");
+                Cache::increment("{$phoneCacheKey}.attempts");
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid OTP code',
+                    'attempts_remaining' => 5 - ($emailOtpData['attempts'] + 1)
+                ], 422);
+            }
+
+            // Mark as verified
+            $verificationExpiry = now()->addMinutes(30);
+            $verificationKey = 'auth:verified:' . md5($validated['email'] . $validated['phone']);
+
+            Cache::put($verificationKey, [
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'verified_at' => now()
+            ], $verificationExpiry);
+
+            // Cleanup OTP data
+            Cache::forget($emailCacheKey);
+            Cache::forget($phoneCacheKey);
 
             return response()->json([
                 'success' => true,
                 'message' => 'OTP verified successfully',
-                'verified_email' => $request->all(),
-                'verified_phone' => $request('phone'),
-                'expires_at' => $verificationExpiry->toDateTimeString()
+                'verification_expires_at' => $verificationExpiry->toDateTimeString()
             ]);
 
         } catch (ValidationException $e) {
-            \Log::error("OTP validation failed", ['errors' => $e->errors()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid request data',
+                'message' => 'Invalid input data',
                 'errors' => $e->errors()
             ], 422);
+
         } catch (\Exception $e) {
-            \Log::error("OTP verification error: " . $e->getMessage(), [
-                'exception' => $e,
-                'trace' => $e->getTraceAsString()
-            ]);
-            
+            Log::error('OTP verification error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred during verification. Please try again.'
+                'message' => 'Verification failed. Please try again.'
             ], 500);
         }
     }
