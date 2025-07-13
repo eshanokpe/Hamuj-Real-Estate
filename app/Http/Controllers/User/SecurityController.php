@@ -4,14 +4,19 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Auth; 
+use App\Services\OtpService;
 use Illuminate\Support\Facades\Hash;
 
 class SecurityController extends Controller
 {
-    public function __construct() 
+    protected $otpService;
+
+    public function __construct(OtpService $otpService)
     {
+        $this->otpService = $otpService;
         $this->middleware('auth');
     }
 
@@ -70,7 +75,6 @@ class SecurityController extends Controller
         $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;
         return view('user.pages.security.transactionPin', $data); 
     }
-
     
     public function createTransactionPin(Request $request, $id)
     {
@@ -107,6 +111,28 @@ class SecurityController extends Controller
         return $this->sendSuccessResponse('Transaction PIN created/updated successfully.', 200, $request);
     }
 
+    public function verifyTransactionPin(Request $request)
+    {
+        $request->validate([
+            'pin' => 'required|digits:4'
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->pin, $user->transaction_pin)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid PIN'
+            ], 401);
+        }
+        // Generate and send OTP
+        $otpData = $this->otpService->generateAndSendOtp($user);
+            
+        return response()->json([
+            'success' => true,
+            'message' => 'OTP sent successfully'
+        ]);
+    }
     private function sendErrorResponse($message, $statusCode, $request)
     {
         if ($request->wantsJson()) {

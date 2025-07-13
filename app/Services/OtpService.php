@@ -1,74 +1,74 @@
-<?php 
-// app/Services/OtpService.php
+<?php
+
 namespace App\Services;
 
-use App\Models\OtpVerification;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use App\Notifications\TransactionOtpNotification;
+use Illuminate\Support\Str;
 
 class OtpService
 {
-    public function generateOtp(User $user)
+    protected $expirationMinutes = 15;
+    protected $maxAttempts = 3;
+
+    public function generateAndSendOtp($user)
     {
-        // Generate OTPs (6 digits)
-        $otp = mt_rand(100000, 999999);
-        $emailOtp = mt_rand(100000, 999999);
-        $phoneOtp = mt_rand(100000, 999999);
+        $otp = random_int(100000, 999999);
+        $expiresAt = now()->addMinutes($this->expirationMinutes);
+        $otpHash = hash('sha256', $otp);
 
-        // Expiry time (15 minutes from now)
-        $expiry = Carbon::now()->addMinutes(15);
-
-        // Create or update OTP record
-        OtpVerification::updateOrCreate( 
-            ['user_id' => $user->id],
-            [
-                'otp' => $otp,
-                'email_otp' => null,
-                'phone_otp' => null,
-                'email_otp_expires_at' => $expiry,
-                'phone_otp_expires_at' => $expiry,
-                'email_verified' => false,
-                'phone_verified' => false
-            ]
-        );
+        $this->storeOtp($user, $otpHash, $expiresAt);
+        $this->sendOtpToUser($user, $otp);
 
         return [
-            'otp' => $otp,
-            'email_otp' => $emailOtp,
-            'phone_otp' => $phoneOtp,
-            'expires_at' => $expiry
+            'expires_in' => $this->expirationMinutes * 60,
+            'delivery_methods' => $this->getDeliveryMethods($user)
         ];
     }
 
-    public function verifyOtp(User $user, string $otp, string $type = 'email')
+    protected function storeOtp($user, $otpHash, $expiresAt)
     {
-        $otpRecord = OtpVerification::where('user_id', $user->id)->first();
+        $identifier = Str::random(32); // OTP session identifier
+        
+        Cache::put("otp:{$identifier}", [
+            'user_id' => $user->id,
+            'code_hash' => $otpHash,
+            'expires_at' => $expiresAt->toDateTimeString(),
+            'attempts' => 0,
+            'verified' => false
+        ], $expiresAt);
 
-        if (!$otpRecord) {
-            return false;
-        }
-
-        $field = $type . '_otp';
-        $expiryField = $type . '_otp_expires_at';
-        $verifiedField = $type . '_verified';
-
-        if ($otpRecord->$field !== $otp) {
-            return false;
-        }
-
-        if (Carbon::now()->gt($otpRecord->$expiryField)) {
-            return false;
-        }
-
-        $otpRecord->update([$verifiedField => true]);
-        return true;
+        return $identifier;
     }
 
-    public function isVerified(User $user)
+    protected function sendOtpToUser($user, $otp)
     {
-        $otpRecord = OtpVerification::where('user_id', $user->id)->first();
+        try {
+            $user->notify(new TransactionOtpNotification($otp));
+            
+            Log::info('OTP sent successfully', [
+                'user_id' => $user->id,
+                'otp' => $otp,
+                'delivery_method' => 'email' // Could be SMS or other methods
+            ]);
+        } catch (\Exception $e) {
+            Log::error('OTP delivery failed', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
+        }
+    }
+
+    protected function getDeliveryMethods($user)
+    {
+        $methods = ['email'];
         
-        return $otpRecord && $otpRecord->email_verified && $otpRecord->phone_verified;
+        if ($user->phone_verified_at) {
+            $methods[] = 'sms';
+        }
+        
+        return $methods;
     }
 }
