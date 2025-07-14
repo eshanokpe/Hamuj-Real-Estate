@@ -135,7 +135,7 @@ class SecurityController extends Controller
         ]);
     }
 
-    public function verifyOtp(Request $request)
+    public function verifyOTP(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
@@ -209,6 +209,50 @@ class SecurityController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred during OTP verification',
+                'error' => env('APP_DEBUG') ? $e->getMessage() : null
+            ], 500);
+        }
+    }
+
+    public function resendOTP(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            
+            // Validate if user has an active OTP request
+            $otpCacheKey = 'otp:user:' . $user->id;
+            
+            if (Cache::has($otpCacheKey)) {
+                $existingOtp = Cache::get($otpCacheKey);
+                
+                // Prevent OTP reset abuse
+                if (now()->diffInMinutes($existingOtp['created_at']) < 1) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Please wait before requesting a new OTP'
+                    ], 429);
+                }
+                
+                // Clear existing OTP
+                Cache::forget($otpCacheKey);
+            }
+
+            // Generate and send new OTP
+            $otpData = $this->otpService->generateAndSendOtp($user);
+            
+            return response()->json([
+                'success' => true,
+                'otp_data' => [
+                    'expires_at' => $otpData['expires_at']->toDateTimeString(),
+                    'delivery_method' => $otpData['delivery_method'] // email/sms
+                ],
+                'message' => 'New OTP has been sent successfully'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to reset OTP',
                 'error' => env('APP_DEBUG') ? $e->getMessage() : null
             ], 500);
         }

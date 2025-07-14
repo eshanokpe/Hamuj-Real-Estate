@@ -104,9 +104,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/{id}/change-password', [SecurityController::class, 'changePasswordPost']);
     Route::put('/{id}/transaction/pin', [SecurityController::class, 'createTransactionPin']);
-    Route::put('/{id}/transaction/verify_pin', [SecurityController::class, 'verifyTransactionPin']);
-    Route::put('/{id}/transaction/verify_otp_pin', [SecurityController::class, 'verifyOtpTransaction']);
     Route::get('/{userId}/transaction/get/pin', [SecurityController::class, 'getTransactionPin']);
+    Route::put('/{id}/transaction/verify_pin', [SecurityController::class, 'verifyTransactionPin']);
+    Route::put('/{id}/transaction/verify_otp_pin', [SecurityController::class, 'verifyOTP']);
+    Route::put('/{id}/transaction/resend-pin', [SecurityController::class, 'resendOTP']);
+   
    
     Route::get('/get/bank', [APIWalletController::class, 'getBank']);
     Route::get('resolve/account', [WalletController::class, 'resolveAccount']);
