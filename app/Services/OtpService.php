@@ -22,7 +22,7 @@ class OtpService
         $this->sendOtpToUser($user, $otp);
 
         return [
-            'expires_in' => $this->expirationMinutes * 60,
+            'expires_at' => $this->expirationMinutes * 60,
             'delivery_methods' => $this->getDeliveryMethods($user)
         ];
     }
