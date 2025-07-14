@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use App\Notifications\TransactionOtpNotification;
@@ -34,7 +35,7 @@ class OtpService
         Cache::put("otp:{$identifier}", [
             'user_id' => $user->id,
             'code_hash' => $otpHash,
-            'expires_at' => $expiresAt->toDateTimeString(),
+            'expires_at' => Carbon::createFromTimestamp($otpData['expires_at'])->toDateTimeString,
             'attempts' => 0,
             'verified' => false
         ], $expiresAt);
