@@ -130,9 +130,90 @@ class SecurityController extends Controller
             
         return response()->json([
             'success' => true,
+            '$otpData' => $otpData,
             'message' => 'OTP sent successfully'
         ]);
     }
+
+    public function verifyOtp(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'otp' => 'required|digits:6'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid OTP format',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $user = Auth::user();
+            $otpCacheKey = 'otp:user:' . $user->id;
+
+            if (!Cache::has($otpCacheKey)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'OTP has expired or was not requested'
+                ], 400);
+            }
+
+            $otpData = Cache::get($otpCacheKey);
+
+            // Check maximum attempts
+            if ($otpData['attempts'] >= 3) {
+                Cache::forget($otpCacheKey);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Maximum OTP attempts reached. Please request a new OTP.'
+                ], 429);
+            }
+
+            // Verify OTP code
+            if (!hash_equals($otpData['code_hash'], hash('sha256', $request->otp))) {
+                $remainingAttempts = 2 - $otpData['attempts'];
+                Cache::put($otpCacheKey, array_merge($otpData, [
+                    'attempts' => $otpData['attempts'] + 1
+                ]), now()->diffInSeconds($otpData['expires_at']));
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid OTP code',
+                    'attempts_remaining' => $remainingAttempts
+                ], 401);
+            }
+
+            // Generate transaction authorization token
+            $token = Str::random(64);
+            $tokenExpiry = now()->addMinutes(30);
+            
+            Cache::put("transaction_token:{$token}", [
+                'user_id' => $user->id,
+                'verified_at' => now(),
+                'expires_at' => $tokenExpiry
+            ], $tokenExpiry);
+
+            // Clear used OTP
+            Cache::forget($otpCacheKey);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'OTP verified successfully',
+                'token' => $token,
+                'token_expires_at' => $tokenExpiry->toDateTimeString()
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred during OTP verification',
+                'error' => env('APP_DEBUG') ? $e->getMessage() : null
+            ], 500);
+        }
+    }
+
     private function sendErrorResponse($message, $statusCode, $request)
     {
         if ($request->wantsJson()) {
