@@ -19,12 +19,13 @@ class OtpService
         $expiresAt = now()->addMinutes($this->expirationMinutes);
         $otpHash = hash('sha256', $otp);
 
-        $this->storeOtp($user, $otpHash, $expiresAt);
+        $identifier = $this->storeOtp($user, $otpHash, $expiresAt);
         $this->sendOtpToUser($user, $otp);
 
         return [
-            'expires_at' => $this->expirationMinutes * 60,
-            'delivery_methods' => $this->getDeliveryMethods($user)
+            'expires_at' => $expiresAt->timestamp, // Return Unix timestamp
+            'delivery_method' => $this->getPrimaryDeliveryMethod($user),
+            'identifier' => $identifier
         ];
     }
 
@@ -35,7 +36,7 @@ class OtpService
         Cache::put("otp:{$identifier}", [
             'user_id' => $user->id,
             'code_hash' => $otpHash,
-            'expires_at' => Carbon::createFromTimestamp($otpData['expires_at'])->toDateTimeString,
+            'expires_at' => $expiresAt->timestamp, // Store as timestamp
             'attempts' => 0,
             'verified' => false
         ], $expiresAt);
@@ -51,7 +52,7 @@ class OtpService
             Log::info('OTP sent successfully', [
                 'user_id' => $user->id,
                 'otp' => $otp,
-                'delivery_method' => 'email' // Could be SMS or other methods
+                'delivery_method' => 'email'
             ]);
         } catch (\Exception $e) {
             Log::error('OTP delivery failed', [
@@ -62,14 +63,9 @@ class OtpService
         }
     }
 
-    protected function getDeliveryMethods($user)
+    protected function getPrimaryDeliveryMethod($user)
     {
-        $methods = ['email'];
-        
-        if ($user->phone_verified_at) {
-            $methods[] = 'sms';
-        }
-        
-        return $methods;
+        // Default to email, use SMS if available
+        return $user->phone_verified_at ? 'sms' : 'email';
     }
 }
