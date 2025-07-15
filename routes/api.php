@@ -132,15 +132,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/remove', [PasscodeController::class, 'removePasscode']);
         Route::post('/{id}/verify/otp', [PasscodeController::class, 'verifyPassCodeOTP']);
         Route::post('/{id}/confirm/otp', [PasscodeController::class, 'confirmPassCodeOTP']);
-        Route::post('/resend-passcode-otp', [PasscodeController::class, 'resendOTP']);
-
+        Route::post('/resend-otp', [PasscodeController::class, 'resendOTP']);
     });
 
     Route::prefix('biometric')->group(function () {
         Route::get('/show', [AuthMethodController::class, 'show']);
         Route::put('/update', [AuthMethodController::class, 'update']); 
         Route::get('/biometric-support', [AuthMethodController::class, 'checkBiometricSupport']);
-    });
+    });      
 
     Route::prefix('about')->group(function () {
         Route::get('/index', [HelpSupportController::class, 'contactSupport']);
