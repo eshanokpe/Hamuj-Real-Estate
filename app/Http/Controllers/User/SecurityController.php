@@ -112,7 +112,7 @@ class SecurityController extends Controller
         return $this->sendSuccessResponse('Transaction PIN created/updated successfully.', 200, $request);
     }
 
-     public function verifyTransactionPin(Request $request)
+    public function verifyTransactionPin(Request $request)
     {
         $request->validate([
             'pin' => 'required|digits:4'
@@ -126,12 +126,17 @@ class SecurityController extends Controller
                 'message' => 'Invalid PIN'
             ], 401);
         }
+
         // Generate and send OTP
         $otpData = $this->otpService->generateAndSendOtp($user);
-            
+        
         return response()->json([
             'success' => true,
-            '$otpData' => $otpData,
+            'otp_data' => [
+                'expires_at' => Carbon::createFromTimestamp($otpData['expires_at'])->toDateTimeString(),
+                'delivery_method' => $otpData['delivery_method'],
+                'identifier' => $otpData['identifier'] // Add this line
+            ],
             'message' => 'OTP sent successfully'
         ]);
     }
