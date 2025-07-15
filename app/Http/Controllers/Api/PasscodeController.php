@@ -296,7 +296,8 @@ class PasscodeController extends Controller
                 'success' => true,
                 'otp_data' => [
                     'expires_at' => \Carbon\Carbon::createFromTimestamp($otpData['expires_at'])->toDateTimeString(),
-                    'delivery_method' => $otpData['delivery_method'] // email/sms
+                    'delivery_method' => $otpData['delivery_method'],
+                    'identifier' => $otpData['identifier'] 
                 ],
                 'message' => 'New OTP has been sent successfully'
             ]);
@@ -309,5 +310,5 @@ class PasscodeController extends Controller
             ], 500);
         }
     }
-    
+
 }
