@@ -309,4 +309,5 @@ class PasscodeController extends Controller
             ], 500);
         }
     }
+    
 }
