@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Auth; 
 use Carbon\Carbon;
+use App\Models\User;
 use Cache;
 use App\Services\OtpService;
 use Illuminate\Support\Facades\Hash;
@@ -151,7 +152,6 @@ class SecurityController extends Controller
             'new_pin' => 'required|digits:4',
             'new_pin_confirmation' => 'required|same:new_pin',
         ]);
-
         $user = User::findOrFail($userId);
         
         // Verify user has permission
