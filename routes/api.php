@@ -130,6 +130,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/set', [PasscodeController::class, 'setPasscode']);
         Route::post('/verify', [PasscodeController::class, 'verifyPasscode']);
         Route::post('/remove', [PasscodeController::class, 'removePasscode']);
+        Route::post('/{id}/verify/otp', [PasscodeController::class, 'verifyPasscodeOTP']);
+
     });
 
     Route::prefix('biometric')->group(function () {

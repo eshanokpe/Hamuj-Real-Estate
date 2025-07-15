@@ -7,9 +7,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Cache;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Services\OtpService;
 
 class PasscodeController extends Controller
 {
+    protected $otpService;
+    protected $maxAttempts = 3;
+
+    public function __construct(OtpService $otpService)
+    {
+        $this->otpService = $otpService;
+        $this->middleware('auth');
+    }
     /**
      * Check passcode status
      */
@@ -81,7 +93,7 @@ class PasscodeController extends Controller
             'status' => 'success',
             'message' => 'Passcode verified',
         ]);
-    }
+    } 
 
     /**
      * Remove passcode
@@ -117,4 +129,43 @@ class PasscodeController extends Controller
             'message' => 'Passcode removed successfully',
         ]);
     }
+
+    public function verifyPasscodeOTP(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'passcode' => 'required|digits:4',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->passcode, $user->app_passcode)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid passcode',
+            ], 401);
+        }
+
+        // Generate and send OTP
+        $otpData = $this->otpService->generateAndSendOtp($user);
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Passcode verified',
+            'otp_data' => [
+                'expires_at' => Carbon::createFromTimestamp($otpData['expires_at'])->toDateTimeString(),
+                'delivery_method' => $otpData['delivery_method'],
+                'identifier' => $otpData['identifier'] 
+            ],
+        ]);
+    } 
+
+    
 }
