@@ -244,7 +244,7 @@ class SecurityController extends Controller
             return response()->json([
                 'success' => true,
                 'otp_data' => [
-                    'expires_at' => $otpData['expires_at']->toDateTimeString(),
+                    'expires_at' => \Carbon\Carbon::createFromTimestamp($otpData['expires_at'])->toDateTimeString(),
                     'delivery_method' => $otpData['delivery_method'] // email/sms
                 ],
                 'message' => 'New OTP has been sent successfully'
