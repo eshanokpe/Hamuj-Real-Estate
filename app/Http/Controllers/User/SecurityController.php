@@ -164,7 +164,7 @@ class SecurityController extends Controller
 
         $user->update([
             'transaction_pin' => Hash::make($request->new_pin),
-            // 'transaction_pin_updated_at' => now(),
+            'transaction_pin_updated_at' => now(),
         ]);
 
         return response()->json([

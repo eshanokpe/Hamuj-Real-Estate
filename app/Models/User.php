@@ -50,7 +50,8 @@ class User extends Authenticatable
         'bvn',
         'nin',
         'terms',
-        'verified_at'
+        'verified_at',
+        'transaction_pin_updated_at'
     ];
 
     protected $hidden = [
