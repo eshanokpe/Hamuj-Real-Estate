@@ -112,7 +112,7 @@ class SecurityController extends Controller
         return $this->sendSuccessResponse('Transaction PIN created/updated successfully.', 200, $request);
     }
 
-    public function verifyTransactionPin(Request $request)
+     public function verifyTransactionPin(Request $request)
     {
         $request->validate([
             'pin' => 'required|digits:4'
@@ -140,7 +140,8 @@ class SecurityController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'otp' => 'required|digits:6'
+                'otp' => 'required|digits:6',
+                'identifier' => 'required|string' // Add identifier to request
             ]);
 
             if ($validator->fails()) {
@@ -152,7 +153,7 @@ class SecurityController extends Controller
             }
 
             $user = Auth::user();
-            $otpCacheKey = 'otp:user:' . $user->id;
+            $otpCacheKey = 'otp:' . $request->identifier; // Use the identifier
 
             if (!Cache::has($otpCacheKey)) {
                 return response()->json([
@@ -163,8 +164,16 @@ class SecurityController extends Controller
 
             $otpData = Cache::get($otpCacheKey);
 
+            // Verify user match
+            if ($otpData['user_id'] != $user->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'OTP does not belong to this user'
+                ], 403);
+            }
+
             // Check maximum attempts
-            if ($otpData['attempts'] >= 3) {
+            if ($otpData['attempts'] >= $this->maxAttempts) {
                 Cache::forget($otpCacheKey);
                 return response()->json([
                     'success' => false,
@@ -174,10 +183,10 @@ class SecurityController extends Controller
 
             // Verify OTP code
             if (!hash_equals($otpData['code_hash'], hash('sha256', $request->otp))) {
-                $remainingAttempts = 2 - $otpData['attempts'];
+                $remainingAttempts = $this->maxAttempts - ($otpData['attempts'] + 1);
                 Cache::put($otpCacheKey, array_merge($otpData, [
                     'attempts' => $otpData['attempts'] + 1
-                ]), now()->diffInSeconds($otpData['expires_at']));
+                ]), Carbon::createFromTimestamp($otpData['expires_at'])->diffInSeconds(now()));
 
                 return response()->json([
                     'success' => false,
