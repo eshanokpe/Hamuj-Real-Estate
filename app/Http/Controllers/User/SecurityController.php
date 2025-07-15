@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 class SecurityController extends Controller
 {
     protected $otpService;
+    protected $maxAttempts = 3;
 
     public function __construct(OtpService $otpService)
     {
@@ -147,7 +148,7 @@ class SecurityController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'otp' => 'required|digits:6',
-                'identifier' => 'required|string' // Add identifier to request
+                'identifier' => 'required|string'
             ]);
 
             if ($validator->fails()) {
@@ -159,7 +160,7 @@ class SecurityController extends Controller
             }
 
             $user = Auth::user();
-            $otpCacheKey = 'otp:' . $request->identifier; // Use the identifier
+            $otpCacheKey = 'otp:' . $request->identifier;
 
             if (!Cache::has($otpCacheKey)) {
                 return response()->json([
@@ -170,6 +171,15 @@ class SecurityController extends Controller
 
             $otpData = Cache::get($otpCacheKey);
 
+            // Verify expiration first
+            if (now()->timestamp > $otpData['expires_at']) {
+                Cache::forget($otpCacheKey);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'OTP has expired'
+                ], 400);
+            }
+
             // Verify user match
             if ($otpData['user_id'] != $user->id) {
                 return response()->json([
@@ -178,7 +188,7 @@ class SecurityController extends Controller
                 ], 403);
             }
 
-            // Check maximum attempts
+            // Check maximum attempts (using the class property)
             if ($otpData['attempts'] >= $this->maxAttempts) {
                 Cache::forget($otpCacheKey);
                 return response()->json([
@@ -201,14 +211,14 @@ class SecurityController extends Controller
                 ], 401);
             }
 
-            // Generate transaction authorization token
+            // Generate transaction token
             $token = Str::random(64);
             $tokenExpiry = now()->addMinutes(30);
             
             Cache::put("transaction_token:{$token}", [
                 'user_id' => $user->id,
-                'verified_at' => now(),
-                'expires_at' => $tokenExpiry
+                'verified_at' => now()->timestamp,
+                'expires_at' => $tokenExpiry->timestamp
             ], $tokenExpiry);
 
             // Clear used OTP
@@ -222,6 +232,7 @@ class SecurityController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('OTP Verification Error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred during OTP verification',
