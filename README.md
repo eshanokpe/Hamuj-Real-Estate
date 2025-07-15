@@ -67,3 +67,15 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 Test BVN = 54651333604
 Test -NIN = 12345678901
+php artisan make:migration add_transaction_pin_updated_at_to_users_table --table=users
+
+Schema::table('users', function (Blueprint $table) {
+            $table->timestamp('transaction_pin_updated_at')
+                ->nullable()
+                ->after('transaction_pin')
+                ->comment('Timestamp when transaction PIN was last updated');
+        });
+
+Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('transaction_pin_updated_at');
+        });
