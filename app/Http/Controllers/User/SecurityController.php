@@ -144,6 +144,35 @@ class SecurityController extends Controller
         ]);
     }
 
+    // In your Laravel controller
+    public function resetTransactionPin(Request $request, $userId)
+    {
+        $request->validate([
+            'new_pin' => 'required|digits:4',
+            'new_pin_confirmation' => 'required|same:new_pin',
+        ]);
+
+        $user = User::findOrFail($userId);
+        
+        // Verify user has permission
+        if (Auth::id() != $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $user->update([
+            'transaction_pin' => Hash::make($request->new_pin),
+            // 'transaction_pin_updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Transaction PIN reset successfully'
+        ]);
+    }
+
     public function verifyOTP(Request $request)
     {
         try {
