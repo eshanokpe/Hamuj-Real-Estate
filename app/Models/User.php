@@ -62,6 +62,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'transaction_pin_updated_at' => 'datetime',
         'hide_balance' => 'boolean',
         'last_login_at' => 'datetime',
         'dob' => 'date',
