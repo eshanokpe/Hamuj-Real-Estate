@@ -14,7 +14,7 @@ class BeneficiaryController extends Controller
 {
 
     public function index()
-    {
+    { 
         $beneficiaries = Beneficiary::where('user_id', auth()->id())
             ->orderBy('created_at', 'desc')
             ->get();
@@ -60,5 +60,32 @@ class BeneficiaryController extends Controller
         ]);
     }
 
+    public function delete(Request $request)
+    {
+        $validated = $request->validate([
+            'beneficiary_id' => 'required|integer|exists:beneficiaries,id,user_id,'.auth()->id()
+        ]);
+
+        try {
+            $beneficiary = Beneficiary::where('user_id', auth()->id())
+                ->where('id', $validated['beneficiary_id'])
+                ->firstOrFail();
+
+            $beneficiary->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Beneficiary deleted successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error deleting beneficiary: '.$e->getMessage());
+            
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete beneficiary'
+            ], 500);
+        }
+    }
   
 }

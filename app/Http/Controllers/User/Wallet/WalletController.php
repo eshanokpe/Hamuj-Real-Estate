@@ -11,7 +11,7 @@ use App\Models\Beneficiary;
 use App\Models\WalletTransaction;
 use Barryvdh\DomPDF\Facade\Pdf; 
 
-
+ 
 class WalletController extends Controller
 {
    

@@ -159,6 +159,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('beneficiaries')->group(function () {
         Route::post('/', [BeneficiaryController::class, 'store']);
         Route::get('/', [BeneficiaryController::class, 'index']);
+        Route::post('/delete', [BeneficiaryController::class, 'delete']);
     });
     Route::prefix('kyc')->group(function () {
         Route::post('/', [KycController::class, 'store']);
