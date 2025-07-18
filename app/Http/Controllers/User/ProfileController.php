@@ -143,6 +143,8 @@ class ProfileController extends Controller
                 'phone' => 'nullable|string|max:15',
                 'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
                 'referral_code' => 'nullable|string|exists:users,referral_code',
+                'bvn' => 'nullable|string',
+                'nin' => 'nullable|string',
                 'dob' => [
                     'nullable',
                     'date',
@@ -158,6 +160,8 @@ class ProfileController extends Controller
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
             $user->phone = $request->phone;
+            $user->bvn = $request->bvn;
+            $user->nin = $request->nin;
 
             if ($request->filled('dob')) {
                 $user->dob = Carbon::parse($request->dob)->format('Y-m-d');
@@ -170,7 +174,7 @@ class ProfileController extends Controller
                 $destinationPath = public_path('assets/profile/');
 
                 if (!file_exists($destinationPath)) {
-                    mkdir($destinationPath, 0755, true); // Ensure the directory exists
+                    mkdir($destinationPath, 0755, true); 
                 }
 
                 $image->move($destinationPath, $imageName);
