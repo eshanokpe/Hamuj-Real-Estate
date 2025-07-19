@@ -84,7 +84,6 @@ class WalletTransferController extends Controller
                 Log::info('Transfer successful. Wallet updated.', $transferResponse['data']);
 
                 // Log the transaction
-                // Log the transaction
                 $transaction = WalletTransaction::create([
                     'user_id' => $user->id,
                     'wallet_id' => $userWallet->id,
@@ -101,12 +100,10 @@ class WalletTransferController extends Controller
                 ]); 
 
                 // Trigger the notification 
-                 
                 $newBalance = $userWallet->fresh()->balance;
                 // Send success notification
                 $user->notify(new WalletTransferNotification(
                     'Transfer Successful',
-                    // 'Your transfer of '.number_format($transferAmount, 2).' to '.$validated['account_number'].' was successful.',
                     'Your transfer of '.number_format($transferAmount, 2).' was successful.',
                     true, 
                     $transaction,
@@ -114,8 +111,16 @@ class WalletTransferController extends Controller
                 ));
                  Log::info('Transfer successful');
                 // Log::info('Notification.', $transaction);
-                 
-
+                if ($request->wantsJson()) {
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Transfer completed successfully.',
+                        'transaction' => $transaction,
+                        'new_balance' => $newBalance,
+                        'data' => $transferResponse['data'],
+                        'new_balance' => $newBalance,
+                    ]);
+                }
                 return response()->json([
                     'status' => 'success', 
                     'data' => $transferResponse['data'],
