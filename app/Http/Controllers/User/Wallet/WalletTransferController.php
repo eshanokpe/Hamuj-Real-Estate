@@ -52,6 +52,7 @@ class WalletTransferController extends Controller
             'amount' => 'required|numeric|min:1',
             'reason' => 'nullable|string',
             'accountName' => 'nullable|string',
+            'accountNumber' => 'nullable|string',
             'bankName' => 'nullable|string',
             'account_number' => 'nullable',
         ]);
@@ -88,14 +89,17 @@ class WalletTransferController extends Controller
                     'user_id' => $user->id,
                     'wallet_id' => $userWallet->id,
                     'type' => 'transfer', 
-                    'currency' => $transferResponse['currency'] ?? 'NGN', // Taken directly from response
-                    'accountName' => $validated['accountName'] ?? '', // Changed from account_number to accountName
-                    'transfer_code' => $transferResponse['transfer_code'] ?? '', // From response, not validated
+                    'currency' => $transferResponse['currency'] ?? 'NGN', 
+                    'accountName' => $validated['accountName'] ?? '', 
+                    'account_number' => $validated['accountNumber'] ?? '', 
+                    'transfer_code' => $transferResponse['transfer_code'] ?? '', 
                     'bankName' => $validated['bankName'] ?? '',
                     'amount' => $transferAmount,
                     'recipient_code' => $validated['recipient_code'],
-                    'reason' => $validated['reason'] ?? 'Payment', // Default to 'Payment' if not provided
-                    'status' => $transferResponse['status'] ?? 'success', // Use status from response
+                    'reason' => $validated['reason'] ?? 'Payment', 
+                    'status' => $transferResponse['status'] ?? 'success', 
+                    'transaction_id' => $transferResponse['id'] ?? null, // From payment gateway response
+                    'reference' => $transferResponse['reference'] ?? $this->generateReference(),
                     'metadata' => $transferResponse,
                 ]); 
 
@@ -153,7 +157,10 @@ class WalletTransferController extends Controller
         }
        
     }
-
+    protected function generateReference()
+    {
+        return 'WAL' . time() . strtoupper(Str::random(4));
+    }
     public function processTransfer(array $validated)
     {
         $user = Auth::user();

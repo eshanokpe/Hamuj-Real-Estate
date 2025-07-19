@@ -769,6 +769,7 @@ class ComposerStaticInitffdab87688986358a321b0eef150dca0
 
     public static $classMap = array (
         'App\\Channels\\SmsChannel' => __DIR__ . '/../..' . '/app/Channels/SmsChannel.php',
+        'App\\Console\\Commands\\GenerateSitemap' => __DIR__ . '/../..' . '/app/Console/Commands/GenerateSitemap.php',
         'App\\Console\\Commands\\WebSocketServer' => __DIR__ . '/../..' . '/app/Console/Commands/WebSocketServer.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
@@ -901,6 +902,7 @@ class ComposerStaticInitffdab87688986358a321b0eef150dca0
         'App\\Notifications\\SellPropertyUserNotification' => __DIR__ . '/../..' . '/app/Notifications/SellPropertyUserNotification.php',
         'App\\Notifications\\SenderTransferNotification' => __DIR__ . '/../..' . '/app/Notifications/SenderTransferNotification.php',
         'App\\Notifications\\SmsOtpNotification' => __DIR__ . '/../..' . '/app/Notifications/SmsOtpNotification.php',
+        'App\\Notifications\\TransactionOtpNotification' => __DIR__ . '/../..' . '/app/Notifications/TransactionOtpNotification.php',
         'App\\Notifications\\TransferNotification' => __DIR__ . '/../..' . '/app/Notifications/TransferNotification.php',
         'App\\Notifications\\WalletFundedNotification' => __DIR__ . '/../..' . '/app/Notifications/WalletFundedNotification.php',
         'App\\Notifications\\WalletTransferNotification' => __DIR__ . '/../..' . '/app/Notifications/WalletTransferNotification.php',

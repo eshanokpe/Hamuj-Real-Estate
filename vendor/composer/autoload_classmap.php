@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Channels\\SmsChannel' => $baseDir . '/app/Channels/SmsChannel.php',
+    'App\\Console\\Commands\\GenerateSitemap' => $baseDir . '/app/Console/Commands/GenerateSitemap.php',
     'App\\Console\\Commands\\WebSocketServer' => $baseDir . '/app/Console/Commands/WebSocketServer.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
@@ -139,6 +140,7 @@ return array(
     'App\\Notifications\\SellPropertyUserNotification' => $baseDir . '/app/Notifications/SellPropertyUserNotification.php',
     'App\\Notifications\\SenderTransferNotification' => $baseDir . '/app/Notifications/SenderTransferNotification.php',
     'App\\Notifications\\SmsOtpNotification' => $baseDir . '/app/Notifications/SmsOtpNotification.php',
+    'App\\Notifications\\TransactionOtpNotification' => $baseDir . '/app/Notifications/TransactionOtpNotification.php',
     'App\\Notifications\\TransferNotification' => $baseDir . '/app/Notifications/TransferNotification.php',
     'App\\Notifications\\WalletFundedNotification' => $baseDir . '/app/Notifications/WalletFundedNotification.php',
     'App\\Notifications\\WalletTransferNotification' => $baseDir . '/app/Notifications/WalletTransferNotification.php',

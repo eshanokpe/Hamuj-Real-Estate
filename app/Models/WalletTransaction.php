@@ -14,13 +14,16 @@ class WalletTransaction extends Model
         'wallet_id',       
         'type',            
         'accountName',            
-        'bankName',            
+        'bankName',  
+        'account_number',          
         'amount',   
         'currency', 
         'transfer_code',        
         'reason',     
         'recipient_code', 
-        'status',           
+        'status',     
+        'transaction_id', // Add this
+        'reference',      
         'metadata',           
         
     ]; 
