@@ -89,7 +89,7 @@ class WalletTransferController extends Controller
                     'wallet_id' => $userWallet->id,
                     'type' => 'transfer', 
                     'currency' => $transferResponse['currency'] ?? 'NGN', // Taken directly from response
-                    'accountName' => $validated['account_number'] ?? '', // Changed from account_number to accountName
+                    'accountName' => $validated['accountName'] ?? '', // Changed from account_number to accountName
                     'transfer_code' => $transferResponse['transfer_code'] ?? '', // From response, not validated
                     'bankName' => $validated['bankName'] ?? '',
                     'amount' => $transferAmount,
