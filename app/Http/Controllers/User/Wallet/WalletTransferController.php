@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\Wallet;
 use Auth;
 use Log;
 use App\Models\WalletTransaction;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\WalletController  as PayStackWalletController;
