@@ -556,6 +556,7 @@ class RegisterController extends Controller
                 Log::error('BVN bvnLastName:', ['bvnLastName' => $bvnLastName]);
 
                 if ($bvnFirstName !== $inputFirstName || $bvnLastName !== $inputLastName) {
+                    Log::error('BVN verified:', ['BVN verified' => 'BVN verified but names do not match ']);
                     return response()->json([
                         'status' => false,
                         'message' => 'BVN verified but names do not match '
