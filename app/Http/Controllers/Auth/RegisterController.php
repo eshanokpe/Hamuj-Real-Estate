@@ -550,13 +550,15 @@ class RegisterController extends Controller
                 $bvnLastName = strtolower(trim($data['data']['lastName']));
                 $inputFirstName = strtolower(trim($validated['firstname']));
                 $inputLastName = strtolower(trim($validated['lastname']));
-                Log::error('BVN verification error:', ['inputFirstName' => $inputFirstName]);
-                Log::error('BVN verification error:', ['inputLastName' => $inputLastName]);
+                Log::error('BVN inputFirstName:', ['inputFirstName' => $inputFirstName]);
+                Log::error('BVN inputLastName:', ['inputLastName' => $inputLastName]);
+                Log::error('BVN bvnFirstName:', ['bvnFirstName' => $bvnFirstName]);
+                Log::error('BVN bvnLastName:', ['bvnLastName' => $bvnLastName]);
 
                 if ($bvnFirstName !== $inputFirstName || $bvnLastName !== $inputLastName) {
                     return response()->json([
                         'status' => false,
-                        'message' => 'Names do not match BVN records'
+                        'message' => 'BVN verified but names do not match '
                     ], 422);
                 }
             }
