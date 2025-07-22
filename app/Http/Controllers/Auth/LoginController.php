@@ -84,7 +84,6 @@ class LoginController extends Controller
                 ]);
                 
                 if ($request->wantsJson()) {
-                    $user->makeVisible(['app_passcode']);
                     return response()->json([ 
                         'message' => 'Login successful',
                         'user' => $user, 

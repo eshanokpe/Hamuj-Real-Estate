@@ -168,6 +168,26 @@ class PasscodeController extends Controller
         ]);
     } 
 
+    public function NoPassCodeOTP(Request $request, $id)
+    {
+        
+        $user = User::findOrFail($id);
+
+    
+        // Generate and send OTP
+        $otpData = $this->otpService->generateAndSendOtp($user);
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Passcode verified',
+            'otp_data' => [
+                'expires_at' => Carbon::createFromTimestamp($otpData['expires_at'])->toDateTimeString(),
+                'delivery_method' => $otpData['delivery_method'],
+                'identifier' => $otpData['identifier'] 
+            ],
+        ]);
+    } 
+
     public function confirmPassCodeOTP(Request $request)
     {
         try {
@@ -316,7 +336,7 @@ class PasscodeController extends Controller
         // Validate the input
         $request->validate([
             'old_passcode' => 'required',
-            'new_passcode' => 'nullable|min:4|confirmed', 
+            'new_passcode' => 'required|min:4|confirmed', 
         ]);
 
         $user = Auth::user();
@@ -332,13 +352,9 @@ class PasscodeController extends Controller
                 return back()->withErrors(['old_passcode' => 'The old passcode is incorrect.']);
             }
         }
-        $appcodeUser = User::findOrFail($id);
-        $request_new_passcode = $appcodeUser->app_passcode;
-        if ($request->filled('new_passcode')) {
-            $request_new_passcode = $request->new_passcode;
-        }
+
         // Update the password
-        $user->app_passcode = Hash::make($request_new_passcode);
+        $user->app_passcode = Hash::make($request->new_passcode);
         $user->save();
         if ($request->wantsJson()) {
             return response()->json([
