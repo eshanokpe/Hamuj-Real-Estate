@@ -53,7 +53,7 @@ class LoginController extends Controller
         
         // Attempt to log in with credentials
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+            $user = Auth::user(); 
             // Check if the user account is active
             if (!$user->active) {
                 Auth::logout();
@@ -84,6 +84,7 @@ class LoginController extends Controller
                 ]);
                 
                 if ($request->wantsJson()) {
+                    $user->makeVisible(['app_passcode']);
                     return response()->json([ 
                         'message' => 'Login successful',
                         'user' => $user, 
