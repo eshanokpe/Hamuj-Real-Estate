@@ -311,4 +311,39 @@ class PasscodeController extends Controller
         }
     }
 
+    public function changePasscode(Request $request, $id)
+    {
+        // Validate the input
+        $request->validate([
+            'old_passcode' => 'required',
+            'new_passcode' => 'required|min:8|confirmed', 
+        ]);
+
+        $user = Auth::user();
+
+        // Check if old password is correct
+        if (!Hash::check($request->old_passcode, $user->app_passcode)) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The old passcode is incorrect.',
+                ], 400); 
+            } else {
+                return back()->withErrors(['old_passcode' => 'The old passcode is incorrect.']);
+            }
+        }
+
+        // Update the password
+        $user->app_passcode = Hash::make($request->new_passcode);
+        $user->save();
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Password changed successfully. For security reasons, please log in again.',
+            ], 200);
+        } else {
+            return back()->with('success', 'Password changed successfully. For security reasons, please log in again.');
+        }
+    }
+
 }
