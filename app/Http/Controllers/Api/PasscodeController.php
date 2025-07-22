@@ -316,7 +316,7 @@ class PasscodeController extends Controller
         // Validate the input
         $request->validate([
             'old_passcode' => 'required',
-            'new_passcode' => 'required|min:4|confirmed', 
+            'new_passcode' => 'nullable|min:4|confirmed', 
         ]);
 
         $user = Auth::user();
@@ -332,17 +332,21 @@ class PasscodeController extends Controller
                 return back()->withErrors(['old_passcode' => 'The old passcode is incorrect.']);
             }
         }
-
+        $appcodeUser = User::findOrFail($id);
+        $request_new_passcode = $appcodeUser->app_passcode;
+        if ($request->filled('new_passcode')) {
+            $request_new_passcode = $request->new_passcode;
+        }
         // Update the password
-        $user->app_passcode = Hash::make($request->new_passcode);
+        $user->app_passcode = Hash::make($request_new_passcode);
         $user->save();
         if ($request->wantsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Password changed successfully. For security reasons, please log in again.',
+                'message' => 'Passcode changed successfully. For security reasons, please log in again.',
             ], 200);
         } else {
-            return back()->with('success', 'Password changed successfully. For security reasons, please log in again.');
+            return back()->with('success', 'Passcode changed successfully. For security reasons, please log in again.');
         }
     }
 
