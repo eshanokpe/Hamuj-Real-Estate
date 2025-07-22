@@ -316,7 +316,7 @@ class PasscodeController extends Controller
         // Validate the input
         $request->validate([
             'old_passcode' => 'required',
-            'new_passcode' => 'required|min:8|confirmed', 
+            'new_passcode' => 'required|min:4|confirmed', 
         ]);
 
         $user = Auth::user();
