@@ -555,11 +555,17 @@ class RegisterController extends Controller
                 Log::error('BVN bvnFirstName:', ['bvnFirstName' => $bvnFirstName]);
                 Log::error('BVN bvnLastName:', ['bvnLastName' => $bvnLastName]);
 
-                if ($bvnFirstName !== $inputFirstName || $bvnLastName !== $inputLastName) {
-                    Log::error('BVN verified:', ['BVN verified' => 'BVN verified but names do not match ']);
+                // Accept if names match in any order
+                $inputNames = [$inputFirstName, $inputLastName];
+                $bvnNames = [$bvnFirstName, $bvnLastName];
+                sort($inputNames);
+                sort($bvnNames);
+
+                if ($inputNames !== $bvnNames) {
+                    Log::error('BVN verified:', ['BVN verified' => 'BVN verified but names do not match (order-insensitive)']);
                     return response()->json([
                         'status' => false,
-                        'message' => 'BVN verified but names do not match '
+                        'message' => 'BVN verified but names do not match'
                     ], 422);
                 }
             }

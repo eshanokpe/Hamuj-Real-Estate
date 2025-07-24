@@ -100,7 +100,7 @@ Route::middleware('auth:sanctum')->group(function () {
  
     Route::get('/notifications', [NotificationController::class, 'index']);
 
- 
+
 
     Route::put('/{id}/change-password', [SecurityController::class, 'changePasswordPost']);
     Route::put('/{id}/transaction/pin', [SecurityController::class, 'createTransactionPin']);
