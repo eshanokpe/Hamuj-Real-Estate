@@ -123,6 +123,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/get/userProfile', [ProfileController::class, 'index']);
     Route::post('/update/profile', [ProfileController::class, 'update']);
+    Route::get('/verify-token', [ProfileController::class, 'verifyToken']);
 
     // AppLock
     Route::prefix('passcode')->group(function () {

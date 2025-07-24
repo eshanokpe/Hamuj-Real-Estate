@@ -173,7 +173,6 @@ class PasscodeController extends Controller
         
         $user = User::findOrFail($id);
 
-    
         // Generate and send OTP
         $otpData = $this->otpService->generateAndSendOtp($user);
         

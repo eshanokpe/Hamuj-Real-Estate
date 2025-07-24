@@ -216,4 +216,22 @@ class ProfileController extends Controller
     {
         //
     }
+
+    public function verifyToken(Request $request)
+    {
+        $user = Auth::user();
+        
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated',
+            ], 401);
+        }
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Token is valid',
+            'user' => $user,
+        ]);
+    }
 }
