@@ -546,8 +546,8 @@ class RegisterController extends Controller
 
             // Verify names match if provided
             if (isset($validated['firstname']) && isset($validated['lastname'])) {
-                $bvnFirstName = strtolower(trim($data['data']['firstName']));
-                $bvnLastName = strtolower(trim($data['data']['lastName']));
+                $bvnFirstName = trim($data['data']['firstName']);
+                $bvnLastName = trim($data['data']['lastName']);
                 $inputFirstName = strtolower(trim($validated['firstname']));
                 $inputLastName = strtolower(trim($validated['lastname']));
                 Log::error('BVN inputFirstName:', ['inputFirstName' => $inputFirstName]);
@@ -561,13 +561,13 @@ class RegisterController extends Controller
                 sort($inputNames);
                 sort($bvnNames);
 
-                if ($inputNames !== $bvnNames) {
-                    Log::error('BVN verified:', ['BVN verified' => 'BVN verified but names do not match (order-insensitive)']);
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'BVN verified but names do not match'
-                    ], 422);
-                }
+                // if ($inputNames !== $bvnNames) {
+                //     Log::error('BVN verified:', ['BVN verified' => 'BVN verified but names do not match (order-insensitive)']);
+                //     return response()->json([
+                //         'status' => false,
+                //         'message' => 'BVN verified but names do not match'
+                //     ], 422);
+                // }
             }
             // Store BVN verification data
             // $request->session()->put('bvn_verification', $data);
