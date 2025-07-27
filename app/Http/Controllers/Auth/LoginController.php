@@ -123,9 +123,6 @@ class LoginController extends Controller
         // For web response, redirect to verify.otp with the email
          if ($user && !$user->hasVerifiedEmail()) {
              \Log::error('hasVerifiedEmail:');
-             // Generate and send OTPs
-            $otpService = app(OtpService::class);
-            $otps = $otpService->generateOtp($user);
             
             // Send email OTP
             try {
