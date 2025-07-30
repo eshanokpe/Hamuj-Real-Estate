@@ -600,22 +600,26 @@ class RegisterController extends Controller
         try {
             $response = Http::withHeaders([
                 'accept' => 'application/json',
-                'content-type' => 'application/json', // Changed from form to json
+                // 'content-type' => 'application/json', 
                 'x-api-key' => config('services.prembly.api_key'),
                 'app-id' => config('services.prembly.app_id'),
             ])
+            ->asForm() 
             ->post(config('services.prembly.base_url').config('services.prembly.nin_validation_url'), [
                 'number_nin' => $request->nin, // Note: Field name should match API expectation
             ]);
+            // Log the response for debugging
+            Log::info('Prembly NIN Verification Response:', $response->json());
 
             $data = $response->json();
 
-            if (!$response->successful() || !isset($data['status'])) {
+            if (!$response->successful()) {
                 return response()->json([
                     'status' => false,
-                    'message' => $data['detail'] ?? 'NIN verification failed'
+                    'message' => $data['detail'] ?? 'NIN verification failed',
+                    'response' => $data // Include full response for debugging
                 ], 422);
-            } 
+            }  
 
             if ($data['response_code'] !== '00') {
                 return response()->json([
@@ -631,14 +635,19 @@ class RegisterController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => $data['detail'] ?? 'NIN verified successfully',
-                'data' => $data['nin_data']
+                'data' => $data['nin_data'] ?? $data
             ]);
 
         } catch (\Exception $e) {
-            Log::error('NIN verification error:', ['error' => $e->getMessage()]);
+            Log::error('NIN verification error:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             return response()->json([
                 'status' => false,
-                'message' => 'Error connecting to NIN service: ' . $e->getMessage()
+                'message' => 'Error connecting to NIN service',
+                'error' => $e->getMessage() // Only include in development
             ], 500);
         }
     }
