@@ -606,20 +606,31 @@ class RegisterController extends Controller
 
             $startTime = microtime(true);
 
-            $response = Http::withHeaders([
+            $response = Http::asForm()
+            ->withHeaders([
                 'accept' => 'application/json',
+                'content-type' => 'application/x-www-form-urlencoded',
                 'x-api-key' => config('services.prembly.api_key'),
                 'app-id' => config('services.prembly.app_id'),
             ])
-            ->timeout(60) // Increased timeout to 60 seconds
-            ->retry(3, 1000, function ($exception) {
-                // Only retry on timeout or connection errors
-                return $exception instanceof ConnectionException || 
-                    $exception instanceof TransferException;
-            })
-            ->post($baseUrl.'/identitypass/verification/vnin', [
+            ->post($baseUrl.config('services.prembly.nin_validation_url'), [
                 'number_nin' => $request->nin,
             ]);
+            
+            // $response = Http::withHeaders([
+            //     'accept' => 'application/json',
+            //     'x-api-key' => config('services.prembly.api_key'),
+            //     'app-id' => config('services.prembly.app_id'),
+            // ])
+            // ->timeout(60) // Increased timeout to 60 seconds
+            // ->retry(3, 1000, function ($exception) {
+            //     // Only retry on timeout or connection errors
+            //     return $exception instanceof ConnectionException || 
+            //         $exception instanceof TransferException;
+            // })
+            // ->post($baseUrl.'/identitypass/verification/vnin', [
+            //     'number_nin' => $request->nin,
+            // ]);
 
             $duration = round((microtime(true) - $startTime) * 1000, 2);
             Log::debug('NIN verification response received', [
