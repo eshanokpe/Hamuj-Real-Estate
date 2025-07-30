@@ -578,7 +578,7 @@ class RegisterController extends Controller
             'email' => 'sometimes|string|email|max:50',
         ]);
 
-        try {
+        // try {
             $response = Http::withHeaders([
                 'accept' => 'application/json',
                 'content-type' => 'application/json', // Changed from form to json
@@ -615,13 +615,13 @@ class RegisterController extends Controller
                 'data' => $data['nin_data']
             ]);
 
-        } catch (\Exception $e) {
-            Log::error('NIN verification error:', ['error' => $e->getMessage()]);
-            return response()->json([
-                'status' => false,
-                'message' => 'Error connecting to NIN service: ' . $e->getMessage()
-            ], 500);
-        }
+        // } catch (\Exception $e) {
+        //     Log::error('NIN verification error:', ['error' => $e->getMessage()]);
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Error connecting to NIN service: ' . $e->getMessage()
+        //     ], 500);
+        // }
     }
 
     public function verifyBvnFace(Request $request): JsonResponse
