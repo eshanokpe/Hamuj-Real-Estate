@@ -595,9 +595,7 @@ class RegisterController extends Controller
         ]);
 
         try {
-            $baseUrl = config('services.prembly.sandbox_mode') 
-                ? 'https://sandbox.api.prembly.com'  // Sandbox URL
-                : 'https://api.prembly.com';         // Production URL
+            $baseUrl = config('services.prembly.base_url'); 
 
             $response = Http::withHeaders([
                 'accept' => 'application/json',
