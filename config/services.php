@@ -52,7 +52,7 @@ return [
         'from' => env('TWILIO_FROM'),
         'messagingServiceSid' => env('TWILIO_MESSAGING_SERVICE_SID'),
     ],
-
+   
     'prembly' => [ 
         'base_url' => env('PREMBLY_API_BASE_URL'), 
         'api_key' => env('PREMBLY_API_KEY'),
