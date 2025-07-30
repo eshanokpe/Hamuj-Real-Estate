@@ -591,25 +591,30 @@ class RegisterController extends Controller
     public function verifyNin(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'nin' => 'required|digits:11', // Note: You're validating 'bvn' but using NIN endpoint
-            'firstname' => 'sometimes|string|max:50',
-            'lastname' => 'sometimes|string|max:50',
-            'email' => 'sometimes|string|email|max:50',
+            'nin' => 'required|digits:11',
         ]);
 
         try {
+            $baseUrl = config('services.prembly.sandbox_mode') 
+                ? 'https://sandbox.api.prembly.com'  // Sandbox URL
+                : 'https://api.prembly.com';         // Production URL
+
             $response = Http::withHeaders([
                 'accept' => 'application/json',
-                // 'content-type' => 'application/json', 
                 'x-api-key' => config('services.prembly.api_key'),
                 'app-id' => config('services.prembly.app_id'),
             ])
-            ->asForm() 
-            ->post(config('services.prembly.base_url').config('services.prembly.nin_validation_url'), [
-                'number_nin' => $request->nin, // Note: Field name should match API expectation
+            ->asForm() // Send as form-data
+            ->post($baseUrl . '/identitypass/verification/vnin', [
+                'number_nin' => $request->nin,
             ]);
-            // Log the response for debugging
-            Log::info('Prembly NIN Verification Response:', $response->json());
+
+            // Debugging: Log the full request & response
+            Log::info('Prembly API Request:', [
+                'url' => $baseUrl . '/identitypass/verification/vnin',
+                'headers' => $response->headers(),
+                'body' => $response->body(),
+            ]);
 
             $data = $response->json();
 
@@ -617,37 +622,25 @@ class RegisterController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => $data['detail'] ?? 'NIN verification failed',
-                    'response' => $data // Include full response for debugging
-                ], 422);
-            }  
-
-            if ($data['response_code'] !== '00') {
-                return response()->json([
-                    'status' => false,
-                    'message' => $data['detail'] ?? 'NIN verification unsuccessful',
-                    'response_code' => $data['response_code']
+                    'response' => $data,
                 ], 422);
             }
 
-            // Store NIN verification data
-            // $request->session()->put('nin_data', $data['nin_data'] ?? $data['data']);
-            
             return response()->json([
                 'status' => true,
                 'message' => $data['detail'] ?? 'NIN verified successfully',
-                'data' => $data['nin_data'] ?? $data
+                'data' => $data['nin_data'] ?? $data,
             ]);
 
         } catch (\Exception $e) {
             Log::error('NIN verification error:', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
-            
+
             return response()->json([
                 'status' => false,
                 'message' => 'Error connecting to NIN service',
-                'error' => $e->getMessage() // Only include in development
             ], 500);
         }
     }
