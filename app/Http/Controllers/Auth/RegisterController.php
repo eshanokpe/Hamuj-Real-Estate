@@ -617,7 +617,6 @@ class RegisterController extends Controller
                 return $exception instanceof ConnectionException || 
                     $exception instanceof TransferException;
             })
-            ->asForm()
             ->post($baseUrl.'/identitypass/verification/vnin', [
                 'number_nin' => $request->nin,
             ]);
