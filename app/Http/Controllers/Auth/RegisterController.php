@@ -596,9 +596,7 @@ class RegisterController extends Controller
 
         try {
             // Dynamic URL based on environment
-            $baseUrl = config('services.prembly.sandbox_mode')
-                ? 'https://sandbox.api.prembly.com'
-                : 'https://api.prembly.com';
+            $baseUrl = config('services.prembly.sandbox_mode');
 
             // Debug: Log the request being sent
             Log::debug('Sending NIN verification request', [
