@@ -69,6 +69,7 @@ class User extends Authenticatable
         'is_admin' => 'boolean',
         'is_active' => 'boolean',
         'otp_verified_at' => 'datetime',
+        'biometric_data' => 'array',
     ];
 
     public function isOnline()
@@ -199,7 +200,17 @@ class User extends Authenticatable
 
     public function supportedBiometricTypes(): array
     {
-        return $this->biometric_data ?? [];
+        if (empty($this->biometric_data)) {
+            return [];
+        }
+
+        // If it's already an array, return it
+        if (is_array($this->biometric_data)) {
+            return $this->biometric_data;
+        }
+
+        // If it's a string (e.g., "fingerprint,face"), split into an array
+        return explode(',', $this->biometric_data);
     }
 
     public function enableBiometric(array $biometricTypes): bool
@@ -208,11 +219,11 @@ class User extends Authenticatable
             return false;
         }
 
-        $this->biometric_data = array_intersect($biometricTypes, [
+        $this->biometric_data = json_encode(array_intersect($biometricTypes, [
             self::BIOMETRIC_FACE,
             self::BIOMETRIC_FINGERPRINT,
             self::BIOMETRIC_IRIS
-        ]);
+        ]));
 
         $this->biometric_enabled_at = now();
         return $this->save();
