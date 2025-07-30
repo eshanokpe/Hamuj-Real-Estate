@@ -590,7 +590,7 @@ class RegisterController extends Controller
             ]);
 
             $data = $response->json();
-            Log::error('NIN verification data:', ['data' => $data]);
+           
 
             if (!$response->successful() || !isset($data['status'])) {
                 return response()->json([
@@ -610,7 +610,7 @@ class RegisterController extends Controller
 
             // Store NIN verification data
             // $request->session()->put('nin_data', $data['nin_data'] ?? $data['data']);
-            
+             Log::error('NIN verification data:', ['data' => $data]);
             return response()->json([
                 'status' => true,
                 'message' => 'NIN verified successfully',
