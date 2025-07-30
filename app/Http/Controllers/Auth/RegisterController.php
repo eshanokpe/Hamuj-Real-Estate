@@ -591,98 +591,54 @@ class RegisterController extends Controller
     public function verifyNin(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'nin' => 'required|digits:11'
+            'nin' => 'required|digits:11', // Note: You're validating 'bvn' but using NIN endpoint
+            'firstname' => 'sometimes|string|max:50',
+            'lastname' => 'sometimes|string|max:50',
+            'email' => 'sometimes|string|email|max:50',
         ]);
 
         try {
-            // Dynamic URL based on environment
-            $baseUrl = config('services.prembly.sandbox_mode');
-
-            // Debug: Log the request being sent
-            Log::debug('Sending NIN verification request', [
-                'url' => $baseUrl.'/identitypass/verification/vnin',
-                'nin' => substr($request->nin, 0, 3).'******'.substr($request->nin, -2) // Masked for security
-            ]);
-
-            $startTime = microtime(true);
-
-            $response = Http::asForm()
-            ->withHeaders([
+            $response = Http::withHeaders([
                 'accept' => 'application/json',
-                'content-type' => 'application/x-www-form-urlencoded',
+                'content-type' => 'application/json', // Changed from form to json
                 'x-api-key' => config('services.prembly.api_key'),
                 'app-id' => config('services.prembly.app_id'),
             ])
-            ->post($baseUrl.config('services.prembly.nin_validation_url'), [
-                'number_nin' => $request->nin,
-            ]);
-            
-            // $response = Http::withHeaders([
-            //     'accept' => 'application/json',
-            //     'x-api-key' => config('services.prembly.api_key'),
-            //     'app-id' => config('services.prembly.app_id'),
-            // ])
-            // ->timeout(60) // Increased timeout to 60 seconds
-            // ->retry(3, 1000, function ($exception) {
-            //     // Only retry on timeout or connection errors
-            //     return $exception instanceof ConnectionException || 
-            //         $exception instanceof TransferException;
-            // })
-            // ->post($baseUrl.'/identitypass/verification/vnin', [
-            //     'number_nin' => $request->nin,
-            // ]);
-
-            $duration = round((microtime(true) - $startTime) * 1000, 2);
-            Log::debug('NIN verification response received', [
-                'duration_ms' => $duration,
-                'status' => $response->status()
+            ->post(config('services.prembly.base_url').config('services.prembly.nin_validation_url'), [
+                'number_nin' => $request->nin, // Note: Field name should match API expectation
             ]);
 
             $data = $response->json();
 
-            if (!$response->successful()) {
-                Log::error('Prembly API Error Response', [
-                    'status_code' => $response->status(),
-                    'response' => $data
-                ]);
-                
+            if (!$response->successful() || !isset($data['status'])) {
                 return response()->json([
                     'status' => false,
-                    'message' => $data['detail'] ?? 'NIN verification service error',
-                    'response_code' => $data['response_code'] ?? 'UNKNOWN'
+                    'message' => $data['detail'] ?? 'NIN verification failed'
+                ], 422);
+            } 
+
+            if ($data['response_code'] !== '00') {
+                return response()->json([
+                    'status' => false,
+                    'message' => $data['detail'] ?? 'NIN verification unsuccessful',
+                    'response_code' => $data['response_code']
                 ], 422);
             }
 
-            // Successful response
+            // Store NIN verification data
+            // $request->session()->put('nin_data', $data['nin_data'] ?? $data['data']);
+            
             return response()->json([
                 'status' => true,
-                'message' => $data['detail'] ?? 'NIN verification successful',
-                'data' => $data['nin_data'] ?? $data
+                'message' => $data['detail'] ?? 'NIN verified successfully',
+                'data' => $data['nin_data'] ?? $data['data']
             ]);
-
-        } catch (RequestException $e) {
-            Log::error('NIN Verification Request Exception', [
-                'error' => $e->getMessage(),
-                'url' => $e->hasResponse() ? $e->getResponse()->getEffectiveUri() : null,
-                'response' => $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : null
-            ]);
-
-            return response()->json([
-                'status' => false,
-                'message' => 'Connection to NIN service failed',
-                'error' => env('APP_DEBUG') ? $e->getMessage() : null
-            ], 504);
 
         } catch (\Exception $e) {
-            Log::error('NIN Verification General Exception', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
+            Log::error('NIN verification error:', ['error' => $e->getMessage()]);
             return response()->json([
                 'status' => false,
-                'message' => 'An unexpected error occurred',
-                'error' => env('APP_DEBUG') ? $e->getMessage() : null
+                'message' => 'Error connecting to NIN service: ' . $e->getMessage()
             ], 500);
         }
     }
