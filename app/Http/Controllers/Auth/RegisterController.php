@@ -533,18 +533,6 @@ class RegisterController extends Controller
             }
 
             // Verify names match if provided
-            // if (isset($validated['email'])) {
-            //     $bvnEmail = strtolower($data['data']['email']);
-            //     $inputEmail = strtolower($validated['email']);
-            //     if ($bvnEmail !== $inputEmail) {
-            //         return response()->json([
-            //             'status' => false,
-            //             'message' => 'Email do not match BVN records'
-            //         ], 422);
-            //     }
-            // }
-
-            // Verify names match if provided
             if (isset($validated['firstname']) && isset($validated['lastname'])) {
                 $bvnFirstName = trim($data['data']['firstName']);
                 $bvnLastName = trim($data['data']['lastName']);
@@ -561,13 +549,6 @@ class RegisterController extends Controller
                 sort($inputNames);
                 sort($bvnNames);
 
-                // if ($inputNames !== $bvnNames) {
-                //     Log::error('BVN verified:', ['BVN verified' => 'BVN verified but names do not match (order-insensitive)']);
-                //     return response()->json([
-                //         'status' => false,
-                //         'message' => 'BVN verified but names do not match'
-                //     ], 422);
-                // }
             }
             // Store BVN verification data
             // $request->session()->put('bvn_verification', $data);
@@ -614,8 +595,9 @@ class RegisterController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => $data['detail'] ?? 'NIN verification failed'
+                   
                 ], 422);
-            } 
+            }  
 
             if ($data['response_code'] !== '00') {
                 return response()->json([
@@ -630,8 +612,8 @@ class RegisterController extends Controller
             
             return response()->json([
                 'status' => true,
-                'message' => $data['detail'] ?? 'NIN verified successfully',
-                'data' => $data['nin_data'] ?? $data['data']
+                'message' => 'NIN verified successfully',
+                'data' =>  $data['detail']
             ]);
 
         } catch (\Exception $e) {
