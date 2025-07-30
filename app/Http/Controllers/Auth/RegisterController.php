@@ -631,7 +631,7 @@ class RegisterController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => $data['detail'] ?? 'NIN verified successfully',
-                'data' => $data
+                'data' => $data['nin_data']
             ]);
 
         } catch (\Exception $e) {
