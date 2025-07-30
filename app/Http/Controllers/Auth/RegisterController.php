@@ -590,6 +590,7 @@ class RegisterController extends Controller
             ]);
 
             $data = $response->json();
+            Log::error('NIN verification data:', ['data' => $data]);
 
             if (!$response->successful() || !isset($data['status'])) {
                 return response()->json([
