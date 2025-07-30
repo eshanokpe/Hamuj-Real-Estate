@@ -54,7 +54,7 @@ return [
     ],
 
     'prembly' => [ 
-        'base_url' => env('PREMBLY_API_BASE_URL'),
+        'base_url' => env('PREMBLY_API_BASE_URL'), 
         'api_key' => env('PREMBLY_API_KEY'),
         'sandbox_mode' => env('PREMBLY_SANDBOX_MODE', true),
         'bvn_validation_url' => '/identitypass/verification/bvn_validation',
