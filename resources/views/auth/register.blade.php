@@ -441,30 +441,187 @@
                                 lastname: lastName
                             },
                             success: function(response) {
-                                if (response.success === true || response.status === true) {
-                                    // Force hide all steps first
-                                    $('.registration-step').hide();
-                                    $('#step-3').show();
-                                    updateProgress(3);
-                                    toastr.success(response.message || 'BVN verification successful!', 'Success');
+                                if (response.status === true && response.data) {
+                                    const userData = response.data;
+                                    console.log('BVN Verification Success:', userData);
                                     
-                                    showAlert('success', response.message || 'BVN verification successful!');
+                                    // Extract verified data
+                                    const verifiedData = {
+                                        firstName: userData.firstName || firstName,
+                                        lastName: userData.lastName || lastName,
+                                        middleName: userData.middleName || '',
+                                        dob: userData.dateOfBirth || '',
+                                        phone: userData.phoneNumber || ''
+                                    };
+
+                                    // Update form fields
+                                    $('#firstname').val(verifiedData.firstName);
+                                    $('#lastname').val(verifiedData.lastName);
+                                    
+                                    // Build modal content
+                                    const modalContent = `
+                                        <div class="text-center mb-4">
+                                            <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                                            <h4 class="mt-3">BVN Verified Successfully</h4>
+                                        </div>
+                                        <div class="verification-details">
+                                            ${buildDetailRow('First Name', verifiedData.firstName)}
+                                            ${verifiedData.middleName ? buildDetailRow('Middle Name', verifiedData.middleName) : ''}
+                                            ${buildDetailRow('Last Name', verifiedData.lastName)}
+                                        </div>
+                                    `;
+
+                                    // Safely handle modal
+                                    const modalElement = document.getElementById('verificationSuccessModal');
+                                    if (!modalElement) {
+                                        console.error('Modal element not found - creating fallback');
+                                        // Fallback: proceed to next step
+                                        proceedToPasswordStep();
+                                        return;
+                                    }
+
+                                    // Update modal content
+                                    $('#verificationSuccessModal .modal-body').html(modalContent);
+                                    
+                                    // Initialize or get existing modal instance
+                                    const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                                    modal.show();
+                                    
+                                    // Store verification data
+                                    $('input[name="bvn_verified"]').val('true');
+                                    $('input[name="verified_data"]').val(JSON.stringify(verifiedData));
+
+                                    toastr.success('BVN verification successful!', 'Success');
+                                    
                                 } else {
-                                    showAlert('danger', response.message || 'BVN verification failed');
+                                    handleVerificationError(response);
                                 }
                             },
                             error: function(xhr) {
-                                let errorMessage = 'Error verifying BVN';
-                                if (xhr.responseJSON && xhr.responseJSON.message) {
-                                    errorMessage = xhr.responseJSON.message;
-                                }
-                                showAlert('danger', errorMessage);
+                                handleVerificationError(xhr.responseJSON || { 
+                                    message: xhr.statusText || 'Network error occurred' 
+                                });
                             },
                             complete: function() {
                                 $('#verifyBvnBtn').prop('disabled', false).html('Continue<i class="fas fa-arrow-right ms-2"></i>');
                             }
                         });
                     }
+
+                    // Error handling function
+                    function handleVerificationError(errorResponse) {
+                        let errorMessage = errorResponse.message || 'BVN verification failed';
+                        
+                        if (errorResponse.errors) {
+                            errorMessage = Object.values(errorResponse.errors)[0][0];
+                        } else if (errorResponse.data && errorResponse.data.message) {
+                            errorMessage = errorResponse.data.message;
+                        }
+                        
+                        showAlert('danger', errorMessage);
+                        $('#bvn').addClass('is-invalid').focus();
+                        toastr.error(errorMessage, 'Verification Failed');
+                    }
+
+                    // Format date for display (12-Oct-1994 → Oct 12, 1994)
+                    function formatDobDisplay(dobString) {
+                        if (!dobString) return '';
+                        try {
+                            const parts = dobString.split('-');
+                            if (parts.length === 3) {
+                                return `${parts[1]} ${parts[0]}, ${parts[2]}`;
+                            }
+                            return dobString;
+                        } catch (e) {
+                            return dobString;
+                        }
+                    }
+
+                    // Format phone number for display (08139267960 → 0813 926 7960)
+                    function formatPhoneDisplay(phone) {
+                        if (!phone) return '';
+                        return phone.replace(/(\d{4})(\d{3})(\d{4})/, '$1 $2 $3');
+                    }
+
+                    // Format date for form input (12-Oct-1994 → 1994-10-12)
+                    function formatDate(dobString) {
+                        if (!dobString) return '';
+                        try {
+                            const months = {
+                                'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+                                'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+                                'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+                            };
+                            
+                            const parts = dobString.split('-');
+                            if (parts.length === 3) {
+                                const day = parts[0].padStart(2, '0');
+                                const month = months[parts[1]] || '01';
+                                const year = parts[2];
+                                return `${year}-${month}-${day}`;
+                            }
+                            return dobString;
+                        } catch (e) {
+                            return dobString;
+                        }
+                    }
+
+                    // Helper function to build detail rows
+                    function buildDetailRow(label, value) {
+                        return `
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold">${label}:</span>
+                                <span>${value}</span>
+                            </div>
+                        `;
+                    }
+
+                    // Proceed to password step
+                    function proceedToPasswordStep() {
+                        $('.registration-step').hide();
+                        $('#step-3').show();
+                        updateProgress(3);
+                        $('#password').focus();
+                    }
+
+                    // Modal next button handler
+                    $(document).on('click', '#proceedToNextStep', function() {
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('verificationSuccessModal'));
+                        if (modal) {
+                            modal.hide();
+                        }
+                        proceedToPasswordStep();
+                    });
+
+                    // Updated modal next button handler
+                    $(document).on('click', '#proceedToNextStep', function() {
+                        const modalElement = document.getElementById('verificationSuccessModal');
+                        if (modalElement) {
+                            const modal = bootstrap.Modal.getInstance(modalElement);
+                            if (modal) {
+                                modal.hide();
+                            }
+                        }
+                        $('.registration-step').hide();
+                        $('#step-3').show();
+                        updateProgress(3);
+                        $('#password').focus();
+                    });
+
+                    // Add this event handler for the modal's next button
+                    $(document).on('click', '#proceedToNextStep', function() {
+                        // Hide the modal
+                        const successModal = bootstrap.Modal.getInstance(document.getElementById('verificationSuccessModal'));
+                        successModal.hide();
+                        
+                        // Proceed to next step
+                        $('.registration-step').hide();
+                        $('#step-3').show();
+                        updateProgress(3);
+                        
+                        // Focus on password field for better UX
+                        $('#password').focus();
+                    });
 
                     // Function to verify NIN
                     function verifyNin(bvn, firstName, lastName) {
@@ -481,11 +638,59 @@
                             },
                             success: function(response) {
                                 if (response.success === true || response.status === true) {
-                                    // Force hide all steps first
-                                    $('.registration-step').hide();
-                                    $('#step-3').show();
-                                    updateProgress(3);
-                                    toastr.success(response.message || 'BVN verification successful!', 'Success');
+                                    const userData = response.data;
+                                    console.log('NIN Verification Success:', userData);
+                                    // Check if data is masked (contains ***)
+                                    if (isDataMasked(userData)) {
+                                        showSuspendedNinModal();
+                                        return;
+                                    }
+                                    // Extract verified data
+                                    const verifiedData = {
+                                        firstName: userData.firstname || firstName,
+                                        lastName: userData.surname || lastName,
+                                        middleName: userData.middlename || '',
+                                    };
+
+                                     // Update form fields
+                                    $('#firstname').val(verifiedData.firstName);
+                                    $('#lastname').val(verifiedData.lastName);
+                                    
+                                    // Build modal content
+                                    const modalContent = `
+                                        <div class="text-center mb-4">
+                                            <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                                            <h4 class="mt-3">NIN Verified Successfully</h4>
+                                        </div>
+                                        <div class="verification-details">
+                                            ${buildDetailRow('First Name', verifiedData.firstName)}
+                                            ${verifiedData.middleName ? buildDetailRow('Middle Name', verifiedData.middleName) : ''}
+                                            ${buildDetailRow('Last Name', verifiedData.lastName)}
+                                        </div>
+                                    `;
+
+                                    // Safely handle modal
+                                    const modalElement = document.getElementById('verificationSuccessModal');
+                                    if (!modalElement) {
+                                        console.error('Modal element not found - creating fallback');
+                                        // Fallback: proceed to next step
+                                        proceedToPasswordStep();
+                                        return;
+                                    }
+
+                                    // Update modal content
+                                    $('#verificationSuccessModal .modal-body').html(modalContent);
+                                    
+                                    // Initialize or get existing modal instance
+                                    const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                                    modal.show();
+                                    
+                                    // Store verification data
+                                    $('input[name="bvn_verified"]').val('true');
+                                    $('input[name="verified_data"]').val(JSON.stringify(verifiedData));
+
+
+                                    toastr.success(response.message || 'NIN verification successful!', 'Success');
                                     
                                     showAlert('success', response.message || 'BVN verification successful!');
                                 } else {
@@ -719,7 +924,46 @@
                             }
                         });
                     });
-                    
+
+                    // Check if NIN data is masked/suspended
+                    function isDataMasked(userData) {
+                        return (
+                            userData.firstname === '***' || 
+                            userData.surname === '***' || 
+                            userData.title === '***'
+                        );
+                    }
+                    // Show suspended NIN modal
+                    function showSuspendedNinModal() {
+                        const modalContent = `
+                            <div class="text-center mb-4">
+                                <i class="fas fa-exclamation-triangle text-warning" style="font-size: 4rem;"></i>
+                                <h4 class="mt-3">NIN Suspended</h4>
+                            </div>
+                            <div class="alert alert-warning">
+                                <p>Your NIN has been suspended. Please visit the nearest NIMC Enrollment Center for resolution.</p>
+                                <p class="mb-0">Alternatively, you may use your BVN for verification.</p>
+                            </div>
+                            <div class="d-grid gap-2 mt-3">
+                                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+                                    Use BVN Instead
+                                </button>
+                            </div>
+                        `;
+
+                        const modalElement = document.getElementById('verificationSuccessModal');
+                        if (modalElement) {
+                            $('#verificationSuccessModal .modal-body').html(modalContent);
+                            const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+                            modal.show();
+                        } else {
+                            // Fallback alert if modal doesn't exist
+                            alert('Your NIN has been suspended. Please visit the nearest NIMC Enrollment Center or use BVN instead.');
+                            // Optionally switch to BVN verification
+                            $('.verification-toggle button[data-id-method="bvn"]').click();
+                        }
+                    }
+
                     // Helper functions
                     function validateEmail(email) {
                         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -732,7 +976,7 @@
                     }
                     
                     function startOtpTimer() {
-                        let timeLeft = 60;
+                        let timeLeft = 180;
                         $('#resendCodeBtn').prop('disabled', true);
                         
                         window.otpTimer = setInterval(function() {
@@ -821,6 +1065,24 @@
                 });
                 </script>
             </div>
+            <!-- Verification Success Modal -->
+            <div class="modal fade" id="verificationSuccessModal" tabindex="-1" aria-labelledby="verificationSuccessModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title">Verification Successful</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Dynamic content will be inserted here -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="proceedToNextStep">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -828,6 +1090,15 @@
 <!-- Include necessary JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+<!-- jQuery first -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Then Bootstrap bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Other dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <style>
 /* Registration Section Styles */

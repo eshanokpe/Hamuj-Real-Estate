@@ -68,16 +68,9 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 Test BVN = 54651333604
 Test -NIN = 12345678901
 Real Bvn = 54651333604
+Real Bvn = 22261960293
+Real NIN = 22219825220
+Real NIN = 17335778953
 
-php artisan make:migration add_transaction_pin_updated_at_to_users_table --table=users
-
-Schema::table('users', function (Blueprint $table) {
-            $table->timestamp('transaction_pin_updated_at')
-                ->nullable()
-                ->after('transaction_pin')
-                ->comment('Timestamp when transaction PIN was last updated');
-        });
-
-Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('transaction_pin_updated_at');
-        });
+${verifiedData.dob ? buildDetailRow('Date of Birth', formatDobDisplay(verifiedData.dob)) : ''}
+${verifiedData.phone ? buildDetailRow('Phone Number', formatPhoneDisplay(verifiedData.phone)) : ''}
