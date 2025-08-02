@@ -123,7 +123,7 @@
                                 <input id="verification_code" type="text" class="account__form--input__field" 
                                        name="otp" placeholder="Enter 6-digit code" required maxlength="6" pattern="\d{6}" placeholder="123456">
                                 <div class="d-flex justify-content-between mt-2">
-                                    <small class="text-muted" id="otpTimer">Code expires in: 01:00</small>
+                                    <small class="text-muted" id="otpTimer">Code expires in: 03:00</small>
                                     <button type="button" class="btn btn-link p-0 text-decoration-none" id="resendCodeBtn" disabled>
                                         Resend Code
                                     </button>
@@ -353,12 +353,22 @@
                                 console.log(xhr);
                                 $('#email').prop('disabled', false);
                                 $('#phone').prop('disabled', false);
+
                                 let errorMessage = 'Error sending OTP';
-                                if (xhr.responseJSON && xhr.responseJSON.message) {
+
+                                if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                                    // Extract first error message
+                                    const errors = xhr.responseJSON.errors;
+                                    const firstKey = Object.keys(errors)[0];
+                                    errorMessage = errors[firstKey][0];
+                                } else if (xhr.responseJSON && xhr.responseJSON.message) {
                                     errorMessage = xhr.responseJSON.message;
                                 }
+
+                                toastr.error(errorMessage, 'Error');
                                 showAlert('danger', errorMessage);
                             },
+
                             complete: function() {
                                 $('#sendVerificationCode').prop('disabled', false).html('Send Verification Code');
                             }
@@ -729,7 +739,7 @@
                             timeLeft--;
                             
                             const minutes = Math.floor(timeLeft / 60);
-                            const seconds = timeLeft % 60;
+                            const seconds = timeLeft % 180;
                             
                             $('#otpTimer').text(`Code expires in: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
                             

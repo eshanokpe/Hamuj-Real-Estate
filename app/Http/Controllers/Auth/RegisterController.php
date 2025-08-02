@@ -127,6 +127,18 @@ class RegisterController extends Controller
                 'phone' => 'required|string|min:10',
             ]);
 
+            // ✅ Check for existing user
+            $existingUser = User::where('email', $validated['email'])
+                ->orWhere('phone', $validated['phone'])
+                ->first();
+
+            if ($existingUser) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The email or phone number has already been registered.'
+                ], 409);
+            }
+
             // Generate 6-digit numeric OTP
             $otp = random_int(100000, 999999);
             $expiresAt = now()->addMinutes(15);
@@ -202,6 +214,18 @@ class RegisterController extends Controller
                 'email' => 'required|email|max:255',
                 'phone' => 'required|string|min:10|max:15',
             ]);
+
+            // ✅ Check for existing user
+            $existingUser = User::where('email', $validated['email'])
+                ->orWhere('phone', $validated['phone'])
+                ->first();
+
+            if ($existingUser) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The email or phone number has already been registered.'
+                ], 409);
+            }
 
             // Generate cryptographically secure OTP
             $otp = random_int(100000, 999999);
@@ -302,12 +326,26 @@ class RegisterController extends Controller
                 'phone' => 'required|string|min:10'
             ]);
 
+            // ✅ Check for existing user
+            $existingUser = User::where('email', $validated['email'])
+                ->orWhere('phone', $validated['phone'])
+                ->first();
+
+            if ($existingUser) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The email or phone number has already been registered.'
+                ], 409);
+            }
+
+
             // Check both email and phone OTPs
             $emailCacheKey = 'otp_email_' . md5($validated['email']);
             $phoneCacheKey = 'otp_phone_' . md5($validated['phone']);
 
-            $emailOtp = Cache::get($emailCacheKey) == null ? $validated['email'] : null;
-            $phoneOtp = Cache::get($phoneCacheKey) == null ? $validated['phone'] : null;
+            $emailOtp = Cache::get($emailCacheKey);
+            $phoneOtp = Cache::get($phoneCacheKey);
+
             \Log::warning("Cache data ", [
                 'otp' => $validated['otp'],
                 'email' => $emailOtp,
@@ -532,18 +570,7 @@ class RegisterController extends Controller
                 ], 422);
             }
 
-            // Verify names match if provided
-            // if (isset($validated['email'])) {
-            //     $bvnEmail = strtolower($data['data']['email']);
-            //     $inputEmail = strtolower($validated['email']);
-            //     if ($bvnEmail !== $inputEmail) {
-            //         return response()->json([
-            //             'status' => false,
-            //             'message' => 'Email do not match BVN records'
-            //         ], 422);
-            //     }
-            // }
-
+          
             // Verify names match if provided
             if (isset($validated['firstname']) && isset($validated['lastname'])) {
                 $bvnFirstName = trim($data['data']['firstName']);
@@ -561,13 +588,7 @@ class RegisterController extends Controller
                 sort($inputNames);
                 sort($bvnNames);
 
-                // if ($inputNames !== $bvnNames) {
-                //     Log::error('BVN verified:', ['BVN verified' => 'BVN verified but names do not match (order-insensitive)']);
-                //     return response()->json([
-                //         'status' => false,
-                //         'message' => 'BVN verified but names do not match'
-                //     ], 422);
-                // }
+               
             }
             // Store BVN verification data
             // $request->session()->put('bvn_verification', $data);

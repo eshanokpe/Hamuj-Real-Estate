@@ -15,7 +15,7 @@
                         <div class="float-end">
                             <ol class="breadcrumb">
                                 <a href="{{ route('admin.users')}}" class="btn btn-dark">View User</a>
-                            </ol>
+                            </ol> 
                         </div>
                         <h4 class="page-title">Edit User</h4>
                     </div>
@@ -75,9 +75,22 @@
                                             <input type="text" class="form-control" value="{{ $user->referral_code }}" name="referral_code" readonly required>
                                         </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1">BVN</label>
+                                            <input type="text" class="form-control" value="{{ $user->bvn }}" name="bvn" readonly required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1">NIN</label>
+                                            <input type="text" class="form-control" value="{{ $user->nin }}" name="nin" readonly required>
+                                        </div>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-dark">Update </button>
-                                <button type="reset" class="btn btn-danger">Cancel</button>
+                                {{-- <button type="submit" class="btn btn-dark">Update </button> --}}
+                                {{-- <a type="reset" class="btn btn-danger">Back</a> --}}
+                                <a href="{{ route('admin.users')}}" class="btn btn-dark">Back</a>
                             </form>    
                                                                  
                         </div><!--end card-body-->
