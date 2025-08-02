@@ -127,7 +127,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     
     Route::get('wallet/show/{id}', [WalletController::class, 'show'])->name('wallet.show');
     Route::get('wallet/top-up', [WalletController::class, 'topUp'])->name('wallet.topUp'); 
-    Route::get('wallet/with-draw', [WalletController::class, 'withDraw'])->name('wallet.withdraw');
+    Route::get('wallet/transfer', [WalletController::class, 'withDraw'])->name('wallet.withdraw');
     Route::get('wallet/transfer-post', [WalletController::class, 'transferPost'])->name('wallet.transferPost');
     Route::get('resolve-account', [WalletController::class, 'resolveAccount'])->name('wallet.resolve.account');
     Route::get('payment/history', [WalletController::class, 'paymentHistory'])->name('payment.history');

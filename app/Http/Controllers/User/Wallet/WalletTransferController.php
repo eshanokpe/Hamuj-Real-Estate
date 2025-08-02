@@ -60,6 +60,7 @@ class WalletTransferController extends Controller
 
         $user = Auth::user();
         $userWallet = $user->wallet;
+        Log::info('Transfer validated', $validated);
         
         if ($userWallet->balance < (float)$validated['amount']) {
             if ($request->wantsJson()) {
@@ -84,7 +85,7 @@ class WalletTransferController extends Controller
                 $userWallet->save();
                 Log::info('validated', $validated);
                 Log::info('Transfer successful. Wallet updated.', $transferResponse['data']);
-
+ 
                 // Log the transaction
                 $transaction = WalletTransaction::create([
                     'user_id' => $user->id,
@@ -141,6 +142,7 @@ class WalletTransferController extends Controller
                 return response()->json(['status' => 'error', 'message' => 'Insufficient wallet balance.']);
             }
         } else {
+          
             WalletTransaction::create([
                 'user_id' => $user->id,
                 'wallet_id' => $userWallet->id,
@@ -154,7 +156,7 @@ class WalletTransferController extends Controller
                 'metadata' => $transferResponse, // Store the Paystack response
             ]); 
             Log::info('Transfer failed. Paystack response:', $transferResponse);
-            return response()->json(['status' => 'error', 'message' => $transferResponse['message']]);
+            return response()->json(['status' => 'error', 'message' =>'Currently out of service. Please try again later']);
         }
        
     }

@@ -9,7 +9,7 @@
     }
 
     .copy-fail {
-        font-size: 14px;
+        font-size: 14px; 
         color: #dc3545;
         margin-left: 8px;
         animation: fadeInOut 3s forwards;
@@ -560,6 +560,7 @@
                     account_number: accountNumber,
                     bank_code: bankCode,
                     recipient_code: recipientCode,
+                    bankName:$('#bank option:selected').text(),
                     amount: amount,
                     reason: 'Payment', 
                     transfer_reference: generateUUID()
@@ -593,11 +594,11 @@
                             window.location.href = response.redirect_url || "{{ route('user.transactions') }}";
                         }, 2000);
                     } else {
-                        toastr.error('Transfer failed: ' + response.message, 'Error');
+                        toastr.error(response.message, 'Error');
                     }
                 },
-                error: function() {
-                    toastr.error('An error occurred during the transfer process.', 'Error');
+                error: function(xhr, status, error) {
+                    toastr.error(error, 'Error');
                 },
                 complete: function() {
                     resetButtonState($button);
