@@ -1,0 +1,78 @@
+
+.in-check {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+.accordion-wrapper {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.5);
+  /* width: 600px; */
+  margin:0 auto;
+}
+.accordion {
+  width: 100%;
+  color: white;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.accordion:last-child{
+  margin-bottom: 0;
+}
+.accordion-label {
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  padding: 16px;
+  background: rgba(39, 39, 39, .9);
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 18px;
+}
+.accordion-label:hover {
+  background: rgba(39, 39, 39, 1)
+}
+.accordion-label::after {
+  content: "\276F";
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.accordion-content {
+  max-height: 0;
+  padding: 0 16px;
+  color: #8b8b8b;
+  background: white;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.accordion-content p{
+  margin: 0;
+  /* color: rgba(4,57,94,.7); */
+  font-size: 14px;
+}
+.in-check:checked + .accordion-label {
+  background: rgba(39, 39, 39, 1)
+}
+.in-check:checked + .accordion-label::after {
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.in-check:checked ~ .accordion-content {
+  max-height: 400vh;
+  padding: 16px;
+}
+
+@media (max-width: 1199px){
+  .accordion-label{
+    font-size:18px;
+  }}
+
+@media (max-width: 991px){
+  .accordion-label{
+    font-size:16px;
+  }
+}

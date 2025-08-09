@@ -1,0 +1,144 @@
+/* 
+    19. preloader css 
+*/
+
+
+#preloader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    z-index: 999;
+    display: flex;
+    height: 100vh;
+    width: 100%;
+  }
+  
+  #preloader:before,
+  #preloader:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    z-index: -1;
+    background-color: #000;
+    transition: all 0.3s ease 0s;
+  }
+  
+  .preloaded:before,
+  .preloaded:after {
+    -webkit-animation: preloadedDone 300ms ease-in-out 500ms forwards;
+    animation: preloadedDone 300ms ease-in-out 500ms forwards;
+  }
+  
+  #preloader:after {
+    left: auto;
+    right: 0;
+  }
+  
+  #preloader .loader--border {
+    margin: auto;
+    width: 1px;
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.8s ease 0s;
+  }
+  
+  .loader--border:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 1px;
+    height: 0%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    -webkit-animation: borderLine 1000ms ease-in-out 0s forwards;
+    animation: borderLine 1000ms ease-in-out 0s forwards;
+  }
+  
+  .loader--border:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background-color: #999999;
+    transform: translateY(-100%);
+    -webkit-animation: borderRound 1200ms linear 0s infinite;
+    animation: borderRound 1200ms linear 0s infinite;
+    -webkit-animation-delay: 2000ms;
+            animation-delay: 2000ms;
+  }
+  
+  .preloaded .loader--border {
+    opacity: 0;
+    height: 100% !important;
+  }
+  
+  .preloaded .loader--border:after {
+    opacity: 0;
+  }
+  
+  @-webkit-keyframes borderLine {
+    0% {
+      height: 0%;
+    }
+  
+    100% {
+      height: 100%;
+    }
+  }
+  
+  @keyframes borderLine {
+    0% {
+      height: 0%;
+    }
+  
+    100% {
+      height: 100%;
+    }
+  }
+  
+  @-webkit-keyframes borderRound {
+    0% {
+      transform: translateY(-100%);
+    }
+  
+    100% {
+      transform: translateY(200%);
+    }
+  }
+  
+  @keyframes borderRound {
+    0% {
+      transform: translateY(-100%);
+    }
+  
+    100% {
+      transform: translateY(200%);
+    }
+  }
+  
+  @-webkit-keyframes preloadedDone {
+    0% {
+      width: 50%;
+    }
+  
+    100% {
+      width: 0%;
+    }
+  }
+  
+  @keyframes preloadedDone {
+    0% {
+      width: 50%;
+    }
+  
+    100% {
+      width: 0%;
+    }
+  }

@@ -1,0 +1,161 @@
+/* 
+    21. Property css
+*/
+.property__type--section{
+    background: url(../img/other/bg-full-3.png);
+}
+.property__type--inner{
+    gap: 3rem;
+    @media only screen and (max-width: 767px) {
+       flex-wrap: wrap;
+    }
+}
+.property__type--box{
+    width: 25%;
+    @media only screen and (max-width: 767px) {
+        width: 47%;
+     }
+    @media only screen and (max-width: 575px) {
+        width: 46%;
+     }
+    @media only screen and (max-width: 479px) {
+        width: 100%;
+     }
+    &:hover{
+        .property__type--badge{
+            background: var(--color-hover);
+            color: var(--color-white);
+        }
+    }
+}
+.property__type--icon {
+    background: var(--color-background);
+    height: 22rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.05);
+    border-radius: 1rem;
+    position: relative;
+    @media only screen and (max-width: 991px) {
+        height: 17rem;
+    }
+    & span{
+        & svg{
+            @media only screen and (max-width: 991px) {
+                width: 5rem;
+                height: 5rem;
+            }
+        }
+    }
+}
+.property__type--content{
+    text-align: center;
+    border-radius: 0.5rem;
+}
+.property__type--badge{
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    background: var(--color-background);
+    color: var(--color-hover);
+    box-shadow: 0 3px 18px 0 rgba(0, 0, 0, 0.10);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    transition: .3s;
+}
+
+.property__type--content{
+    padding-top: 2rem;
+}
+.property__type--title{
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+}
+.property__type--subtitle{
+    font-weight: 700;
+    color: var(--color-hover);
+    font-size: 1.7rem;
+}
+
+
+/*
+    Sell property section css
+*/
+.sell__property--box{
+    padding: 3rem 1.5rem;
+    background: var(--color-background);
+    box-shadow: 0 6px 24px 0 rgba(122, 122, 122, 0.12);
+    transition: .3s;
+    @media only screen and (min-width: 1200px) {
+        padding: 4rem 2.5rem;
+    }
+    &:hover{
+        transform: translateY(-15px);
+        background: var(--color-hover);
+        & .sell__property--icon span{
+            background: rgba(255, 255, 255, 0.10);
+            color: var(--color-white);
+            border: 0;
+        }
+        & .sell__property--content__title{
+            color: var(--color-white);
+        }
+        & .sell__property--content__desc{
+            color: var(--color-white);
+        }
+    }
+}
+.sell__property--icon{
+    & span{
+        width: 8rem;
+        height: 8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--color-border);
+        border-radius: 50%;
+        color: var(--color-hover);
+        @media only screen and (min-width: 1200px) {
+            width: 9rem;
+            height: 9rem;
+        }
+    }
+}
+.sell__property--content__title{
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    transition: .3s;
+    @media only screen and (min-width: 1200px) {
+        font-size: 2.2rem;
+        margin-bottom: 1.2rem;
+    }
+}
+.sell__property--content__desc{
+    color: var(--color-foreground-sub);
+    transition: .3s;
+}
+.sell__property--content{
+    width: calc(100% - 8rem);
+    padding-left: 2rem;
+    @media only screen and (min-width: 1200px) {
+        width: calc(100% - 9rem);
+    }
+}
+
+.property__type--section.style2{
+    background: var(--color-background-8);
+    padding-top: 13.5rem;
+    @media only screen and (min-width: 768px) {
+        padding-top: 15rem;
+    }
+    @media only screen and (min-width: 992px) {
+        padding-top: 17.5rem;
+    }
+}
