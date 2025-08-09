@@ -48,10 +48,36 @@ class AppServiceProvider extends ServiceProvider
             'registered' => \App\Models\User::class,
         ]); 
 
+        // Fetch the latest conversation with related messages, user, and admin
+        // if (\Schema::hasTable('conversations')) {
+        //     $conversation = \App\Models\Conversation::with([
+        //         'messages' => function($query) {
+        //             $query->orderBy('created_at', 'asc');
+        //         },
+        //         'user',
+        //         'admin'
+        //     ])->latest()->first();
+        // } else {
+        //     $conversation = null;
+        // }
+
+        // View::share('conversation', $conversation);
+
+        // if ($conversation && $conversation->admin) {
+        //     $availableAdmins = User::where('is_admin', true)
+        //         ->where('id', '!=', $conversation->admin->id)
+        //         ->get();
+        // } else {
+        //     $availableAdmins = User::where('is_admin', true)->get();
+        // }
+         
+        // View::share('availableAdmins', $availableAdmins);
+
         View::share('menuItems', MenuItem::with('dropdownItems')->get()); 
         View::share('faqs', Faqs::all());  
         View::share('posts', Post::latest()->paginate(20)); 
         View::share('about', About::first()); 
+        // View::share('properties', Property::inRandomOrder()->take(6)->get()); 
         View::share('recentProperties', Property::inRandomOrder()->take(6)->get());
         View::share('recentBlog', Post::inRandomOrder()->take(6)->get());
         View::share('visionMission', VisionMission::first());  

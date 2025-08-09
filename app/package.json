@@ -1,4 +1,7 @@
 {
+    "name": "dohmayn",
+    "homepage": "http://dohmayn.com",
+    "version": "0.1.0",
     "private": true,
     "scripts": {
         "dev": "vite",
@@ -20,10 +23,10 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "@inertiajs/react": "^2.0.17",
-        "@revolut/checkout": "^1.1.23",
-        "react": "^19.1.1",
-        "react-dom": "^19.1.1",
-        "react-router-dom": "^7.8.0"
+        "@revolut/checkout": "^1.1.21",
+        "laravel-echo-server": "^1.6.3",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-router-dom": "^7.6.0"
     }
 }

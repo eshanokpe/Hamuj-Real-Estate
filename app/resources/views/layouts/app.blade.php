@@ -30,10 +30,8 @@
   <link rel="stylesheet" href="{{ asset('assets/css/chatWidget.css')}}">
 
   <!-- Scripts -->
-  {{-- @viteReactRefresh --}}
-  {{-- @vite('resources/js/app.jsx') --}}
-  
-  
+  @viteReactRefresh
+  @vite('resources/js/app.jsx')
   <!-- Add Toastr CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -67,6 +65,7 @@
    
     @include('home.partial.footer')
     
+    {{-- @include('chattle::chat')  --}}
     
     
 </body>

@@ -5,32 +5,32 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.0",
-        "ext-bcmath": "*",
-        "ext-gmp": "*",
-        "cloudinary-labs/cloudinary-laravel": "^2.0",
-        "fruitcake/laravel-cors": "^3.0",
-        "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.54",
-        "laravel/sanctum": "^2.11",
-        "laravel/tinker": "^2.5",
-        "laravel/ui": "^3.4",
-        "maatwebsite/excel": "^3.1",
+        "php": "^8.0.2",
+        "barryvdh/laravel-dompdf": "^3.1",
+        "beyondcode/laravel-websockets": "^1.14",
+        "cloudinary-labs/cloudinary-laravel": "^2.1",
+        "guzzlehttp/guzzle": "^7.9",
+        "ilmedova/chattle": "^1.0",
+        "laravel/framework": "^9.19",
+        "laravel/sanctum": "^3.3",
+        "laravel/tinker": "^2.7",
+        "laravel/ui": "^4.5",
+        "phpseclib/phpseclib": "^3.0",
+        "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-permission": "^6.20",
         "spatie/laravel-sitemap": "^6.4",
         "twilio/sdk": "^8.6",
         "unicodeveloper/laravel-paystack": "^1.2",
-        "vinkla/hashids": "^9.1",
         "yabacon/paystack-php": "^2.2",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {
-        "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
+        "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.3.3",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^6.1",
+        "phpunit/phpunit": "^9.5.10",
         "spatie/laravel-ignition": "^1.0"
     },
     "autoload": {
@@ -54,7 +54,7 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -71,8 +71,11 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
