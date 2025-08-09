@@ -1,0 +1,286 @@
+/*
+    20. Project css
+*/
+.project__items{
+    &:hover{
+        & .project__thumbnail--media{
+            transform: scale(1.07);
+            -webkit-transform: scale(1.07);
+            -moz-transform: scale(1.07);
+            -ms-transform: scale(1.07);
+            -o-transform: scale(1.07);
+}
+    }
+}
+.project__thumbnail{
+    line-height: 1;
+}
+.project__thumbnail--link{
+    overflow: hidden;
+}
+.project__content{
+    margin: 0 1.5rem;
+    padding: 2rem 1.5rem;
+    background: var(--color-background);
+    box-shadow: 0 3px 13px 0 rgba(0, 0, 0, 0.08);
+    border-radius: 1rem;
+    margin-top: -4rem;
+    position: relative;
+    z-index: 9;
+    @media only screen and (min-width: 576px) {
+        margin: 0 2rem;
+        padding: 2rem;
+        margin-top: -7rem;
+    }
+    @media only screen and (min-width: 992px) {
+        margin: 0 2.5rem;
+        padding: 3rem;
+    }
+}
+.project__content--meta__tag{
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--color-foreground-sub);
+    line-height: 1.8rem;
+    margin-bottom: 1rem;
+}
+.project__content--title{
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    @media only screen and (min-width: 576px) {
+        font-size: 2rem;
+        margin-bottom: 1.2rem;
+    }
+    @media only screen and (min-width: 992px) {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+    }
+}
+.project__content--link{
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-hover);
+    &:hover{
+        color: var(--color-foreground);
+    }
+    & svg{
+        margin-left: 1rem;
+    }
+}
+
+
+/*
+    Project details css
+*/
+.project__details--content__top{
+    gap: 2rem;
+    flex-wrap: wrap;
+    &.mb-50{
+        @media only screen and (max-width: 991px) {
+            margin-bottom: 3rem;
+        }
+    }
+}
+.project__details--info{
+    padding: 3rem 2rem;
+    background: var(--color-background);
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.08);
+    border-radius: 1rem;
+    @media only screen and (min-width: 1200px) {
+        padding: 4rem 3rem;
+    }
+}
+.project__details--meta__list{
+    gap: 1.5rem;
+}
+.project__details--meta{
+    gap: 2.5rem;
+    @media only screen and (min-width: 768px) {
+        gap: 3rem;
+    }
+    @media only screen and (min-width: 992px) {
+        gap: 5rem;
+    }
+    @media only screen and (max-width: 767px) {
+       flex-wrap: wrap;
+    }
+}
+
+.project__details--meta__icon{
+    color: var(--color-hover);
+}
+.project__details--info__title{
+    font-size: 1.7rem;
+    line-height: 2.2rem;
+    margin-bottom: 1.5rem;
+    @media only screen and (min-width: 576px) {
+        font-size: 1.8rem;
+    }
+    & span{
+        color: var(--color-hover);
+        margin-right: 1rem;
+    }
+}
+.project__details--info__desc{
+    color: var(--color-foreground-sub);
+    line-height: 3rem;
+    & a{
+        color: var(--color-foreground-sub);
+        &:hover{
+            color: var(--color-hover);
+        } 
+    }
+}
+.project__details--info__list{
+    padding: 0 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+.project__details--info__contacting{
+    & span{
+        color: var(--color-hover);
+        margin-right: 1.5rem;
+    }
+}
+.project__details--info__timing{
+    gap: 1.5rem;
+}
+.project__details--info__timing--icon{
+    width: 5rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-hover);
+    color: var(--color-white);
+    border-radius: 0.5rem;
+    @media only screen and (min-width: 480px) {
+        width: 6rem;
+        height: 6rem;
+    }
+    @media only screen and (min-width: 1200px) {
+        width: 7rem;
+        height: 7rem;
+    }
+}
+.project__details--info__timing--title{
+    font-size: 1.8rem;
+    line-height: 2rem;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+.project__details--info__timing--desc{
+    font-size: 1.4rem;
+    color: var(--color-foreground-sub);
+    line-height: 2rem;
+}
+.project__info--social{
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+.project__info--social__icon{
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background-3);
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    @media only screen and (min-width: 480px) {
+        width: 4.5rem;
+        height: 4.5rem;
+    }
+    &:hover{
+        background: var(--color-hover);
+        color: var(--color-white);
+    }
+}
+.project__details--content__left{
+    @media only screen and (min-width: 1200px) {
+        padding-right: 2rem;
+    }
+}
+.project__details--meta__title{
+    font-size: 1.6rem;
+    line-height: 1.8rem;
+    margin-bottom: 0.7rem;
+}
+.project__details--meta__subtitle{
+    font-size: 1.4rem;
+    color: var(--color-foreground-sub);
+    line-height: 1.8rem;
+}
+.project__details--title{
+    font-size: 2rem;
+    line-height: 2.2rem;
+    margin-bottom: 1.5rem;
+    @media only screen and (min-width: 480px) {
+        font-size: 2.2rem;
+        line-height: 2.5rem;
+        margin-bottom: 1.5rem;
+    }
+    @media only screen and (min-width: 768px) {
+        font-size: 2.5rem;
+        line-height: 2.8rem;
+        margin-bottom: 2rem;
+    }
+    @media only screen and (min-width: 992px) {
+        font-size: 3rem;
+        line-height: 3.2rem;
+        margin-bottom: 2rem;
+    }
+}
+.project__details--desc{
+    font-size: 1.6rem;
+    line-height: 2.8rem;
+    color: var(--color-foreground-sub);
+    @media only screen and (min-width: 992px) {
+        line-height: 3rem;
+    }
+}
+.project__details--ui__content{
+    margin-top: 3rem;
+    @media only screen and (min-width: 992px) {
+        margin-top: 4rem;
+    }
+}
+.project__details--ui__content--title{
+    font-size: 2rem;
+    line-height: 2.5rem;
+    margin-bottom: 2rem;
+    @media only screen and (min-width: 768px) {
+        font-size: 2.2rem;
+        line-height: 2.6rem;
+        margin-bottom: 2.5rem;
+    }
+}
+.project__details--ui__desc{
+    font-size: 1.6rem;
+    color: var(--color-foreground-sub);
+    margin-bottom: 1.5rem;
+    line-height: 2.2rem;
+    @media only screen and (min-width: 576px) {
+        margin-bottom: 2rem;
+    }
+    &:last-child{
+        margin-bottom: 0;
+    }
+    & svg{
+        margin-right: 1rem;
+        color: var(--color-hover);
+    }
+}
+.project__details--info{
+    @media only screen and (max-width: 991px) {
+        margin-top: 7rem;
+    }
+    @media only screen and (max-width: 767px) {
+        margin-top: 6rem;
+    }
+}

@@ -1,0 +1,122 @@
+/*
+    14. Gallery css
+*/
+.internal__gallery--inner{
+    @media only screen and (min-width: 1200px) {
+        padding: 0 12rem;
+    }
+    @media only screen and (min-width: 1366px) {
+        padding: 0 17rem;
+    }
+    @media only screen and (min-width: 1600px) {
+        padding: 0 27rem;
+    }
+    @media only screen and (min-width: 1800px) {
+        padding: 0 31rem;
+    }
+}
+.internal__gallery--wrapper{
+    align-items: center;
+}
+.internal__gallery--thumbnail{
+    position: relative;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+.internal__gallery--items{
+    &:hover{
+        & .internal__gallery--media{
+            transform: scale(1.05);
+            -webkit-transform: scale(1.05);
+            -moz-transform: scale(1.05);
+            -ms-transform: scale(1.05);
+            -o-transform: scale(1.05);
+        }
+        & .internal__gallery--content{
+            bottom: 2rem;
+            opacity: 1;
+            visibility: visible;
+            @media only screen and (min-width: 992px) {
+                bottom: 3rem;
+            }
+        }
+        & .internal__gallery--badge{
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}
+.internal__gallery--media{
+    border-radius: 0.5rem;
+}
+.internal__gallery--content{
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    background: var(--color-background);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: .3s;
+    -webkit-transition: .3s;
+    -moz-transition: .3s;
+    -ms-transition: .3s;
+    -o-transition: .3s;
+    @media only screen and (min-width: 992px) {
+        bottom: 2rem;
+        left: 3rem;
+        right: 3rem;
+        padding: 2rem 2.5rem;
+    }
+}
+.internal__gallery--title{
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    & span{
+        color: var(--color-hover);
+    }
+    @media only screen and (min-width: 992px) {
+        margin-bottom: 1.2rem;
+    }
+}
+.internal__gallery--link{
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 2.2rem;
+    @media only screen and (min-width: 992px) {
+        font-size: 1.4rem;
+        line-height: 2.4rem;
+    }
+    & svg{
+        margin-left: 1rem;
+    }
+}
+.internal__gallery--badge{
+    width: 4rem;
+    height: 4rem;
+    background: var(--color-background);
+    color: var(--color-hover);
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    opacity: 0;
+    visibility: hidden;
+    @media only screen and (min-width: 992px) {
+        width: 4.8rem;
+        height: 4.8rem;
+        top: 1.5rem;
+        right: 1.5rem;
+    }
+}
