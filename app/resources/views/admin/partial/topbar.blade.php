@@ -153,7 +153,7 @@
                                             class="mdi mdi-chevron-down"></i></span>
                                 </div>
                             </div>
-                        </a>. 
+                        </a>
                         <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="#"><i class="ti ti-user font-16 me-1 align-text-bottom"></i> Profile</a>
                         <a class="dropdown-item" href="#"><i class="ti ti-settings font-16 me-1 align-text-bottom"></i> Settings</a>
