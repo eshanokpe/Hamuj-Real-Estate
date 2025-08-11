@@ -114,10 +114,16 @@ class WalletController extends Controller
         // Your verification logic
         return response()->json(['account_name' => $validated['bank_code'] ]); // Example
     }
- 
+  
     public function paymentHistory(Request $request){
        $user = Auth::user();
-        
+
+        // Add date filtering
+        $startDate = $request->input('fromDate', now()->startOfDay());
+        $endDate = $request->input('toDate', now());
+        $status = $request->input('status');
+        $type = $request->input('type');
+          
         // Get wallet transactions
         $walletTransactions = WalletTransaction::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
@@ -152,6 +158,8 @@ class WalletController extends Controller
         
         return view('user.pages.wallet.payment.history', $data);
     } 
+
+   
 
     public function resolveAccount(Request $request) 
     {
@@ -209,5 +217,31 @@ class WalletController extends Controller
         return $pdf->download("receipt-{$transaction->reference}.pdf");
     }
 
+    public function dailyTransferTotal(Request $request)
+    {
+        $user = Auth::user();
+        $todayStart = now()->startOfDay();
+        $now = now();
+
+        $walletTransfers = WalletTransaction::where('user_id', $user->id)
+            ->where('type', 'transfer')
+            ->where('status', 'success')
+            ->whereBetween('created_at', [$todayStart, $now])
+            ->sum('amount');
+
+        $paymentTransfers = Transaction::where('user_id', $user->id)
+            ->where('payment_method', 'dedicated_nuban')
+            ->where('status', 'success')
+            ->whereBetween('created_at', [$todayStart, $now])
+            ->sum('amount');
+
+        $total = $walletTransfers + $paymentTransfers;
+
+        return response()->json([
+            'total' => $total,
+            'currency' => 'NGN',
+            'date' => now()->format('Y-m-d')
+        ]);
+    }
     
 }

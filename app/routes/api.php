@@ -12,7 +12,7 @@ use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\NotificationController; 
 use App\Http\Controllers\User\TransactionController;
 use App\Http\Controllers\Api\PasscodeController;
-use App\Http\Controllers\Api\AuthMethodController;
+use App\Http\Controllers\Api\AuthMethodController; 
 use App\Http\Controllers\Api\BuyPropertyController;
 use App\Http\Controllers\User\SecurityController;
 use App\Http\Controllers\User\Wallet\WalletTransferController; 
@@ -117,7 +117,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('create/recipient', [WalletTransferController::class, 'createRecipient']);
     Route::post('initiate/transfer', [WalletTransferController::class, 'initiateTransfer']);
     Route::get('get/wallet/transactions', [WalletController::class, 'paymentHistory']);
- 
+    Route::get('get/daily-transfer-total', [WalletController::class, 'dailyTransferTotal']);
     //Referral
     Route::get('get/referral', [ReferralController::class, 'index']); 
 

@@ -14,7 +14,7 @@ class WalletTransaction extends Model
         'wallet_id',       
         'type',            
         'accountName',            
-        'bankName',  
+        'bankName',   
         'account_number',          
         'amount',   
         'currency', 
