@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 
  
-class UploadePropertyController extends Controller
+class AddPropertyController extends Controller
 {
     public function __construct()
     {
