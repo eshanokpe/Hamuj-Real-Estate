@@ -9,6 +9,8 @@ use Log;
 use DB;
 use App\Models\Buy;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Property;
 use App\Models\Offerprice;
 use App\Models\PropertyValuation;
