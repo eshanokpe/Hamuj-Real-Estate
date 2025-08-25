@@ -25,11 +25,113 @@ class AddPropertyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        $properties = AddProperty::with('media')->latest()->get();
-        return response()->json($properties);
+        try {
+            // Get the authenticated user
+            $user = Auth::user();
+            
+            // Get pagination parameters from request (optional)
+            $perPage = $request->get('per_page', 15); // Default to 15 items per page
+            $page = $request->get('page', 1);
+            
+            // Get sorting parameters
+            $sortBy = $request->get('sort_by', 'created_at');
+            $sortOrder = $request->get('sort_order', 'desc');
+            
+            // Validate sort order
+            if (!in_array(strtolower($sortOrder), ['asc', 'desc'])) {
+                $sortOrder = 'desc';
+            }
+            
+            // Get filter parameters
+            $mediaType = $request->get('media_type');
+            $minPrice = $request->get('min_price');
+            $maxPrice = $request->get('max_price');
+            
+            // Start building the query
+            $query = AddProperty::where('user_id', $user->id)
+                ->with(['media', 'user']) // Eager load relationships if needed
+                ->orderBy($sortBy, $sortOrder);
+            
+            // Apply filters
+            if ($mediaType && in_array($mediaType, ['image', 'video'])) {
+                $query->where('media_type', $mediaType);
+            }
+            
+            if ($minPrice) {
+                $query->where('price', '>=', (float) $minPrice);
+            }
+            
+            if ($maxPrice) {
+                $query->where('price', '<=', (float) $maxPrice);
+            }
+            
+            // Search functionality
+            if ($search = $request->get('search')) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'LIKE', "%{$search}%")
+                      ->orWhere('description', 'LIKE', "%{$search}%")
+                      ->orWhere('location', 'LIKE', "%{$search}%")
+                      ->orWhere('caption', 'LIKE', "%{$search}%");
+                });
+            }
+            
+            // Get paginated results
+            $properties = $query->paginate($perPage, ['*'], 'page', $page);
+            
+            // Transform the data to include full media URLs
+            $transformedProperties = $properties->getCollection()->map(function ($property) {
+                return [
+                    'id' => $property->id,
+                    'title' => $property->title,
+                    'description' => $property->description,
+                    'price' => (float) $property->price,
+                    'location' => $property->location,
+                    'caption' => $property->caption,
+                    'media_path' => $property->media_path,
+                    'media_url' => $property->media_path ? asset('storage/' . $property->media_path) : null,
+                    'media_type' => $property->media_type,
+                    'mime_type' => $property->mime_type,
+                    'created_at' => $property->created_at->toISOString(),
+                    'updated_at' => $property->updated_at->toISOString(),
+                    'user' => [
+                        'id' => $property->user->id,
+                        'name' => $property->user->name,
+                        'email' => $property->user->email,
+                    ]
+                ];
+            });
+            
+            // Return paginated response with transformed data
+            return response()->json([
+                'success' => true,
+                'message' => 'Properties retrieved successfully',
+                'data' => [
+                    'properties' => $transformedProperties,
+                    'pagination' => [
+                        'current_page' => $properties->currentPage(),
+                        'per_page' => $properties->perPage(),
+                        'total' => $properties->total(),
+                        'last_page' => $properties->lastPage(),
+                        'from' => $properties->firstItem(),
+                        'to' => $properties->lastItem(),
+                    ]
+                ]
+            ], 200);
+            
+        } catch (\Exception $e) {
+            // Log the error
+            \Log::error('Error fetching properties: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve properties',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
+        }
     }
+
 
     /**
      * Store a newly created resource in storage.
