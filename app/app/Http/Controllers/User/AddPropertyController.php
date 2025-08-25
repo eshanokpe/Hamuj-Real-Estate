@@ -117,6 +117,7 @@ class AddPropertyController extends Controller
             // Create property
             $property = AddProperty::create([
                 'title' => $request->title,
+                'user_id' => Auth::user()->id,
                 'description' => $request->description,
                 'price' => $request->price,
                 'location' => $request->location,
