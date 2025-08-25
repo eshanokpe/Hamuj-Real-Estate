@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\PropertyController;
+use App\Http\Controllers\User\UploadePropertyController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\NotificationController; 
 use App\Http\Controllers\User\TransactionController;
@@ -68,6 +69,7 @@ Route::post('deactivate-account', [AuthMethodController::class, 'deactivateAccou
 Route::middleware('auth:sanctum')->group(function () {
 
     
+    Route::get('/properties/upload', [UploadePropertyController::class, 'store']);
     Route::get('/properties', [PropertyController::class, 'index']);
     Route::get('/buy/assets', [PropertyController::class, 'buy']);
     Route::get('/sell/assets', [SellPropertyController::class, 'index']);
