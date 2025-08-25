@@ -27,7 +27,7 @@ class AddPropertyController extends Controller
      */
     public function index()
     {
-        $properties = Property::with('media')->latest()->get();
+        $properties = AddProperty::with('media')->latest()->get();
         return response()->json($properties);
     }
 
@@ -107,7 +107,7 @@ class AddPropertyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Property $property)
+    public function update(Request $request, AddProperty $property)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'sometimes|required|string|max:255',
@@ -190,5 +190,7 @@ class AddPropertyController extends Controller
     {
         return $this->store($request);
     }
+
+    
  
 }
