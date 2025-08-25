@@ -7,15 +7,10 @@ use Illuminate\Http\Request;
 use Auth;
 use Log;
 use DB;
-use App\Models\Buy;
+use App\Models\AddProperty;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Property;
-use App\Models\Offerprice;
-use App\Models\PropertyValuation;
-use App\Models\PropertyValuationSummary;
-use App\Models\PropertyValuationPrediction;
 
 
 
@@ -78,7 +73,7 @@ class UploadePropertyController extends Controller
             }
 
             // Create property
-            $property = Property::create([
+            $property = AddProperty::create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'price' => $request->price,
