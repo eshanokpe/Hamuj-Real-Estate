@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Log;
 use DB;
+use Illuminate\Http\JsonResponse;
 use App\Models\AddProperty;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -31,8 +32,7 @@ class AddPropertyController extends Controller
             // Get the authenticated user
             $user = Auth::user();
             
-            // Get pagination parameters from request (optional)
-            $perPage = $request->get('per_page', 15); // Default to 15 items per page
+            $perPage = $request->get('per_page', 15); 
             $page = $request->get('page', 1);
             
             // Get sorting parameters
