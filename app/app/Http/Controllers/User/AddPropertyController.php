@@ -83,7 +83,7 @@ class AddPropertyController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'location' => 'required|string|max:255',
-            'caption' => 'required|string|max:500',
+            // 'caption' => 'required|string|max:500',
             'mediaType' => 'required|in:image,video',
             'media' => 'required|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240' // 10MB max
         ]);
@@ -121,7 +121,8 @@ class AddPropertyController extends Controller
                 'description' => $request->description,
                 'price' => $request->price,
                 'location' => $request->location,
-                'caption' => $request->caption,
+                // 'caption' => $request->caption,
+                'caption' => 'caption',
                 'media_path' => $filePath,
                 'media_type' => $mediaType,
                 'mime_type' => $mimeType
