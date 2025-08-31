@@ -89,8 +89,8 @@ class AddPropertyController extends Controller
             'mediaType' => 'required|in:image,video',
             'media' => 'required|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240' // 10MB max
         ]);
-    // Log any validation errors in a readable format
-    \Log::error('request errors: ' . $request->all());
+    // Log request data safely as structured context (avoids Array to string conversion)
+    \Log::error('Request data', $request->all());
    
         if ($validator->fails()) {
             return response()->json([
