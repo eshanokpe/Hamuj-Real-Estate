@@ -91,8 +91,7 @@ class AddPropertyController extends Controller
         ]);
     // Log any validation errors in a readable format
     \Log::error('request errors: ' . $request->all());
-    \Log::error('Validator errors: ' . $validator->errors()->toJson());
-
+   
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation failed',
