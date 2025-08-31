@@ -80,6 +80,7 @@ class AddPropertyController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
+            'user_id' => 'required|string',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'location' => 'required|string|max:255',
