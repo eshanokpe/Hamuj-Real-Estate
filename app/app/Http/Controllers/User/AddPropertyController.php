@@ -33,8 +33,8 @@ class AddPropertyController extends Controller
             $user = Auth::user();
             
             // Get all properties for the authenticated user
-            $properties = AddProperty::where('user_id', $user->id)
-                ->orderBy('created_at', 'desc')
+            $properties = AddProperty::
+                orderBy('created_at', 'desc')
                 ->get();
             
             // Transform properties with media URLs
