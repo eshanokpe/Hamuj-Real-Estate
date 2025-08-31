@@ -11,6 +11,7 @@ class AddProperty extends Model
 
     protected $fillable = [
         'title',
+        'user_id',
         'description',
         'price',
         'location',

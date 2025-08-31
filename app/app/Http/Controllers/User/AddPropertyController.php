@@ -81,7 +81,7 @@ class AddPropertyController extends Controller
       
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'user_id' => 'required|string',
+            // 'user_id' => 'required|string',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'location' => 'required|string|max:255',
@@ -90,8 +90,8 @@ class AddPropertyController extends Controller
             'media' => 'required|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240' // 10MB max
         ]);
     // Log request data safely as structured context (avoids Array to string conversion)
-    \Log::error('Request data', $request->all());
-   
+    // \Log::error('Request data', $request->all());
+        $user = auth()->user();
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation failed',
@@ -121,7 +121,7 @@ class AddPropertyController extends Controller
             // Create property
             $property = AddProperty::create([
                 'title' => $request->title,
-                'user_id' => $request->input('user_id'),
+                'user_id' =>  $user->id,
                 'description' => $request->description,
                 'price' => $request->price,
                 'location' => $request->location,
