@@ -78,6 +78,7 @@ class AddPropertyController extends Controller
      */
     public function store(Request $request)
     {
+            
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'user_id' => 'required|string',
@@ -88,6 +89,7 @@ class AddPropertyController extends Controller
             'mediaType' => 'required|in:image,video',
             'media' => 'required|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240' // 10MB max
         ]);
+        \Log::error('validator ' . $validator);
 
         if ($validator->fails()) {
             return response()->json([
