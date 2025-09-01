@@ -34,6 +34,8 @@ use Ilmedova\Chattle\app\Http\Controllers\Chat\AdminController;
 use Ilmedova\Chattle\app\Http\Controllers\Chat\CreateController;
 use Ilmedova\Chattle\app\Http\Controllers\Chat\GetMessagesController;
 use Ilmedova\Chattle\app\Http\Controllers\Chat\PostMessageController;
+//review
+use App\Http\Controllers\User\ReviewController;
 
  
 /*
@@ -174,8 +176,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('kyc')->group(function () {
         Route::post('/', [KycController::class, 'store']);
         Route::get('/', [KycController::class, 'show']);
+    }); 
+
+    //reviews
+    Route::prefix('properties')->group(function () {
+        Route::get('/{property}/reviews', [ReviewController::class, 'index']);
+        Route::post('/reviews', [ReviewController::class, 'store']);
+        Route::put('/reviews/{review}', [ReviewController::class, 'update']);
+        Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
     });
-    
 });
 
  
