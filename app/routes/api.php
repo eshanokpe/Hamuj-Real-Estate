@@ -179,7 +179,7 @@ Route::middleware('auth:sanctum')->group(function () {
     }); 
 
     //reviews
-    Route::prefix('properties')->group(function () {
+    Route::prefix('property')->group(function () {
         Route::get('/{property}/reviews', [ReviewController::class, 'index']);
         Route::post('/reviews', [ReviewController::class, 'store']);
         Route::put('/reviews/{review}', [ReviewController::class, 'update']);
