@@ -28,7 +28,7 @@ class AddPropertyController extends Controller
      */
     public function index(Request $request): JsonResponse // ✅ Now using correct JsonResponse
     {
-        try {
+        try { 
             // Get the authenticated user
             $user = Auth::user();
             
@@ -41,6 +41,7 @@ class AddPropertyController extends Controller
             $transformedProperties = $properties->map(function ($property) {
                 return [
                     'id' => $property->id,
+                    'user' => $property->user()->serialize(),
                     'title' => $property->title,
                     'description' => $property->description,
                     'price' => (float) $property->price,

@@ -25,13 +25,18 @@ class AddProperty extends Model
         'price' => 'decimal:2'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     /**
      * Get the full URL for the media file
      */
     public function getMediaUrlAttribute()
     {
         return $this->media_path ? Storage::disk('public')->url($this->media_path) : null;
-    }
+    } 
 
     /**
      * Scope a query to only include properties with images.
