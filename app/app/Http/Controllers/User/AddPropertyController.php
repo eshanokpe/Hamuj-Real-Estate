@@ -46,6 +46,7 @@ class AddPropertyController extends Controller
                         'email' => $property->user->email,
                         'first_name' => $property->user->first_name,
                         'last_name' => $property->user->last_name,
+                        'profile_image' => $property->user->profile_image,
                     ] : null,
                     'title' => $property->title,
                     'description' => $property->description,
