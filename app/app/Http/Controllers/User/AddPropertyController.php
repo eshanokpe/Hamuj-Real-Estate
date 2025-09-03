@@ -40,13 +40,13 @@ class AddPropertyController extends Controller
             $transformedProperties = $properties->map(function ($property) {
                 return [
                     'id' => $property->id,
-                    'user' => [
+                    'user' => $property->user ? [ // Check if user exists
                         'id' => $property->user->id,
-                        'name' => $property->user->full_name, 
+                        'name' => $property->user->full_name,
                         'email' => $property->user->email,
                         'first_name' => $property->user->first_name,
                         'last_name' => $property->user->last_name,
-                    ],
+                    ] : null,
                     'title' => $property->title,
                     'description' => $property->description,
                     'price' => (float) $property->price,
