@@ -29,19 +29,23 @@ class AddPropertyController extends Controller
     public function index(Request $request): JsonResponse // ✅ Now using correct JsonResponse
     {
         try { 
-            // Get the authenticated user
-            $user = Auth::user();
             
             // Get all properties for the authenticated user
-            $properties = AddProperty::
-                orderBy('created_at', 'desc')
+            $properties = AddProperty::with('user')
+                ->orderBy('created_at', 'desc')
                 ->get();
             
             // Transform properties with media URLs
             $transformedProperties = $properties->map(function ($property) {
                 return [
                     'id' => $property->id,
-                    'user' => $property->user()->serialize(),
+                    'user' => [
+                        'id' => $property->user->id,
+                        'name' => $property->user->full_name, 
+                        'email' => $property->user->email,
+                        'first_name' => $property->user->first_name,
+                        'last_name' => $property->user->last_name,
+                    ],
                     'title' => $property->title,
                     'description' => $property->description,
                     'price' => (float) $property->price,
