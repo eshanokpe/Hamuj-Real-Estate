@@ -32,7 +32,7 @@ class AddPropertyController extends Controller
             
             // Get all properties for the authenticated user
             $properties = AddProperty::with('user')
-                ->whereHas('user')
+                // ->whereHas('user')
                 ->orderBy('created_at', 'desc')
                 ->get();
             
