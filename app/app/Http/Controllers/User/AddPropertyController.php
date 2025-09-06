@@ -73,7 +73,7 @@ class AddPropertyController extends Controller
                             'updated_at' => $review->updated_at->toISOString(),
                         ];
                     }),
-                    'average_rating' => (float) $property->reviews->avg('rating') ?: 0,
+                    'average_rating' => (float) $property->reviews->avg('rating') ?: 0.0,
                     'reviews_count' => $property->reviews->count(),
                     'created_at' => $property->created_at->toISOString(),
                     'updated_at' => $property->updated_at->toISOString(),
