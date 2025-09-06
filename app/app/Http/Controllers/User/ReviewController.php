@@ -40,19 +40,20 @@ class ReviewController extends Controller
             'user_id' => auth()->id(),
             'rating' => $validated['rating'],
             'comment' => $validated['comment'],
+            'reviewer_name' => $validated['reviewer_name'],
         ]);
 
         return response()->json([
             'data' => [
                 'id' => $review->id,
-                'reviewer_name' => auth()->user()->name,
+                'reviewer_name' => $review->reviewer_name,
                 'rating' => $review->rating,
                 'comment' => $review->comment,
                 'date' => $review->created_at->toISOString(),
                 'property_id' => $review->property_id,
                 'user_id' => $review->user_id,
             ]
-        ], 201);
+        ], 200);
     }
 
     public function update(Request $request, Review $review): JsonResponse

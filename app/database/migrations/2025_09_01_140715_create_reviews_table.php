@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->decimal('rating', 2, 1); // Stores values like 4.5, 3.0, etc.
             $table->text('comment');
+            $table->text('reviewer_name');
             $table->timestamps();
             
             // Add unique constraint to prevent duplicate reviews from same user for same property
