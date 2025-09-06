@@ -36,6 +36,25 @@ class ReviewController extends Controller
             'reviewer_name' => 'required|string',
         ]);
 
+
+        // Check if user already reviewed this property
+        $existingReview = Review::where('property_id', $validated['property_id'])
+            ->where('user_id', auth()->id())
+            ->first();
+
+         if ($existingReview) {
+            return response()->json([
+                'message' => 'You have already reviewed this property.',
+                'existing_review' => [
+                    'id' => $existingReview->id,
+                    'reviewer_name' => auth()->user()->name,
+                    'rating' => $existingReview->rating,
+                    'comment' => $existingReview->comment,
+                    'date' => $existingReview->created_at->toISOString(),
+                ]
+            ], 409); // 409 Conflict status code
+        }
+
         $review = Review::create([
             'property_id' => $validated['property_id'],
             'user_id' => auth()->id(),
