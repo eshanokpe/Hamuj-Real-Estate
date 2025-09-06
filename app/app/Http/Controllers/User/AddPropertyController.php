@@ -31,7 +31,7 @@ class AddPropertyController extends Controller
         try { 
             
             // Get all properties for the authenticated user
-            $properties = AddProperty::with('user')
+            $properties = AddProperty::with(['user', 'reviews.user'])
                 // ->whereHas('user')
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -57,6 +57,24 @@ class AddPropertyController extends Controller
                     'media_url' => $property->media_path ? asset('storage/' . $property->media_path) : null,
                     'media_type' => $property->media_type,
                     'mime_type' => $property->mime_type,
+                    'reviews' => $property->reviews->map(function ($review) {
+                        return [
+                            'id' => $review->id,
+                            'rating' => (float) $review->rating,
+                            'comment' => $review->comment,
+                            'user' => $review->user ? [
+                                'id' => $review->user->id,
+                                'name' => $review->user->full_name,
+                                'first_name' => $review->user->first_name,
+                                'last_name' => $review->user->last_name,
+                                'profile_image' => $review->user->profile_image,
+                            ] : null,
+                            'created_at' => $review->created_at->toISOString(),
+                            'updated_at' => $review->updated_at->toISOString(),
+                        ];
+                    }),
+                    'average_rating' => (float) $property->reviews->avg('rating') ?: 0,
+                    'reviews_count' => $property->reviews->count(),
                     'created_at' => $property->created_at->toISOString(),
                     'updated_at' => $property->updated_at->toISOString(),
                 ];

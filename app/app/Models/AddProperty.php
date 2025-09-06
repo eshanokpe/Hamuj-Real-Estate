@@ -29,6 +29,11 @@ class AddProperty extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'property_id');
+    }
 
     /**
      * Get the full URL for the media file
