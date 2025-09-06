@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
 use App\Models\Review;
 use App\Models\Property;
@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 class ReviewController extends Controller
 {
     public function index(Property $property): JsonResponse
-    {
+    { 
         $reviews = $property->reviews()->with('user')->latest()->get();
         
         return response()->json([
