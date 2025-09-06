@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\User;
-use App\Http\Controllers\Controller
+use App\Http\Controllers\Controller;
 use App\Models\Review;
 use App\Models\Property;
 use Illuminate\Http\Request;
