@@ -33,6 +33,7 @@ class ReviewController extends Controller
             'property_id' => 'required|exists:add_properties,id',
             'rating' => 'required|numeric|min:0|max:5',
             'comment' => 'required|string|max:1000',
+            'property_id' => 'required|string',
         ]);
 
         $review = Review::create([
