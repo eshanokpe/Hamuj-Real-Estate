@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage; // Added for Storage usage
 
 class AddProperty extends Model
 {
     use HasFactory;
+
     protected $table = 'add_properties';
 
     protected $fillable = [
@@ -23,15 +26,16 @@ class AddProperty extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2'
+        'price' => 'decimal:2',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
-    public function reviews()
+
+    // Correct return type with proper import
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class, 'property_id');
     }
