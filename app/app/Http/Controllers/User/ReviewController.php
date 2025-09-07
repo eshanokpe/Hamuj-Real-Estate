@@ -8,10 +8,10 @@ use Illuminate\Http\JsonResponse;
 
 class ReviewController extends Controller
 {
-    public function index(AddProperty $addProperty): JsonResponse
+    public function index($addPropertyId): JsonResponse
     { 
         $reviews = Review::with('user')
-        ->where('property_id', $addProperty->id)
+        ->where('property_id', $addPropertyId)
         ->latest()
         ->get();
         
