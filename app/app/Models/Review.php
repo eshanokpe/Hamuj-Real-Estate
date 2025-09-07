@@ -25,9 +25,10 @@ class Review extends Model
         'deleted_at' => 'datetime',
     ]; 
 
+
     public function property(): BelongsTo
     {
-        return $this->belongsTo(Property::class);
+        return $this->belongsTo(AddProperty::class, 'property_id');
     }
 
     public function user(): BelongsTo

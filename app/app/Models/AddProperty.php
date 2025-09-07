@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AddProperty extends Model
 {
     use HasFactory;
+    protected $table = 'add_properties';
 
     protected $fillable = [
         'title',
