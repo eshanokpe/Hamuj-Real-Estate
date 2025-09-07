@@ -30,7 +30,7 @@ class AddProperty extends Model
         return $this->belongsTo(User::class);
     }
     
-    public function reviews()
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class, 'property_id');
     }
