@@ -23,7 +23,7 @@ class ReviewController extends Controller
                     'property_id' => $review->property_id,
                     'user_id' => $review->user_id,
                 ];
-            })
+            })->toArray()
         ]);
     }
 
