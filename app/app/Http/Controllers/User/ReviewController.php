@@ -29,6 +29,11 @@ class ReviewController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        $recentReviewsCount = Review::where('user_id', auth()->id())
+        ->where('created_at', '>', now()->subHour())
+        ->count();
+
+        
         $validated = $request->validate([
             'property_id' => 'required|exists:add_properties,id',
             'rating' => 'required|numeric|min:0|max:5',
