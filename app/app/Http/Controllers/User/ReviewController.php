@@ -11,7 +11,7 @@ class ReviewController extends Controller
     public function index(AddProperty $addProperty): JsonResponse
     { 
         $reviews = Review::with('user')
-        ->where('property_id', $property->id)
+        ->where('property_id', $addProperty->id)
         ->latest()
         ->get();
         
