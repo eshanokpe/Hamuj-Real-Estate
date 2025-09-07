@@ -29,36 +29,13 @@ class ReviewController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $recentReviewsCount = Review::where('user_id', auth()->id())
-        ->where('created_at', '>', now()->subHour())
-        ->count();
-
-        
+       
         $validated = $request->validate([
             'property_id' => 'required|exists:add_properties,id',
             'rating' => 'required|numeric|min:0|max:5',
             'comment' => 'required|string|max:1000',
             'reviewer_name' => 'required|string',
         ]);
-
-
-        // Check if user already reviewed this property
-        $existingReview = Review::where('property_id', $validated['property_id'])
-            ->where('user_id', auth()->id())
-            ->first();
-
-         if ($existingReview) {
-            return response()->json([
-                'message' => 'You have already reviewed this property.',
-                'existing_review' => [
-                    'id' => $existingReview->id,
-                    'reviewer_name' => auth()->user()->name,
-                    'rating' => $existingReview->rating,
-                    'comment' => $existingReview->comment,
-                    'date' => $existingReview->created_at->toISOString(),
-                ]
-            ], 409); // 409 Conflict status code
-        }
 
         $review = Review::create([
             'property_id' => $validated['property_id'],
