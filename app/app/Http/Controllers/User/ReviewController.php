@@ -8,9 +8,9 @@ use Illuminate\Http\JsonResponse;
 
 class ReviewController extends Controller
 {
-    public function index(Property $property): JsonResponse
+    public function index(AddProperty $addProperty): JsonResponse
     { 
-        $reviews = $property->reviews()->with('user')->latest()->get();
+        $reviews = $addProperty->reviews()->with('user')->latest()->get();
         
         return response()->json([
             'data' => $reviews->map(function ($review) {
