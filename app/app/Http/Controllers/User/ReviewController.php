@@ -15,7 +15,7 @@ class ReviewController extends Controller
         ->latest()
         ->get();
                    
-        
+
         return response()->json([
             'data' => $reviews->map(function ($review) {
                 return [
@@ -26,6 +26,10 @@ class ReviewController extends Controller
                     'date' => $review->created_at->toISOString(),
                     'property_id' => $review->property_id,
                     'user_id' => $review->user_id,
+                    'profile_image' => $review->user->profile_image,
+                    'first_name' => $review->user->first_name,
+                    'last_name' => $review->user->last_name,
+                    'email' => $review->user->email
                 ];
             })->toArray()
         ]);
