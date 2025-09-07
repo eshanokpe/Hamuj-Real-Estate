@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Review;
-use App\Models\Property;
+use App\Models\AddProperty;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
