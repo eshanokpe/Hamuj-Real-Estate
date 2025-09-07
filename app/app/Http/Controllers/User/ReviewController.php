@@ -14,6 +14,7 @@ class ReviewController extends Controller
         ->where('property_id', $addPropertyId)
         ->latest()
         ->get();
+                   
         
         return response()->json([
             'data' => $reviews->map(function ($review) {
