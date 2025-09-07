@@ -10,7 +10,11 @@ class ReviewController extends Controller
 {
     public function index(AddProperty $addProperty): JsonResponse
     { 
-        $reviews = $addProperty->reviews()->with('user')->latest()->get();
+        // $reviews = $addProperty->reviews()->with('user')->latest()->get();
+        $reviews = Review::with('user')
+        ->where('property_id', $property->id)
+        ->latest()
+        ->get();
         
         return response()->json([
             'data' => $reviews->map(function ($review) {
