@@ -35,10 +35,10 @@ class AddProperty extends Model
     }
 
     // Correct return type with proper import
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(Review::class, 'property_id');
-    }
+    public function reviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+{
+    return $this->hasMany(Review::class, 'property_id');
+}
 
     /**
      * Get the full URL for the media file
