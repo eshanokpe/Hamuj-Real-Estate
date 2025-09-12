@@ -29,7 +29,7 @@ class AddPropertyController extends Controller
     public function index(Request $request): JsonResponse // ✅ Now using correct JsonResponse
     {
         try { 
-            
+            $user = Auth::user(); 
             // Get all properties for the authenticated user
             $properties = AddProperty::with(['user', 'reviews.user'])
                 // ->whereHas('user')
@@ -77,13 +77,14 @@ class AddPropertyController extends Controller
                     'reviews_count' => $property->reviews->count(),
                     'created_at' => $property->created_at->toISOString(),
                     'updated_at' => $property->updated_at->toISOString(),
+                    'post_properies'=> $user->load('postProperty'),
                 ];
             });
             
             return response()->json([
                 'success' => true,
                 'message' => 'Properties retrieved successfully',
-                'data' => $transformedProperties
+                'data' => $transformedProperties,
             ], 200);
             
         } catch (\Exception $e) {
