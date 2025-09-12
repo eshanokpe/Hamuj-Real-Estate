@@ -29,16 +29,19 @@ class AddPropertyController extends Controller
     public function index(Request $request): JsonResponse // ✅ Now using correct JsonResponse
     {
         try { 
-           
+            $user = Auth::user(); 
             // Get all properties for the authenticated user
             $properties = AddProperty::with(['user', 'reviews.user'])
                 // ->whereHas('user')
                 ->orderBy('created_at', 'desc')
                 ->get();
+            $userProperties = AddProperty::with('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
             
             // Transform properties with media URLs
             $transformedProperties = $properties->map(function ($property) {
-                $user = Auth::user(); 
+               
                 return [
                     'id' => $property->id,
                     'user' => $property->user ? [ // Check if user exists
@@ -78,7 +81,7 @@ class AddPropertyController extends Controller
                     'reviews_count' => $property->reviews->count(),
                     'created_at' => $property->created_at->toISOString(),
                     'updated_at' => $property->updated_at->toISOString(),
-                    'post_properies'=> $user->load('postProperty'),
+                    'user_postProperies'=> $userProperties,
                 ];
             });
             
