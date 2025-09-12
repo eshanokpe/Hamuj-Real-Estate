@@ -35,7 +35,7 @@ class AddPropertyController extends Controller
                 // ->whereHas('user')
                 ->orderBy('created_at', 'desc')
                 ->get();
-            $userProperties = AddProperty::with('user_id', $user->id)
+            $userProperties = AddProperty::where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
             
