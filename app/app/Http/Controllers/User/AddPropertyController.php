@@ -35,9 +35,11 @@ class AddPropertyController extends Controller
                 // ->whereHas('user')
                 ->orderBy('created_at', 'desc')
                 ->get();
-            $userProperties = AddProperty::where('user_id', $user->id)
+            $userProperties = AddProperty::with('user')
+                ->where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
+
             
             // Transform properties with media URLs
             $transformedProperties = $properties->map(function ($property) {
@@ -81,7 +83,6 @@ class AddPropertyController extends Controller
                     'reviews_count' => $property->reviews->count(),
                     'created_at' => $property->created_at->toISOString(),
                     'updated_at' => $property->updated_at->toISOString(),
-                    'user_postProperies'=> $userProperties,
                 ];
             });
             
@@ -89,6 +90,7 @@ class AddPropertyController extends Controller
                 'success' => true,
                 'message' => 'Properties retrieved successfully',
                 'data' => $transformedProperties,
+                'user_properties' => $userProperties,
             ], 200);
             
         } catch (\Exception $e) {
