@@ -103,6 +103,10 @@ class User extends Authenticatable
         return $this->hasMany(VirtualAccount::class);
     } 
 
+    public function postProperty()
+    {
+        return $this->hasMany(AddProperty::class);
+    } 
 
     public function wallet()
     {

@@ -15,7 +15,7 @@ class ReviewController extends Controller
         ->latest()
         ->get();
                    
-
+ 
         return response()->json([
             'data' => $reviews->map(function ($review) {
                 return [

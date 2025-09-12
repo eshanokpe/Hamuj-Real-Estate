@@ -70,13 +70,7 @@ Route::post('deactivate-account', [AuthMethodController::class, 'deactivateAccou
 // Protected routes (authentication required)
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::prefix('add_properties')->group(function () {
-        Route::get('/get', [AddPropertyController::class, 'index']);
-        Route::get('/{id}', [AddPropertyController::class, 'show']);
-        Route::post('/upload', [AddPropertyController::class, 'upload']);
-        Route::put('/{id}', [AddPropertyController::class, 'update']);
-        Route::delete('/{id}', [AddPropertyController::class, 'destroy']);
-    });
+    
     Route::get('/properties', [PropertyController::class, 'index']);
     Route::get('/buy/assets', [PropertyController::class, 'buy']);
     Route::get('/sell/assets', [SellPropertyController::class, 'index']);
@@ -177,6 +171,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [KycController::class, 'store']);
         Route::get('/', [KycController::class, 'show']);
     }); 
+
+    Route::prefix('add_properties')->group(function () {
+        Route::get('/get', [AddPropertyController::class, 'index']);
+        Route::get('/{id}', [AddPropertyController::class, 'show']);
+        Route::post('/upload', [AddPropertyController::class, 'upload']);
+        Route::put('/{id}', [AddPropertyController::class, 'update']);
+        Route::delete('/{id}', [AddPropertyController::class, 'destroy']);
+    });
 
     //reviews
     Route::prefix('property')->group(function () {

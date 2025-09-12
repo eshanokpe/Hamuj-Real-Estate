@@ -75,7 +75,8 @@ class LoginController extends Controller
                 ]);
                 Cache::put('user-is-online-' . $user->id, true, now()->addMinutes(5));
 
-                $user->load('virtualAccounts');
+                $user->load('virtualAccounts'); 
+                $user->load('postProperty'); 
                 // Log user activity
                 UserActivity::create([
                     'user_id' => $user->id,
@@ -88,7 +89,7 @@ class LoginController extends Controller
                         'message' => 'Login successful',
                         'user' => $user, 
                         'token' => Auth::user()->createToken('dohmayn')->plainTextToken, // For API Token
-                    ], 200);
+                    ], 200); 
                 } 
                 return redirect()->route('user.dashboard');
             }
