@@ -178,7 +178,7 @@ class AddPropertyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Property $property)
+    public function show(AddProperty $property)
     {
         return response()->json($property->load('media'));
     }
@@ -255,7 +255,7 @@ class AddPropertyController extends Controller
             }
 
             // Check if user owns the property or has permission to delete
-            $user = auth()->user();
+             $user = Auth::user(); 
             
             if ($property->user_id !== $user->id) {
                 return response()->json([
