@@ -259,7 +259,9 @@ class AddPropertyController extends Controller
             
             if ($property->user_id !== $user->id) {
                 return response()->json([
-                    'message' => 'Unauthorized: You can only delete your own properties'
+                    'message' => 'Unauthorized: You can only delete your own properties',
+                    'property_id' => $property->user_id,
+                    'user_id' => $user->id,
                 ], 403);
             }
 
