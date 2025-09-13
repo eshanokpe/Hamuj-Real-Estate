@@ -197,6 +197,7 @@
                                         </span>
                                     @enderror
                                     @if(isset($property))
+                                    <p>{{ asset($property->property_images) }}</p>
                                     <img src="{{ asset($property->property_images) }}" alt="{{ $property->name }}" class="img-thumbnail mt-2" width="200">
                                     @endif
                                     <img id="image-preview" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">

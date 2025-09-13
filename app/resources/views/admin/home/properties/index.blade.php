@@ -17,7 +17,7 @@
                                 <li class="breadcrumb-item">
                                     <a href="{{ route('admin.properties.create')}}" class="btn btn-dark">Add Property</a>
                                 </li>
-                            </ol>
+                            </ol> 
                         </div>
                         <h4 class="page-title">Property</h4>
                     </div>
