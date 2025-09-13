@@ -35,7 +35,7 @@
                                 <th>Listing Title</th>
                                 <th><span class="min-w-100">Percentage</span></th>
                                 <th>Acquired Size</th>
-                                <th colspan="2">Action2</th>
+                                <th colspan="2">Action</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -26,7 +26,7 @@
                                     </th>
                                     <th>Size</th>
                                     <th>Available Size</th>
-                                    <th>Action</th>
+                                    <th>Action2</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -35,7 +35,7 @@
                                         <td> 
                                             <div class="properties__author d-flex align-items-center">
                                                 <div class="properties__author--thumb">
-                                                    <img src="{{ asset($item->property_images) }}" alt="img" style="width: 90px; height:120px; max-width:100%; max-height:100%; object-fit:cover"> 
+                                                    <img src="{{ asset('app/public/' . $item->property_images) }}" alt="img" style="width: 90px; height:120px; max-width:100%; max-height:100%; object-fit:cover"> 
                                                 </div>
                                                 <div class="reviews__author--text">
                                                     <h3 class="reviews__author--title">{{$item->name}}</h3>
