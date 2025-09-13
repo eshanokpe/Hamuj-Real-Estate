@@ -259,7 +259,7 @@ class PropertyController extends Controller
             if ($property->$field && file_exists(public_path($property->$field))) {
                 unlink(public_path($property->$field));
             }
-            
+             
             $folder = str_replace('_', '', $field) . 's'; // Convert 'property_images' to 'propertyimages'
             $filePath = $request->file($field)->move(
                 public_path('assets/images/' . $folder),
