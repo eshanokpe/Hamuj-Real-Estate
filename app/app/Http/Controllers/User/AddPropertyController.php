@@ -242,46 +242,75 @@ class AddPropertyController extends Controller
      * Remove the specified resource from storage.
      */
    public function destroy($id)
-    {
-        try {
-            // Find the property by ID
-            $property = AddProperty::find($id);
-            
-            // Check if property exists
-            if (!$property) {
-                return response()->json([
-                    'message' => 'Property not found'
-                ], 404);
-            }
+{
+    \Log::info('Delete property request received', [
+        'property_id' => $id,
+        'user_id' => auth()->id(),
+        'ip' => request()->ip(),
+        'time' => now()
+    ]);
 
-            // Check if user owns the property or has permission to delete
-             $user = Auth::user(); 
-            
-            if ($property->user_id !== $user->id) {
-                return response()->json([
-                    'message' => 'Unauthorized: You can only delete your own properties',
-                    'property_id' => $property->user_id,
-                    'user_id' => $user->id,
-                ], 403);
-            }
-
-            // Delete associated file
-            if ($property->media_path && Storage::disk('public')->exists($property->media_path)) {
-                Storage::disk('public')->delete($property->media_path);
-            }
-
-            $property->delete();
-
+    try {
+        // Find the property by ID
+        $property = AddProperty::find($id);
+        
+        // Check if property exists
+        if (!$property) {
+            \Log::warning('Property not found', ['property_id' => $id]);
             return response()->json([
-                'message' => 'Property deleted successfully'
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error deleting property: ' . $e->getMessage()
-            ], 500);
+                'message' => 'Property not found'
+            ], 404);
         }
+
+        // Check if user owns the property or has permission to delete
+        $user = auth()->user();
+        
+        \Log::info('Ownership check', [
+            'property_user_id' => $property->user_id,
+            'current_user_id' => $user->id,
+            'match' => $property->user_id === $user->id
+        ]);
+
+        if ($property->user_id !== $user->id) {
+            \Log::warning('Unauthorized delete attempt', [
+                'property_id' => $id,
+                'property_owner' => $property->user_id,
+                'attempted_by' => $user->id
+            ]);
+            
+            return response()->json([
+                'message' => 'Unauthorized: You can only delete your own properties',
+                'property_id' => $property->id,
+                'property_user_id' => $property->user_id,
+                'current_user_id' => $user->id
+            ], 403);
+        }
+
+        // Delete associated file
+        if ($property->media_path && Storage::disk('public')->exists($property->media_path)) {
+            Storage::disk('public')->delete($property->media_path);
+        }
+
+        $property->delete();
+
+        \Log::info('Property deleted successfully', ['property_id' => $id]);
+
+        return response()->json([
+            'message' => 'Property deleted successfully'
+        ], 200);
+
+    } catch (\Exception $e) {
+        \Log::error('Error deleting property', [
+            'property_id' => $id,
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+        
+        return response()->json([
+            'message' => 'Error deleting property: ' . $e->getMessage()
+        ], 500);
     }
+}
 
     /**
      * Upload media for property (alternative endpoint)
