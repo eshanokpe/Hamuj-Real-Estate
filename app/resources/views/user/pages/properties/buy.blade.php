@@ -35,7 +35,7 @@
                                 <th>Listing Title</th>
                                 <th><span class="min-w-100">Percentage</span></th>
                                 <th>Acquired Size</th>
-                                <th colspan="2">Action</th>
+                                <th colspan="2">Action2</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,7 +44,7 @@
                                 <td>
                                     <div class="properties__author d-flex align-items-center">
                                         <div class="properties__author--thumb">
-                                            <img src="{{ asset($property->property->property_images) }}" alt="img" style="max-height: 100%; max-width:100%; width:70px; height:80px; object-fit:cover">
+                                            <img src=" {{ asset('app/public/' . $property->property->property_images) }}" alt="img" style="max-height: 100%; max-width:100%; width:70px; height:80px; object-fit:cover">
                                         </div>
                                         <div class="reviews__author--text">
                                             <h3 class="reviews__author--title">{{$property->property->name}}</h3>
