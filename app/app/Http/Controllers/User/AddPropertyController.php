@@ -241,9 +241,19 @@ class AddPropertyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AddProperty $property)
+   public function destroy($id)
     {
         try {
+            // Find the property by ID
+            $property = AddProperty::find($id);
+            
+            // Check if property exists
+            if (!$property) {
+                return response()->json([
+                    'message' => 'Property not found'
+                ], 404);
+            }
+
             // Check if user owns the property or has permission to delete
             $user = auth()->user();
             
