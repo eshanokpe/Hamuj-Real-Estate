@@ -17,7 +17,7 @@ use App\Notifications\PropertyValuationPredictionNotification;
 
   
 class PropertyController extends Controller
-{
+{ 
      
     public function index()
     {
@@ -339,7 +339,8 @@ class PropertyController extends Controller
             'previous_year' => $previousYear,
             'updated_price' => $newPrice,
             'percentage_increase' => $percentageIncrease,
-            'updated_year' => $year,
+            'updated_year' => Carbon::createFromDate($year, 1, 1),
+            
         ]);
 
         $property->update([
