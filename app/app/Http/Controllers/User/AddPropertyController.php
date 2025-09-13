@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 
 
+
  
 class AddPropertyController extends Controller
 {
@@ -240,9 +241,18 @@ class AddPropertyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Property $property)
+    public function destroy(AddProperty $property)
     {
         try {
+            // Check if user owns the property or has permission to delete
+            $user = auth()->user();
+            
+            if ($property->user_id !== $user->id) {
+                return response()->json([
+                    'message' => 'Unauthorized: You can only delete your own properties'
+                ], 403);
+            }
+
             // Delete associated file
             if ($property->media_path && Storage::disk('public')->exists($property->media_path)) {
                 Storage::disk('public')->delete($property->media_path);
@@ -252,7 +262,7 @@ class AddPropertyController extends Controller
 
             return response()->json([
                 'message' => 'Property deleted successfully'
-            ]);
+            ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
