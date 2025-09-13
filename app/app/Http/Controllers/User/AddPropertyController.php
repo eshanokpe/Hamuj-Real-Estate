@@ -241,7 +241,7 @@ class AddPropertyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-   public function destroy($id)
+    public function destroy($id)
 {
     \Log::info('Delete property request received', [
         'property_id' => $id,
@@ -265,24 +265,28 @@ class AddPropertyController extends Controller
         // Check if user owns the property or has permission to delete
         $user = auth()->user();
         
+        // Convert both to integers for proper comparison
+        $propertyUserId = (int) $property->user_id;
+        $currentUserId = (int) $user->id;
+        
         \Log::info('Ownership check', [
-            'property_user_id' => $property->user_id,
-            'current_user_id' => $user->id,
-            'match' => $property->user_id === $user->id
+            'property_user_id' => $propertyUserId,
+            'current_user_id' => $currentUserId,
+            'match' => $propertyUserId === $currentUserId
         ]);
 
-        if ($property->user_id !== $user->id) {
+        if ($propertyUserId !== $currentUserId) {
             \Log::warning('Unauthorized delete attempt', [
                 'property_id' => $id,
-                'property_owner' => $property->user_id,
-                'attempted_by' => $user->id
+                'property_owner' => $propertyUserId,
+                'attempted_by' => $currentUserId
             ]);
             
             return response()->json([
                 'message' => 'Unauthorized: You can only delete your own properties',
                 'property_id' => $property->id,
-                'property_user_id' => $property->user_id,
-                'current_user_id' => $user->id
+                'property_user_id' => $propertyUserId,
+                'current_user_id' => $currentUserId
             ], 403);
         }
 
