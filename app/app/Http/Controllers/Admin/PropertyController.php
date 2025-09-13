@@ -336,7 +336,7 @@ class PropertyController extends Controller
             'property_id' => $property->id,
             'previous_price' => $previousPrice,
             'previous_percentage_increase' => $previousPercentageIncrease,
-            'previous_year' => $previousYear,
+            'previous_year' => $previousYear ? Carbon::createFromDate($previousYear, 1, 1) : null,,
             'updated_price' => $newPrice,
             'percentage_increase' => $percentageIncrease,
             'updated_year' => Carbon::createFromDate($year, 1, 1),
