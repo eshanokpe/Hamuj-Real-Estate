@@ -38,7 +38,7 @@
                                         <div class="add__listing--google__map mb-10">
                                             <img 
                                             style="object-fit: contain"
-                                            src="{{ asset($property->property_images) }}" />
+                                            src="{{ asset('app/public/' . $property->property_images) }}" />
                                         </div>
                                     </div>
                                     <div class="col-12">

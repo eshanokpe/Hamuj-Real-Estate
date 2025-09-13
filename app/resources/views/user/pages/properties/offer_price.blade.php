@@ -29,7 +29,7 @@
                                     <td>
                                         <div class="properties__author d-flex align-items-center">
                                             <div class="properties__author--thumb">
-                                                <img src="{{ asset($buy->property->property_images) }}" alt="img" 
+                                                <img src="{{ asset('app/public/' . $buy->property->property_images) }}" alt="img" 
                                                     style="width: 64px; height:64px; object-fit:cover">
                                             </div>
                                             <div class="reviews__author--text">
