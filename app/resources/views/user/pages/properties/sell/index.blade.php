@@ -38,7 +38,7 @@
                                     <div class="properties__author d-flex align-items-center">
                                         <div class="properties__author--thumb flex-shrink-0 me-3"> {{-- Added margin --}}
                                             {{-- Use optional() helper and provide a default/placeholder image --}}
-                                            <img src="{{ asset(optional($property->property)->property_images ?? 'path/to/default-image.jpg') }}"
+                                            <img src="{{ asset('app/public/' .optional($property->property)->property_images ?? 'path/to/default-image.jpg') }}"
                                                  alt="{{ optional($property->property)->name ?? 'Property Image' }}"
                                                  style="width:70px; height:90px; object-fit:cover; border-radius: 4px;"> {{-- Consistent size & added radius --}}
                                         </div>

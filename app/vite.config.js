@@ -13,7 +13,7 @@ export default defineConfig({
             input: [
                 // 'resources/js/app.js',
                 'resources/sass/app.scss',
-                'resources/js/app.jsx',
+                'resources/js/app.jsx',  
             ],
             refresh: true,
         }),

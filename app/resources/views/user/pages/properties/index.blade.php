@@ -31,7 +31,7 @@
                             </thead>
                             <tbody>
                                 @forelse ($properties as $index => $item)
-                                    <tr>
+                                    <tr> 
                                         <td> 
                                             <div class="properties__author d-flex align-items-center">
                                                 <div class="properties__author--thumb">

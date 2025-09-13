@@ -30,7 +30,7 @@
                                 <td>
                                     <div class="properties__author d-flex align-items-center">
                                         <div class="properties__author--thumb">
-                                            <img src="{{ asset($transfer->property->property_images) }}" alt="img" style="max-height: 100%; max-width:100%; width:70px; height:70px; object-fit:cover">
+                                            <img src="{{ asset('app/public/' .$transfer->property->property_images) }}" alt="img" style="max-height: 100%; max-width:100%; width:70px; height:70px; object-fit:cover">
                                         </div>
                                         <div class="reviews__author--text">
                                             <h3 class="reviews__author--title">{{$transfer->property->name}}</h3> 
