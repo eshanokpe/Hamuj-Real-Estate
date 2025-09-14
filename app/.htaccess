@@ -1,17 +1,22 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Send requests for assets, css, js, images directly to public folder
-    RewriteCond %{REQUEST_URI} ^/(assets|storage|images|css|js|fonts|vendor|build) [NC]
-    RewriteRule ^(.*)$ public/$1 [L]
+    # Protect .env file
+    <Files .env>
+        Order allow,deny
+        Deny from all
+    </Files>
 
-    # Send everything else to Laravel's public/index.php
-    RewriteCond %{REQUEST_URI} !^/public
+    # Handle root redirect to app/public without showing /app/public in URL
+    RewriteCond %{REQUEST_URI} !^/app/public
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ public/$1 [L]
-</IfModule>
+    RewriteRule ^(.*)$ app/public/$1 [L]
 
+    # Special rule for webhook routes (if needed)
+    # RewriteCond %{REQUEST_URI} ^/user/webhook/paystack [NC]
+    # RewriteRule ^ - [L]
+</IfModule>
 
 # <IfModule mod_rewrite.c>
 #     RewriteEngine On

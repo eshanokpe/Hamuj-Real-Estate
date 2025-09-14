@@ -70,7 +70,7 @@ Route::post('deactivate-account', [AuthMethodController::class, 'deactivateAccou
 // Protected routes (authentication required)
 Route::middleware('auth:sanctum')->group(function () {
 
-    
+     
     Route::get('/properties', [PropertyController::class, 'index']);
     Route::get('/buy/assets', [PropertyController::class, 'buy']);
     Route::get('/sell/assets', [SellPropertyController::class, 'index']);

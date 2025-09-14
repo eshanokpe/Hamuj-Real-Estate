@@ -24,7 +24,7 @@ class PropertyController extends Controller
     {
         $this->middleware('auth'); 
     }  
- 
+  
     public function index(Request $request){
         $user = Auth::user(); 
        
@@ -49,7 +49,7 @@ class PropertyController extends Controller
             return response()->json([
                 'user' => $user, // Send the authenticated user object directly
                 'properties' => $properties,
-            ]);
+            ]); 
         } catch (\Exception $e) {
             Log::error('Error fetching properties in indexAPI: ' . $e->getMessage());
             return response()->json(['error' => 'Server error while fetching properties.', 'details' => $e->getMessage()], 500);
@@ -75,7 +75,7 @@ class PropertyController extends Controller
             return response()->json([
                 'success' => true,
                 'data' =>  $data['buyProperty']
-            ]);
+            ]); 
         } 
 
         return view('user.pages.properties.buy', $data); 
