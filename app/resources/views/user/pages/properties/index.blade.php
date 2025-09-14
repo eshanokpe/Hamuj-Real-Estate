@@ -26,7 +26,7 @@
                                     </th>
                                     <th>Size</th>
                                     <th>Available Size</th>
-                                    <th>Action22</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>

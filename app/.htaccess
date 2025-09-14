@@ -1,21 +1,23 @@
 <IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
     RewriteEngine On
 
-    # Protect .env file
-    <Files .env>
-        Order allow,deny
-        Deny from all
-    </Files>
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle root redirect to app/public without showing /app/public in URL
-    RewriteCond %{REQUEST_URI} !^/app/public
-    RewriteCond %{REQUEST_FILENAME} !-f
+    # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ app/public/$1 [L]
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
 
-    # Special rule for webhook routes (if needed)
-    # RewriteCond %{REQUEST_URI} ^/user/webhook/paystack [NC]
-    # RewriteRule ^ - [L]
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
 </IfModule>
 
 # <IfModule mod_rewrite.c>
