@@ -22,13 +22,18 @@ class AddProperty extends Model
         'caption',
         'media_path',
         'media_type',
-        'mime_type'
+        'mime_type',
+        'is_favorite',
+        'favorite_count' 
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'price' => 'decimal:2',
+        'is_favorite' => 'boolean', 
     ];
 
+   
     public function user()
     {
         return $this->belongsTo(User::class);
