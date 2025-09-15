@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->  
+    <!-- CSRF Token --> 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{  $contactDetials->company_name }}</title>
     <!-- App favicon -->
@@ -14,8 +14,8 @@
     @viteReactRefresh
     @vite(['resources/js/app.jsx'])
     <!-- App css -->
-    <link href="{{ asset('app/admin/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('app/admin/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('admin/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('admin/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admin/css/app.min.css')}}" rel="stylesheet" type="text/css" />
 
 </head>
