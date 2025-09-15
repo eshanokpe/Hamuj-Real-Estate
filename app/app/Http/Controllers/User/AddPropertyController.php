@@ -369,7 +369,7 @@ class AddPropertyController extends Controller
                 'message' => $isFavorite ? 'Added to favorites' : 'Removed from favorites',
                 'data' => [
                     'is_favorite' => $isFavorite,
-                    'favorite_count' => $property->favorite_count
+                    'favorite_count' => (int)$property->favorite_count
                 ]
             ]);
 
