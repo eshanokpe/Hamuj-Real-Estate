@@ -242,79 +242,79 @@ class AddPropertyController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-{
-    \Log::info('Delete property request received', [
-        'property_id' => $id,
-        'user_id' => auth()->id(),
-        'ip' => request()->ip(),
-        'time' => now()
-    ]);
-
-    try {
-        // Find the property by ID
-        $property = AddProperty::find($id);
-        
-        // Check if property exists
-        if (!$property) {
-            \Log::warning('Property not found', ['property_id' => $id]);
-            return response()->json([
-                'message' => 'Property not found'
-            ], 404);
-        }
-
-        // Check if user owns the property or has permission to delete
-        $user = auth()->user();
-        
-        // Convert both to integers for proper comparison
-        $propertyUserId = (int) $property->user_id;
-        $currentUserId = (int) $user->id;
-        
-        \Log::info('Ownership check', [
-            'property_user_id' => $propertyUserId,
-            'current_user_id' => $currentUserId,
-            'match' => $propertyUserId === $currentUserId
+    {
+        \Log::info('Delete property request received', [
+            'property_id' => $id,
+            'user_id' => auth()->id(),
+            'ip' => request()->ip(),
+            'time' => now()
         ]);
 
-        if ($propertyUserId !== $currentUserId) {
-            \Log::warning('Unauthorized delete attempt', [
+        try { 
+            // Find the property by ID
+            $property = AddProperty::find($id);
+            
+            // Check if property exists
+            if (!$property) {
+                \Log::warning('Property not found', ['property_id' => $id]);
+                return response()->json([
+                    'message' => 'Property not found'
+                ], 404);
+            }
+
+            // Check if user owns the property or has permission to delete
+            $user = auth()->user();
+            
+            // Convert both to integers for proper comparison
+            $propertyUserId = (int) $property->user_id;
+            $currentUserId = (int) $user->id;
+            
+            \Log::info('Ownership check', [
+                'property_user_id' => $propertyUserId,
+                'current_user_id' => $currentUserId,
+                'match' => $propertyUserId === $currentUserId
+            ]);
+
+            if ($propertyUserId !== $currentUserId) {
+                \Log::warning('Unauthorized delete attempt', [
+                    'property_id' => $id,
+                    'property_owner' => $propertyUserId,
+                    'attempted_by' => $currentUserId
+                ]);
+                
+                return response()->json([
+                    'message' => 'Unauthorized: You can only delete your own properties',
+                    'property_id' => $property->id,
+                    'property_user_id' => $propertyUserId,
+                    'current_user_id' => $currentUserId
+                ], 403);
+            }
+
+            // Delete associated file
+            if ($property->media_path && Storage::disk('public')->exists($property->media_path)) {
+                Storage::disk('public')->delete($property->media_path);
+            }
+
+            $property->delete();
+
+            \Log::info('Property deleted successfully', ['property_id' => $id]);
+
+            return response()->json([
+                'message' => 'Property deleted successfully'
+            ], 200);
+
+        } catch (\Exception $e) {
+            \Log::error('Error deleting property', [
                 'property_id' => $id,
-                'property_owner' => $propertyUserId,
-                'attempted_by' => $currentUserId
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
             
             return response()->json([
-                'message' => 'Unauthorized: You can only delete your own properties',
-                'property_id' => $property->id,
-                'property_user_id' => $propertyUserId,
-                'current_user_id' => $currentUserId
-            ], 403);
+                'message' => 'Error deleting property: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Delete associated file
-        if ($property->media_path && Storage::disk('public')->exists($property->media_path)) {
-            Storage::disk('public')->delete($property->media_path);
-        }
-
-        $property->delete();
-
-        \Log::info('Property deleted successfully', ['property_id' => $id]);
-
-        return response()->json([
-            'message' => 'Property deleted successfully'
-        ], 200);
-
-    } catch (\Exception $e) {
-        \Log::error('Error deleting property', [
-            'property_id' => $id,
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString()
-        ]);
-        
-        return response()->json([
-            'message' => 'Error deleting property: ' . $e->getMessage()
-        ], 500);
     }
-}
 
     /**
      * Upload media for property (alternative endpoint)
@@ -324,6 +324,88 @@ class AddPropertyController extends Controller
         return $this->store($request);
     }
 
-    
+    // In AddPropertyController.php
+    public function toggleFavorite($id)
+    {
+        try {
+            $property = AddProperty::findOrFail($id);
+            $user = Auth::user();
+
+            // Check if user already favorited this property
+            $existingFavorite = DB::table('property_favorites')
+                ->where('property_id', $property->id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if ($existingFavorite) {
+                // Remove from favorites
+                DB::table('property_favorites')
+                    ->where('property_id', $property->id)
+                    ->where('user_id', $user->id)
+                    ->delete();
+
+                // Decrement favorite count
+                $property->decrement('favorite_count');
+                $isFavorite = false;
+            } else {
+                // Add to favorites
+                DB::table('property_favorites')->insert([
+                    'property_id' => $property->id,
+                    'user_id' => $user->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                // Increment favorite count
+                $property->increment('favorite_count');
+                $isFavorite = true;
+            }
+
+            // Refresh the property to get updated favorite count
+            $property->refresh();
+
+            return response()->json([
+                'success' => true,
+                'message' => $isFavorite ? 'Added to favorites' : 'Removed from favorites',
+                'data' => [
+                    'is_favorite' => $isFavorite,
+                    'favorite_count' => $property->favorite_count
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to toggle favorite: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getFavoriteStatus($id)
+    {
+        try {
+            $property = AddProperty::findOrFail($id);
+            $user = Auth::user();
+
+            $isFavorite = DB::table('property_favorites')
+                ->where('property_id', $property->id)
+                ->where('user_id', $user->id)
+                ->exists();
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'is_favorite' => $isFavorite,
+                    'favorite_count' => $property->favorite_count
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get favorite status: ' . $e->getMessage()
+            ], 500);
+        }
+    }
  
 }

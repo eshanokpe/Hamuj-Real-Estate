@@ -178,6 +178,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/upload', [AddPropertyController::class, 'upload']);
         Route::put('/{id}', [AddPropertyController::class, 'update']);
         Route::delete('/{id}', [AddPropertyController::class, 'destroy']);
+        Route::post('/{id}/toggle-favorite', [AddPropertyController::class, 'toggleFavorite']);
+        Route::get('/{id}/favorite-status', [AddPropertyController::class, 'getFavoriteStatus']);
     });
 
     //reviews
