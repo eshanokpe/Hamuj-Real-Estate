@@ -8,6 +8,7 @@ use Auth;
 use Log;
 use DB;
 use Illuminate\Http\JsonResponse;
+use App\Models\PostPropertyMedia;
 use App\Models\AddProperty;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -110,70 +111,73 @@ class AddPropertyController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-      
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            // 'user_id' => 'required|string',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'location' => 'required|string|max:255',
-            // 'caption' => 'required|string|max:500',
-            'mediaType' => 'required|in:image,video',
-            'media' => 'required|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240' // 10MB max
-        ]);
-        $user = auth()->user();
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        }
+{
+    $validator = Validator::make($request->all(), [
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'price' => 'required|numeric|min:0',
+        'location' => 'required|string|max:255',
+        'media' => 'required|array',
+        'media.*' => 'file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240'
+    ]);
+    
+    $user = auth()->user();
+    
+    if ($validator->fails()) {
+        return response()->json([
+            'message' => 'Validation failed',
+            'errors' => $validator->errors()
+        ], 422);
+    }
 
-        try {
-            // Handle file upload
-            if ($request->hasFile('media')) {
-                $file = $request->file('media');
-                $fileName = time() . '_' . $file->getClientOriginalName();
+    try {
+        // Create property first
+        $property = AddProperty::create([
+            'title' => $request->title,
+            'user_id' => $user->id,
+            'description' => $request->description,
+            'price' => $request->price,
+            'location' => $request->location,
+            'caption' => 'caption',
+            // Remove these fields since we're using a separate media table
+            'media_path' => null,
+            'media_type' => null,
+            'mime_type' => null,
+        ]);
+
+        // Handle multiple file uploads
+        if ($request->hasFile('media')) {
+            foreach ($request->file('media') as $file) {
+                $fileName = time() . '_' . uniqid() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('properties', $fileName, 'public');
                 
-                $mediaType = $request->mediaType;
                 $mimeType = $file->getMimeType();
+                $mediaType = str_contains($mimeType, 'image') ? 'image' : 'video';
                 
-                // Validate media type consistency
-                if (($mediaType === 'image' && !str_contains($mimeType, 'image')) ||
-                    ($mediaType === 'video' && !str_contains($mimeType, 'video'))) {
-                    return response()->json([
-                        'message' => 'Media type does not match file content'
-                    ], 422);
-                }
+                // Create media record associated with the property
+                PostPropertyMedia::create([
+                    'property_id' => $property->id,
+                    'media_path' => $filePath,
+                    'media_type' => $mediaType,
+                    'mime_type' => $mimeType
+                ]);
             }
-
-            // Create property
-            $property = AddProperty::create([
-                'title' => $request->title,
-                'user_id' =>  $user->id,
-                'description' => $request->description,
-                'price' => $request->price,
-                'location' => $request->location,
-                // 'caption' => $request->caption,
-                'caption' => 'caption',
-                'media_path' => $filePath,
-                'media_type' => $mediaType,
-                'mime_type' => $mimeType
-            ]);
-
-            return response()->json([
-                'message' => 'Property created successfully',
-                'property' => $property
-            ], 201);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error creating property: ' . $e->getMessage()
-            ], 500);
         }
+
+        // Load media with the property response
+        $property->load('media');
+
+        return response()->json([
+            'message' => 'Property created successfully',
+            'property' => $property
+        ], 201);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Error creating property: ' . $e->getMessage()
+        ], 500);
     }
+}
 
     /**
      * Display the specified resource.
@@ -183,9 +187,6 @@ class AddPropertyController extends Controller
         return response()->json($property->load('media'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, AddProperty $property)
     {
         $validator = Validator::make($request->all(), [
@@ -238,9 +239,6 @@ class AddPropertyController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         \Log::info('Delete property request received', [
@@ -316,15 +314,11 @@ class AddPropertyController extends Controller
         }
     }
 
-    /**
-     * Upload media for property (alternative endpoint)
-     */
     public function upload(Request $request)
     {
         return $this->store($request);
     }
 
-    // In AddPropertyController.php
     public function toggleFavorite($id)
     {
         try {

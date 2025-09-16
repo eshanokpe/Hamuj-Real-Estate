@@ -28,7 +28,7 @@ class AddProperty extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
+        'price' => 'decimal:2', 
         'price' => 'decimal:2',
         'is_favorite' => 'boolean', 
     ];
@@ -43,6 +43,16 @@ class AddProperty extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class, 'property_id');
+    }
+
+    public function media()
+    {
+        return $this->hasMany(PostPropertyMedia::class);
+    }
+
+    public function property()
+    {
+        return $this->belongsTo(AddProperty::class);
     }
 
     /**

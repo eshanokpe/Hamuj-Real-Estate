@@ -175,7 +175,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('add_properties')->group(function () {
         Route::get('/get', [AddPropertyController::class, 'index']);
         Route::get('/{id}', [AddPropertyController::class, 'show']);
-        Route::post('/upload', [AddPropertyController::class, 'upload']);
+        Route::post('/upload', [AddPropertyController::class, 'upload']); 
         Route::put('/{id}', [AddPropertyController::class, 'update']);
         Route::delete('/{id}', [AddPropertyController::class, 'destroy']);
         Route::post('/{id}/toggle-favorite', [AddPropertyController::class, 'toggleFavorite']);
