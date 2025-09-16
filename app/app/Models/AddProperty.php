@@ -47,7 +47,7 @@ class AddProperty extends Model
 
     public function media()
     {
-        return $this->hasMany(PostPropertyMedia::class);
+        return $this->hasMany(PostPropertyMedia::class, 'property_id'); // Specify foreign key
     }
 
     public function property()

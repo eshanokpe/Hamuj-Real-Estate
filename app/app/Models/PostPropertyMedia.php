@@ -19,8 +19,8 @@ class PostPropertyMedia extends Model
     /**
      * Get the property that owns the media.
      */
-    public function property()
+     public function property()
     {
-        return $this->belongsTo(AddProperty::class);
+        return $this->belongsTo(AddProperty::class, 'property_id'); // Specify foreign key
     }
 }
