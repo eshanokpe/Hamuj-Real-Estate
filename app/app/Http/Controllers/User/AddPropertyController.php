@@ -28,33 +28,53 @@ class AddPropertyController extends Controller
     {
         try { 
             $user = Auth::user(); 
-            // Get all properties with their media
+            
+            // Get all properties with their media, user, and reviews
             $properties = AddProperty::with(['user', 'reviews.user', 'media'])
                 ->orderBy('created_at', 'desc')
                 ->get();
                 
+            // Get user-specific properties
             $userProperties = AddProperty::with(['user', 'media'])
                 ->where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
 
-            // Transform properties with media URLs
+            // Transform all properties with proper data types
             $transformedProperties = $properties->map(function ($property) {
                 // Transform media files
                 $media = $property->media->map(function ($mediaItem) {
                     return [
-                        'id' => $mediaItem->id,
+                        'id' => (int) $mediaItem->id,
                         'media_path' => $mediaItem->media_path,
                         'media_url' => asset('storage/' . $mediaItem->media_path),
                         'media_type' => $mediaItem->media_type,
                         'mime_type' => $mediaItem->mime_type,
                     ];
                 });
-               
+            
+                // Transform reviews
+                $reviews = $property->reviews->map(function ($review) {
+                    return [
+                        'id' => (int) $review->id,
+                        'rating' => (float) $review->rating,
+                        'comment' => $review->comment,
+                        'user' => $review->user ? [
+                            'id' => (int) $review->user->id,
+                            'name' => $review->user->full_name,
+                            'first_name' => $review->user->first_name,
+                            'last_name' => $review->user->last_name,
+                            'profile_image' => $review->user->profile_image,
+                        ] : null,
+                        'created_at' => $review->created_at->toISOString(),
+                        'updated_at' => $review->updated_at->toISOString(),
+                    ];
+                });
+
                 return [
-                    'id' => $property->id,
+                    'id' => (int) $property->id,
                     'user' => $property->user ? [
-                        'id' => $property->user->id,
+                        'id' => (int) $property->user->id,
                         'name' => $property->user->full_name,
                         'email' => $property->user->email,
                         'first_name' => $property->user->first_name,
@@ -67,26 +87,54 @@ class AddPropertyController extends Controller
                     'location' => $property->location,
                     'caption' => $property->caption,
                     'media' => $media,
-                    'reviews' => $property->reviews->map(function ($review) {
-                        return [
-                            'id' => $review->id,
-                            'rating' => (float) $review->rating,
-                            'comment' => $review->comment,
-                            'user' => $review->user ? [
-                                'id' => $review->user->id,
-                                'name' => $review->user->full_name,
-                                'first_name' => $review->user->first_name,
-                                'last_name' => $review->user->last_name,
-                                'profile_image' => $review->user->profile_image,
-                            ] : null,
-                            'created_at' => $review->created_at->toISOString(),
-                            'updated_at' => $review->updated_at->toISOString(),
-                        ];
-                    }),
+                    'reviews' => $reviews,
                     'average_rating' => (float) $property->reviews->avg('rating') ?: 0.0,
-                    'reviews_count' => $property->reviews->count(),
+                    'reviews_count' => (int) $property->reviews->count(),
                     'created_at' => $property->created_at->toISOString(),
                     'updated_at' => $property->updated_at->toISOString(),
+                ];
+            });
+            
+            // Transform user properties with consistent data types
+            $transformedUserProperties = $userProperties->map(function ($property) {
+                // Transform media files
+                $media = $property->media->map(function ($mediaItem) {
+                    return [
+                        'id' => (int) $mediaItem->id,
+                        'property_id' => (int) $mediaItem->property_id,
+                        'media_path' => $mediaItem->media_path,
+                        'media_url' => asset('storage/' . $mediaItem->media_path),
+                        'media_type' => $mediaItem->media_type,
+                        'mime_type' => $mediaItem->mime_type,
+                        'created_at' => $mediaItem->created_at->toISOString(),
+                        'updated_at' => $mediaItem->updated_at->toISOString(),
+                    ];
+                });
+                
+                return [
+                    'id' => (int) $property->id,
+                    'user_id' => (int) $property->user_id,
+                    'title' => $property->title,
+                    'description' => $property->description,
+                    'price' => (float) $property->price,
+                    'location' => $property->location,
+                    'caption' => $property->caption,
+                    'media_path' => $property->media_path,
+                    'media_type' => $property->media_type,
+                    'mime_type' => $property->mime_type,
+                    'is_favorite' => (bool) $property->is_favorite,
+                    'favorite_count' => (int) $property->favorite_count,
+                    'created_at' => $property->created_at->toISOString(),
+                    'updated_at' => $property->updated_at->toISOString(),
+                    'user' => $property->user ? [
+                        'id' => (int) $property->user->id,
+                        'first_name' => $property->user->first_name,
+                        'last_name' => $property->user->last_name,
+                        'email' => $property->user->email,
+                        'is_admin' => (bool) $property->user->is_admin,
+                        'profile_image' => $property->user->profile_image,
+                    ] : null,
+                    'media' => $media,
                 ];
             });
             
@@ -94,11 +142,12 @@ class AddPropertyController extends Controller
                 'success' => true,
                 'message' => 'Properties retrieved successfully',
                 'data' => $transformedProperties,
-                'user_properties' => $userProperties,
+                'user_properties' => $transformedUserProperties,
             ], 200);
             
         } catch (\Exception $e) {
             \Log::error('Error fetching properties: ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
             
             return response()->json([
                 'success' => false,
