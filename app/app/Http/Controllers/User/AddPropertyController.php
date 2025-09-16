@@ -139,10 +139,6 @@ class AddPropertyController extends Controller
             'price' => $request->price,
             'location' => $request->location,
             'caption' => 'caption',
-            // Remove these fields since we're using a separate media table
-            'media_path' => null,
-            'media_type' => null,
-            'mime_type' => null,
         ]);
 
         // Handle multiple file uploads
