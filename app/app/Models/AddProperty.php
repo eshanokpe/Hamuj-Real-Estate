@@ -45,7 +45,7 @@ class AddProperty extends Model
         return $this->hasMany(Review::class, 'property_id');
     }
 
-    public function media()
+   public function media()
     {
         return $this->hasMany(PostPropertyMedia::class, 'property_id'); // Specify foreign key
     }
@@ -54,7 +54,7 @@ class AddProperty extends Model
     {
         return $this->belongsTo(AddProperty::class);
     }
-
+    
     /**
      * Get the full URL for the media file
      */
