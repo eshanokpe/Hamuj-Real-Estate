@@ -9,7 +9,6 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\PropertyController;
 use App\Http\Controllers\User\AddPropertyController;
-use App\Http\Controllers\Admin\AddPropertyController  as APIAddPropertyController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\NotificationController; 
 use App\Http\Controllers\User\TransactionController;
@@ -174,7 +173,7 @@ Route::middleware('auth:sanctum')->group(function () {
     }); 
 
     Route::prefix('add_properties')->group(function () {
-        Route::get('property/type', [APIAddPropertyController::class, 'propertyType']); 
+        Route::get('property/type', [AddPropertyController::class, 'propertyType']); 
         Route::get('/get', [AddPropertyController::class, 'index']);
         Route::get('/{id}', [AddPropertyController::class, 'show']);
         Route::post('/upload', [AddPropertyController::class, 'upload']); 

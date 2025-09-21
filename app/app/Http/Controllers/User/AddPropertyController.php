@@ -9,6 +9,7 @@ use Log;
 use DB;
 use Illuminate\Http\JsonResponse;
 use App\Models\PostPropertyMedia;
+use App\Models\PropertyType;
 use App\Models\AddProperty;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
@@ -25,7 +26,7 @@ class AddPropertyController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request): JsonResponse
-    {
+    { 
         try { 
             $user = Auth::user(); 
             
@@ -505,6 +506,36 @@ class AddPropertyController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to get favorite status: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function propertyType(Request $request)
+    {
+        try {
+            $propertyTypes = PropertyType::all();
+            
+            if ($propertyTypes->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No property types found',
+                    'data' => []
+                ], 404);
+            }
+
+            if ($request->ajax() || $request->is('api/*')) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Property Types fetched successfully',
+                    'data' => $propertyTypes
+                ], 200);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error fetching property types: ' . $e->getMessage(),
+                'data' => []
             ], 500);
         }
     }
