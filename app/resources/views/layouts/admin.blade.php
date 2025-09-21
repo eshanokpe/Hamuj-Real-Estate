@@ -13,7 +13,7 @@
     <!-- Scripts -->
     @viteReactRefresh
     @vite(['resources/js/app.jsx'])
-    <!-- App css --> 
+    <!-- App css -->  
     <link href="{{ asset('admin/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admin/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admin/css/app.min.css')}}" rel="stylesheet" type="text/css" />

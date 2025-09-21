@@ -11,7 +11,7 @@
                 <img src="{{ asset('assets/img/logo/nav-log.png')}}" alt="logo-large" class="logo-lg logo-dark">
             </span> --}}
         </a> 
-    </div> 
+    </div>  
     <div class="sidebar-user-pro media border-end">                    
         <div class="position-relative mx-auto">
             <img src="{{ asset($contactDetials->favicon) }}" alt="user" class="rounded-circle thumb-md">
@@ -66,6 +66,20 @@
                             <i class="ti ti-brand-asana menu-icon"></i>
                             <span>Properties</span>
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sidebarElements" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="sidebarElements">
+                            <i class="ti ti-settings menu-icon"></i>
+                        <span>Add Properties</span>
+                        </a>
+                        <div class="collapse " id="sidebarElements">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('admin.property.type.index')}}">Property Types</a>
+                                </li>
+                            </ul><!--end nav-->
+                        </div><!--end sidebarElements-->
                     </li>
 
                     <li class="nav-item">

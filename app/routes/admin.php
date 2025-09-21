@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\VisionMissionController;
 use App\Http\Controllers\Admin\SociallinkController;
 use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\PropertyHistoryController;
+use App\Http\Controllers\Admin\AddPropertyController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 use Ilmedova\Chattle\app\Http\Controllers\Chat\AdminController as AdminChatController;
 
@@ -75,6 +76,16 @@ Route::prefix('admin')->group(function () {
 
         //Property
         Route::name('admin.')->group(function () {
+            Route::get('property/type', [AddPropertyController::class, 'propertyType'])->name('property.type.index');
+            Route::get('property/type/create', [AddPropertyController::class, 'creatPropertyType'])->name('property.createPropertyType');
+            Route::post('property/type/store', [AddPropertyController::class, 'storePropertyType'])->name('property.type.store');
+            Route::get('property/type/{id}/edit', [AddPropertyController::class, 'editPropertyType'])->name('property.type.edit');
+            Route::put('property/type/{id}/update', [AddPropertyController::class, 'updatePropertyType'])->name('property.type.update');
+            Route::delete('property/type/{id}/destroy', [AddPropertyController::class, 'destroyPropertyType'])->name('property.type.destroy');
+        });
+
+        Route::name('admin.')->group(function () {
+            
             Route::resource('properties', AdminPropertyController::class);
             Route::get('properties/{id}/evaluate', [AdminPropertyController::class, 'evaluate'])
             ->name('properties.evaluate');
