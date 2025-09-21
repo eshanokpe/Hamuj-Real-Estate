@@ -15,7 +15,6 @@ class AddPropertyController extends Controller
     {
         $propertyTypes = PropertyType::all();
 
-        // If request is expecting JSON (e.g. from mobile app / API)
         if ($request->wantsJson()) {
             return response()->json([
                 'status' => true,
@@ -24,7 +23,6 @@ class AddPropertyController extends Controller
             ], 200);
         }
 
-        // Default: return Blade view for web
         return view('admin.home.addProperty.propertyType.index', compact('propertyTypes'));
     }
 
