@@ -13,17 +13,34 @@ class AddPropertyController extends Controller
      
     public function propertyType(Request $request)
     {
-        $propertyTypes = PropertyType::all();
+        try {
+            $propertyTypes = PropertyType::all();
+            
+            if ($propertyTypes->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No property types found',
+                    'data' => []
+                ], 404);
+            }
 
-        if ($request->ajax() || $request->is('api/*')) {
+            if ($request->ajax() || $request->is('api/*')) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Property Types fetched successfully',
+                    'data' => $propertyTypes
+                ], 200);
+            }
+
+            return view('admin.home.addProperty.propertyType.index', compact('propertyTypes'));
+            
+        } catch (\Exception $e) {
             return response()->json([
-                'status' => true,
-                'message' => 'Property Types fetched successfully',
-                'data' => $propertyTypes
-            ], 200);
+                'status' => false,
+                'message' => 'Error fetching property types: ' . $e->getMessage(),
+                'data' => []
+            ], 500);
         }
-
-        return view('admin.home.addProperty.propertyType.index', compact('propertyTypes'));
     }
 
 
