@@ -15,7 +15,7 @@ class AddPropertyController extends Controller
     {
         $propertyTypes = PropertyType::all();
 
-        if ($request->wantsJson()) {
+        if ($request->ajax() || $request->is('api/*')) {
             return response()->json([
                 'status' => true,
                 'message' => 'Property Types fetched successfully',
