@@ -24,7 +24,9 @@ class AddProperty extends Model
         'media_type',
         'mime_type',
         'is_favorite',
-        'favorite_count' 
+        'favorite_count',
+        'property_type_id', 
+        'property_subtitle',  
     ];
 
     protected $casts = [

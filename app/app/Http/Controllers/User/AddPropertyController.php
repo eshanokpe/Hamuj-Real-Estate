@@ -169,7 +169,9 @@ class AddPropertyController extends Controller
             'price' => 'required|numeric|min:0',
             'location' => 'required|string|max:255',
             'media' => 'required|array',
-            'media.*' => 'file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240'
+            'media.*' => 'file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240',
+            'property_type_id' => 'required|exists:property_types,id',
+            'property_subtitle' => 'nullable|string|max:255',
         ]);
         
         $user = auth()->user();
@@ -190,6 +192,8 @@ class AddPropertyController extends Controller
                 'price' => $request->price,
                 'location' => $request->location,
                 'caption' => 'caption',
+                'property_type_id' => $request->property_type_id, 
+                'property_subtitle' => $request->property_subtitle, 
             ]);
 
             // Handle multiple file uploads
@@ -206,7 +210,7 @@ class AddPropertyController extends Controller
                         'property_id' => $property->id,
                         'media_path' => $filePath,
                         'media_type' => $mediaType,
-                        'mime_type' => $mimeType
+                        'mime_type' => $mimeType,
                     ]);
                 }
             }
