@@ -47,9 +47,15 @@ class AddProperty extends Model
         return $this->hasMany(Review::class, 'property_id');
     }
 
-   public function media()
+    public function media()
     {
         return $this->hasMany(PostPropertyMedia::class, 'property_id'); // Specify foreign key
+    }
+    
+
+    public function propertyType()
+    {
+        return $this->belongsTo(PropertyType::class, 'property_type_id');
     }
 
     public function property()

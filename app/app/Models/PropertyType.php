@@ -15,4 +15,9 @@ class PropertyType extends Model
     protected $casts = [
         'subtitles' => 'array',
     ];
+
+    public function properties()
+    {
+        return $this->hasMany(AddProperty::class, 'property_type_id');
+    }
 }

@@ -30,13 +30,13 @@ class AddPropertyController extends Controller
         try { 
             $user = Auth::user(); 
             
-            // Get all properties with their media, user, and reviews
-            $properties = AddProperty::with(['user', 'reviews.user', 'media'])
+            // Get all properties with their media, user, reviews, and property type
+            $properties = AddProperty::with(['user', 'reviews.user', 'media', 'propertyType']) // Added propertyType
                 ->orderBy('created_at', 'desc')
                 ->get();
                 
             // Get user-specific properties
-            $userProperties = AddProperty::with(['user', 'media'])
+            $userProperties = AddProperty::with(['user', 'media', 'propertyType']) // Added propertyType
                 ->where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -87,6 +87,13 @@ class AddPropertyController extends Controller
                     'price' => (float) $property->price,
                     'location' => $property->location,
                     'caption' => $property->caption,
+                    'property_type_id' => (int) $property->property_type_id, // Add this
+                    'property_subtitle' => $property->property_subtitle, // Add this
+                    'property_type' => $property->propertyType ? [ // Add property type details
+                        'id' => (int) $property->propertyType->id,
+                        'title' => $property->propertyType->title,
+                        'subtitles' => $property->propertyType->subtitles,
+                    ] : null,
                     'media' => $media,
                     'reviews' => $reviews,
                     'average_rating' => (float) $property->reviews->avg('rating') ?: 0.0,
@@ -120,6 +127,13 @@ class AddPropertyController extends Controller
                     'price' => (float) $property->price,
                     'location' => $property->location,
                     'caption' => $property->caption,
+                    'property_type_id' => (int) $property->property_type_id, // Add this
+                    'property_subtitle' => $property->property_subtitle, // Add this
+                    'property_type' => $property->propertyType ? [ // Add property type details
+                        'id' => (int) $property->propertyType->id,
+                        'title' => $property->propertyType->title,
+                        'subtitles' => $property->propertyType->subtitles,
+                    ] : null,
                     'media_path' => $property->media_path,
                     'media_type' => $property->media_type,
                     'mime_type' => $property->mime_type,
