@@ -514,7 +514,7 @@ class AddPropertyController extends Controller
     {
         try {
             $propertyTypes = PropertyType::all();
-            
+            \Log::error('propertyTypes: ' . $propertyTypes);
             if ($propertyTypes->isEmpty()) {
                 return response()->json([
                     'status' => false,
