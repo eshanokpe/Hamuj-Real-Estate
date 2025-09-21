@@ -523,13 +523,12 @@ class AddPropertyController extends Controller
                 ], 404);
             }
 
-            if ($request->ajax() || $request->is('api/*')) {
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Property Types fetched successfully',
-                    'data' => $propertyTypes
-                ], 200);
-            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Property Types fetched successfully',
+                'data' => $propertyTypes
+            ], 200);
+            
 
         } catch (\Exception $e) {
             return response()->json([
