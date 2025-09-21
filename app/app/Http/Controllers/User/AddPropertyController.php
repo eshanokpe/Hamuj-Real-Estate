@@ -514,8 +514,13 @@ class AddPropertyController extends Controller
     {
         try {
             $propertyTypes = PropertyType::all();
-            \Log::error('propertyTypes: ' . $propertyTypes);
+            
+            // Proper logging to see the actual data
+            \Log::info('Property Types Count: ' . $propertyTypes->count());
+            \Log::info('Property Types Data: ' . json_encode($propertyTypes->toArray()));
+            
             if ($propertyTypes->isEmpty()) {
+                \Log::warning('No property types found in database');
                 return response()->json([
                     'status' => false,
                     'message' => 'No property types found',
@@ -528,9 +533,9 @@ class AddPropertyController extends Controller
                 'message' => 'Property Types fetched successfully',
                 'data' => $propertyTypes
             ], 200);
-            
 
         } catch (\Exception $e) {
+            \Log::error('Error fetching property types: ' . $e->getMessage());
             return response()->json([
                 'status' => false,
                 'message' => 'Error fetching property types: ' . $e->getMessage(),
