@@ -24,7 +24,8 @@ const BuyProperties = () => {
     let url = window.location.origin
     
     // State management
-    const [quantity, setQuantity] = useState(0);
+    const [inputAmount, setInputAmount] = useState('');
+    const [calculatedLandSize, setCalculatedLandSize] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [applyCommission, setApplyCommission] = useState(false);
     const [property, setProperty] = useState(null);
@@ -36,7 +37,10 @@ const BuyProperties = () => {
     const [paymentMethod, setPaymentMethod] = useState(null);
     const [transactionPin, setTransactionPin] = useState('');
     const [paymentProcessing, setPaymentProcessing] = useState(false);
+    const [amountError, setAmountError] = useState('');
     const revolutCheckoutRef = useRef(null);
+
+    const MINIMUM_AMOUNT = 1000;
 
     // Fetch property details
     useEffect(() => {
@@ -67,46 +71,76 @@ const BuyProperties = () => {
         fetchProperty();
     }, [slug]);
 
-    // Calculate total price and remaining size
+    // Calculate land size and total price based on input amount
     useEffect(() => {
         if (!property) return;
         
         const pricePerSqm = property.valuationSummary?.current_value_sum || property.price;
-        const calculatedTotal = pricePerSqm * quantity;
-        let finalTotal = calculatedTotal;
+        const amount = parseFloat(inputAmount) || 0;
+        
+        // Validate minimum amount
+        if (amount > 0 && amount < MINIMUM_AMOUNT) {
+            setAmountError(`Minimum amount is ${formatCurrency(MINIMUM_AMOUNT)}`);
+        } else {
+            setAmountError('');
+        }
+        
+        if (amount <= 0) {
+            setCalculatedLandSize(0);
+            setTotalPrice(0);
+            return;
+        }
+        
+        // Calculate land size: amount / price per sqm
+        const landSize = amount / pricePerSqm;
+        setCalculatedLandSize(landSize);
+        
+        // Calculate total price (with commission if applied)
+        let finalTotal = amount;
         
         if (applyCommission && user?.commission_balance) {
-            finalTotal = Math.max(calculatedTotal - user.commission_balance, 0);
+            finalTotal = Math.max(amount - user.commission_balance, 0);
         }
         
         setTotalPrice(finalTotal);
-        setRemainingSize(Math.max(property.available_size - quantity, 0));
-    }, [quantity, applyCommission, property, user]);
+        setRemainingSize(Math.max(property.available_size - landSize, 0));
+    }, [inputAmount, applyCommission, property, user]);
 
-    // Quantity handlers
-    const handleIncrement = () => {
-        if (quantity < property?.available_size) {
-            setQuantity(prev => prev + 1);
-        } else {
-            alert(`You cannot exceed the available size of ${property?.available_size} per/sqm.`);
+    // Amount handlers
+    const handleAmountChange = (e) => {
+        const value = e.target.value;
+        
+        // Allow empty string or numeric values
+        if (value === '' || /^\d*\.?\d*$/.test(value)) {
+            setInputAmount(value);
         }
     };
 
-    const handleDecrement = () => {
-        if (quantity > 0) {
-            setQuantity(prev => prev - 1);
+    // Handle input focus to clear the placeholder
+    const handleInputFocus = (e) => {
+        if (e.target.value === '0') {
+            setInputAmount('');
         }
     };
 
-    const handleQuantityChange = (e) => {
-        const value = parseInt(e.target.value) || 0;
-        if (value < 0) {
-            setQuantity(0);
-        } else if (property && value > property.available_size) {
-            alert(`You cannot exceed the available size of ${property.available_size} per/sqm.`);
-            setQuantity(property.available_size);
+    // Handle input blur to validate minimum amount
+    const handleInputBlur = (e) => {
+        const amount = parseFloat(inputAmount) || 0;
+        
+        if (inputAmount === '') {
+            setInputAmount('0');
+        } else if (amount > 0 && amount < MINIMUM_AMOUNT) {
+            setAmountError(`Minimum amount is ${formatCurrency(MINIMUM_AMOUNT)}`);
         } else {
-            setQuantity(value);
+            setAmountError('');
+        }
+    };
+
+    // Quick amount buttons
+    const setQuickAmount = (amount) => {
+        if (amount >= MINIMUM_AMOUNT) {
+            setInputAmount(amount.toString());
+            setAmountError('');
         }
     };
 
@@ -119,13 +153,31 @@ const BuyProperties = () => {
         }).format(amount || 0);
     };
 
+    // Format land size (square meters)
+    const formatLandSize = (size) => {
+        return `${size.toFixed(4)} SQM`;
+    };
+
     // Payment handlers
     const handleMakePayment = (e) => {
         e.preventDefault();
-        if (quantity <= 0) { 
-            alert('Please select a quantity greater than 0 to proceed.');
+        const amount = parseFloat(inputAmount) || 0;
+        
+        if (amount < MINIMUM_AMOUNT) {
+            alert(`Minimum amount required is ${formatCurrency(MINIMUM_AMOUNT)}`);
             return;
         }
+        
+        if (amount <= 0 || calculatedLandSize <= 0) { 
+            alert('Please enter a valid amount to proceed.');
+            return;
+        }
+        
+        if (calculatedLandSize > property.available_size) {
+            alert(`The calculated land size (${formatLandSize(calculatedLandSize)}) exceeds the available size of ${property.available_size} SQM. Please enter a smaller amount.`);
+            return;
+        }
+        
         setShowPaymentModal(true);
     };
 
@@ -135,9 +187,6 @@ const BuyProperties = () => {
 
     const initializeRevolutPayment = async (publicId) => {
         try {
-            // RevolutCheckout("pk_Gjk5dYEZjkHeJqgrzfMeSYhy2deEQkD0r1zhrGLGAKuurOyV", "sandbox").then((instance) => {
-            // // work with instance
-            // })
             const revolutCheckout = await RevolutCheckout(publicId, {
                 mode: process.env.REACT_APP_REVOLUT_MODE || 'sandbox',
                 onSuccess: () => {
@@ -163,6 +212,12 @@ const BuyProperties = () => {
     const handleConfirmPayment = async (e) => {
         e.preventDefault();
         
+        const amount = parseFloat(inputAmount) || 0;
+        if (amount < MINIMUM_AMOUNT) {
+            alert(`Minimum amount required is ${formatCurrency(MINIMUM_AMOUNT)}`);
+            return;
+        }
+        
         if (!transactionPin || transactionPin.length !== 4 || !/^\d{4}$/.test(transactionPin)) {
             alert('Please enter a valid 4-digit PIN.');
             return;
@@ -174,7 +229,7 @@ const BuyProperties = () => {
             const response = await axios.post('/user/payment/initiate', {
                 remaining_size: remainingSize,
                 property_slug: property.slug,
-                quantity,
+                quantity: calculatedLandSize,
                 total_price: totalPrice,
                 commission_applied_amount: applyCommission ? user.commission_balance : 0,
                 transaction_pin: transactionPin,
@@ -205,6 +260,10 @@ const BuyProperties = () => {
     if (error) return <div className="alert alert-danger">{error}</div>;
     if (!property) return <div className="alert alert-warning">No property found</div>;
 
+    const pricePerSqm = property.valuationSummary?.current_value_sum || property.price;
+    const amount = parseFloat(inputAmount) || 0;
+    const isAmountValid = amount >= MINIMUM_AMOUNT;
+
     return (
         <div className="dashboard__page--wrapper">
             <div className="page__body--wrapper" id="dashbody__page--body__wrapper">
@@ -221,11 +280,12 @@ const BuyProperties = () => {
                                     <thead>
                                         <tr>
                                             <th>Product Image</th>
-                                            <th>Price</th>
+                                            <th>Price per SQM</th>
                                             <th>Actual Land Size</th>
                                             <th>Available Land Size</th>
-                                            <th>Select Land Size</th>
-                                            <th>Total</th>
+                                            <th>Enter Amount (₦)</th>
+                                            <th>Calculated Land Size</th>
+                                            <th>Total to Pay</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -271,7 +331,7 @@ const BuyProperties = () => {
                                             </td>
                                             <td>
                                                 <span className="item-price">
-                                                    {formatCurrency(property.valuationSummary?.current_value_sum || property.price)} per/sqm
+                                                    {formatCurrency(pricePerSqm)} per/sqm
                                                 </span>
                                             </td>
                                             <td><span>{property.size} SQM</span></td>
@@ -279,40 +339,91 @@ const BuyProperties = () => {
                                                 {remainingSize} SQM
                                             </td>
                                             <td>
-                                                <div className="d-flex align-items-center">
-                                                    <button 
-                                                        className="btn btn-outline-secondary btn-sm decrement-btn" 
-                                                        style={{ padding: '5px 10px', background: '#47008E', color: '#fff', fontSize: '18px' }}
-                                                        onClick={handleDecrement}
-                                                    >
-                                                        -
-                                                    </button>
+                                                <div className="d-flex flex-column gap-2">
                                                     <input 
                                                         type="number" 
-                                                        value={quantity}
-                                                        onChange={handleQuantityChange}
-                                                        className="quantity-input text-center mx-2" 
-                                                        style={{ width: '50px' }} 
-                                                        min="0"
+                                                        value={inputAmount}
+                                                        onChange={handleAmountChange}
+                                                        onFocus={handleInputFocus}
+                                                        onBlur={handleInputBlur}
+                                                        className={`form-control ${amountError ? 'is-invalid' : ''}`}
+                                                        placeholder={`Minimum ${formatCurrency(MINIMUM_AMOUNT)}`}
+                                                        min={MINIMUM_AMOUNT}
+                                                        step="100"
                                                     />
-                                                    <button 
-                                                        className="btn btn-outline-secondary btn-sm increment-btn" 
-                                                        style={{ padding: '5px 10px', background: '#47008E', color: '#fff', fontSize: '18px' }}
-                                                        onClick={handleIncrement}
-                                                    >
-                                                        +
-                                                    </button>
+                                                    {amountError && (
+                                                        <div className="text-danger small">{amountError}</div>
+                                                    )}
+                                                    <div className="d-flex flex-wrap gap-1">
+                                                        <button 
+                                                            className="btn btn-outline-secondary btn-sm"
+                                                            onClick={() => setQuickAmount(1000)}
+                                                        >
+                                                            ₦1,000
+                                                        </button>
+                                                        <button 
+                                                            className="btn btn-outline-secondary btn-sm"
+                                                            onClick={() => setQuickAmount(5000)}
+                                                        >
+                                                            ₦5,000
+                                                        </button>
+                                                        <button 
+                                                            className="btn btn-outline-secondary btn-sm"
+                                                            onClick={() => setQuickAmount(10000)}
+                                                        >
+                                                            ₦10,000
+                                                        </button>
+                                                        <button 
+                                                            className="btn btn-outline-secondary btn-sm"
+                                                            onClick={() => setQuickAmount(50000)}
+                                                        >
+                                                            ₦50,000
+                                                        </button>
+                                                    </div>
+                                                    <div className="text-muted small">
+                                                        Minimum amount: {formatCurrency(MINIMUM_AMOUNT)}
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td>
-                                                <span className="total-price" style={{ color: '#47008E' }}>
+                                                <span className="calculated-land-size" style={{ color: '#47008E', fontWeight: 'bold' }}>
+                                                    {formatLandSize(calculatedLandSize)}
+                                                </span>
+                                                {amount > 0 && isAmountValid && (
+                                                    <div className="text-muted small mt-1">
+                                                        Formula: {amount} / {pricePerSqm} = {calculatedLandSize.toFixed(4)}
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td>
+                                                <span className="total-price" style={{ color: '#47008E', fontWeight: 'bold' }}>
                                                     {formatCurrency(totalPrice)}
                                                 </span>
+                                                {applyCommission && user?.commission_balance && (
+                                                    <div className="text-success small mt-1">
+                                                        Commission applied: -{formatCurrency(user.commission_balance)}
+                                                    </div>
+                                                )}
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+
+                        {/* Commission Toggle */}
+                        <div className="form-check mt-3">
+                            <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id="applyCommission"
+                                checked={applyCommission}
+                                onChange={(e) => setApplyCommission(e.target.checked)}
+                                disabled={!user?.commission_balance}
+                            />
+                            <label className="form-check-label" htmlFor="applyCommission">
+                                Apply commission balance ({formatCurrency(user?.commission_balance || 0)})
+                            </label>
                         </div>
 
                         <div className="cart__footer d-flex justify-content-between align-items-center mt-4">
@@ -323,6 +434,7 @@ const BuyProperties = () => {
                                 <button 
                                     className="solid__btn" 
                                     onClick={handleMakePayment}
+                                    disabled={!isAmountValid || calculatedLandSize <= 0 || calculatedLandSize > property.available_size || amountError}
                                 >
                                     Make Payment
                                 </button>
@@ -413,6 +525,8 @@ const BuyProperties = () => {
         </div>
     );
 };
+
+
 
 // Index Page Component
 const IndexPage = () => {
