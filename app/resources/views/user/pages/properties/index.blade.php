@@ -11,7 +11,7 @@
         <main class="main__content_wrapper">
             <!-- dashboard container -->
             <div class="dashboard__container dashboard__reviews--container">
-                <div class="reviews__heading mb-30">
+                <div class="reviews__heading mb-30"> 
                     <h2 class="reviews__heading--title">Buy Properties</h2>
                     <p class="reviews__heading--desc">We are glad to see you again!</p>
                 </div>
@@ -35,7 +35,7 @@
                                         <td>  
                                             <div class="properties__author d-flex align-items-center">
                                                 <div class="properties__author--thumb">
-                                                    <img src="{{ asset('app/public/' . $item->property_images) }}" alt="img" style="width: 90px; height:120px; max-width:100%; max-height:100%; object-fit:cover"> 
+                                                    <img src="{{ asset($item->property_images) }}" alt="img" style="width: 90px; height:120px; max-width:100%; max-height:100%; object-fit:cover"> 
                                                 </div>
                                                 <div class="reviews__author--text">
                                                     <h3 class="reviews__author--title">{{$item->name}}</h3>
