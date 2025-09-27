@@ -354,32 +354,7 @@ const BuyProperties = () => {
                                                     {amountError && (
                                                         <div className="text-danger small">{amountError}</div>
                                                     )}
-                                                    <div className="d-flex flex-wrap gap-1">
-                                                        <button 
-                                                            className="btn btn-outline-secondary btn-sm"
-                                                            onClick={() => setQuickAmount(1000)}
-                                                        >
-                                                            ₦1,000
-                                                        </button>
-                                                        <button 
-                                                            className="btn btn-outline-secondary btn-sm"
-                                                            onClick={() => setQuickAmount(5000)}
-                                                        >
-                                                            ₦5,000
-                                                        </button>
-                                                        <button 
-                                                            className="btn btn-outline-secondary btn-sm"
-                                                            onClick={() => setQuickAmount(10000)}
-                                                        >
-                                                            ₦10,000
-                                                        </button>
-                                                        <button 
-                                                            className="btn btn-outline-secondary btn-sm"
-                                                            onClick={() => setQuickAmount(50000)}
-                                                        >
-                                                            ₦50,000
-                                                        </button>
-                                                    </div>
+                                                    
                                                     <div className="text-muted small">
                                                         Minimum amount: {formatCurrency(MINIMUM_AMOUNT)}
                                                     </div>
@@ -389,11 +364,11 @@ const BuyProperties = () => {
                                                 <span className="calculated-land-size" style={{ color: '#47008E', fontWeight: 'bold' }}>
                                                     {formatLandSize(calculatedLandSize)}
                                                 </span>
-                                                {amount > 0 && isAmountValid && (
+                                                {/* {amount > 0 && isAmountValid && (
                                                     <div className="text-muted small mt-1">
                                                         Formula: {amount} / {pricePerSqm} = {calculatedLandSize.toFixed(4)}
                                                     </div>
-                                                )}
+                                                )} */}
                                             </td>
                                             <td>
                                                 <span className="total-price" style={{ color: '#47008E', fontWeight: 'bold' }}>
