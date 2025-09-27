@@ -346,7 +346,7 @@ const BuyProperties = () => {
                                                         onChange={handleAmountChange}
                                                         onFocus={handleInputFocus}
                                                         onBlur={handleInputBlur}
-                                                        className={`form-control ${amountError ? 'is-invalid' : ''}`}
+                                                        className={`${amountError ? 'is-invalid' : ''}`}
                                                         placeholder={`Minimum ${formatCurrency(MINIMUM_AMOUNT)}`}
                                                         min={MINIMUM_AMOUNT}
                                                         step="100"
