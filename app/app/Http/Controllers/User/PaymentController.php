@@ -6,7 +6,7 @@ use Auth;
 use Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Str; 
 use App\Models\Buy;  
 use App\Models\Wallet;
 use App\Models\Property;  
@@ -31,7 +31,8 @@ class PaymentController extends Controller
             'quantity' => 'required',
             'total_price' => 'required|numeric|min:1',
             'commission_applied_amount' => 'required|numeric|min:0', 
-            'transaction_pin' => 'required|digits:4' // Make PIN mandatory
+            'transaction_pin' => 'required|digits:4',
+            'payment_method' => 'required|string|in:wallet,card',
         ]); 
         $user = Auth::user();
         $commissionToApply = 0.0; 
@@ -110,18 +111,21 @@ class PaymentController extends Controller
         $transaction = Transaction::create([
             'user_id' => $user->id,
             'email' => $user->email,
+            'transaction_type' => 'wallet',
             'property_id' => $property->id,
             'property_name' => $property->name,
             'amount' => $finalAmountPayable,
             'reference' => $reference,
-            'status' => 'completed',
+            'status' => 'completed', 
             'source' => $request->is('api/*') ? 'mobile' : 'web',
-            'payment_method' => 'buy_property',
+            'payment_method' => 'wallet',
             'metadata' => [
                 'property_id' => $property->id,
                 'property_name' => $property->name,
                 'remaining_size' => $remainingSize,
                 'selected_size_land' => $selectedSizeLand,
+                'payment_method' => 'wallet',
+                'property_mode' => 'buy_property',
             ],
         ]);
     

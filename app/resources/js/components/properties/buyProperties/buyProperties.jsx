@@ -190,7 +190,8 @@ const BuyProperties = () => {
             const revolutCheckout = await RevolutCheckout(publicId, {
                 mode: process.env.REACT_APP_REVOLUT_MODE || 'sandbox',
                 onSuccess: () => {
-                    navigate('/user/cart/buy/success');
+                    // navigate('/user/cart/buy/success');
+                    window.location.href = '/user/cart/buy/success';
                 },
                 onError: (error) => {
                     console.error('Payment error:', error);
@@ -236,10 +237,13 @@ const BuyProperties = () => {
                 commission_check: applyCommission ? 1 : 0,
                 payment_method: paymentMethod,
             });
-
+            console.log('Payment response:', response.data);
             if (response.data.success) {
+                // navigate('/user/cart/buy/success');
+                window.location.href = '/user/dashboard';
                 if (paymentMethod === 'wallet') {
                     navigate('/user/cart/buy/success');
+                    window.location.href = '/user/cart/buy/success';
                 } else if (paymentMethod === 'card' && response.data.public_id) {
                     await initializeRevolutPayment(response.data.public_id);
                 }
@@ -422,7 +426,7 @@ const BuyProperties = () => {
                                 <div className="modal-dialog modal-dialog-centered">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <h5 className="modal-title">Select Payment Method</h5>
+                                            <h4 className="">Select Payment Method</h4>
                                             <button 
                                                 type="button" 
                                                 className="btn-close" 
@@ -435,14 +439,14 @@ const BuyProperties = () => {
                                         <div className="modal-body">
                                             {!paymentMethod ? (
                                                 <div className="d-flex flex-column gap-3">
-                                                    <button 
+                                                    {/* <button 
                                                         className="btn btn-primary"
                                                         onClick={() => handlePaymentMethodSelect('card')}
                                                     >
                                                         Pay with Card
-                                                    </button>
+                                                    </button> */}
                                                     <button 
-                                                        className="btn btn-secondary"
+                                                        className="solid__btn add__property--btn w-100" 
                                                         onClick={() => handlePaymentMethodSelect('wallet')}
                                                     >
                                                         Pay with Wallet

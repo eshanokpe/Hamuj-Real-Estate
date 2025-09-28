@@ -254,7 +254,7 @@
                                     <h4 class="card-title">Buy Properties</h4>                      
                                 </div><!--end col-->
                                 <div class="col text-end">                      
-                                    <a href="{{ route('admin.properties.index') }}">View More</a>                      
+                                    <a href="{{ route('admin.buy.index') }}">View More</a>                      
                                 </div><!--end col-->
                             </div>  <!--end row-->                                  
                         </div><!--end card-header-->

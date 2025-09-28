@@ -5,7 +5,7 @@
 
  
 <div class="dashboard__page--wrapper">
-    <!-- Dashboard sidebar .\ -->
+    <!-- Dashboard sidebar .\ --> 
     <div class="page__body--wrapper" id="dashbody__page--body__wrapper">
         
         <main class="main__content_wrapper">

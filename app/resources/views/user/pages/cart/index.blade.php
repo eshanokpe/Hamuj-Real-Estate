@@ -1,6 +1,9 @@
 @extends('layouts.dashboard')
 
-@section('content')
+@section('content') 
+
 <div class="dashboard__page--wrapper" id="buyProperties">
      
 </div> 
+
+@endsection 
