@@ -56,7 +56,7 @@
                                 </td>
                               
                                 <td> 
-                                    <span class="properties__views">{{ $property->total_selected_size_land }} SQM</span>
+                                    <span class="properties__views">{{ number_format($property->total_selected_size_land, 4) }} SQM</span>
                                 </td>
                                 <td>
                                     <span class="status__btn pending2">

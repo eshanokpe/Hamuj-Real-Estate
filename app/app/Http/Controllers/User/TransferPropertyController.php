@@ -62,12 +62,36 @@ class TransferPropertyController extends Controller
         if(!Auth::user()){
             return redirect()->route('login');
         }
+        
+       
         $request->validate([
-            'remaining_size' => 'required|numeric|min:1',
-            'property_slug' => 'required',
-            'quantity' => 'required',
+            'remaining_size' => 'required|numeric|min:0',
+            'property_slug' => 'required|string',
+            'calculated_size' => 'required|numeric|min:0.0001', // Minimum 0.0001 SQM
+            'amount' => 'required|numeric|min:1000', // Minimum ₦1000
             'total_price' => 'required|numeric|min:1',
+        ], [
+            'remaining_size.required' => 'Remaining size is required',
+            'remaining_size.numeric' => 'Remaining size must be a number',
+            'remaining_size.min' => 'Remaining size cannot be negative',
+            
+            'property_slug.required' => 'Property slug is required',
+            'property_slug.string' => 'Property slug must be a string',
+            
+            'calculated_size.required' => 'Calculated land size is required',
+            'calculated_size.numeric' => 'Calculated land size must be a number',
+            'calculated_size.min' => 'Calculated land size must be at least 0.0001 SQM',
+            
+            'amount.required' => 'Amount is required',
+            'amount.numeric' => 'Amount must be a number',
+            'amount.min' => 'Minimum transfer amount is ₦1,000',
+            
+            'total_price.required' => 'Total price is required',
+            'total_price.numeric' => 'Total price must be a number',
+            'total_price.min' => 'Total price must be at least ₦1',
         ]);
+        // dd('coorect');
+        try {
         $user = Auth::user();
         $propertySlug  = $request->input('property_slug');
 
@@ -77,7 +101,7 @@ class TransferPropertyController extends Controller
             return back()->with('error', 'Property not found.');
         } 
         $reference = 'PRO-TRANSFER-REF-' . time() . '-' . strtoupper(Str::random(8));
-        $selectedSizeLand  = $request->input('quantity');
+        $selectedSizeLand  = $request->input('calculated_size');
         $remainingSize  = $request->input('remaining_size');
         $amount  = $request->input('total_price');
         $propertySlug = $request->input('property_slug');
@@ -110,7 +134,10 @@ class TransferPropertyController extends Controller
             ]);
         } 
 
-        return view('user.pages.properties.transfer.recipient', compact('data')); 
+            return view('user.pages.properties.transfer.recipient', compact('data')); 
+        } catch (\Exception $e) {
+            return back()->with('error', 'Transfer failed: ' . $e->getMessage());
+        }
     }
 
     public function verifyRecipient(Request $request){
