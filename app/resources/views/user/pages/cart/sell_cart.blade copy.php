@@ -50,8 +50,10 @@
                                     <td>
                                         <span>{{ $property->size }} SQM </span>
                                     </td>
-                                    <td class="available-size" data-initial-size="{{ $property->buys->sum('selected_size_land')}}">
-                                        {{ $property->buys->sum('selected_size_land')}} SQM
+                                    
+                                    <td class="available-size" data-initial-size="{{ number_format($property->buys->sum('selected_size_land'), 4) }}">
+                                      
+                                        {{ $property->buys->sum('selected_size_land') }} SQM
                                     </td> 
                                     <td>
                                         <div class="d-flex align-items-center">

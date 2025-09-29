@@ -51,30 +51,49 @@ class SellPropertyController extends Controller
         $request->validate([ 
             'remaining_size' => 'required',
             'property_slug' => 'required',
-            'quantity' => 'required',
+            'calculated_size' => 'required',
+            'amount' => 'required',
             'total_price' => 'required|numeric|min:1',
         ]);
+        
         $user = Auth::user();
-        $propertySlug  = $request->input('property_slug');
+        $propertySlug = $request->input('property_slug');
         $property = Property::where('slug', $propertySlug)->first();
+        
         // Check if the property exists
         if (!$property) {
             return back()->with('error', 'Property not found.');
         }
-       
+    
         // Generate a unique transaction reference
         $reference = 'SELLDOHREF-' . time() . '-' . strtoupper(Str::random(8));
 
-        $selectedSizeLand  = $request->input('quantity');
-        $remainingSize  = $request->input('remaining_size');
-        $amount  = $request->input('total_price');
+        $selectedSizeLand = $request->input('calculated_size');
+        $remainingSize = $request->input('remaining_size');
+        $amount = $request->input('total_price');
 
-        $propertyId  = $property->id;
-        $propertyName  =  $property->name;
+        $propertyId = $property->id;
+        $propertyName = $property->name;
         $propertyData = Property::where('id', $propertyId)->where('name', $propertyName)->first();
+        
+        // Get user's buy records for this property that still have available land
+        $userBuys = Buy::where('user_id', $user->id)
+            ->where('property_id', $propertyId)
+            ->where('remaining_size', '>', 0)
+            ->orderBy('created_at', 'asc') // Sell from oldest purchases first (FIFO)
+            ->get();
+
+        // Calculate total available land from user's buys
+        $totalAvailableLand = $userBuys->sum('remaining_size');
+        
+        // Check if user has enough land to sell
+        if ($totalAvailableLand < $selectedSizeLand) {
+            return back()->with('error', 'Insufficient land available for sale. You only have ' . $totalAvailableLand . ' SQM available.');
+        }
+
         // Prepare the data to send to Paystack
-       
         try {
+            // Create the sell record
             $sell = Sell::create([
                 'property_id' => $propertyData->id,
                 'property_name' => $propertyData->name,
@@ -85,10 +104,29 @@ class SellPropertyController extends Controller
                 'reference' => $reference,
                 'total_price' => $amount,
                 'status' => 'pending',
-            ]); 
+            ]);  
+            
+            // Deduct the sold land size from user's Buy records
+            $landToDeduct = $selectedSizeLand;
+            
+            foreach ($userBuys as $buy) {
+                if ($landToDeduct <= 0) break;
+                
+                $deductibleAmount = min($buy->selected_size_land, $landToDeduct);
+                
+                // Update the buy record
+                $buy->update([
+                    'selected_size_land' => $buy->selected_size_land - $deductibleAmount
+                ]);
+                
+                $landToDeduct -= $deductibleAmount;
+            }
+
             $contactDetials = ContactDetials::first();
+            
             // Notify the user
             $user->notify(new SellPropertyUserNotification($user, $propertyData, $sell, $contactDetials));
+            
             // Notify the admin (support email)
             Notification::route('mail', 'customersupport@dohmayn.com')
                 ->notify(new SellPropertyAdminNotification($user, $propertyData, $sell));
