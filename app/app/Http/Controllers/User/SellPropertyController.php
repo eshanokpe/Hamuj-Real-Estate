@@ -24,7 +24,7 @@ class SellPropertyController extends Controller
         $user = Auth::user();
        
         $data['sellProperty'] = Buy::select(
-            'property_id', 
+            'property_id',  
             DB::raw('SUM(selected_size_land) as total_selected_size_land'),
             DB::raw('MAX(created_at) as latest_created_at') 
         )

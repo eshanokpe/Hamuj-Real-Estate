@@ -34,8 +34,8 @@
                                 <td>
                                     <div class="properties__author d-flex align-items-center">
                                         <div class="properties__author--thumb">
-                                            <img src="{{ asset('app/public/' .$property->property->property_images) }}" alt="img" style="max-height: 100%; max-width:100%; width:70px; height:70px; object-fit:cover">
-                                        </div>
+                                            <img src="{{ asset( $property->property->property_images) }}" alt="img" style="max-height: 100%; max-width:100%; width:70px; height:70px; object-fit:cover">
+                                        </div> 
                                         <div class="reviews__author--text"> 
                                             <h3 class="reviews__author--title">{{$property->property->name}}</h3>
                                             <p class="reviews__author--subtitle">{{$property->property->location}}</p>

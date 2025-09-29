@@ -31,14 +31,14 @@
                                     return isset($item->total_selected_size_land) && is_numeric($item->total_selected_size_land) && $item->total_selected_size_land > 0;
                                 });
                             @endphp
-
-                            @forelse ($sellableProperties as $property)
+                          
+                            @forelse ($sellableProperties as $property) 
                             <tr>
                                 <td>
                                     <div class="properties__author d-flex align-items-center">
                                         <div class="properties__author--thumb flex-shrink-0 me-3"> {{-- Added margin --}}
                                             {{-- Use optional() helper and provide a default/placeholder image --}}
-                                            <img src="{{ asset('app/public/' .optional($property->property)->property_images ?? 'path/to/default-image.jpg') }}"
+                                            <img src="{{ asset(($property->property)->property_images ?? 'path/to/default-image.jpg') }}"
                                                  alt="{{ optional($property->property)->name ?? 'Property Image' }}"
                                                  style="width:70px; height:90px; object-fit:cover; border-radius: 4px;"> {{-- Consistent size & added radius --}}
                                         </div>
@@ -66,7 +66,7 @@
                                     </span>
                                 </td>
                                 <td class="text-nowrap align-middle fw-bold"> {{-- Align vertically, make bold --}}
-                                    <span class="properties__views">{{ number_format($property->total_selected_size_land, 0) }} SQM</span>
+                                    <span class="properties__views">{{ number_format($property->total_selected_size_land, 4) }} SQM</span>
                                 </td> 
                                 <td>
                                     <span class="status__btn pending2"> 
