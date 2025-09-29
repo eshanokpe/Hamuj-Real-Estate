@@ -882,7 +882,7 @@ class TransferPropertyController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
+            Log::warning("Error: {$e->getMessage()}");
             $statusCode = is_int($e->getCode()) && $e->getCode() >= 400 && $e->getCode() < 600 
                 ? $e->getCode() 
                 : 400;
