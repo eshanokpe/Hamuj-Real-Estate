@@ -540,24 +540,8 @@ class TransferPropertyController extends Controller
         $sendWallet = Wallet::where('user_id', $sender->id)->first();
         $recipientWallet =  Wallet::where('user_id', $recipient->id)->first();
        
-        // Ensure sender has enough balance
-        // if ($sendWallet->balance < ($amount / 100)) {
-        //     if ($request->wantsJson()) {
-        //         return response()->json(['error' => 'You do not has insufficient funds'], 404);
-        //     }
-        //     return redirect()->back()->with(['error' => 'Insufficient wallet balance']);
-
-        // }
-        // dd('Assets transferred');
-
-        // Check sender's wallet balance
-        // if ($sendWallet->balance < $amount) {
-        
-        //     return redirect()->back()->with(['error' => 'You do not has insufficient funds']);
-        // }
 
         $notification = CustomNotification::find($id);
-        // dd($notification);
         if (!$notification) {
             if ($request->wantsJson()) {
                 return response()->json(['error' => 'Notification not found'], 404);
@@ -583,13 +567,7 @@ class TransferPropertyController extends Controller
         ->groupBy('id', 'property_id', 'status', 'selected_size_land')
         ->get();
         $totalLandSize = $buy->sum('selected_size_land');
-        // dd($landSize);
-        // if ($landSize < $totalLandSize) {
-        //     if ($request->wantsJson()) {
-        //         return response()->json(['error' => 'Insufficient land size'], 400);
-        //     }
-        //     return redirect()->back()->with(['error' => 'Insufficient land size']);
-        // }
+       
         // Deduct land size from sender's purchases
         foreach ($buy as $item) {
             if ($item->selected_size_land >= $landSize) {
@@ -599,10 +577,6 @@ class TransferPropertyController extends Controller
 
             }
         }
-        // foreach ($buy as $item) {
-        //     $item->selected_size_land -= $landSize;
-        //     $item->save();
-        // }
         $buy = Buy::create([ 
             'property_id' => $propertyId,
             'transaction_id' => null,
@@ -613,9 +587,6 @@ class TransferPropertyController extends Controller
             'total_price' => $amount / 100,
             'status' => 'transfer',
         ]);
-        // Deduct from sender's wallet
-        // $sendWallet->balance -= $amount;
-        // $sendWallet->save();
         $propertyData = Property::where('id', $propertyId)->first();
  
         // Deduct from sender's wallet
@@ -656,9 +627,6 @@ class TransferPropertyController extends Controller
             'transaction_state' => null,
         ]);
 
-        // Credit to recipient's wallet
-        // $recipientWallet->balance += $amount;
-        // $recipientWallet->save(); 
         // Now notify
         $sender->property_id = $propertyId;
         $sender->property_name = $propertyData->name;
@@ -713,10 +681,11 @@ class TransferPropertyController extends Controller
             
             // Validate request data
             $validatedData = $request->validate([
-                'land_size' => 'required|numeric|min:1',
+                'land_size' => 'required|numeric|min:0.0001', // Minimum 0.0001 SQM
                 'sender_id' => 'required|exists:users,id',
                 'property_id' => 'required|exists:properties,id',
-                'amount' => 'required|numeric|min:1',
+                'property_slug' => 'required',
+                'amount' => 'required|numeric|min:1000',
             ]);
 
             // Extract validated data
