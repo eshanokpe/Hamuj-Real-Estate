@@ -491,9 +491,10 @@ class TransferPropertyController extends Controller
         $recipient = auth()->user();
 
         $request->validate([
-            'land_size' => 'required|numeric|min:0.0001', // Minimum 0.0001 SQM
+            'land_size' => 'required', // Minimum 0.0001 SQM
             'sender_id' => 'required|exists:users,id',
             'property_id' => 'required|exists:properties,id',
+            'property_slug' => 'required',
             'amount' => 'required|numeric|min:1000',
         ]);
 
