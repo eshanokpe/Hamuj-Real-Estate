@@ -473,8 +473,6 @@ class PropertyController extends Controller
             'percentageIncrease' => round($percentageIncrease, 2), // Rounded to 2 decimal places
         ];
     }
-    
-
 
     public function valuationStore(Request $request)
     {

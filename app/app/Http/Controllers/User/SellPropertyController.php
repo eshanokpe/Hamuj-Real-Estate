@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Notification;
 use DB;
 use Auth;
 use Log;
+use App\Models\WalletTransaction;
 use App\Models\ContactDetials;
+use App\Models\Wallet;
 use App\Models\Sell;
 use App\Models\Buy;
 use App\Models\User;
@@ -103,7 +105,7 @@ class SellPropertyController extends Controller
                 'user_email' => $user->email,
                 'reference' => $reference,
                 'total_price' => $amount,
-                'status' => 'pending',
+                'status' => 'completed',
             ]);  
             
             // Deduct the sold land size from user's Buy records
@@ -121,6 +123,25 @@ class SellPropertyController extends Controller
                 
                 $landToDeduct -= $deductibleAmount;
             }
+            // Top up user's wallet
+            $wallet = Wallet::firstOrCreate(
+                ['user_id' => $user->id],
+                ['balance' => 0] 
+            );
+
+            // Update the wallet balance
+            $wallet->increment('balance', $amount);
+
+            WalletTransaction::create([
+                'user_id' => $user->id,
+                'type' => 'credit',
+                'amount' => $amount,
+                'balance_before' => $wallet->balance - $amount,
+                'balance_after' => $wallet->balance,
+                'description' => 'Property sale: ' . $propertyData->name . ' - ' . $selectedSizeLand . ' SQM',
+                'reference' => $reference,
+                'status' => 'completed',
+            ]);
 
             $contactDetials = ContactDetials::first();
             
