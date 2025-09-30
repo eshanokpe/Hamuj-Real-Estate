@@ -12,7 +12,7 @@
                         <div class="float-end">
                             <ol class="breadcrumb">
                                 <a href="{{ route('admin.properties.index')}}" class="btn btn-dark">View Property</a>
-                            </ol>
+                            </ol> 
                         </div>
                         <h4 class="page-title">Edit Property</h4>
                     </div>
@@ -198,7 +198,7 @@
                                     @enderror
                                     @if(isset($property))
                                     {{-- <p>{{ asset('app/public/' . $property->property_images) }}</p> --}}
-                                    <img src="{{ asset('app/public/' . $property->property_images) }}" alt="{{ $property->name }}" class="img-thumbnail mt-2" width="200">
+                                    <img src="{{ asset($property->property_images) }}" alt="{{ $property->name }}" class="img-thumbnail mt-2" width="200">
                                     @endif
                                     <img id="image-preview" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
                                 </div>

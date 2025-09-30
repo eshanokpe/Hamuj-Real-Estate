@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User;
 use Auth;
 
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; 
 use App\Models\User;
 use App\Models\Faqs;
 use App\Models\Neighborhood;

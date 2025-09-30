@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Property;
+use App\Models\Transaction;
 use App\Models\Neighborhood;
 use App\Models\PropertyValuation; 
 use App\Models\PropertyPriceUpdate;
 use App\Models\NeighborhoodCategory;
+use App\Models\TransactionUpdateLog;
 use App\Models\PropertyValuationSummary;
 use App\Models\PropertyValuationPrediction;
 use App\Notifications\PropertyValuationNotification;
@@ -20,86 +22,22 @@ class PropertyController extends Controller
 { 
      
     public function index()
-    {
+    { 
         $properties = Property::all();
         return view('admin.home.properties.index', compact('properties'));
       
     }
 
     public function create()
-    {
-        $state = [
+    { 
+        $states = [
             "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", 
             "Borno", "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "Gombe", 
             "Imo", "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", 
             "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", 
             "Rivers", "Sokoto", "Taraba", "Yobe", "Zamfara", "FCT"
         ];
-        return view('admin.home.properties.create', compact('state'));
-    }
-
-    public function storee(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'location' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'lunch_price' => 'required|numeric',
-            'price' => 'required|numeric',
-            'percentage_increase' => 'required|numeric',
-            'size' => 'required|string|max:255',
-            'gazette_number' => 'required|string|max:50',
-            'tenure_free' => 'required|string|max:50',
-            'property_images' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
-            'payment_plan' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
-            'brochure' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
-            'contract_deed' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
-            'land_survey' => 'required|image|mimes:jpeg,pdf,png,jpg|max:5048',
-            'video_link' => 'required|url|max:255',
-            'google_map' => 'required|url',
-            'status' => 'required|in:available,sold',
-        ]);
-        // Handle file uploads to public directory
-        $propertyImagePath = $request->file('property_images')->move(public_path('assets/images/property'), time().'_'.$request->file('property_images')->getClientOriginalName());
-        $paymentPlanPath = $request->file('payment_plan')->move(public_path('assets/images/property'), time().'_'.$request->file('payment_plan')->getClientOriginalName());
-        $brochurePath = $request->file('brochure')->move(public_path('assets/images/property'), time().'_'.$request->file('brochure')->getClientOriginalName());
-        $landSurveyPath = $request->file('land_survey')->move(public_path('assets/images/property'), time().'_'.$request->file('land_survey')->getClientOriginalName());
-        $contractDeedPath = $request->file('contract_deed')->move(public_path('assets/images/property'), time().'_'.$request->file('contract_deed')->getClientOriginalName());
-       
-        $lunchPrice = $request->input('lunch_price');
-        $currentPrice = $request->input('price');
-
-        $priceIncrease = $lunchPrice > 0 ? (($currentPrice - $lunchPrice) / $lunchPrice) * 100 : 0;
-
-        Property::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'location' => $request->input('location'),
-            'city' => $request->input('city'),
-            'state' => $request->input('state'),
-            'country' => $request->input('country'),
-            'lunch_price' => $request->input('lunch_price'),
-            'price' => $request->input('price'),
-            'percentage_increase' => $priceIncrease,
-            'gazette_number' => $request->input('gazette_number'),
-            'tenure_free' => $request->input('tenure_free'),
-            'size' => $request->input('size'),
-            'available_size' => $request->input('size'),
-            'property_images' => 'assets/images/property/' . basename($propertyImagePath),
-            'payment_plan' => 'assets/images/property/' . basename($paymentPlanPath),
-            'brochure' => 'assets/images/property/' . basename($brochurePath),
-            'land_survey' => 'assets/images/property/' . basename($landSurveyPath),
-            'contract_deed' => 'assets/images/property/' . basename($contractDeedPath),
-            'video_link' => $request->input('video_link'),
-            'google_map' => $request->input('google_map'),
-            'year' => $request->input('year'),
-            'status' => $request->input('status'),
-
-        ]);
-        return redirect()->route('admin.properties.create')->with('success', 'Property uploaded successfully.');
+        return view('admin.home.properties.create', compact('states'));
     }
 
     public function store(Request $request)
@@ -161,9 +99,7 @@ class PropertyController extends Controller
         return redirect()->route('admin.properties.index')->with('success', 'Property created successfully.');
     }
   
-   
-    
-   
+
 
     public function update(Request $request, $id)
     {
@@ -202,7 +138,10 @@ class PropertyController extends Controller
         $previousYear = $property->year;
 
         $percentageIncrease = $lunchPrice > 0 ? (($newPrice - $lunchPrice) / $lunchPrice) * 100 : 0;
-
+       
+        // Calculate price ratio for updating transactions
+        $priceRatio = $previousPrice > 0 ? $newPrice / $previousPrice : 1;
+        
         // Log the price update (only if price changed)
         if ($previousPrice != $newPrice) {
             PropertyPriceUpdate::create([
@@ -214,6 +153,8 @@ class PropertyController extends Controller
                 'percentage_increase' => $percentageIncrease,
                 'updated_year' => $year
             ]);
+            // Update all transactions for this property with new amounts
+            $this->updatePropertyTransactions($property->id, $priceRatio, $newPrice);
         }
 
         // Prepare update data
@@ -247,6 +188,35 @@ class PropertyController extends Controller
         $property->update($updateData);
 
         return redirect()->back()->with('success', 'Property updated successfully.');
+    }
+
+    /**
+     * Update all transactions for a property when price changes
+     */
+    private function updatePropertyTransactions($propertyId, $priceRatio, $newPrice)
+    {
+        // Get all transactions for this property
+        $transactions = Transaction::where('property_id', $propertyId)->get();
+
+        foreach ($transactions as $transaction) {
+            // Calculate new amount based on price ratio
+            $newAmount = $transaction->amount * $priceRatio;
+            
+            // Update the transaction amount
+            $transaction->update([
+                'amount' => $newAmount,
+                'updated_at' => now()
+            ]);
+
+            // Optional: Log the transaction update for audit trail
+            TransactionUpdateLog::create([
+                'transaction_id' => $transaction->id,
+                'previous_amount' => $transaction->getOriginal('amount'),
+                'new_amount' => $newAmount,
+                'price_ratio' => $priceRatio,
+                'updated_at' => now()
+            ]);
+        }
     }
 
     /**

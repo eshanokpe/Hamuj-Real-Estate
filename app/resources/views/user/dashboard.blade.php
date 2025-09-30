@@ -9,7 +9,7 @@
     }
 
     .copy-fail {
-        font-size: 14px;
+        font-size: 14px; 
         color: #dc3545;
         margin-left: 8px;
         animation: fadeInOut 3s forwards;
@@ -63,10 +63,10 @@
                                                 </svg>
                                             </span>
                                             Total Assets 
-                                        </h3>
+                                        </h3> 
                                         <span class="currency__card--amount">₦{{ number_format($totalPropertyAmount, 2)}}</span>
                                         <div class="currency__card--footer"> 
-                                         
+                                          
                                             <span class="currency__weekly">Property assets</span>
                                             <span class="currency__increase ">
                                                 <a class="currency__withdrawal" href="{{ route('user.buy') }}">
