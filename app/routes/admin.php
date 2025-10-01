@@ -64,7 +64,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/settings/vision-mission/store', [SettingsController::class, 'storeVisionMission'])->name('admin.visionMission.store');
         Route::put('/settings/vision-mission/update/{id}', [SettingsController::class, 'updateVisionMission'])->name('admin.visionMission.update');
       
-        // Blog Routes
+        // Blog Routes 
         Route::prefix('post')->group(function () {
             Route::get('index', [BlogController::class, 'index'])->name('admin.post.index');
             Route::get('create', [BlogController::class, 'create'])->name('admin.post.create');

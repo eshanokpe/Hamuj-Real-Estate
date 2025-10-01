@@ -56,7 +56,7 @@
                                                 <td>{{ $buy->selected_size_land }} per/sqm</td>
                                                 <td>{{ $buy->remaining_size }} sqm</td>
                                                 <td>₦{{ number_format($buy->total_price, 2) }}</td>
-                                                <td>{{ ucfirst($buy->status) }}</td>
+                                                <td>{{ ucfirst($buy->status) }}</td> 
                                                 <td>{{ $buy->created_at ? $buy->created_at->format('d F Y') : 'N/A' }}</td>
                                                 <td class="text-end d-flex justify-content-end">
                                                     <a href="{{ route('admin.buy.edit', encrypt($buy->id)) }}" class="btn btn-sm btn-outline-primary me-2" title="Edit">

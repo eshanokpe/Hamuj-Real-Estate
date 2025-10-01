@@ -1,15 +1,12 @@
 @extends('layouts.dashboard')
 
-
 @section('content')
-
- 
 <div class="dashboard__page--wrapper">
     <!-- Dashboard sidebar .\ -->
     <div class="page__body--wrapper" id="dashbody__page--body__wrapper">
         
         <main class="main__content_wrapper">
-            <!-- dashboard container -->
+            <!-- dashboard container --> 
             <div class="dashboard__container add__property--container">
                 <div class="row add__property--heading mb-30">
                     <h2 class="add__property--heading__title text-start">Show Property</h2>
@@ -31,16 +28,46 @@
                     <div class="col-lg-12">
                         <div class="add__property--step__inner">
                             <div class="add__property--box mb-30">
-                                <h3 class="add__property--box__title mb-20">View Property</h3>
+                                <h3 class="add__property--box__title mb-20">Property Media</h3>
                              
                                 <div class="row m-2">
                                     <div class="col-12">
                                         <div class="add__listing--google__map mb-10">
                                             <img 
-                                            style="object-fit: contain"
-                                            src="{{ asset('app/public/' . $property->property_images) }}" />
+                                            style="object-fit: contain; width: 100%; max-height: 400px;"
+                                            src="{{ asset( $property->property_images) }}" />
                                         </div>
                                     </div>
+                                    
+                                    <!-- YouTube Video Section -->
+                                  
+@if($property->video_link)
+<div class="col-12 mt-4">
+    <div class="property-video-section">
+        <h4 class="property-video-title mb-3">Property Video</h4>
+        <div class="youtube-shorts-container">
+            <iframe 
+                src="https://www.youtube.com/embed/Dm53qtEoeRE"
+                title="Property Video"
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen
+                class="youtube-shorts-embed">
+            </iframe>
+        </div>
+        <div class="video-description mt-3">
+            <p class="text-muted">Watch this video to learn more about the property features and surroundings.</p>
+        </div>
+    </div>
+</div>
+@endif
+                                </div>
+                            </div>
+                            
+                            <div class="add__property--box mb-30">
+                                <h3 class="add__property--box__title mb-20">Property Details</h3>
+                             
+                                <div class="row m-2">
                                     <div class="col-12">
                                         <div class="add__listing--input__box mb-20">
                                             <label class="add__listing--input__label" for="input1">Title</label>
@@ -55,7 +82,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="add__listing--input__box mb-20">
-                                            <label class="add__listing--input__label">Lunch Price</label>
+                                            <label class="add__listing--input__label">Launch Price</label>
                                             @if($property->valuationSummary)
                                                 <input disabled value="₦{{ number_format($property->valuationSummary->initial_value_sum,2) }}" class="add__listing--input__field" id="input1" placeholder="Your Name" type="text">
                                             @else
@@ -123,12 +150,6 @@
                                             <input  disabled value="{{ $property->state }}" class="add__listing--input__field" id="neighborhood" type="text">
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-4">
-                                        <div class="add__listing--input__box mb-20">
-                                            <label class="add__listing--input__label" for="neighborhood">Neighborhood</label>
-                                            <input class="add__listing--input__field" id="neighborhood" placeholder="Neighborhood" type="text">
-                                        </div>
-                                    </div>  --}}
                                     <div class="col-lg-3">
                                         <div class="add__listing--input__box mb-20">
                                             <label class="add__listing--input__label" for="input7">SIZE(sqm)</label>
@@ -162,7 +183,6 @@
                                                         data-bs-toggle="pill" 
                                                         data-bs-target="#pills-{{ Str::slug($categoryName) }}" 
                                                         type="button" 
-                                                        {{-- style="color: brown" --}}
                                                         role="tab" 
                                                         aria-controls="pills-{{ Str::slug($categoryName) }}" 
                                                         aria-selected="{{ $loop->first ? 'true' : 'false' }}">
@@ -263,7 +283,56 @@
 
     </div>
 </div>
-        
-       
 
-@endsection 
+<style>
+.youtube-embed-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.youtube-embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.property-video-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.property-video-title {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.video-description {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .property-video-section {
+        padding: 15px;
+    }
+    
+    .property-video-title {
+        font-size: 1.1rem;
+    }
+}
+</style>
+        
+@endsection

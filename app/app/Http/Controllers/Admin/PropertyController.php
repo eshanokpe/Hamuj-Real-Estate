@@ -201,7 +201,7 @@ class PropertyController extends Controller
         foreach ($transactions as $transaction) {
             // Calculate new amount based on price ratio
             $newAmount = $transaction->amount * $priceRatio;
-            
+             
             // Update the transaction amount
             $transaction->update([
                 'amount' => $newAmount,
