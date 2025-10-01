@@ -285,13 +285,12 @@
 </div>
 
 <style>
-.youtube-embed-container {
+.youtube-shorts-container {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-    height: 0;
+    margin: 0 auto;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 

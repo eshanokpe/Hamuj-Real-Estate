@@ -141,19 +141,11 @@ class TransferPropertyController extends Controller
     }
 
     public function verifyRecipient(Request $request){
-        
+        // dd('verifyRecipient');
         if(!Auth::user()){
             return redirect()->route('login');
         }
-        // $request->validate([
-        //     'property_id' => 'required',
-        //     'property_name' => 'required',
-        //     'amount' => 'required',
-        //     'selected_size_land' => 'required',
-        //     'recipient_id' => 'required',
-        //     'property_image' => 'string',
-        //     'property_slug' => 'string',
-        // ]);
+        
         $data['amount'] = $request->input('amount');
         $data['propertyImage']  = $request->input('property_image');
         $data['propertyName']  = $request->input('property_name');
