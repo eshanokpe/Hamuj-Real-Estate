@@ -56,7 +56,7 @@
             </iframe>
         </div>
         <div class="video-description mt-3">
-            <p class="text-muted">Watch this video to learn more about the property features and surroundings.</p>
+            <p class="text-muted">Watch this video to learn more about the features of the Dohmayn app and its surroundings.</p>
         </div>
     </div>
 </div>
@@ -292,7 +292,7 @@
     overflow: hidden;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+} 
 
 .youtube-embed {
     position: absolute;
