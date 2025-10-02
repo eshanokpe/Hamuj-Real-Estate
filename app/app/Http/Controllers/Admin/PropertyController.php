@@ -153,9 +153,7 @@ class PropertyController extends Controller
                 'percentage_increase' => $percentageIncrease,
                 'updated_year' => $year
             ]);
-            // Update all transactions for this property with new amounts
-            $this->updatePropertyTransactions($property->id, $priceRatio, $newPrice);
-        }
+         }
 
         // Prepare update data
         $updateData = [
@@ -190,38 +188,6 @@ class PropertyController extends Controller
         return redirect()->back()->with('success', 'Property updated successfully.');
     }
 
-    /**
-     * Update all transactions for a property when price changes
-     */
-    private function updatePropertyTransactions($propertyId, $priceRatio, $newPrice)
-    {
-        // Get all transactions for this property
-        $transactions = Transaction::where('property_id', $propertyId)->get();
-
-        foreach ($transactions as $transaction) {
-            // Calculate new amount based on price ratio
-            $newAmount = $transaction->amount * $priceRatio;
-             
-            // Update the transaction amount
-            $transaction->update([
-                'amount' => $newAmount,
-                'updated_at' => now()
-            ]);
-
-            // Optional: Log the transaction update for audit trail
-            TransactionUpdateLog::create([
-                'transaction_id' => $transaction->id,
-                'previous_amount' => $transaction->getOriginal('amount'),
-                'new_amount' => $newAmount,
-                'price_ratio' => $priceRatio,
-                'updated_at' => now()
-            ]);
-        }
-    }
-
-    /**
-     * Helper method for file updates
-     */
     private function handleFileUpdate(Request $request, $property, $field, $updateData)
     {
         if ($request->hasFile($field)) {
@@ -247,7 +213,6 @@ class PropertyController extends Controller
         //
     }
 
-   
     public function edit($id)
     {
         $property = Property::findOrFail( decrypt($id));
@@ -331,110 +296,161 @@ class PropertyController extends Controller
         $data['valuationData'] = $valuationData;
         return view('admin.home.properties.evaluation.evaluate', $data);
     }
-
+   
     public function valuationUpdate(Request $request, $id)
-{
-    $request->validate([
-        'property_id' => 'required|exists:properties,id',
-        'valuation_type' => 'required|string|max:255',
-        'current_price' => 'required|string|min:0',
-        'market_value' => 'required|string|min:0',
-        'percentage_increase' => 'required|string|min:0',
-    ]);
+    {
+        $request->validate([
+            'property_id' => 'required|exists:properties,id',
+            'valuation_type' => 'required|string|max:255',
+            'current_price' => 'required|string|min:0',
+            'market_value' => 'required|string|min:0',
+            'percentage_increase' => 'required|string|min:0',
+        ]);
 
-    $propertyValuations = PropertyValuation::where('property_id', $request->property_id)
-        ->where('id', $id)
-        ->get();
+        $propertyValuations = PropertyValuation::where('property_id', $request->property_id)
+            ->where('id', $id)
+            ->get();
 
-    $valueSum = $this->calculateValuationSums($propertyValuations, $id);
+        $valueSum = $this->calculateValuationSums($propertyValuations, $id);
 
-    $currentPrice = preg_replace('/[₦,]/', '', $request->current_price);
-    $marketValue = preg_replace('/[₦,]/', '', $request->market_value);
+        $currentPrice = preg_replace('/[₦,]/', '', $request->current_price);
+        $marketValue = preg_replace('/[₦,]/', '', $request->market_value);
 
-    $percentageIncrease = 0;
-    if ($currentPrice > 0) {
-        $percentageIncrease = ceil((($marketValue - $currentPrice) / $currentPrice) * 100);
+        $percentageIncrease = 0;
+        if ($currentPrice > 0) {
+            $percentageIncrease = ceil((($marketValue - $currentPrice) / $currentPrice) * 100);
+        }
+
+        $data['propertyValuation'] = PropertyValuation::where('property_id', $request->property_id)
+            ->when(request('filter'), function ($query) {
+                if ($year = request('filter')) {
+                    return $query->whereYear('created_at', $year);
+                }
+                return $query;
+            })
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        $initialMarketValue = $data['propertyValuation']->sum('market_value');
+        $propertyValuationSummary = PropertyValuationSummary::firstOrNew([
+            'property_id' => $request->property_id,
+        ]);
+        $propertyValuationSummary->initial_value_sum = $initialMarketValue;
+        $propertyValuationSummary->save();
+
+        // Get the property BEFORE updating
+        $property = Property::findOrFail($request->property_id);
+        
+        // Store the previous price before updating
+        $previousPrice = $property->price; // Capture current price as previous price
+        
+        $propertyValuation = PropertyValuation::findOrFail($id);
+        $propertyValuation->update([
+            'property_id' => $request->property_id,
+            'valuation_type' => $request->valuation_type,
+            'current_price' => $currentPrice,
+            'market_value' => $marketValue,
+            'percentage_increase' => $percentageIncrease,
+        ]);
+
+        // PropertyValuationSummary
+        $updatedPropertyValuation = PropertyValuation::where('property_id', $request->property_id)
+            ->when(request('filter'), function ($query) {
+                if ($year = request('filter')) {
+                    return $query->whereYear('created_at', $year);
+                }
+                return $query;
+            })
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        $currentMarketValue = $updatedPropertyValuation->sum('market_value');
+        $propertyValuationSummary = PropertyValuationSummary::firstOrNew([
+            'property_id' => $request->property_id,
+        ]);
+
+        $percentage_value = 0;
+        if ($initialMarketValue > 0) {
+            $percentage_value = ceil((($currentMarketValue - $initialMarketValue) / $initialMarketValue) * 100);
+        }
+        $propertyValuationSummary->current_value_sum = $currentMarketValue;
+        $propertyValuationSummary->percentage_value = $percentage_value;
+        $propertyValuationSummary->save();
+
+        // Update the Property price - Store previous price first
+        $lunchPrice = $property->lunch_price;
+        $priceIncrease = $lunchPrice > 0 ? (($marketValue - $lunchPrice) / $lunchPrice) * 100 : 0;
+
+        // Calculate price ratio for transaction updates
+        $priceRatio = $previousPrice > 0 ? $marketValue / $previousPrice : 1;
+
+        // Update the property with new price and store the previous price
+        $property->previous_price = $previousPrice; // Store the previous price
+        $property->price = $marketValue;
+        $property->percentage_increase = $priceIncrease;
+        $property->save();
+
+        // Update all user transactions for this property with the new price ratio
+        $this->updatePropertyTransactions($property->id, $priceRatio, $marketValue);
+
+        // $user = User::where('email', 'eshanokpe@gmail.com')->first();
+        // if ($user) {
+        //     $user->notify(new PropertyValuationNotification($property, $percentageIncrease));
+        // }
+
+        $users = User::all();
+        foreach ($users as $user) {
+            $user->notify(new PropertyValuationNotification($property, $percentageIncrease));
+        }
+
+        return redirect()->route('admin.properties.evaluate', encrypt($property->id))
+            ->with('success', 'Properties Valuation updated successfully!');
     }
 
-    $data['propertyValuation'] = PropertyValuation::where('property_id', $request->property_id)
-        ->when(request('filter'), function ($query) {
-            if ($year = request('filter')) {
-                return $query->whereYear('created_at', $year);
+    private function updatePropertyTransactions($propertyId, $priceRatio, $newPrice)
+    {
+        try {
+            // Get all transactions for this property
+            $transactions = Transaction::where('property_id', $propertyId)->get();
+
+            $updatedCount = 0;
+            
+            foreach ($transactions as $transaction) {
+                // Store original amount before update
+                $originalAmount = $transaction->amount;
+                
+                // Calculate new amount based on price ratio
+                $newAmount = $originalAmount * $priceRatio;
+                
+                // Update the transaction amount
+                $transaction->update([
+                    'amount' => $newAmount,
+                    'updated_at' => now()
+                ]);
+
+                // Log the transaction update for audit trail
+                TransactionUpdateLog::create([
+                    'transaction_id' => $transaction->id,
+                    'previous_amount' => $originalAmount,
+                    'new_amount' => $newAmount,
+                    'price_ratio' => $priceRatio,
+                    'property_new_price' => $newPrice,
+                    'updated_at' => now()
+                ]);
+
+                $updatedCount++;
             }
-            return $query;
-        })
-        ->orderBy('created_at', 'asc')
-        ->get();
 
-    $initialMarketValue = $data['propertyValuation']->sum('market_value');
-    $propertyValuationSummary = PropertyValuationSummary::firstOrNew([
-        'property_id' => $request->property_id,
-    ]);
-    $propertyValuationSummary->initial_value_sum = $initialMarketValue;
-    $propertyValuationSummary->save();
+            // Log the bulk update
+            \Log::info("Updated {$updatedCount} transactions for property ID: {$propertyId} with price ratio: {$priceRatio}");
 
-    // Get the property BEFORE updating
-    $property = Property::findOrFail($request->property_id);
-    
-    // Store the previous price before updating
-    $previousPrice = $property->price; // Capture current price as previous price
-    
-    $propertyValuation = PropertyValuation::findOrFail($id);
-    $propertyValuation->update([
-        'property_id' => $request->property_id,
-        'valuation_type' => $request->valuation_type,
-        'current_price' => $currentPrice,
-        'market_value' => $marketValue,
-        'percentage_increase' => $percentageIncrease,
-    ]);
+            return $updatedCount;
 
-    // PropertyValuationSummary
-    $updatedPropertyValuation = PropertyValuation::where('property_id', $request->property_id)
-        ->when(request('filter'), function ($query) {
-            if ($year = request('filter')) {
-                return $query->whereYear('created_at', $year);
-            }
-            return $query;
-        })
-        ->orderBy('created_at', 'asc')
-        ->get();
-
-    $currentMarketValue = $updatedPropertyValuation->sum('market_value');
-    $propertyValuationSummary = PropertyValuationSummary::firstOrNew([
-        'property_id' => $request->property_id,
-    ]);
-
-    $percentage_value = 0;
-    if ($initialMarketValue > 0) {
-        $percentage_value = ceil((($currentMarketValue - $initialMarketValue) / $initialMarketValue) * 100);
+        } catch (\Exception $e) {
+            \Log::error("Error updating transactions for property ID: {$propertyId}. Error: " . $e->getMessage());
+            return 0;
+        }
     }
-    $propertyValuationSummary->current_value_sum = $currentMarketValue;
-    $propertyValuationSummary->percentage_value = $percentage_value;
-    $propertyValuationSummary->save();
-
-    // Update the Property price - Store previous price first
-    $lunchPrice = $property->lunch_price;
-    $priceIncrease = $lunchPrice > 0 ? (($marketValue - $lunchPrice) / $lunchPrice) * 100 : 0;
-
-    // Update the property with new price and store the previous price
-    $property->previous_price = $previousPrice; // Store the previous price
-    $property->price = $marketValue;
-    $property->percentage_increase = $priceIncrease;
-    $property->save();
-
-    // $user = User::where('email', 'eshanokpe@gmail.com')->first();
-    // if ($user) {
-    //     $user->notify(new PropertyValuationNotification($property, $percentageIncrease));
-    // }
-
-    $users = User::all();
-    foreach ($users as $user) {
-        $user->notify(new PropertyValuationNotification($property, $percentageIncrease));
-    }
-
-    return redirect()->route('admin.properties.evaluate', encrypt($property->id))
-        ->with('success', 'Properties Valuation updated successfully!');
-}
 
     private function calculateValuationSums($propertyValuations)
     {
