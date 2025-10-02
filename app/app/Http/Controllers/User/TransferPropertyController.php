@@ -334,10 +334,14 @@ class TransferPropertyController extends Controller
                 ->where('user_email', $user->email)
                 ->where('property_id', $propertyId)
                 ->sum('selected_size_land');
-                
-            Log::warning("totalLand: {$totalLand}, landSize: {$landSize}");
-                
-            if ($totalLand < $landSize) {
+
+            // Format both numbers to 6 decimal places for comparison
+            $formattedTotalLand = number_format($totalLand, 6, '.', '');
+            $formattedLandSize = number_format($landSize, 6, '.', '');
+
+            Log::warning("totalLand: {$totalLand}, landSize: {$landSize}, formattedTotalLand: {$formattedTotalLand}, formattedLandSize: {$formattedLandSize}");
+
+            if ($formattedTotalLand < $formattedLandSize) {
                 return $this->sendResponse($request, 'error', 'Insufficient land size available for transfer.', false);
             }
 
