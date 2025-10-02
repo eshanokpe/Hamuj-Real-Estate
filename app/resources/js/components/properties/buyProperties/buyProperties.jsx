@@ -88,7 +88,7 @@ const BuyProperties = () => {
         };
 
         fetchProperty();
-    }, [slug]);
+    }, [slug]);   
 
     // Calculate land size and total price based on input amount
     useEffect(() => {
