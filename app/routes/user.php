@@ -94,7 +94,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     
     Route::get('/payment/failed', [OrderController::class, 'failed'])->name('payment.failed');
     Route::get('success/', [OrderController::class, 'success']);
-   
+    
     
     Route::get('/purchases', [DashboardController::class, 'purchases'])->name('purchases');
     Route::get('/sell', [SellPropertyController::class, 'index'])->name('sell');
