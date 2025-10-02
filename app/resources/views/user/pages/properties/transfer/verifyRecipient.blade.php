@@ -20,7 +20,7 @@
                                     <th>Price</th>
                                     <th>Acquired Size</th>
                                     <th>Total</th>
-                                </tr>
+                                </tr> 
                             </thead>
                             <tbody>
                                

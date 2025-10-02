@@ -60,10 +60,6 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
       
     Route::post('/transfer/verify/recipient', [TransferPropertyController::class, 'verifyRecipient'])->name('transfer.checkRecipient');
     
-    Route::get('/transfer/verify/recipient', function () { 
-        return redirect()->back();
-    }); 
-    
     Route::get('/transfer/history', [TransferPropertyController::class, 'transferHistory'])->name('transfer.history');
 
     Route::get('/transfer/add', [PropertyController::class, 'add'])->name('transfer.add');

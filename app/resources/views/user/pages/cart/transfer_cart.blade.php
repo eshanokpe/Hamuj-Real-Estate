@@ -81,7 +81,7 @@
                 </div>
                 <!-- Hidden Form to Pass Data for Payment -->
                 <form id="payment-form" action="{{ route('user.transfer.recipient') }}" method="GET" style="display: none">
-                    @csrf 
+                    @csrf  
                     <input type="hidden" name="remaining_size" id="remaining_size">
                     <input type="hidden" name="property_slug" id="property_slug" value="{{ $property->slug }}">
                     <input type="hidden" name="amount" id="amount">
