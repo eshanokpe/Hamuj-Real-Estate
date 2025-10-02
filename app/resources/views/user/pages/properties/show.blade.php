@@ -244,7 +244,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-6">
+                                    {{-- <div class="col-6">
                                         <div class="add__listing--input__box mb-20">
                                             <label class="add__listing--input__label" for="input5">Land Information certificate</label>
                                             @if(isset($property) && $property->contract_deed)
@@ -265,7 +265,7 @@
                                                 <p class="text-muted mt-2">No Land Survey available.</p>
                                             @endif
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     
                                 </div>

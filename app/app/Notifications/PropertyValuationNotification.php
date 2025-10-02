@@ -60,7 +60,7 @@ class PropertyValuationNotification extends Notification
             ->line('')
             ->line('Thank you for being a valued member of our community. We look forward to supporting you in maximizing the potential of your asset!')
             ->salutation('Best regards,')
-            ->line('[Your Contact Information]')
+            // ->line('[Your Contact Information]')
             ->action('View Property', url('user/my-properties/' . encrypt($this->property->slug) ));
     
     }

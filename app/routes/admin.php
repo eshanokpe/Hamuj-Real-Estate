@@ -24,7 +24,7 @@ use App\Http\Controllers\Admin\PropertyHistoryController;
 use App\Http\Controllers\Admin\AddPropertyController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 use Ilmedova\Chattle\app\Http\Controllers\Chat\AdminController as AdminChatController;
-
+ 
     
 Route::redirect('/admin', '/admin/dashboard');
 
@@ -94,8 +94,10 @@ Route::prefix('admin')->group(function () {
             ->name('properties.valuation');
             Route::get('properties/valuation/edit/{id}', [AdminPropertyController::class, 'valuationEdit'])
             ->name('properties.valuation.edit');
+            
             Route::put('properties/valuation/update/{id}', [AdminPropertyController::class, 'valuationUpdate'])
             ->name('properties.valuation.update');
+
             Route::get('properties/valuation/delete/{id}', [AdminPropertyController::class, 'valuationDelete'])
             ->name('properties.valuation.delete');
 

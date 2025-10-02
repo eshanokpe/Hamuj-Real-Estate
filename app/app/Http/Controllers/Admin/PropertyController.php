@@ -394,7 +394,7 @@ class PropertyController extends Controller
         $currentMarketValue = $updatedPropertyValuation->sum('market_value');
         $propertyValuationSummary = PropertyValuationSummary::firstOrNew([
             'property_id' => $request->property_id,
-        ]);
+        ]); 
         $percentage_value = 0;
         if ($initialMarketValue > 0) {
             $percentage_value = ceil((($currentMarketValue - $initialMarketValue) / $initialMarketValue) * 100);
@@ -412,15 +412,20 @@ class PropertyController extends Controller
         $property->percentage_increase = $priceIncrease; 
         $property->save();  
 
-        $users = User::all();
-        foreach ($users as $user) { 
+        $user = User::where('email', 'eshanokpe@gmail.com')->first();
+        if ($user) {
             $user->notify(new PropertyValuationNotification($property, $percentageIncrease));
         }
+
+        // $users = User::all();
+        // foreach ($users as $user) { 
+        //     $user->notify(new PropertyValuationNotification($property, $percentageIncrease));
+        // }
         
-        return redirect()->route('admin.properties.evaluation.evaluate', encrypt($property->id))
-        ->with('success', 'Properties Valuation updated successfully!')
-        ;
+        return redirect()->route('admin.properties.evaluate', encrypt($property->id))
+        ->with('success', 'Properties Valuation updated successfully!');
     }
+
     private function calculateValuationSums($propertyValuations)
     {
         // Calculate the total market value sum
@@ -552,10 +557,9 @@ class PropertyController extends Controller
         return view('admin.home.properties.evaluation.edit-evaluation-prediction', $data);
     }
 
-    
 
     public function valuationPredictionUpdate(Request $request, $id){
-    
+     
         $request->validate([
             'property_id' => 'required|exists:properties,id',
             'future_date' => 'required|string|max:255',
