@@ -21,6 +21,7 @@ const PaymentSuccess = () => {
 const BuyProperties = () => {
     const navigate = useNavigate();
     const { slug } = useParams();
+    let url = window.location.origin
     
     // State management
     const [inputAmount, setInputAmount] = useState('');
@@ -46,10 +47,10 @@ const BuyProperties = () => {
         console.log('remainingSize state:', remainingSize);
         console.log('property available_size:', property?.available_size);
         console.log('calculatedLandSize:', calculatedLandSize);
-        console.log('inputAmount:', inputAmount);
-    }, [remainingSize, property, calculatedLandSize, inputAmount]);
+    }, [remainingSize, property, calculatedLandSize]);
 
     // Fetch property details
+    // After fetching property, log the price values
     useEffect(() => {
         if (!slug) {
             setError("No property identifier provided in the URL.");
@@ -72,16 +73,12 @@ const BuyProperties = () => {
                 console.log('Valuation Summary:', response.data.property.valuationSummary);
                 console.log('Price:', response.data.property.price);
                 
-                // FIX: Check both valuationSummary and valuation_summary (inconsistent naming)
-                const pricePerSqm = response.data.property.valuationSummary?.current_value_sum || 
-                                  response.data.property.valuation_summary?.current_value_sum || 
-                                  response.data.property.price;
+                const pricePerSqm = response.data.property.valuationSummary?.current_value_sum || response.data.property.price;
                 console.log('Calculated pricePerSqm:', pricePerSqm);
                 
                 // Ensure remainingSize is always a number, not null
                 const availableSize = response.data.property.available_size;
-                console.log('Original available_size:', availableSize);
-                setRemainingSize(availableSize !== null && availableSize !== undefined ? availableSize : 0);
+                setRemainingSize(availableSize !== null ? availableSize : 0);
             } catch (err) {
                 console.error('Error fetching property:', err);
                 setError(err.response?.data?.message || err.message || 'Failed to fetch property details.');
@@ -97,16 +94,10 @@ const BuyProperties = () => {
     useEffect(() => {
         if (!property) return;
         
-        // FIX: Check both valuationSummary and valuation_summary
-        const pricePerSqm = property.valuationSummary?.current_value_sum || 
-                          property.valuation_summary?.current_value_sum || 
-                          property.price;
-        
-        console.log('Calculation - pricePerSqm:', pricePerSqm);
-        console.log('Calculation - inputAmount:', inputAmount);
+        const pricePerSqm = property.valuationSummary?.current_value_sum || property.price;
         
         // Add validation for pricePerSqm
-        if (!pricePerSqm || pricePerSqm <= 0 || isNaN(pricePerSqm)) {
+        if (!pricePerSqm || pricePerSqm <= 0) {
             console.error('Invalid price per square meter:', pricePerSqm);
             setCalculatedLandSize(0);
             setTotalPrice(0);
@@ -114,7 +105,6 @@ const BuyProperties = () => {
         }
         
         const amount = parseFloat(inputAmount) || 0;
-        console.log('Calculation - parsed amount:', amount);
         
         // Validate minimum amount
         if (amount > 0 && amount < MINIMUM_AMOUNT) {
@@ -131,7 +121,6 @@ const BuyProperties = () => {
         
         // Calculate land size: amount / price per sqm
         const landSize = amount / pricePerSqm;
-        console.log('Calculation - landSize:', landSize);
         
         // Ensure landSize is a valid number
         if (isNaN(landSize) || !isFinite(landSize)) {
@@ -152,11 +141,9 @@ const BuyProperties = () => {
         
         setTotalPrice(finalTotal);
         
-        // FIX: Ensure remainingSize calculation uses valid numbers
-        const currentRemainingSize = property.available_size !== null && property.available_size !== undefined ? property.available_size : 0;
-        const newRemainingSize = Math.max(currentRemainingSize - landSize, 0);
-        console.log('Calculation - newRemainingSize:', newRemainingSize);
-        setRemainingSize(newRemainingSize);
+        // Ensure remainingSize is always a number
+        const currentRemainingSize = property.available_size !== null ? property.available_size : 0;
+        setRemainingSize(Math.max(currentRemainingSize - landSize, 0));
     }, [inputAmount, applyCommission, property, user]);
 
     // Amount handlers
@@ -207,19 +194,18 @@ const BuyProperties = () => {
     };
 
     // Format land size (square meters)
+    // Format land size (square meters)
     const formatLandSize = (size) => {
-        const numSize = parseFloat(size);
-        if (isNaN(numSize) || !isFinite(numSize)) {
+        if (isNaN(size) || !isFinite(size)) {
             return '0.0000 SQM';
         }
-        return `${Math.max(0, numSize).toFixed(4)} SQM`;
+        return `${Math.max(0, size).toFixed(4)} SQM`;
     };
 
     // Helper function to safely get remaining size for display
     const getDisplayRemainingSize = () => {
-        const value = remainingSize !== null && remainingSize !== undefined ? remainingSize : (property?.available_size || 0);
-        const numValue = parseFloat(value);
-        return isNaN(numValue) ? '0.0000' : numValue.toFixed(4);
+        const value = remainingSize !== null ? remainingSize : (property?.available_size || 0);
+        return Number.parseFloat(value).toPrecision(4);
     };
 
     // Payment handlers
@@ -237,10 +223,8 @@ const BuyProperties = () => {
             return;
         }
         
-        // FIX: Use proper validation for available_size
-        const availableSize = property.available_size !== null && property.available_size !== undefined ? property.available_size : 0;
-        if (calculatedLandSize > availableSize) {
-            alert(`The calculated land size (${formatLandSize(calculatedLandSize)}) exceeds the available size of ${availableSize} SQM. Please enter a smaller amount.`);
+        if (calculatedLandSize > property.available_size) {
+            alert(`The calculated land size (${formatLandSize(calculatedLandSize)}) exceeds the available size of ${property.available_size} SQM. Please enter a smaller amount.`);
             return;
         }
         
@@ -289,19 +273,14 @@ const BuyProperties = () => {
             return;
         }
 
-        // FIX: Validate remainingSize is a proper number
-        const validRemainingSize = remainingSize !== null && remainingSize !== undefined ? remainingSize : (property?.available_size || 0);
-        const numericRemainingSize = parseFloat(validRemainingSize);
-        
-        console.log('Payment - remaining_size being sent:', numericRemainingSize);
-        console.log('Payment - calculatedLandSize:', calculatedLandSize);
-        console.log('Payment - totalPrice:', totalPrice);
+        // Validate remainingSize is a number
+        const validRemainingSize = remainingSize !== null ? remainingSize : 0;
 
         setPaymentProcessing(true);
 
         try {
             const response = await axios.post('/user/payment/initiate', {
-                remaining_size: isNaN(numericRemainingSize) ? 0 : numericRemainingSize,
+                remaining_size: validRemainingSize, // Use validated value
                 property_slug: property.slug,
                 quantity: calculatedLandSize,
                 total_price: totalPrice,
@@ -339,10 +318,7 @@ const BuyProperties = () => {
     if (error) return <div className="alert alert-danger">{error}</div>;
     if (!property) return <div className="alert alert-warning">No property found</div>;
 
-    // FIX: Check both valuationSummary and valuation_summary
-    const pricePerSqm = property.valuationSummary?.current_value_sum || 
-                       property.valuation_summary?.current_value_sum || 
-                       property.price;
+    const pricePerSqm = property.valuationSummary?.current_value_sum || property.price;
     const amount = parseFloat(inputAmount) || 0;
     const isAmountValid = amount >= MINIMUM_AMOUNT;
 
@@ -418,7 +394,7 @@ const BuyProperties = () => {
                                             </td>
                                             <td><span>{property.size} SQM</span></td>
                                             <td className="available-size">
-                                                {getDisplayRemainingSize()} 129 SQM
+                                                {getDisplayRemainingSize()} SQM
                                             </td>
                                             <td>
                                                 <div className="d-flex flex-column gap-2">
@@ -444,7 +420,7 @@ const BuyProperties = () => {
                                             </td>
                                             <td>
                                                 <span className="calculated-land-size" style={{ color: '#47008E', fontWeight: 'bold' }}>
-                                                    {formatLandSize(calculatedLandSize)} 
+                                                    {formatLandSize(calculatedLandSize)}
                                                 </span>
                                             </td>
                                             <td>
@@ -512,6 +488,12 @@ const BuyProperties = () => {
                                         <div className="modal-body">
                                             {!paymentMethod ? (
                                                 <div className="d-flex flex-column gap-3">
+                                                    {/* <button 
+                                                        className="btn btn-primary"
+                                                        onClick={() => handlePaymentMethodSelect('card')}
+                                                    >
+                                                        Pay with Card
+                                                    </button> */}
                                                     <button 
                                                         className="solid__btn add__property--btn w-100" 
                                                         onClick={() => handlePaymentMethodSelect('wallet')}
