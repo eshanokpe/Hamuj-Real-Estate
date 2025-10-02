@@ -335,13 +335,13 @@ class TransferPropertyController extends Controller
                 ->where('property_id', $propertyId)
                 ->sum('selected_size_land');
 
-            // Format both numbers to 6 decimal places for comparison
-            $formattedTotalLand = number_format($totalLand, 6, '.', '');
-            $formattedLandSize = number_format($landSize, 6, '.', '');
+            // Round both values to 4 decimal places (matching 0.0144 precision)
+            $roundedTotalLand = round($totalLand, 4);
+            $roundedLandSize = round($landSize, 4);
 
-            Log::warning("totalLand: {$totalLand}, landSize: {$landSize}, formattedTotalLand: {$formattedTotalLand}, formattedLandSize: {$formattedLandSize}");
+            Log::warning("totalLand: {$totalLand}, landSize: {$landSize}, roundedTotalLand: {$roundedTotalLand}, roundedLandSize: {$roundedLandSize}");
 
-            if ($formattedTotalLand < $formattedLandSize) {
+            if ($roundedTotalLand < $roundedLandSize) {
                 return $this->sendResponse($request, 'error', 'Insufficient land size available for transfer.', false);
             }
 
