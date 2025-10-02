@@ -50,6 +50,7 @@ const BuyProperties = () => {
     }, [remainingSize, property, calculatedLandSize]);
 
     // Fetch property details
+    // After fetching property, log the price values
     useEffect(() => {
         if (!slug) {
             setError("No property identifier provided in the URL.");
@@ -66,6 +67,14 @@ const BuyProperties = () => {
                 
                 setUser(response.data.user);
                 setProperty(response.data.property);
+                
+                // Debug logging
+                console.log('Property data:', response.data.property);
+                console.log('Valuation Summary:', response.data.property.valuationSummary);
+                console.log('Price:', response.data.property.price);
+                
+                const pricePerSqm = response.data.property.valuationSummary?.current_value_sum || response.data.property.price;
+                console.log('Calculated pricePerSqm:', pricePerSqm);
                 
                 // Ensure remainingSize is always a number, not null
                 const availableSize = response.data.property.available_size;
@@ -86,6 +95,15 @@ const BuyProperties = () => {
         if (!property) return;
         
         const pricePerSqm = property.valuationSummary?.current_value_sum || property.price;
+        
+        // Add validation for pricePerSqm
+        if (!pricePerSqm || pricePerSqm <= 0) {
+            console.error('Invalid price per square meter:', pricePerSqm);
+            setCalculatedLandSize(0);
+            setTotalPrice(0);
+            return;
+        }
+        
         const amount = parseFloat(inputAmount) || 0;
         
         // Validate minimum amount
@@ -103,6 +121,15 @@ const BuyProperties = () => {
         
         // Calculate land size: amount / price per sqm
         const landSize = amount / pricePerSqm;
+        
+        // Ensure landSize is a valid number
+        if (isNaN(landSize) || !isFinite(landSize)) {
+            console.error('Invalid land size calculation:', { amount, pricePerSqm });
+            setCalculatedLandSize(0);
+            setTotalPrice(0);
+            return;
+        }
+        
         setCalculatedLandSize(landSize);
         
         // Calculate total price (with commission if applied)
@@ -167,8 +194,12 @@ const BuyProperties = () => {
     };
 
     // Format land size (square meters)
+    // Format land size (square meters)
     const formatLandSize = (size) => {
-        return `${size.toFixed(4)} SQM`;
+        if (isNaN(size) || !isFinite(size)) {
+            return '0.0000 SQM';
+        }
+        return `${Math.max(0, size).toFixed(4)} SQM`;
     };
 
     // Helper function to safely get remaining size for display
