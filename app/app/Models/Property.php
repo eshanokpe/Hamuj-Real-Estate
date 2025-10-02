@@ -20,6 +20,7 @@ class Property extends Model
         'state', 
         'country',
         'lunch_price', 
+        'previous_price',
         'price',
         'percentage_increase',
         'size',
