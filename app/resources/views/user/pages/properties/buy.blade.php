@@ -56,7 +56,7 @@
                                             @else    
                                                 <span class="properties__author--price">₦{{ number_format($property->property->price, 2)}} per/sqm</span>
                                             @endif
-                                        </div>
+                                        </div> 
                                     </div>
                                 </td>
                                 <td>
