@@ -26,7 +26,7 @@ class PaymentController extends Controller
     public function initializePayment(Request $request)
     {
         
-        Log::warning('totalLand: ' . json_encode($request->all()));
+        Log::warning('totalLand:222' . json_encode($request->all()));
 
         $request->validate([
             'remaining_size' => 'required', 
