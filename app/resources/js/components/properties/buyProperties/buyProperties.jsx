@@ -334,7 +334,7 @@ const BuyProperties = () => {
                                                 </div>
                                             </td>
                                             <td>
-                                                <span className="item-price">
+                                                <span className="item-price"> 
                                                     {formatCurrency(pricePerSqm)}test per/sqm
                                                 </span>
                                             </td>
