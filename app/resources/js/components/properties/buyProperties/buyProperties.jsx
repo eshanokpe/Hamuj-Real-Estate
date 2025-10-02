@@ -418,7 +418,7 @@ const BuyProperties = () => {
                                             </td>
                                             <td><span>{property.size} SQM</span></td>
                                             <td className="available-size">
-                                                {getDisplayRemainingSize()} 129 SQM
+                                                {getDisplayRemainingSize()} SQM
                                             </td>
                                             <td>
                                                 <div className="d-flex flex-column gap-2">
