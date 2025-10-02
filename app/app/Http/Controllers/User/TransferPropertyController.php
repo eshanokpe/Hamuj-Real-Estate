@@ -355,6 +355,35 @@ class TransferPropertyController extends Controller
         }
     }
 
+    public function handleRecipientVerification(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        // Handle GET request - show the form or redirect
+        if ($request->isMethod('get')) {
+            return redirect()->route('user.properties'); // or your starting page
+        }
+
+        // Handle POST request - original logic
+        $data['amount'] = $request->input('amount');
+        $data['propertyImage'] = $request->input('property_image');
+        $data['propertyName'] = $request->input('property_name');
+        $data['landSize'] = $request->input('selected_size_land');
+        $data['propertySlug'] = $request->input('property_slug');
+        $data['propertyId'] = $request->input('property_id');
+
+        $recipientId = $request->input('recipient_id');
+        $data['recipientData'] = User::where('recipient_id', $recipientId)->first();
+            
+        if (!$data['recipientData']) {
+            return back()->with('error', 'This recipient does not exist.');
+        }
+        
+        return view('user.pages.properties.transfer.verifyRecipient', $data);
+    }
+
     protected function errorResponse($propertyId, Request $request, $message, $statusCode)
     {
         
