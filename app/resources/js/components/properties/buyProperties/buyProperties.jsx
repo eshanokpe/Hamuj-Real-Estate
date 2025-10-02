@@ -42,6 +42,13 @@ const BuyProperties = () => {
 
     const MINIMUM_AMOUNT = 1000;
 
+    // Debug useEffect to track state changes
+    useEffect(() => {
+        console.log('remainingSize state:', remainingSize);
+        console.log('property available_size:', property?.available_size);
+        console.log('calculatedLandSize:', calculatedLandSize);
+    }, [remainingSize, property, calculatedLandSize]);
+
     // Fetch property details
     useEffect(() => {
         if (!slug) {
@@ -59,7 +66,10 @@ const BuyProperties = () => {
                 
                 setUser(response.data.user);
                 setProperty(response.data.property);
-                setRemainingSize(response.data.property.available_size);
+                
+                // Ensure remainingSize is always a number, not null
+                const availableSize = response.data.property.available_size;
+                setRemainingSize(availableSize !== null ? availableSize : 0);
             } catch (err) {
                 console.error('Error fetching property:', err);
                 setError(err.response?.data?.message || err.message || 'Failed to fetch property details.');
@@ -103,7 +113,10 @@ const BuyProperties = () => {
         }
         
         setTotalPrice(finalTotal);
-        setRemainingSize(Math.max(property.available_size - landSize, 0));
+        
+        // Ensure remainingSize is always a number
+        const currentRemainingSize = property.available_size !== null ? property.available_size : 0;
+        setRemainingSize(Math.max(currentRemainingSize - landSize, 0));
     }, [inputAmount, applyCommission, property, user]);
 
     // Amount handlers
@@ -158,6 +171,12 @@ const BuyProperties = () => {
         return `${size.toFixed(4)} SQM`;
     };
 
+    // Helper function to safely get remaining size for display
+    const getDisplayRemainingSize = () => {
+        const value = remainingSize !== null ? remainingSize : (property?.available_size || 0);
+        return Number.parseFloat(value).toPrecision(4);
+    };
+
     // Payment handlers
     const handleMakePayment = (e) => {
         e.preventDefault();
@@ -190,8 +209,7 @@ const BuyProperties = () => {
             const revolutCheckout = await RevolutCheckout(publicId, {
                 mode: process.env.REACT_APP_REVOLUT_MODE || 'sandbox',
                 onSuccess: () => {
-                    // navigate('/user/cart/buy/success');
-                    window.location.href = '/user/cart/buy/success';
+                    navigate('/user/cart/buy/success');
                 },
                 onError: (error) => {
                     console.error('Payment error:', error);
@@ -224,11 +242,14 @@ const BuyProperties = () => {
             return;
         }
 
+        // Validate remainingSize is a number
+        const validRemainingSize = remainingSize !== null ? remainingSize : 0;
+
         setPaymentProcessing(true);
 
         try {
             const response = await axios.post('/user/payment/initiate', {
-                remaining_size: remainingSize,
+                remaining_size: validRemainingSize, // Use validated value
                 property_slug: property.slug,
                 quantity: calculatedLandSize,
                 total_price: totalPrice,
@@ -237,15 +258,17 @@ const BuyProperties = () => {
                 commission_check: applyCommission ? 1 : 0,
                 payment_method: paymentMethod,
             });
+            
             console.log('Payment response:', response.data);
+            
             if (response.data.success) {
-                // navigate('/user/cart/buy/success');
-                window.location.href = '/user/dashboard';
                 if (paymentMethod === 'wallet') {
-                    navigate('/user/cart/buy/success');
-                    window.location.href = '/user/cart/buy/success';
+                    window.location.href = '/user/dashboard';
                 } else if (paymentMethod === 'card' && response.data.public_id) {
                     await initializeRevolutPayment(response.data.public_id);
+                } else {
+                    // Fallback redirect
+                    window.location.href = '/user/dashboard';
                 }
             } else {
                 throw new Error(response.data.message || 'Payment failed');
@@ -340,7 +363,7 @@ const BuyProperties = () => {
                                             </td>
                                             <td><span>{property.size} SQM</span></td>
                                             <td className="available-size">
-                                                {remainingSize} SQM
+                                                {getDisplayRemainingSize()} SQM
                                             </td>
                                             <td>
                                                 <div className="d-flex flex-column gap-2">
@@ -368,11 +391,6 @@ const BuyProperties = () => {
                                                 <span className="calculated-land-size" style={{ color: '#47008E', fontWeight: 'bold' }}>
                                                     {formatLandSize(calculatedLandSize)}
                                                 </span>
-                                                {/* {amount > 0 && isAmountValid && (
-                                                    <div className="text-muted small mt-1">
-                                                        Formula: {amount} / {pricePerSqm} = {calculatedLandSize.toFixed(4)}
-                                                    </div>
-                                                )} */}
                                             </td>
                                             <td>
                                                 <span className="total-price" style={{ color: '#47008E', fontWeight: 'bold' }}>
@@ -504,8 +522,6 @@ const BuyProperties = () => {
         </div>
     );
 };
-
-
 
 // Index Page Component
 const IndexPage = () => {
