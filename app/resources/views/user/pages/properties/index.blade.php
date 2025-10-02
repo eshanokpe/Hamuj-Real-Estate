@@ -70,7 +70,7 @@
                                                 <span class="status__btn " style="color:#fff; background-color:#47008E ">
                                                     <a href="{{ route('user.offerPrice', encrypt($item->id))}}" 
                                                         style=" color: #fff; border: none;  cursor: pointer;">
-                                                        Offer Price
+                                                        Offer Price 
                                                     </a>
                                                 </span>
                                             @elseif($item->status === 'available')
