@@ -6,7 +6,7 @@ import RevolutCheckout from '@revolut/checkout';
 
 // Payment Success Component
 const PaymentSuccess = () => {
-    return (
+    return ( 
         <div className="container py-5 text-center">
             <div className="alert alert-success">
                 <h2>Payment Successful!</h2>
