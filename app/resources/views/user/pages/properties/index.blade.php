@@ -12,7 +12,7 @@
             <!-- dashboard container -->
             <div class="dashboard__container dashboard__reviews--container">
                 <div class="reviews__heading mb-30"> 
-                    <h2 class="reviews__heading--title">Buy Properties222</h2>
+                    <h2 class="reviews__heading--title">Buy Properties</h2>
                     <p class="reviews__heading--desc">We are glad to see you again!</p>
                 </div>
                 <div class="properties__wrapper">
@@ -41,11 +41,11 @@
                                                     <h3 class="reviews__author--title">{{$item->name}}</h3>
                                                     <p class="reviews__author--subtitle">{{$item->location}}</p>
                                                     @if($item->valuationSummary)
-                                                        <span class="properties__author--price">₦{{ number_format($item->valuationSummary->current_value_sum, 0)}} per/sqm</span>
+                                                        <span class="properties__author--price">₦{{ number_format($item->valuationSummary->current_value_sum, 0)}} 1per/sqm</span>
                                                         <p class="properties__author--price text-decoration-line-through text-muted">₦{{ number_format($item->valuationSummary->initial_value_sum, 0)}} per/sqm</p>
                                                         <p class="reviews__author--title">{{$item->valuationSummary->percentage_value}}%</p>
                                                     @else   
-                                                        <span class="properties__author--price">₦{{ number_format($item->property->price, 0)}} per/sqm</span>
+                                                        <span class="properties__author--price">₦{{ number_format($item->property->price, 0)}} 2per/sqm</span>
                                                         <p class="reviews__author--title">{{$item->percentage_increase}}%</p>
 
                                                     @endif
