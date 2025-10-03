@@ -60,10 +60,10 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <span class="properties__views">{{ number_format($item->size, 2) }} SQM </span>
+                                            <span class="properties__views">{{ $item->size }} SQM </span>
                                         </td>
                                         <td>
-                                            <span class="properties__views">{{ number_format($item->available_size, 2) }} SQM </span>
+                                            <span class="properties__views">{{ $item->available_size }} SQM </span>
                                         </td>
                                         <td>
                                             @if($item->status === 'sold out')
