@@ -78,3 +78,7 @@ ${verifiedData.phone ? buildDetailRow('Phone Number', formatPhoneDisplay(verifie
 TransactionPIN:
 $2y$10$K1c/HEI5PVVjLZMLdyHwZ.t/572wqaPbwrnbBCJnBZBKAQOIFuYvG
 
+
+Hamuj6061@
+Something went wrong:SQLSTATE[HY000]: General error: 1364 Field 'wallet_id' doesn't have a default value (SQL: insert into `wallet_transactions` (`user_id`, `type`, `amount`, `reference`, `status`, `updated_at`, `created_at`) values (1, credit, 1000.00, SELLDOHREF-1759569523-IZE0V5XQ, completed, 2025-10-04 09:18:44, 2025-10-04 09:18:44))
+

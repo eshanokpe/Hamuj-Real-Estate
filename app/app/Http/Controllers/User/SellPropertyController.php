@@ -133,7 +133,8 @@ class SellPropertyController extends Controller
             $wallet->increment('balance', $amount);
 
             WalletTransaction::create([
-                'user_id' => $user->id,
+                'user_id' => $user->id, 
+                'wallet_id' => $wallet->id,
                 'type' => 'credit',
                 'amount' => $amount,
                 'balance_before' => $wallet->balance - $amount,

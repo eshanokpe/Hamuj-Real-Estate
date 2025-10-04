@@ -81,7 +81,6 @@
                                                     >Buy</a>  
                                                 </span>
                                             @endif
-
                                         </td>
                                         <td>
                                             <span class="sales__report--status pending2"><a href="{{ route('user.properties.show', encrypt($item->id))}}">View</a></span>

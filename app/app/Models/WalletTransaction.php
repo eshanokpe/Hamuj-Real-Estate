@@ -11,7 +11,7 @@ class WalletTransaction extends Model
 
     protected $fillable = [
         'user_id',          
-        'wallet_id',       
+        'wallet_id',        
         'type',            
         'accountName',            
         'bankName',   

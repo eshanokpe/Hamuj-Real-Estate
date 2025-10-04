@@ -47,7 +47,7 @@
                                         <td>
                                             <span class="item-price" data-price="{{ $property->price }}">₦{{ number_format($property->price, 2) }} per/sqm</span>
                                         </td>
-                                    @endif
+                                    @endif 
                                     <td>
                                         <span class="actual-size" data-size="{{ $property->size }}">{{ $property->size }} SQM</span>
                                     </td>
