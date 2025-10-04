@@ -15,7 +15,7 @@ use App\Models\Sell;
 use App\Models\Transfer;
 use App\Models\WalletTransaction;
 use App\Models\Transaction;
- 
+  
  
 class AdminController extends Controller
 {

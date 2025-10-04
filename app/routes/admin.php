@@ -85,7 +85,7 @@ Route::prefix('admin')->group(function () {
         });
 
         Route::name('admin.')->group(function () {
-            
+             
             Route::resource('properties', AdminPropertyController::class);
             Route::get('properties/{id}/evaluate', [AdminPropertyController::class, 'evaluate'])
             ->name('properties.evaluate');
