@@ -62,7 +62,7 @@
                                                 <path d="M12.0083 1.09155L9.27917 3.82072" stroke="#9E38FF" stroke-linecap="round" stroke-linejoin="round"/>
                                                 </svg>
                                             </span>
-                                            Total Assets 
+                                            Total Assets  
                                         </h3> 
                                         <span class="currency__card--amount">₦{{ number_format($totalPropertyAmount, 2)}}</span>
                                         <div class="currency__card--footer"> 

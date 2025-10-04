@@ -12,6 +12,7 @@ use Auth;
 use Log;
 use App\Models\WalletTransaction;
 use App\Models\ContactDetials;
+use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Models\Sell;
 use App\Models\Buy;
@@ -47,7 +48,6 @@ class SellPropertyController extends Controller
         return view('user.pages.properties.sell.index', $data); 
     }
 
-    
     public function sellProperty(Request $request)
     {
         $request->validate([ 
@@ -66,7 +66,7 @@ class SellPropertyController extends Controller
         if (!$property) {
             return back()->with('error', 'Property not found.');
         }
-    
+
         // Generate a unique transaction reference
         $reference = 'SELLDOHREF-' . time() . '-' . strtoupper(Str::random(8));
 
@@ -108,26 +108,43 @@ class SellPropertyController extends Controller
                 'status' => 'completed',
             ]);  
             
-            // Deduct the sold land size from user's Buy records
+            // Create a transaction record for the sale (use negative amount for deduction)
+            Transaction::create([
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'property_id' => $propertyData->id,
+                'amount' => -$amount, // Negative amount to deduct from total assets
+                'reference' => $reference,
+                'status' => 'completed',
+                'transaction_type' => 'sale',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            
+            // Deduct the sold land size from user's Buy records (FIFO)
             $landToDeduct = $selectedSizeLand;
             
             foreach ($userBuys as $buy) {
                 if ($landToDeduct <= 0) break;
                 
-                $deductibleAmount = min($buy->selected_size_land, $landToDeduct);
+                $deductibleAmount = min($buy->remaining_size, $landToDeduct);
                 
-                // Update the buy record
+                // Update the buy record's remaining size
                 $buy->update([
-                    'selected_size_land' => $buy->selected_size_land - $deductibleAmount
+                    'remaining_size' => $buy->remaining_size - $deductibleAmount
                 ]);
                 
                 $landToDeduct -= $deductibleAmount;
             }
+            
             // Top up user's wallet
             $wallet = Wallet::firstOrCreate(
                 ['user_id' => $user->id],
                 ['balance' => 0] 
             );
+
+            // Store balance before transaction
+            $balanceBefore = $wallet->balance;
 
             // Update the wallet balance
             $wallet->increment('balance', $amount);
@@ -137,12 +154,12 @@ class SellPropertyController extends Controller
                 'wallet_id' => $wallet->id,
                 'type' => 'credit',
                 'amount' => $amount,
-                'balance_before' => $wallet->balance - $amount,
+                'balance_before' => $balanceBefore,
                 'balance_after' => $wallet->balance,
                 'description' => 'Property sale: ' . $propertyData->name . ' - ' . $selectedSizeLand . ' SQM',
                 'reference' => $reference,
                 'status' => 'completed',
-            ]);
+            ]); 
 
             $contactDetials = ContactDetials::first();
             
@@ -161,13 +178,13 @@ class SellPropertyController extends Controller
                 ], 201);
             }
 
-            return redirect()->route('user.sell.history')->with('success', 'We have receive your prompt to sell the Property, your income will be transfer to your account.');
+            return redirect()->route('user.sell.history')->with('success', 'We have received your request to sell the Property, your income has been transferred to your wallet.');
 
         } catch (\Exception $e) {
             if ($request->expectsJson()) {
                 return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
             }
-            return back()->with('error', 'Something went wrong:' . $e->getMessage());
+            return back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
 

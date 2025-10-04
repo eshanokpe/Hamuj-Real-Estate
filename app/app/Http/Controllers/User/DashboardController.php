@@ -39,7 +39,7 @@ class DashboardController extends Controller
                                             ->where('email', $user->email)
                                             ->whereNotNull('property_id') // Property transactions have property_id
                                             ->sum('amount');
- 
+  
         $data['totalTransactionsAssets'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
                                             // ->where('status', 'success')
