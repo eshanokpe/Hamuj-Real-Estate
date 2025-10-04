@@ -55,13 +55,13 @@ class BuyController extends Controller
         $totalPropertyAmount = Transaction::where('user_id', $user->id)
             ->where('email', $user->email)
             ->whereNotNull('property_id')
-            ->sum('amount');
+            ->sum('amount'); 
         
         // Wallet balance
         $walletBalance = $user->wallet->balance ?? 0;
         
         // Total assets (property + wallet)
-        return max(0, $totalPropertyAmount + $walletBalance); // Ensure non-negative
+        return max(0, $totalPropertyAmount); // Ensure non-negative
     }
 
     public function edit($id)
