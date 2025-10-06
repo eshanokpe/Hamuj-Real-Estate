@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\WalletTransactionController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\ReferralController;
+use App\Http\Controllers\Admin\UserAssetsController;
 use App\Http\Controllers\Admin\BuyController;
 use App\Http\Controllers\Admin\SellController;
 use App\Http\Controllers\Admin\TransferController;
@@ -138,6 +139,9 @@ Route::prefix('admin')->group(function () {
             Route::get('{id}/editbuy', [BuyController::class, 'edit'])->name('buy.edit');
             Route::put('{id}/buy', [BuyController::class, 'update'])->name('buy.update');
             Route::delete('{id}/buy', [BuyController::class, 'destroy'])->name('buy.destroy');
+        });
+        Route::name('admin.')->group(function () {
+            Route::get('assets/index', [UserAssetsController::class, 'index'])->name('userAssets.index');
         });
         Route::name('admin.')->group(function () {
             Route::get('transaction/index', [TransactionController::class, 'index'])->name('transaction');

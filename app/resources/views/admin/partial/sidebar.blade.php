@@ -11,7 +11,7 @@
                 <img src="{{ asset('assets/img/logo/nav-log.png')}}" alt="logo-large" class="logo-lg logo-dark">
             </span> --}}
         </a> 
-    </div>  
+    </div>   
     <div class="sidebar-user-pro media border-end">                    
         <div class="position-relative mx-auto">
             <img src="{{ asset($contactDetials->favicon) }}" alt="user" class="rounded-circle thumb-md">
@@ -86,6 +86,13 @@
                         <a class="nav-link" href="{{ route('admin.buy.index') }}" >
                             <i class="ti ti-arrow-up menu-icon"></i>
                             <span>Buy</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.userAssets.index') }}" >
+                            <i class="ti ti-arrow-up menu-icon"></i>
+                            <span>User Assets</span>
                         </a>
                     </li>
 

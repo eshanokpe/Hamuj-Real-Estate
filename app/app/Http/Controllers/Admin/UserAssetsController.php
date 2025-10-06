@@ -8,7 +8,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Buy;
 
-class BuyController extends Controller
+class UserAssetsController extends Controller
 { 
     public function index(Request $request)
     {
@@ -41,7 +41,7 @@ class BuyController extends Controller
             $buy->user->total_assets = $this->calculateUserTotalAssets($buy->user);
         }
         
-        return view('admin.home.buy.index', compact('buys', 'search'));
+        return view('admin.home.userAssets.index', compact('buys', 'search'));
     }
 
     /**
