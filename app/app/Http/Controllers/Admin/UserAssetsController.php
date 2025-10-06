@@ -39,8 +39,8 @@ class UserAssetsController extends Controller
         
         // Calculate total assets for each user
         // foreach ($buys as $buy) {
-            $user->total_assets = $this->calculateUserTotalAssets($user);
-            dd($user->total_assets);
+            $users = $this->calculateUserTotalAssets($user);
+            dd($users);
         // }
         return view('admin.home.userAssets.index', compact('buys', 'search'));
     }
