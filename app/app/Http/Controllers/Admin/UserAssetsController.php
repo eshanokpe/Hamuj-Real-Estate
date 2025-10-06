@@ -39,6 +39,7 @@ class UserAssetsController extends Controller
         // Calculate total assets for each user
         foreach ($buys as $buy) {
             $buy->user->total_assets = $this->calculateUserTotalAssets($buy->user);
+            dd($buy->user->total_assets);
         }
         return view('admin.home.userAssets.index', compact('buys', 'search'));
     }
@@ -59,7 +60,7 @@ class UserAssetsController extends Controller
         // Wallet balance
         // $walletBalance = $user->wallet->balance ?? 0;
         // Total assets (property + wallet)
-        dd($totalPropertyAmount);
+        // dd($totalPropertyAmount);
         return max(0, $totalPropertyAmount); // Ensure non-negative
     }
 
