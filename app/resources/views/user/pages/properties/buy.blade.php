@@ -67,7 +67,7 @@
                                             {{ $property->property->percentage_increase }}%
                                         @endif
                                     </span>
-                                </td>  
+                                </td>   
                                 <td> 
                                     <span class="properties__views">{{ $property->total_selected_size_land }} SQM</span>
                                 </td>

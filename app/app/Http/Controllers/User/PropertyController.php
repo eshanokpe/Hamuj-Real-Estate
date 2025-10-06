@@ -54,7 +54,7 @@ class PropertyController extends Controller
             Log::error('Error fetching properties in indexAPI: ' . $e->getMessage());
             return response()->json(['error' => 'Server error while fetching properties.', 'details' => $e->getMessage()], 500);
         }
-    }
+    } 
 
     public function buy(){
         $user = Auth::user();

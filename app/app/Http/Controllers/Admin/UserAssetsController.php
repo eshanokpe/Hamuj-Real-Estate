@@ -40,7 +40,6 @@ class UserAssetsController extends Controller
         foreach ($buys as $buy) {
             $buy->user->total_assets = $this->calculateUserTotalAssets($buy->user);
         }
-        
         return view('admin.home.userAssets.index', compact('buys', 'search'));
     }
 

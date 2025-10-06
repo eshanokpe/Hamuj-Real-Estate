@@ -61,6 +61,7 @@
                                     <span class="properties__views">{{ $property->total_selected_size_land }} SQM</span>
                                 </td>
                                 <td>
+                                    
                                     @if($property->status == 'pending')
                                         <span class="status__btn pending2 " style="background-color: #f39c12; ">
                                             <a class="text-white" >{{ucfirst($property->status)}}</a>

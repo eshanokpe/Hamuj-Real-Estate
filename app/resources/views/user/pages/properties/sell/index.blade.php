@@ -64,10 +64,10 @@
                                     <span class="reviews__date">
                                         {{  \Carbon\Carbon::parse($property->latest_created_at)->format('d F, Y')  }} 
                                     </span>
-                                </td>
+                                </td> 
                                 <td class="text-nowrap align-middle fw-bold"> {{-- Align vertically, make bold --}}
                                     <span class="properties__views">{{ number_format($property->total_selected_size_land, 4) }} SQM</span>
-                                </td> 
+                                </td>  
                                 <td>
                                     <span class="status__btn pending2"> 
                                         <a href="{{ route('user.properties.show', encrypt($property->property->id))}}">

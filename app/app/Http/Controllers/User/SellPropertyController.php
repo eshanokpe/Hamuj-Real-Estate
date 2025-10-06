@@ -51,6 +51,7 @@ class SellPropertyController extends Controller
     public function sellProperty(Request $request)
     {
         $request->validate([ 
+            'acquired_size_land' => 'required',
             'remaining_size' => 'required',
             'property_slug' => 'required',
             'calculated_size' => 'required',
@@ -95,6 +96,14 @@ class SellPropertyController extends Controller
 
         // Prepare the data to send to Paystack
         try {
+            // Calculate new available size for the property
+            $acquiredSizeLand = $request->input('acquired_size_land');
+            $result = $property->available_size - $acquiredSizeLand;
+            // Update the property's available_size
+            $property->update([
+                'available_size' => $result
+            ]);
+        
             // Create the sell record
             $sell = Sell::create([
                 'property_id' => $propertyData->id,
@@ -131,11 +140,12 @@ class SellPropertyController extends Controller
                 
                 // Update the buy record's remaining size
                 $buy->update([
-                    'remaining_size' => $buy->remaining_size - $deductibleAmount
+                    'remaining_size' => $buy->remaining_size - $deductibleAmount,
+                    'selected_size_land' => $buy->selected_size_land - $deductibleAmount
                 ]);
                 
                 $landToDeduct -= $deductibleAmount;
-            }
+            } 
             
             // Top up user's wallet
             $wallet = Wallet::firstOrCreate(
