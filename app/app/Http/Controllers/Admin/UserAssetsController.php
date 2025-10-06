@@ -47,7 +47,7 @@ class UserAssetsController extends Controller
      * Calculate total assets for a user
      */
     private function calculateUserTotalAssets($user)
-    {
+    {  
         if (!$user) return 0;
          
         // Total property assets (purchases - sales)
@@ -56,11 +56,10 @@ class UserAssetsController extends Controller
             ->whereNotNull('property_id')
             ->sum('amount');  
         
-        
         // Wallet balance
         // $walletBalance = $user->wallet->balance ?? 0;
-        
         // Total assets (property + wallet)
+        dd($totalPropertyAmount);
         return max(0, $totalPropertyAmount); // Ensure non-negative
     }
 
