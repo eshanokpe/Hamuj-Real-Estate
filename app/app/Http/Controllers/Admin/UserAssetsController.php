@@ -55,7 +55,7 @@ class UserAssetsController extends Controller
         // Total property assets (purchases - sales)
         $totalPropertyAmount = Transaction::where('user_id', $user->id)
             ->where('email', $user->email)
-            ->where('payment_method', 'wallet')
+            // ->where('payment_method', 'buy_property')
             ->whereNotNull('property_id')
             ->sum('amount');  
         
