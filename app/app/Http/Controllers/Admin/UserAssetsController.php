@@ -14,7 +14,7 @@ class UserAssetsController extends Controller
    public function index(Request $request)
     {
         $search = $request->input('search');
-        $user = Auth::user();
+        
         $buys = Buy::with(['user', 'property', 'user.wallet'])
                 ->when($search, function ($query, $search) {
                     return $query->where(function ($q) use ($search) {
