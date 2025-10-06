@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Buy;
+use Auth;
 
 class UserAssetsController extends Controller
 { 
