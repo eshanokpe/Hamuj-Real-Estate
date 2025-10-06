@@ -13,7 +13,7 @@ class UserAssetsController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        
+        $user = Auth::user();
         $buys = Buy::with(['user', 'property', 'user.wallet'])
                 ->when($search, function ($query, $search) {
                     return $query->where(function ($q) use ($search) {
@@ -37,10 +37,10 @@ class UserAssetsController extends Controller
                 ->appends(['search' => $search]);
         
         // Calculate total assets for each user
-        foreach ($buys as $buy) {
-            $buy->user->total_assets = $this->calculateUserTotalAssets($buy->user);
-            // dd($buy->user->total_assets);
-        }
+        // foreach ($buys as $buy) {
+            $buy->user->total_assets = $this->calculateUserTotalAssets($user);
+            dd($buy->user->total_assets);
+        // }
         return view('admin.home.userAssets.index', compact('buys', 'search'));
     }
 
