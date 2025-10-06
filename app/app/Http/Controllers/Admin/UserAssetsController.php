@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Buy;
-use Auth;
+
 
 class UserAssetsController extends Controller
 { 
-    public function index(Request $request)
+   public function index(Request $request)
     {
         $search = $request->input('search');
         $user = Auth::user();
@@ -37,18 +37,13 @@ class UserAssetsController extends Controller
                 ->paginate(20)
                 ->appends(['search' => $search]);
         
-        // Calculate total assets for all users
-        $userAssets = [];
-        $allUsers = User::all();
-        foreach ($allUsers as $user) {
-            $userAssets[$user->id] = [
-                'user' => $user,
-                'totalPropertyAmount' => $this->calculateUserTotalAssets($user)
-            ];
+        // Calculate total assets for each user (the user who made the purchase)
+        foreach ($buys as $buy) {
+            $buy->user->total_assets = $this->calculateUserTotalAssets($buy->user);
         }
-        dd($userAssets); // For debugging
-        return view('admin.home.userAssets.index', compact('buys', 'search', 'userAssets'));
-     }
+        
+        return view('admin.home.userAssets.index', compact('buys', 'search'));
+    }
 
     /**
      * Calculate total assets for a user
@@ -56,17 +51,13 @@ class UserAssetsController extends Controller
     private function calculateUserTotalAssets($user)
     {  
         if (!$user) return 0;
-         
+        
         // Total property assets (purchases - sales)
         $totalPropertyAmount = Transaction::where('user_id', $user->id)
             ->where('email', $user->email)
             ->whereNotNull('property_id')
             ->sum('amount');  
         
-        // Wallet balance
-        // $walletBalance = $user->wallet->balance ?? 0;
-        // Total assets (property + wallet)
-        // dd($totalPropertyAmount);
         return max(0, $totalPropertyAmount); // Ensure non-negative
     }
 
