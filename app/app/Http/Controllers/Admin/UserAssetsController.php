@@ -37,13 +37,18 @@ class UserAssetsController extends Controller
                 ->paginate(20)
                 ->appends(['search' => $search]);
         
-        // Calculate total assets for each user
-        // foreach ($buys as $buy) {
-            $users = $this->calculateUserTotalAssets($user);
-            dd($users);
-        // }
-        return view('admin.home.userAssets.index', compact('buys', 'search'));
-    }
+        // Calculate total assets for all users
+        $userAssets = [];
+        $allUsers = User::all();
+        foreach ($allUsers as $user) {
+            $userAssets[$user->id] = [
+                'user' => $user,
+                'totalPropertyAmount' => $this->calculateUserTotalAssets($user)
+            ];
+        }
+        dd($userAssets); // For debugging
+        return view('admin.home.userAssets.index', compact('buys', 'search', 'userAssets'));
+     }
 
     /**
      * Calculate total assets for a user
