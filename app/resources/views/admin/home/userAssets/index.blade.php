@@ -82,7 +82,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>User Full Name</th>
-                                            {{-- <th>User Email</th> --}}
+                                            <th>User Email</th>
                                             <th>Total Assets</th>
                                             <th>Property Name</th>
                                             <th>Selected Size</th>
@@ -106,12 +106,12 @@
                                                         <i class="las la-search text-success ms-1" title="Match found in name"></i>
                                                     @endif
                                                 </td>
-                                                {{-- <td>
+                                                <td>
                                                     {{ $buy->user_email }}
                                                     @if($search && stripos($buy->user_email, $search) !== false)
                                                         <i class="las la-search text-success ms-1" title="Match found in email"></i>
                                                     @endif
-                                                </td> --}}
+                                                </td> 
                                                 <td>
                                                     <span class="badge bg-success fs-6">
                                                         ₦{{ number_format($buy->user->total_assets ?? 0, 2) }}
