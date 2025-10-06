@@ -115,7 +115,7 @@
                                                 <td>
                                                     <span class="badge bg-success fs-6">
                                                         ₦{{ number_format($buy->user->total_assets ?? 0, 2) }}
-                                                    </span>
+                                                    </span> 
                                                 </td>
                                                 <td>
                                                     {{ $buy->property->name }}

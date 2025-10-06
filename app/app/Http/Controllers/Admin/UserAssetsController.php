@@ -32,7 +32,7 @@ class UserAssetsController extends Controller
                         ->orWhere('status', 'like', "%{$search}%");
                     });
                 })
-                ->latest()
+                ->latest() 
                 ->paginate(20)
                 ->appends(['search' => $search]);
         
@@ -54,10 +54,11 @@ class UserAssetsController extends Controller
         $totalPropertyAmount = Transaction::where('user_id', $user->id)
             ->where('email', $user->email)
             ->whereNotNull('property_id')
-            ->sum('amount'); 
+            ->sum('amount');  
+        
         
         // Wallet balance
-        $walletBalance = $user->wallet->balance ?? 0;
+        // $walletBalance = $user->wallet->balance ?? 0;
         
         // Total assets (property + wallet)
         return max(0, $totalPropertyAmount); // Ensure non-negative

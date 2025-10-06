@@ -29,7 +29,7 @@ class DashboardController extends Controller
         ->where('email', $user->email)
         ->whereIn('payment_method', ['transfer_property', 'buy_property'])
         ->latest()->limit(5)->get();
-         
+          
         $data['totalWalletAmount'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
                                             ->where('transaction_type', 'wallet')
