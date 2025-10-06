@@ -117,7 +117,7 @@
                                                         ₦{{ number_format($buy->user->total_assets ?? 0, 2) }}
                                                     </span>
                                                     <!-- Temporary debug -->
-                                                    <small class="text-muted d-block">User ID: {{ $buy->user->id }}</small>
+                                                    {{-- <small class="text-muted d-block">User ID: {{ $buy->user->id }}</small> --}}
                                                 </td>
                                                 <td>
                                                     {{ $buy->property->name }}
