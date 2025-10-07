@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="page-wrapper">
-    <!-- Page Content -->
     <div class="page-content-tab">
         <div class="container-fluid">
             
@@ -29,7 +28,7 @@
                                         <input type="text" 
                                                name="search" 
                                                class="form-control border-start-0" 
-                                               placeholder="Search by user name, email, property name, size, price, or status..." 
+                                               placeholder="Search by user name, email, or phone..." 
                                                value="{{ $search ?? '' }}">
                                     </div>
                                 </div>
@@ -39,7 +38,7 @@
                                             <i class="las la-search me-1"></i> Search
                                         </button>
                                         @if($search)
-                                            <a href="{{ route('admin.buy.index') }}" class="btn btn-outline-secondary">
+                                            <a href="{{ route('admin.userAssets.index') }}" class="btn btn-outline-secondary">
                                                 <i class="las la-times me-1"></i> Clear
                                             </a>
                                         @endif
@@ -51,7 +50,7 @@
                                 <div class="mt-3">
                                     <p class="text-muted mb-0">
                                         Search results for: <strong>"{{ $search }}"</strong>
-                                        <span class="badge bg-primary ms-2">{{ $users->total() }} result(s) found</span>
+                                        <span class="badge bg-primary ms-2">{{ $users->total() }} user(s) found</span>
                                     </p>
                                 </div>
                             @endif
@@ -60,17 +59,17 @@
                 </div>
             </div>
 
-            <!-- Property Buy List -->
+            <!-- Users List -->
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                            <h5 class="card-title mb-0">List of Purchased Assets</h5>
+                            <h5 class="card-title mb-0">All Users with Property Assets</h5>
                             <div class="d-flex align-items-center">
                                 @if($search)
                                     <span class="badge bg-primary me-2">{{ $users->total() }} results</span>
                                 @endif
-                                <span class="badge bg-secondary">Total: {{ $users->total() }} records</span>
+                                <span class="badge bg-secondary">Total: {{ $users->total() }} users</span>
                             </div>
                         </div>
 
@@ -82,18 +81,16 @@
                                         <tr>
                                             <th>#</th>
                                             <th>User Full Name</th>
-                                            <th>User Email</th>
-                                            <th>Total Assets</th>
-                                            <th>Property Name</th>
-                                            <th>Selected Size</th>
-                                            <th>Remaining Size</th>
-                                            <th>Total Price</th>
-                                            <th>Date</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Total Property Assets</th>
+                                            <th>Properties Owned</th>
+                                            <th>Registration Date</th>
                                             <th class="text-end">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($users as $buy)
+                                        @foreach ($users as $user)
                                             @php 
                                                 $index = ($users->currentPage() - 1) * $users->perPage() + $loop->index + 1; 
                                             @endphp
@@ -101,58 +98,39 @@
                                             <tr>
                                                 <td><strong>{{ $index }}</strong></td>
                                                 <td class="text-uppercase">
-                                                    {{ $buy->user->first_name . ' ' . $buy->user->last_name }}
-                                                    @if($search && stripos($buy->user->first_name . ' ' . $buy->user->last_name, $search) !== false)
+                                                    {{ $user->first_name . ' ' . $user->last_name }}
+                                                    @if($search && stripos($user->first_name . ' ' . $user->last_name, $search) !== false)
                                                         <i class="las la-search text-success ms-1" title="Match found in name"></i>
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{ $buy->user_email }}
-                                                    @if($search && stripos($buy->user_email, $search) !== false)
+                                                    {{ $user->email }}
+                                                    @if($search && stripos($user->email, $search) !== false)
                                                         <i class="las la-search text-success ms-1" title="Match found in email"></i>
                                                     @endif
-                                                </td> 
+                                                </td>
+                                                <td>{{ $user->phone ?? 'N/A' }}</td>
                                                 <td>
                                                     <span class="badge bg-success fs-6">
-                                                        ₦{{ number_format($buy->user->total_assets ?? 0, 2) }}
+                                                        ₦{{ number_format($user->total_assets ?? 0, 2) }}
                                                     </span>
-                                                    <!-- Temporary debug -->
-                                                    {{-- <small class="text-muted d-block">User ID: {{ $buy->user->id }}</small> --}}
                                                 </td>
                                                 <td>
-                                                    {{ $buy->property->name }}
-                                                    @if($search && stripos($buy->property->name, $search) !== false)
-                                                        <i class="las la-search text-success ms-1" title="Match found in property name"></i>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $buy->selected_size_land }} SQM</td>
-                                                <td>
-                                                    @if($buy->remaining_size > 0)
-                                                        <span class="badge bg-success">{{ $buy->remaining_size }} SQM</span>
+                                                    @if($user->properties_count > 0)
+                                                        <span class="badge bg-info">{{ $user->properties_count }} properties</span>
                                                     @else
-                                                        <span class="badge bg-danger">Sold Out</span>
+                                                        <span class="badge bg-secondary">No properties</span>
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    ₦{{ number_format($buy->total_price, 2) }}
-                                                    @if($search && stripos($buy->total_price, $search) !== false)
-                                                        <i class="las la-search text-success ms-1" title="Match found in price"></i>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $buy->created_at ? $buy->created_at->format('d M Y') : 'N/A' }}</td>
+                                                <td>{{ $user->created_at ? $user->created_at->format('d M Y') : 'N/A' }}</td>
                                                 <td class="text-end">
                                                     <div class="d-flex justify-content-end">
-                                                        <a href="{{ route('admin.buy.edit', encrypt($buy->id)) }}" class="btn btn-sm btn-outline-primary me-2" title="Edit">
+                                                        <a href="{{ route('admin.users.show', encrypt($user->id)) }}" class="btn btn-sm btn-outline-primary me-2" title="View Details">
+                                                            <i class="las la-eye"></i>
+                                                        </a>
+                                                        <a href="{{ route('admin.users.edit', encrypt($user->id)) }}" class="btn btn-sm btn-outline-warning me-2" title="Edit">
                                                             <i class="las la-pen"></i>
                                                         </a>
-
-                                                        <form action="{{ route('admin.buy.destroy', encrypt($buy->id)) }}" method="POST" class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this property?');" title="Delete">
-                                                                <i class="las la-trash-alt"></i>
-                                                            </button>
-                                                        </form>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -173,27 +151,27 @@
                             @else
                                 <div class="text-center py-5">
                                     <div class="mb-4">
-                                        <i class="las la-search la-4x text-muted"></i>
+                                        <i class="las la-users la-4x text-muted"></i>
                                     </div>
-                                    <h5 class="text-muted">No purchases found</h5>
+                                    <h5 class="text-muted">No users found</h5>
                                     @if($search)
-                                        <p class="text-muted">No results found for your search "{{ $search }}"</p>
-                                        <a href="{{ route('admin.buy.index') }}" class="btn btn-primary mt-2">
-                                            <i class="las la-list me-1"></i> View All Purchases
+                                        <p class="text-muted">No users found for your search "{{ $search }}"</p>
+                                        <a href="{{ route('admin.userAssets.index') }}" class="btn btn-primary mt-2">
+                                            <i class="las la-list me-1"></i> View All Users
                                         </a>
                                     @else
-                                        <p class="text-muted">There are no property purchases in the system yet.</p>
+                                        <p class="text-muted">There are no users in the system yet.</p>
                                     @endif
                                 </div>
                             @endif
-                        </div> <!-- end card-body -->
-                    </div> <!-- end card -->
+                        </div>
+                    </div>
                 </div>
-            </div> <!-- end row -->
+            </div>
 
-        </div> <!-- end container -->
-    </div> <!-- end page-content-tab -->
-</div> <!-- end page-wrapper -->
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('styles')
