@@ -124,9 +124,9 @@
                                                         <span class="badge bg-secondary">No properties</span>
                                                     @endif
                                                 </td>
-                                                <td>{{ $buy->selected_size_land }} SQM</td>
+                                                <td>{{ $user->buy->selected_size_land }} SQM</td>
                                                 <td>
-                                                    @if($buy->remaining_size > 0)
+                                                    @if($user->buy->remaining_size > 0)
                                                         <span class="badge bg-success">{{ $buy->remaining_size }} SQM</span>
                                                 </td>
                                                 <td>{{ $user->created_at ? $user->created_at->format('d M Y') : 'N/A' }}</td>
