@@ -77,6 +77,11 @@ class User extends Authenticatable
         'nin_verified_at' => 'datetime'
     ];
 
+    public function buys()
+    {
+        return $this->hasMany(Buy::class, 'user_id');
+    }
+
     public function isOnline()
     {
         return Cache::has('user-is-online-' . $this->id);
