@@ -128,7 +128,7 @@
                                                         <a href="{{ route('admin.users.show', encrypt($user->id)) }}" class="btn btn-sm btn-outline-primary me-2" title="View Details">
                                                             <i class="las la-eye"></i>
                                                         </a>
-                                                        <a href="{{ route('admin.users.edit', encrypt($user->id)) }}" class="btn btn-sm btn-outline-warning me-2" title="Edit">
+                                                        <a href="{{ route('admin.users.show', encrypt($user->id)) }}" class="btn btn-sm btn-outline-warning me-2" title="Edit">
                                                             <i class="las la-pen"></i>
                                                         </a>
                                                     </div>
