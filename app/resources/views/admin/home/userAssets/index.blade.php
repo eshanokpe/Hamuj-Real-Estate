@@ -85,6 +85,8 @@
                                             <th>Phone</th>
                                             <th>Total Property Assets</th>
                                             <th>Properties Owned</th>
+                                            <th>Selected Size</th>
+                                            <th>Remaining Size</th>
                                             <th>Registration Date</th>
                                             <th class="text-end">Actions</th>
                                         </tr>
@@ -121,6 +123,11 @@
                                                     @else
                                                         <span class="badge bg-secondary">No properties</span>
                                                     @endif
+                                                </td>
+                                                <td>{{ $buy->selected_size_land }} SQM</td>
+                                                <td>
+                                                    @if($buy->remaining_size > 0)
+                                                        <span class="badge bg-success">{{ $buy->remaining_size }} SQM</span>
                                                 </td>
                                                 <td>{{ $user->created_at ? $user->created_at->format('d M Y') : 'N/A' }}</td>
                                                 <td class="text-end">
