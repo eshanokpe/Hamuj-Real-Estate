@@ -51,7 +51,7 @@
                                 <div class="mt-3">
                                     <p class="text-muted mb-0">
                                         Search results for: <strong>"{{ $search }}"</strong>
-                                        <span class="badge bg-primary ms-2">{{ $buys->total() }} result(s) found</span>
+                                        <span class="badge bg-primary ms-2">{{ $users->total() }} result(s) found</span>
                                     </p>
                                 </div>
                             @endif
@@ -75,7 +75,7 @@
                         </div>
 
                         <div class="card-body">
-                            @if($buys->total() > 0)
+                            @if($users->total() > 0)
                             <div class="table-responsive">
                                 <table class="table table-striped align-middle mb-0">
                                     <thead class="table-light">
@@ -95,7 +95,7 @@
                                     <tbody>
                                         @foreach ($users as $buy)
                                             @php 
-                                                $index = ($buys->currentPage() - 1) * $buys->perPage() + $loop->index + 1; 
+                                                $index = ($users->currentPage() - 1) * $users->perPage() + $loop->index + 1; 
                                             @endphp
   
                                             <tr>
@@ -164,10 +164,10 @@
                             <!-- Pagination -->
                             <div class="mt-4 d-flex justify-content-between align-items-center">
                                 <div class="text-muted">
-                                    Showing {{ $buys->firstItem() }} to {{ $buys->lastItem() }} of {{ $buys->total() }} entries
+                                    Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of {{ $users->total() }} entries
                                 </div>
                                 <div>
-                                    {{ $buys->links('vendor.pagination.bootstrap-4') }}
+                                    {{ $users->links('vendor.pagination.bootstrap-4') }}
                                 </div>
                             </div>
                             @else
