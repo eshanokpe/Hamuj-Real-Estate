@@ -41,7 +41,17 @@ class UserAssetsController extends Controller
         // Calculate total assets for each user (the user who made the purchase)
         foreach ($users as $user) {
             $user->total_assets = $this->calculateUserTotalAssets($user);
-            $user->properties_count = Buy::where('user_id', $user->id)->count();
+            
+            // Get property purchase data
+            $propertyData = Buy::where('user_id', $user->id)
+                ->selectRaw('COUNT(*) as properties_count, 
+                            SUM(selected_size_land) as total_land_size,
+                            SUM(remaining_size) as total_remaining_size')
+                ->first();
+                
+            $user->properties_count = $propertyData->properties_count ?? 0;
+            $user->total_land_size = $propertyData->total_land_size ?? 0;
+            $user->total_remaining_size = $propertyData->total_remaining_size ?? 0;
         }
         
         return view('admin.home.userAssets.index', compact('users', 'search'));

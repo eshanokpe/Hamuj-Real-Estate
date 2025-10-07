@@ -84,9 +84,9 @@
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Total Property Assets</th>
-                                            <th>Properties Owned</th>
-                                            <th>Selected Size</th>
+                                            <th>Total Land Size</th>
                                             <th>Remaining Size</th>
+                                            <th>Properties Owned</th>
                                             <th>Registration Date</th>
                                             <th class="text-end">Actions</th>
                                         </tr>
@@ -117,6 +117,14 @@
                                                         ₦{{ number_format($user->total_assets ?? 0, 2) }}
                                                     </span>
                                                 </td>
+                                                <td>{{ $user->total_land_size ?? 0 }} SQM</td>
+                                                <td>
+                                                    @if(($user->total_remaining_size ?? 0) > 0)
+                                                        <span class="badge bg-success">{{ $user->total_remaining_size ?? 0 }} SQM</span>
+                                                    @else
+                                                        <span class="badge bg-danger">Sold Out</span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     @if($user->properties_count > 0)
                                                         <span class="badge bg-info">{{ $user->properties_count }} properties</span>
@@ -124,18 +132,13 @@
                                                         <span class="badge bg-secondary">No properties</span>
                                                     @endif
                                                 </td>
-                                                <td>{{ $user->buy->selected_size_land }} SQM</td>
-                                                <td>
-                                                    @if($user->buy->remaining_size > 0)
-                                                        <span class="badge bg-success">{{ $buy->remaining_size }} SQM</span>
-                                                </td>
                                                 <td>{{ $user->created_at ? $user->created_at->format('d M Y') : 'N/A' }}</td>
                                                 <td class="text-end">
                                                     <div class="d-flex justify-content-end">
                                                         <a href="{{ route('admin.users.show', encrypt($user->id)) }}" class="btn btn-sm btn-outline-primary me-2" title="View Details">
                                                             <i class="las la-eye"></i>
                                                         </a>
-                                                        <a href="{{ route('admin.users.show', encrypt($user->id)) }}" class="btn btn-sm btn-outline-warning me-2" title="Edit">
+                                                        <a href="{{ route('admin.users.edit', encrypt($user->id)) }}" class="btn btn-sm btn-outline-warning me-2" title="Edit">
                                                             <i class="las la-pen"></i>
                                                         </a>
                                                     </div>
@@ -180,19 +183,3 @@
     </div>
 </div>
 @endsection
-
-@push('styles')
-<style>
-.badge.bg-success {
-    font-size: 0.75rem;
-    padding: 0.35em 0.65em;
-}
-.table td {
-    vertical-align: middle;
-}
-.input-group-text {
-    background-color: #f8f9fa;
-    border-color: #dee2e6;
-}
-</style>
-@endpush
