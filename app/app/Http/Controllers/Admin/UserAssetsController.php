@@ -16,7 +16,7 @@ class UserAssetsController extends Controller
         $search = $request->input('search');
         $users = User::
                 // with(['wallet', 'buys.property'])
-                // ->whereHas('buys') 
+                whereHas('buys') 
                 when($search, function ($query, $search) {
                     return $query->where(function ($q) use ($search) {
                         $q->whereHas('user', function ($userQuery) use ($search) {
