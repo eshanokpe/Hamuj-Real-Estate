@@ -68,9 +68,9 @@
                             <h5 class="card-title mb-0">List of Purchased Assets</h5>
                             <div class="d-flex align-items-center">
                                 @if($search)
-                                    <span class="badge bg-primary me-2">{{ $buys->total() }} results</span>
+                                    <span class="badge bg-primary me-2">{{ $users->total() }} results</span>
                                 @endif
-                                <span class="badge bg-secondary">Total: {{ $buys->total() }} records</span>
+                                <span class="badge bg-secondary">Total: {{ $users->total() }} records</span>
                             </div>
                         </div>
 
