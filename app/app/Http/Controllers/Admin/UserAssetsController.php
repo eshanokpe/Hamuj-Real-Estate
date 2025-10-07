@@ -14,26 +14,14 @@ class UserAssetsController extends Controller
    public function index(Request $request)
     {
         $search = $request->input('search');
-        $users = User::
-                // with(['wallet', 'buys.property'])
-                // ->whereHas('buys') 
-                when($search, function ($query, $search) {
-                    return $query->where(function ($q) use ($search) {
-                        $q->whereHas('user', function ($userQuery) use ($search) {
-                            $userQuery->where('first_name', 'like', "%{$search}%")
-                                    ->orWhere('last_name', 'like', "%{$search}%")
-                                    ->orWhere('email', 'like', "%{$search}%");
-                        })
-                        ->orWhereHas('property', function ($propertyQuery) use ($search) {
-                            $propertyQuery->where('name', 'like', "%{$search}%");
-                        })
-                        ->orWhere('user_email', 'like', "%{$search}%")
-                        ->orWhere('selected_size_land', 'like', "%{$search}%")
-                        ->orWhere('remaining_size', 'like', "%{$search}%")
-                        ->orWhere('total_price', 'like', "%{$search}%")
-                        ->orWhere('status', 'like', "%{$search}%");
-                    });
-                })
+        $users = User::when($search, function ($query, $search) {
+            return $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        })
                 ->latest() 
                 ->paginate(20)
                 ->appends(['search' => $search]);
