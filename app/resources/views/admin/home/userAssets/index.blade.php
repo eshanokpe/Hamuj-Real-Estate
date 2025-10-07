@@ -122,7 +122,7 @@
                                                     @if(($user->total_remaining_size ?? 0) > 0)
                                                         <span class="badge bg-success">{{ $user->total_remaining_size ?? 0 }} SQM</span>
                                                     @else
-                                                        <span class="badge bg-danger">Sold Out</span>
+                                                        <span class="badge bg-danger">No Property</span>
                                                     @endif
                                                 </td>
                                                 <td>
