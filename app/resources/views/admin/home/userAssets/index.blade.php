@@ -93,7 +93,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($buys as $buy)
+                                        @foreach ($users as $buy)
                                             @php 
                                                 $index = ($buys->currentPage() - 1) * $buys->perPage() + $loop->index + 1; 
                                             @endphp

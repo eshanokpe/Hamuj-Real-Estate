@@ -14,7 +14,9 @@ class UserAssetsController extends Controller
    public function index(Request $request)
     {
         $search = $request->input('search');
-        $users = User::when($search, function ($query, $search) {
+        $users = User::with(['wallet', 'buys.property'])
+                ->whereHas('buys') 
+                ->when($search, function ($query, $search) {
                     return $query->where(function ($q) use ($search) {
                         $q->whereHas('user', function ($userQuery) use ($search) {
                             $userQuery->where('first_name', 'like', "%{$search}%")
@@ -40,7 +42,7 @@ class UserAssetsController extends Controller
             $user->total_assets = $this->calculateUserTotalAssets($user);
         }
         
-        return view('admin.home.userAssets.index', compact('buys', 'search'));
+        return view('admin.home.userAssets.index', compact('users', 'search'));
     }
 
     /**
