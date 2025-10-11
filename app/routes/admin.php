@@ -135,16 +135,25 @@ Route::prefix('admin')->group(function () {
        
         // Buy Routes
         Route::name('admin.')->group(function () {
+            // Route::get('buy/index', [BuyController::class, 'index'])->name('admin.buy');
             Route::get('buy', [BuyController::class, 'index'])->name('buy.index');
-            Route::get('{id}/editbuy', [BuyController::class, 'edit'])->name('buy.edit');
+            Route::get('{id}/edit', [BuyController::class, 'edit'])->name('buy.edit');
+            Route::get('/buy/search', [BuyController::class, 'search'])->name('buy.search');
             Route::put('{id}/buy', [BuyController::class, 'update'])->name('buy.update');
             Route::delete('{id}/buy', [BuyController::class, 'destroy'])->name('buy.destroy');
+            Route::delete('/destroy-multiple', [BuyController::class, 'destroyMultiple'])->name('buy.destroy-multiple');
+            Route::get('/{id}/delete-confirmation', [BuyController::class, 'showDeleteConfirmation'])->name('buy.delete-confirmation');
         });
+
         Route::name('admin.')->group(function () {
             Route::get('assets/index', [UserAssetsController::class, 'index'])->name('userAssets.index');
+            Route::delete('/delete-transactions/{userId}', [UserAssetsController::class, 'deleteAllTransactions'])->name('userAssets.deleteAllTransactions');
         });
         Route::name('admin.')->group(function () {
-            Route::get('transaction/index', [TransactionController::class, 'index'])->name('transaction');
+            Route::get('transaction', [TransactionController::class, 'index'])->name('transactions.index');
+            Route::get('transaction/search', [TransactionController::class, 'search'])->name('transactions.search');
+            Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
+            Route::delete('/', [TransactionController::class, 'destroyMultiple'])->name('transactions.destroy-multiple');
         });
         
         Route::name('admin.')->group(function () {
@@ -164,7 +173,7 @@ Route::prefix('admin')->group(function () {
             Route::delete('{id}/sell', [SellController::class, 'destroy'])->name('sell.destroy');
             Route::get('/search', [SellController::class, 'search'])->name('sell.search');
             Route::get('/suggestions', [SellController::class, 'suggestions'])->name('sell.suggestions');
-        });
+        }); 
 
         // Transfer Routes
         Route::name('admin.')->group(function () {
@@ -230,7 +239,6 @@ Route::prefix('admin')->group(function () {
             Route::patch('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active');
         }); 
 
-       Route::get('buy/index', [BuyController::class, 'index'])->name('admin.buy');
        Route::get('transfer/index', [TransferController::class, 'index'])->name('admin.transfer');
        Route::get('sell/index', [SellController::class, 'index'])->name('admin.sell');
  

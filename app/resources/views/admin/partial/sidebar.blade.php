@@ -116,7 +116,7 @@
                         </a>
                     </li> 
                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.transaction') }}" >
+                        <a class="nav-link" href="{{ route('admin.transactions.index') }}" >
                             <i class="ti ti-wallet menu-icon"></i>
                             <span>Transactions</span>
                         </a>

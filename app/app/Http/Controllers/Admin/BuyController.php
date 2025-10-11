@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Buy;
+use Illuminate\Support\Facades\DB;
 
 class BuyController extends Controller
 {  
@@ -36,9 +37,12 @@ class BuyController extends Controller
                 ->paginate(20)
                 ->appends(['search' => $search]);
         
-        // Calculate total assets for each user
+        // Calculate total assets for each user and count transactions
         foreach ($buys as $buy) {
             $buy->user->total_assets = $this->calculateUserTotalAssets($buy->user);
+            
+            // Count associated transaction
+            $buy->transaction_count = Transaction::where('id', $buy->transaction_id)->count();
         }
         
         return view('admin.home.buy.index', compact('buys', 'search'));
@@ -70,12 +74,65 @@ class BuyController extends Controller
         return view('admin.home.buy.edit', compact('buy'));
     }
 
+    /**
+     * Delete buy record and associated transaction
+     */
     public function destroy($id)
     {
-        $buy = Buy::findOrFail(decrypt($id)); // not Post::findOrFail()
-        $buy->delete();
+        try {
+            $buyId = decrypt($id);
+            $buy = Buy::with(['user', 'property'])->findOrFail($buyId);
 
-        return redirect()->route('admin.buy.index')->with('success', 'Buy Property deleted successfully.');
+            DB::transaction(function () use ($buy) {
+                // Delete associated transaction if exists
+                if ($buy->transaction_id) {
+                    Transaction::where('id', $buy->transaction_id)->delete();
+                }
+
+                // Delete the buy record
+                $buy->delete();
+            });
+
+            return redirect()->route('admin.buy.index')
+                ->with('success', 'Purchase record and associated transaction deleted successfully.');
+
+        } catch (\Exception $e) {
+            return redirect()->route('admin.buy.index')
+                ->with('error', 'Failed to delete record: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete multiple buy records and their transactions
+     */
+    public function destroyMultiple(Request $request)
+    {
+        try {
+            $buyIds = array_map('decrypt', $request->buy_ids);
+            
+            DB::transaction(function () use ($buyIds) {
+                // Get all buy records with their transaction IDs
+                $buys = Buy::whereIn('id', $buyIds)->get();
+                
+                // Collect all transaction IDs
+                $transactionIds = $buys->pluck('transaction_id')->filter()->toArray();
+                
+                // Delete transactions
+                if (!empty($transactionIds)) {
+                    Transaction::whereIn('id', $transactionIds)->delete();
+                }
+                
+                // Delete buy records
+                Buy::whereIn('id', $buyIds)->delete();
+            });
+
+            return redirect()->route('admin.buy.index')
+                ->with('success', 'Selected purchase records and their transactions deleted successfully.');
+
+        } catch (\Exception $e) {
+            return redirect()->route('admin.buy.index')
+                ->with('error', 'Failed to delete records: ' . $e->getMessage());
+        }
     }
 
     public function update(Request $request, $id)

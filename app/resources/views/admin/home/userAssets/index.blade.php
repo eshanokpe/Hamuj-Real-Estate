@@ -14,6 +14,23 @@
                 </div>
             </div>
 
+            <!-- Success/Error Messages -->
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="las la-check-circle me-2"></i>
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="las la-exclamation-triangle me-2"></i>
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+ 
             <!-- Search Box -->
             <div class="row mb-4">
                 <div class="col-lg-12">
@@ -87,6 +104,7 @@
                                             <th>Total Land Size</th>
                                             <th>Remaining Size</th>
                                             <th>Properties Owned</th>
+                                            <th>Records Count</th>
                                             <th>Registration Date</th>
                                             <th class="text-end">Actions</th>
                                         </tr>
@@ -132,6 +150,13 @@
                                                         <span class="badge bg-secondary">No properties</span>
                                                     @endif
                                                 </td>
+                                                <td>
+                                                    <div class="small text-muted">
+                                                        <div>Transactions: {{ $user->transactions_count }}</div>
+                                                        <div>Buy Records: {{ $user->buy_records_count }}</div>
+                                                        <div>Sell Records: {{ $user->sell_records_count }}</div>
+                                                    </div>
+                                                </td>
                                                 <td>{{ $user->created_at ? $user->created_at->format('d M Y') : 'N/A' }}</td>
                                                 <td class="text-end">
                                                     <div class="d-flex justify-content-end">
@@ -141,7 +166,68 @@
                                                         <a href="{{ route('admin.users.show', encrypt($user->id)) }}" class="btn btn-sm btn-outline-warning me-2" title="Edit">
                                                             <i class="las la-pen"></i>
                                                         </a>
+                                                        
+                                                        <!-- Delete All Transactions Button -->
+                                                        @if($user->transactions_count > 0 || $user->buy_records_count > 0 || $user->sell_records_count > 0)
+                                                            <button type="button" 
+                                                                    class="btn btn-sm btn-outline-danger" 
+                                                                    title="Delete All Transactions"
+                                                                    data-bs-toggle="modal" 
+                                                                    data-bs-target="#deleteModal{{ $user->id }}">
+                                                                <i class="las la-trash-alt"></i>
+                                                            </button>
+                                                        @else
+                                                            <button type="button" 
+                                                                    class="btn btn-sm btn-outline-secondary" 
+                                                                    title="No transactions to delete" 
+                                                                    disabled>
+                                                                <i class="las la-trash-alt"></i>
+                                                            </button>
+                                                        @endif
                                                     </div>
+
+                                                    <!-- Delete Confirmation Modal -->
+                                                    @if($user->transactions_count > 0 || $user->buy_records_count > 0 || $user->sell_records_count > 0)
+                                                    <div class="modal fade" id="deleteModal{{ $user->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $user->id }}" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title text-danger" id="deleteModalLabel{{ $user->id }}">
+                                                                        <i class="las la-exclamation-triangle text-warning me-2"></i>
+                                                                        Delete All Transactions
+                                                                    </h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p class="mb-3">Are you sure you want to delete all transaction records for <strong>{{ $user->first_name . ' ' . $user->last_name }}</strong>?</p>
+                                                                    
+                                                                    <div class="alert alert-warning">
+                                                                        <h6 class="alert-heading mb-2">This action will permanently delete:</h6>
+                                                                        <ul class="mb-0">
+                                                                            <li>{{ $user->transactions_count }} transaction records</li>
+                                                                            <li>{{ $user->buy_records_count }} property purchase records</li>
+                                                                            <li>{{ $user->sell_records_count }} property sale records</li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    
+                                                                    <p class="text-danger mt-3">
+                                                                        <strong>Warning:</strong> This action cannot be undone!
+                                                                    </p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <form action="{{ route('admin.userAssets.deleteAllTransactions', encrypt($user->id)) }}" method="POST">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="btn btn-danger">
+                                                                            <i class="las la-trash-alt me-1"></i> Delete All Records
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -183,3 +269,23 @@
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+.badge.bg-success {
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+}
+.table td {
+    vertical-align: middle;
+}
+.input-group-text {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+.small.text-muted div {
+    line-height: 1.2;
+    margin-bottom: 2px;
+}
+</style>
+@endpush
