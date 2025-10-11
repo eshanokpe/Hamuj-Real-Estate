@@ -133,7 +133,7 @@
                                                     <li><strong>Property:</strong> {{ $buy->property->name }}</li>
                                                     <li><strong>Size:</strong> {{ $buy->selected_size_land }} SQM</li>
                                                     <li><strong>Price:</strong> ₦{{ number_format($buy->total_price, 2) }}</li>
-                                                    <li><strong>Transaction:</strong> 
+                                                    <li><strong>Transaction:</strong>    
                                                         @if($buy->transaction_id && $buy->transaction_count > 0)
                                                             <span class="text-success">Linked (ID: {{ $buy->transaction_id }})</span>
                                                         @else
