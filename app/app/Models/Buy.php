@@ -21,7 +21,11 @@ class Buy extends Model
         'use_referral',      
         'referral_amount', 
         'final_amount',
+<<<<<<< HEAD
         'status', 
+=======
+        'status',
+>>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
     ];
 
     public function property()

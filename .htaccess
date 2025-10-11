@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Protect .env file
+    <Files .env>
+        Order allow,deny
+        Deny from all
+    </Files>
+
+    # Redirect all requests to app/public (except existing files/directories)
+    RewriteCond %{REQUEST_URI} !^/app/public
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ /app/public/$1 [L]
+</IfModule>
