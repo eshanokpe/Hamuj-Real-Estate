@@ -110,7 +110,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.wallet') }}" >
+                        <a class="nav-link" href="{{ route('admin.wallet.index') }}" >
                             <i class="ti ti-wallet menu-icon"></i>
                             <span>Wallet</span>
                         </a>

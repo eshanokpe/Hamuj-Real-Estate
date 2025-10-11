@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use App\Models\Property;
+use App\Models\Wallet;
 use App\Models\Sell;
+Use DB;
 
 class SellController extends Controller
 {
@@ -203,7 +206,7 @@ class SellController extends Controller
 
                 // Deduct the amount from wallet
                 $wallet->decrement('balance', $totalPrice);
-
+                
                 // 2. Add the sold size back to property's available size
                 $property = Property::find($propertyId);
                 if ($property) {
@@ -247,7 +250,7 @@ class SellController extends Controller
                     $userId = $sell->user_id;
                     $propertyId = $sell->property_id;
                     $soldSize = $sell->selected_size_land;
-                    $totalPrice = $sell->total_price;
+                    $totalPrice = $sell->total_price; 
 
                     // 1. Deduct from user's wallet
                     $wallet = Wallet::firstOrCreate(

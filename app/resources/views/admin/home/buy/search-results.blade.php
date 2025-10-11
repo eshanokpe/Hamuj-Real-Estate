@@ -133,6 +133,11 @@
                                                     <li><strong>Property:</strong> {{ $buy->property->name }}</li>
                                                     <li><strong>Size:</strong> {{ $buy->selected_size_land }} SQM</li>
                                                     <li><strong>Price:</strong> ₦{{ number_format($buy->total_price, 2) }}</li>
+                                                    <li><strong>Status:</strong> 
+                                                        <span class="badge bg-{{ $buy->status == 'completed' ? 'success' : ($buy->status == 'pending' ? 'warning' : 'danger') }}">
+                                                            {{ ucfirst($buy->status) }}
+                                                        </span>
+                                                    </li>
                                                     <li><strong>Transaction:</strong>    
                                                         @if($buy->transaction_id && $buy->transaction_count > 0)
                                                             <span class="text-success">Linked (ID: {{ $buy->transaction_id }})</span>
@@ -144,15 +149,22 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="alert alert-danger mt-3">
-                                            <h6 class="alert-heading mb-2">This action will permanently delete:</h6>
+                                        <div class="alert alert-info mt-3">
+                                            <h6 class="alert-heading mb-2">This action will:</h6>
                                             <ul class="mb-0">
-                                                <li>This purchase record</li>
+                                                <li>Add <strong>{{ $buy->selected_size_land }} SQM</strong> back to property available size</li>
+                                                @if($buy->status === 'completed')
+                                                <li>Refund <strong>₦{{ number_format($buy->total_price, 2) }}</strong> to user's wallet</li>
+                                                @endif
+                                                <li>Delete this purchase record</li>
                                                 @if($buy->transaction_id && $buy->transaction_count > 0)
-                                                <li>The associated transaction record</li>
+                                                <li>Delete the associated transaction record</li>
                                                 @endif
                                             </ul>
-                                            <p class="mb-0 mt-2"><strong>Warning:</strong> This action cannot be undone!</p>
+                                        </div>
+
+                                        <div class="alert alert-danger mt-3">
+                                            <p class="mb-0"><strong>Warning:</strong> This action cannot be undone!</p>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -161,7 +173,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">
-                                                <i class="las la-trash-alt me-1"></i> Delete Record
+                                                <i class="las la-trash-alt me-1"></i> Delete & Restore
                                             </button>
                                         </form>
                                     </div>

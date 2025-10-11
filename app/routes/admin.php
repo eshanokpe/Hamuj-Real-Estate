@@ -176,7 +176,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/search', [SellController::class, 'search'])->name('sell.search');
             Route::get('/suggestions', [SellController::class, 'suggestions'])->name('sell.suggestions');
         }); 
-
+ 
         // Transfer Routes
         Route::name('admin.')->group(function () {
             Route::get('transfer', [TransferController::class, 'index'])->name('transfer.index');
@@ -192,7 +192,8 @@ Route::prefix('admin')->group(function () {
         });
 
         Route::name('admin.')->group(function () {
-            Route::get('wallet/index', [WalletController::class, 'index'])->name('wallet');
+            Route::get('wallet/index', [WalletController::class, 'index'])->name('wallet.index');
+            Route::get('/search', [WalletController::class, 'search'])->name('wallet.search');
         });
 
         //Office Hours 
