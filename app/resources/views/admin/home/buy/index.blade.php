@@ -9,7 +9,7 @@
             <!-- Page Title -->
             <div class="row mb-4">
                 <div class="col-sm-12">
-                    <div class="page-title-box">
+                    <div class="page-title-box"> 
                         <h4 class="page-title">Property Purchases</h4>
                     </div>
                 </div>

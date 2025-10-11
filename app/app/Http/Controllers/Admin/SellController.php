@@ -256,7 +256,7 @@ class SellController extends Controller
                     $wallet = Wallet::firstOrCreate(
                         ['user_id' => $userId],
                         ['balance' => 0]
-                    );
+                    ); 
                     $wallet->decrement('balance', $totalPrice);
 
                     // 2. Add size back to property
