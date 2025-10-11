@@ -1,0 +1,138 @@
+/* 
+    17. Location css
+*/
+.location__section{
+    background: url(../img/other/bg-full-2.png);
+    position: relative;
+    background-position: center center;
+    background-size: cover;
+}
+.location__section.section--padding {
+    padding-bottom: 10rem;
+    @media only screen and (min-width: 1200px) {
+        padding-bottom: 13.2rem;
+    }
+}
+.location__inner{
+    gap: 3rem;
+    position: relative;
+    z-index: 9;
+    @media only screen and (max-width: 767px) {
+        flex-direction: column;
+    }
+}
+.location__step{
+    width: 33.33%;
+    @media only screen and (max-width: 767px) {
+        width: 100%;
+    }
+    &.step__img{
+        @media only screen and (max-width: 767px) {
+            order: 1;
+        }
+    }
+}
+.location__list{
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 3rem;
+    cursor: pointer;
+    @media only screen and (min-width: 768px) {
+        margin-bottom: 2rem;
+    }
+    @media only screen and (min-width: 992px) {
+        padding: 1.5rem;
+        margin-bottom: 3rem;
+    }
+    @media only screen and (min-width: 1200px) {
+        margin-bottom: 5rem;
+    }
+    &:last-child{
+        margin-bottom: 0;
+    }
+    &.active{
+        background: #2B2E3A;
+    }
+}
+.location__thumbnail{
+    text-align: center;
+    & img{
+        margin: 0 auto;
+    }
+}
+.location__name{
+    color: var(--color-white);
+    margin-bottom: 1rem;
+    @media only screen and (max-width: 991px) {
+        font-size: 1.6rem;
+        line-height: 2.2rem;
+    }
+}
+.location__properties--count{
+    font-size: 1.4rem;
+    line-height: 2rem;
+    color: var(--color-hover);
+}
+.location__map{
+    width: 8rem;
+    @media only screen and (min-width: 768px) {
+        width: 6rem;
+    }
+    @media only screen and (min-width: 992px) {
+        width: 8rem;
+    }
+    @media only screen and (min-width: 1200px) {
+        width: 9rem;
+    }
+}
+.location__content{
+    width: calc(100% - 6rem);
+    padding-left: 1.5rem;
+    @media only screen and (min-width: 992px) {
+        width: calc(100% - 8rem);
+        padding-left: 2.5rem;
+    }
+    @media only screen and (min-width: 1200px) {
+        width: calc(100% - 9rem);
+        padding-left: 3.5rem;
+    }
+}
+.location__icon{
+    color: var(--color-hover);
+}
+.location__btn{
+    margin-top: 3rem;
+    @media only screen and (min-width: 992px) {
+        margin-top: 5rem;
+    }
+}
+.shape__250{
+    position: absolute;
+    right: 4rem;
+    top: 50%;
+    transform: translatey(-50%);
+    @media only screen and (max-width: 1599px) {
+        right: 4rem;
+        top: 10%;
+        max-width: 4rem;
+    }
+}
+
+/*
+    Home three css
+*/
+.location__section--style3{
+    background: var(--color-background-4);
+    position: relative;
+    & .location__list.active{
+        background: #113344;
+    }
+}
+.location__position--map{
+    position: absolute;
+    top: 0;
+}
+.section__heading.z-index-9{
+    z-index: 9;
+}
