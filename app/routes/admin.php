@@ -151,6 +151,7 @@ Route::prefix('admin')->group(function () {
         });
         Route::name('admin.')->group(function () {
             Route::get('transaction', [TransactionController::class, 'index'])->name('transactions.index');
+            Route::get('transaction/index', [TransactionController::class, 'index'])->name('transaction');
             Route::get('transaction/search', [TransactionController::class, 'search'])->name('transactions.search');
             Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
             Route::delete('/', [TransactionController::class, 'destroyMultiple'])->name('transactions.destroy-multiple');

@@ -61,7 +61,7 @@ Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 Route::post('/guest/info', [HomeController::class, 'guestInfo']); 
 Route::post('/conversations/messages', [MessageController::class, 'store']); 
 
-
+ 
 Route::get('/paystack/create-customer', [WalletController::class, 'createCustomer']);
 Route::get('/paystack/create-dedicated-account', [WalletController::class, 'createDedicatedAccount']);
 
