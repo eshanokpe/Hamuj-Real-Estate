@@ -14,7 +14,7 @@
                 <th>Total Assets</th>
                 <th>Property Name</th>
                 <th>Selected Size</th>
-                <th>Availa ble Size</th>
+                <th>Available Size</th>
                 <th>Total Price</th>
                 <th>Transaction</th>
                 <th>Status</th>
