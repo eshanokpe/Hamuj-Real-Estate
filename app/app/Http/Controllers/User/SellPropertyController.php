@@ -15,7 +15,7 @@ use App\Models\ContactDetials;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Models\Sell;
-use App\Models\Buy;
+use App\Models\Buy; 
 use App\Models\User;
 use App\Models\Property;
 use Illuminate\Support\Str;
@@ -58,7 +58,7 @@ class SellPropertyController extends Controller
             'amount' => 'required',
             'total_price' => 'required|numeric|min:1',
         ]);
-        
+         
         $user = Auth::user();
         $propertySlug = $request->input('property_slug');
         $property = Property::where('slug', $propertySlug)->first();
@@ -152,10 +152,8 @@ class SellPropertyController extends Controller
                 ['user_id' => $user->id],
                 ['balance' => 0] 
             );
-
             // Store balance before transaction
             $balanceBefore = $wallet->balance;
-
             // Update the wallet balance
             $wallet->increment('balance', $amount);
 

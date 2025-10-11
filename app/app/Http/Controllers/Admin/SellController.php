@@ -181,10 +181,132 @@ class SellController extends Controller
 
     public function destroy($id)
     {
-        $sell = Sell::findOrFail(decrypt($id)); // not Post::findOrFail()
-        $sell->delete();
+        try {
+            $sellId = decrypt($id);
+            $sell = Sell::with(['user', 'property'])->findOrFail($sellId);
 
-        return redirect()->route('admin.sell.index')->with('success', 'Sell Property deleted successfully.');
+            DB::transaction(function () use ($sell) {
+                // Store values before deletion for reversal
+                $userId = $sell->user_id;
+                $propertyId = $sell->property_id;
+                $soldSize = $sell->selected_size_land;
+                $totalPrice = $sell->total_price;
+
+                // 1. Deduct the payment from user's wallet
+                $wallet = Wallet::firstOrCreate(
+                    ['user_id' => $userId],
+                    ['balance' => 0]
+                );
+
+                // Store balance before transaction for audit
+                $balanceBefore = $wallet->balance;
+
+                // Deduct the amount from wallet
+                $wallet->decrement('balance', $totalPrice);
+
+                // 2. Add the sold size back to property's available size
+                $property = Property::find($propertyId);
+                if ($property) {
+                    $property->increment('available_size', $soldSize);
+                }
+
+                // 3. Delete any associated transactions
+                if ($sell->transaction_id) {
+                    Transaction::where('id', $sell->transaction_id)->delete();
+                }
+
+                // 4. Delete the sell record
+                $sell->delete();
+
+                // Optional: Log the reversal transaction
+                $this->logReversalTransaction($userId, $totalPrice, $balanceBefore, $wallet->balance, $propertyId, $soldSize);
+            });
+
+            return redirect()->route('admin.sell.index')
+                ->with('success', 'Sold property deleted successfully. Payment deducted from user wallet and property size restored.');
+
+        } catch (\Exception $e) {
+            return redirect()->route('admin.sell.index')
+                ->with('error', 'Failed to delete sold property: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete multiple sold properties with reversal
+     */
+    public function destroyMultiple(Request $request)
+    {
+        try {
+            $sellIds = array_map('decrypt', $request->sell_ids);
+            
+            DB::transaction(function () use ($sellIds) {
+                $sells = Sell::with(['user', 'property'])->whereIn('id', $sellIds)->get();
+                
+                foreach ($sells as $sell) {
+                    // Store values for reversal
+                    $userId = $sell->user_id;
+                    $propertyId = $sell->property_id;
+                    $soldSize = $sell->selected_size_land;
+                    $totalPrice = $sell->total_price;
+
+                    // 1. Deduct from user's wallet
+                    $wallet = Wallet::firstOrCreate(
+                        ['user_id' => $userId],
+                        ['balance' => 0]
+                    );
+                    $wallet->decrement('balance', $totalPrice);
+
+                    // 2. Add size back to property
+                    $property = Property::find($propertyId);
+                    if ($property) {
+                        $property->increment('available_size', $soldSize);
+                    }
+
+                    // 3. Delete associated transactions
+                    if ($sell->transaction_id) {
+                        Transaction::where('id', $sell->transaction_id)->delete();
+                    }
+
+                    // 4. Delete the sell record
+                    $sell->delete();
+
+                    // Log reversal
+                    $this->logReversalTransaction($userId, $totalPrice, $wallet->balance + $totalPrice, $wallet->balance, $propertyId, $soldSize);
+                }
+            });
+
+            return redirect()->route('admin.sell.index')
+                ->with('success', 'Selected sold properties deleted successfully. Payments deducted from user wallets and property sizes restored.');
+
+        } catch (\Exception $e) {
+            return redirect()->route('admin.sell.index')
+                ->with('error', 'Failed to delete sold properties: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Log reversal transaction for audit purposes
+     */
+    private function logReversalTransaction($userId, $amount, $balanceBefore, $balanceAfter, $propertyId, $size)
+    {
+        // You can create a reversal transaction record or log this activity
+        // This is optional but recommended for audit trails
+        
+        Transaction::create([
+            'user_id' => $userId,
+            'type' => 'reversal',
+            'transaction_type' => 'sale_reversal',
+            'amount' => $amount,
+            'balance_before' => $balanceBefore,
+            'balance_after' => $balanceAfter,
+            'status' => 'completed',
+            'description' => "Sale reversal - {$size} SQM property sale deleted by admin",
+            'reversal_reason' => 'Admin deleted sale record',
+            'reversed_by' => 'admin',
+            'property_id' => $propertyId,
+            'reference' => 'RVSL-' . time() . '-' . $userId,
+            'source' => 'admin_panel'
+        ]);
     }
 
     public function update(Request $request, $id)

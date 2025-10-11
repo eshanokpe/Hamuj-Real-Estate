@@ -12,7 +12,7 @@
                 <th>Remaining Size</th>
                 <th>Total Price</th>
                 <th>Status</th>
-                <th>Date</th>
+                <th>Date</th> 
                 <th class="text-end">Actions</th>
             </tr>
         </thead>

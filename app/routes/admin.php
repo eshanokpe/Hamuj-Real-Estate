@@ -172,6 +172,7 @@ Route::prefix('admin')->group(function () {
             Route::get('{id}/editsell', [SellController::class, 'edit'])->name('sell.edit');
             Route::put('{id}/sell', [SellController::class, 'update'])->name('sell.update');
             Route::delete('{id}/sell', [SellController::class, 'destroy'])->name('sell.destroy');
+            Route::delete('/', [SellController::class, 'destroyMultiple'])->name('sell.destroy-multiple');
             Route::get('/search', [SellController::class, 'search'])->name('sell.search');
             Route::get('/suggestions', [SellController::class, 'suggestions'])->name('sell.suggestions');
         }); 
