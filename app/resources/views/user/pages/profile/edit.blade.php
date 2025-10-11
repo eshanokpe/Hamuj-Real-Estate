@@ -30,7 +30,7 @@
                                                 <div class="setting__profile--author__thumb">
                                                     <img 
                                                         id="profile_image_preview"
-                                                        src="{{ Auth::user()->profile_image ? asset(Auth::user()->profile_image) : asset('assets/admin/img/dashboard/avater.jpg') }}"
+                                                        src="{{ Auth::user()->profile_image ? asset(Auth::user()->profile_image) :  asset('assets/admin/img/dashboard/avater.jpg') }}"
                                                         style="border-radius:50px; max-height: 100%; max-width:100%; width:65px; height:65px; object-fit: cover;"
                                                         alt="Profile Image">
                                                 </div>
