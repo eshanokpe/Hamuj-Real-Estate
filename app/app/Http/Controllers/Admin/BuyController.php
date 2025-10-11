@@ -167,7 +167,7 @@ class BuyController extends Controller
                     $wallet = Wallet::firstOrCreate(
                         ['user_id' => $userId],
                         ['balance' => 0]
-                    );
+                    ); 
                     $wallet->increment('balance', $refundAmount);
                 }
                 

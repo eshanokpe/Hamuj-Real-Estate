@@ -18,9 +18,6 @@ return new class extends Migration
                 $table->string('type', 50)->nullable()->after('transaction_type');
                 $table->string('reversed_by', 50)->nullable()->after('reversed_by');
             }
-             if (!Schema::hasColumn('transactions', 'reversed_by')) {
-                $table->string('reversed_by', 50)->nullable()->after('type');
-            }
             
             // Check and add 'balance_before' column if it doesn't exist
             if (!Schema::hasColumn('transactions', 'balance_before')) {
