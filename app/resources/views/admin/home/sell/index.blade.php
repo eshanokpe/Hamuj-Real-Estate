@@ -56,7 +56,7 @@
                                     </div>
                                 </div>
                             </form>
-                            
+                             
                             @if($search)
                                 <div class="mt-3">
                                     <p class="text-muted mb-0">

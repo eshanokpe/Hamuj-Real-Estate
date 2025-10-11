@@ -12,7 +12,7 @@ class Sell extends Model
     protected $fillable = [
         'id',
         'property_id',
-        'property_name',
+        'property_name', 
         'selected_size_land',
         'remaining_size',
         'user_id',

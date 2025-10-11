@@ -83,7 +83,7 @@
 
                             <form action="{{ route('admin.sell.destroy', encrypt($sell->id)) }}" method="POST" class="d-inline">
                                 @csrf
-                                @method('DELETE')
+                                @method('DELETE') 
                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this property?');" title="Delete">
                                     <i class="las la-trash-alt"></i>
                                 </button>

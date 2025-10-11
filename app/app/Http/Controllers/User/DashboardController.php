@@ -14,11 +14,7 @@ use App\Models\Transaction;
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
-<<<<<<< HEAD
 { 
-=======
-{
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
     public function __construct() 
     {
         $this->middleware('auth');
@@ -50,11 +46,7 @@ class DashboardController extends Controller
                                             ->distinct('property_id')
                                             ->count('property_id');
                                             
-<<<<<<< HEAD
                                              
-=======
-                                            
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
         $data['user'] = User::where('id', $user->id)
                             ->where('email', $user->email)
                             ->first();
