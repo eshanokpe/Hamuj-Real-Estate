@@ -15,6 +15,7 @@ class Sell extends Model
         'property_name', 
         'selected_size_land',
         'remaining_size',
+        'available_size',
         'user_id',
         'user_email',
         'reference',

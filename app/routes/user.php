@@ -100,7 +100,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/sell', [SellPropertyController::class, 'index'])->name('sell');
     Route::post('/sell/property', [SellPropertyController::class, 'sellProperty'])->name('sell.property');
     Route::get('/sell/property/history', [SellPropertyController::class, 'sellPropertyHistory'])->name('sell.history');
-     
+      
     Route::resource('profile', ProfileController::class);
     
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

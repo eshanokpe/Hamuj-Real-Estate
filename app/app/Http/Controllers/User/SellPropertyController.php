@@ -50,9 +50,11 @@ class SellPropertyController extends Controller
 
     public function sellProperty(Request $request)
     {
+        // dd($request->all());
         $request->validate([ 
             'acquired_size_land' => 'required',
             'remaining_size' => 'required',
+            'available_size' => 'required',
             'property_slug' => 'required',
             'calculated_size' => 'required',
             'amount' => 'required',
@@ -73,6 +75,7 @@ class SellPropertyController extends Controller
 
         $selectedSizeLand = $request->input('calculated_size');
         $remainingSize = $request->input('remaining_size');
+        $availableSize = $request->input('available_size');
         $amount = $request->input('total_price');
 
         $propertyId = $property->id;
@@ -110,6 +113,7 @@ class SellPropertyController extends Controller
                 'property_name' => $propertyData->name,
                 'selected_size_land' => $selectedSizeLand,
                 'remaining_size' => $remainingSize,
+                'available_size' => $result,
                 'user_id' => $user->id,
                 'user_email' => $user->email,
                 'reference' => $reference,

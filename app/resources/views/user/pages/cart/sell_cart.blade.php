@@ -86,6 +86,7 @@
                     @csrf
                     <input type="hidden" name="acquired_size_land" id="acquired_size_land" value="{{ number_format($property->buys->sum('selected_size_land'), 4) }}">
                     <input type="hidden" name="remaining_size" id="remaining_size">
+                    <input type="hidden" name="available_size"  value="{{ $property->available_size }}">
                     <input type="hidden" name="property_slug" id="property_slug" value="{{ $property->slug }}">
                     <input type="hidden" name="amount" id="amount">
                     <input type="hidden" name="calculated_size" id="calculated_size">

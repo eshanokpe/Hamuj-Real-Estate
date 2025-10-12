@@ -63,7 +63,7 @@
                                             <span class="properties__views">{{ $item->size }} SQM </span>
                                         </td>
                                         <td>
-                                            <span class="properties__views">{{ $item->available_size }} SQM </span>
+                                            <span class="properties__views">{{ $item->available_size }} SQM </span> 
                                         </td>
                                         <td>
                                             @if($item->status === 'sold out')
