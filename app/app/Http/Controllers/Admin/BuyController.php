@@ -60,6 +60,7 @@ class BuyController extends Controller
         // Total property assets (purchases - sales)
         $totalPropertyAmount = Transaction::where('user_id', $user->id)
             ->where('email', $user->email)
+            ->where('transaction_type', 'buy')
             ->whereNotNull('property_id')
             ->sum('amount'); 
         

@@ -43,7 +43,7 @@ class DashboardController extends Controller
   
         $data['totalTransactionsAssets'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
-                                             ->where('transaction_type', 'buy')
+                                            ->where('transaction_type', 'buy')
                                             ->distinct('property_id')
                                             ->count('property_id');
                                             
@@ -53,7 +53,7 @@ class DashboardController extends Controller
                             ->first();
         $data['referralsMade'] = $user->referralsMade()->with('user', 'referrer', 'referred')->take(6)->get();
         $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;
-        
+         
         if ($request->wantsJson() || $request->is('api/*')) {
             return response()->json([
                 'referralsMade' => $data['referralsMade'],

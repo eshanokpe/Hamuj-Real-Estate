@@ -112,10 +112,10 @@ class UserAssetsController extends Controller
         // Total property assets (purchases - sales)
         $totalPropertyAmount = Transaction::where('user_id', $user->id)
             ->where('email', $user->email)
-            // ->where('payment_method', 'buy_property')
+            ->where('transaction_type', 'buy')
             ->whereNotNull('property_id')
             ->sum('amount');  
-        
+        // dd($totalPropertyAmount); 
         return max(0, $totalPropertyAmount); // Ensure non-negative
     }
 
