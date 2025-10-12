@@ -71,7 +71,7 @@
                                     {{ $property->name }}
                                 </small>
                                 <span class="badge bg-soft-{{ $property->available_size > 0 ? 'success' : 'danger' }}">
-                                    {{ number_format($property->available_size, 2) }} SQM
+                                    {{ ($property->available_size) }} SQM
                                 </span>
                             </div>
                         </div>
