@@ -37,12 +37,13 @@ class DashboardController extends Controller
 
         $data['totalPropertyAmount'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
-                                            ->whereNotNull('property_id') // Property transactions have property_id
-                                            ->sum('amount');
+                                            ->where('transaction_type', 'buy')
+                                            // ->whereNotNull('property_id') 
+                                            ->sum('amount'); 
   
         $data['totalTransactionsAssets'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
-                                            // ->where('status', 'success')
+                                             ->where('transaction_type', 'buy')
                                             ->distinct('property_id')
                                             ->count('property_id');
                                             
@@ -167,7 +168,7 @@ class DashboardController extends Controller
         $purchases = Transaction::where('user_id', auth()->id())->get();
         // dd($purchases);
         return view('user.pages.success.index',compact('purchases'));
-    }
+    } 
 
     public function checkStatus(int $userId)
     {

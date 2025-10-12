@@ -23,7 +23,7 @@ class PaymentController extends Controller
 {
    
 
-    public function initializePayment(Request $request)
+public function initializePayment(Request $request)
 {
     Log::warning('totalLand:222' . json_encode($request->all()));
 
@@ -137,7 +137,7 @@ class PaymentController extends Controller
     $transaction = Transaction::create([
         'user_id' => $user->id,
         'email' => $user->email,
-        'transaction_type' => 'wallet',
+        'transaction_type' => 'buy',
         'property_id' => $property->id,
         'property_name' => $property->name,
         'amount' => $finalAmountPayable,
