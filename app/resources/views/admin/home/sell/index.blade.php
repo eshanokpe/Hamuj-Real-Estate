@@ -61,7 +61,7 @@
                                             <th>Total Assets</th>
                                             <th>Property Name</th>
                                             <th>Sold Size</th>
-                                            {{-- <th>Remaining Size</th> --}}
+                                            <th>Available Size</th>
                                             <th>Sale Price</th>
                                             <th>Wallet Impact</th>
                                             <th>Status</th>
@@ -88,7 +88,7 @@
                                                 </td>
                                                 <td>{{ $sell->property->name }}</td>
                                                 <td>{{ $sell->selected_size_land }} SQM</td>
-                                                {{-- <td>{{ $sell->remaining_size }} SQM</td> --}}
+                                                <td>{{ $sell->available_size ?? 'N/A' }} SQM</td>
                                                 <td>₦{{ number_format($sell->total_price, 2) }}</td>
                                                 <td>
                                                     <span class="badge bg-danger">
