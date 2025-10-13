@@ -56,7 +56,7 @@ class BuyController extends Controller
     private function calculateUserTotalAssets($user)
     {
         if (!$user) return 0;
-         
+          
         // Total property assets (purchases - sales)
         $totalPropertyAmount = Transaction::where('user_id', $user->id)
             ->where('email', $user->email)

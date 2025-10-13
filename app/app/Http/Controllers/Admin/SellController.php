@@ -13,7 +13,7 @@ Use DB;
 class SellController extends Controller
 {
     public function index(Request $request)
-    {
+    { 
         $search = $request->input('search');
         
         $sells = Sell::with(['user', 'property', 'user.wallet'])
@@ -166,6 +166,7 @@ class SellController extends Controller
         // Total property assets (purchases - sales)
         $totalPropertyAmount = Transaction::where('user_id', $user->id)
             ->where('email', $user->email)
+            ->where('transaction_type', 'buy')
             ->whereNotNull('property_id')
             ->sum('amount'); 
         
