@@ -207,7 +207,7 @@ const BuyProperties = () => {
         const value = remainingSize !== null ? remainingSize : (property?.available_size || 0);
         return Number.parseFloat(value).toPrecision(4);
     };
-
+ 
     // Payment handlers
     const handleMakePayment = (e) => {
         e.preventDefault();
@@ -288,7 +288,7 @@ const BuyProperties = () => {
                 transaction_pin: transactionPin,
                 commission_check: applyCommission ? 1 : 0,
                 payment_method: paymentMethod,
-            });
+            }); 
             
             console.log('Payment response:', response.data);
             

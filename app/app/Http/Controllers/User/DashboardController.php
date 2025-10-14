@@ -6,12 +6,14 @@ use Auth;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request; 
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Faqs;
 use App\Models\Neighborhood;
 use App\Models\Property;
 use App\Models\Transaction;
 use App\Http\Controllers\Controller;
+
 
 class DashboardController extends Controller
 { 
@@ -38,7 +40,7 @@ class DashboardController extends Controller
         $data['totalPropertyAmount'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
                                             ->where('transaction_type', 'buy')
-                                            // ->whereNotNull('property_id') 
+                                            // ->whereNotNull('property_id')  
                                             ->sum('amount'); 
   
         $data['totalTransactionsAssets'] = Transaction::where('user_id', $user->id)
@@ -46,7 +48,7 @@ class DashboardController extends Controller
                                             ->where('transaction_type', 'buy')
                                             ->distinct('property_id')
                                             ->count('property_id');
-                                            
+                                              
                                              
         $data['user'] = User::where('id', $user->id)
                             ->where('email', $user->email)
@@ -128,7 +130,6 @@ class DashboardController extends Controller
         }
     }
 
-    
     public function propertiesShow($id)
     {  
         $users = Auth::user();
@@ -196,5 +197,74 @@ class DashboardController extends Controller
             'active' => $isActive
         ]);
 
+    }
+
+    public function verifyTransactionPin(Request $request)
+    {
+        $request->validate([
+            'transaction_pin' => 'required|digits:4',
+        ]);
+
+        $user = Auth::user();
+
+        // Check if transaction PIN is enabled in the system
+        if (config('app.enable_transaction_pin')) {
+            if (empty($user->transaction_pin)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please set your transaction PIN first.',
+                    'redirect_url' => route('user.transaction.pin'),
+                    'requires_pin_setup' => true
+                ], 403);
+            }
+        }
+
+        // Check if user is currently locked out
+        if ($user->pin_locked_until && now()->lt($user->pin_locked_until)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Too many failed attempts. Try again after 15 minutes.',
+                'lockout_time' => $user->pin_locked_until->toDateTimeString()
+            ], 429);
+        }
+
+        // Verify the transaction PIN
+        if (!Hash::check($request->transaction_pin, $user->transaction_pin)) {
+            // Track failed attempts
+            $user->increment('failed_pin_attempts');
+            $user->update(['last_failed_pin_attempt' => now()]);
+            
+            $remainingAttempts = max(0, 3 - $user->failed_pin_attempts);
+            
+            // Check if user should be locked out
+            if ($remainingAttempts <= 0) {
+                $lockoutTime = now()->addMinutes(15);
+                $user->update(['pin_locked_until' => $lockoutTime]);
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Too many failed attempts. Try again after 15 minutes.',
+                    'lockout_time' => $lockoutTime->toDateTimeString()
+                ], 429);
+            }
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid transaction PIN',
+                'attempts_remaining' => $remainingAttempts
+            ], 401);
+        }
+
+        // PIN is correct - reset failed attempts and lockout
+        $user->update([
+            'failed_pin_attempts' => 0,
+            'pin_locked_until' => null,
+            'last_failed_pin_attempt' => null
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Transaction PIN verified successfully.'
+        ]);
     }
 }

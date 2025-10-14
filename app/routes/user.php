@@ -80,7 +80,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/my-properties', [DashboardController::class, 'properties'])->name('myProperties');
  
     Route::get('/my-properties/{id}', [DashboardController::class, 'propertiesShow'])->name('properties.show');
-     
+     Route::post('/verify-transaction-pin', [DashboardController::class, 'verifyTransactionPin'])->name('verify.transaction.pin');
     // For React frontend
     Route::get('/cart/buy/{slug}', [CartController::class, 'buy'])->name('cart.buy'); 
     Route::get('properties-details/{slug}', [CartController::class, 'buy']);
@@ -91,7 +91,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/cart/transfer/{id}', [CartController::class, 'transfer'])->name('cart.transfer.index');
     Route::post('/payment/initiate', [PaymentController::class, 'initializePayment'])->name('payment.initiate'); 
     Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
-    
+     
     Route::get('/payment/failed', [OrderController::class, 'failed'])->name('payment.failed');
     Route::get('success/', [OrderController::class, 'success']);
     

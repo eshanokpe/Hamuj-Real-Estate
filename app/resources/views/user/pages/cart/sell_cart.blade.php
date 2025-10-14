@@ -83,7 +83,7 @@
                 </div> 
                 <!-- Hidden Form to Pass Data for Payment --> 
                 <form id="payment-form" action="{{ route('user.sell.property') }}" method="POST" style="display: none">
-                    @csrf
+                    @csrf 
                     <input type="hidden" name="acquired_size_land" id="acquired_size_land" value="{{ number_format($property->buys->sum('selected_size_land'), 4) }}">
                     <input type="hidden" name="remaining_size" id="remaining_size">
                     <input type="hidden" name="available_size"  value="{{ $property->available_size }}">
@@ -91,9 +91,34 @@
                     <input type="hidden" name="amount" id="amount">
                     <input type="hidden" name="calculated_size" id="calculated_size">
                     <input type="hidden" name="total_price" id="total_price">
-                </form>
+                </form> 
             </div>
         </main>
+    </div>
+</div>
+
+<!-- Transaction PIN Verification Modal -->
+<div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pinModalLabel">Verify Transaction PIN</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please enter your 4-digit transaction PIN to confirm the property sale.</p>
+                <div class="mb-3">
+                    <label for="transaction_pin" class="form-label">Transaction PIN</label>
+                    <input type="password" class="form-control" id="transaction_pin" placeholder="Enter 4-digit PIN" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+                    <div id="pinError" class="text-danger mt-1" style="display: none;"></div>
+                    <div id="pinAttempts" class="text-warning mt-1" style="display: none;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmPin">Confirm & Submit</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -256,21 +281,11 @@
         updateCart(row);
     });
 
-    // Handle "Submit Request" button click
+    // Handle "Submit Request" button click - Show PIN modal instead of submitting directly
     document.getElementById('make-payment-btn').addEventListener('click', function(event) {
         event.preventDefault();
         const row = document.querySelector('.cart__table tbody tr');
-        const availableSizeElement = row.querySelector('.available-size');
-        const remainingSize = availableSizeElement.textContent.trim().split(' ')[0]; 
         const amount = row.querySelector('.amount-input').value.trim();
-        const calculatedSize = row.querySelector('.calculated-size').textContent.trim().split(' ')[0];
-        const totalPrice = row.querySelector('.total-price').textContent.replace(/₦|,/g, '').trim();
-
-        // Update hidden input fields
-        document.getElementById('remaining_size').value = remainingSize;
-        document.getElementById('amount').value = amount;
-        document.getElementById('calculated_size').value = calculatedSize;
-        document.getElementById('total_price').value = totalPrice;
 
         // Prevent submission if amount is empty or less than 1000
         if (amount === '' || parseFloat(amount) < 1000) {
@@ -278,14 +293,124 @@
             return;
         }
 
-        // Prevent submission if calculated size is 0
-        if (parseFloat(calculatedSize) <= 0) {
-            alert('Calculated land size must be greater than 0.');
+        // Show PIN verification modal instead of submitting directly
+        const pinModal = new bootstrap.Modal(document.getElementById('pinModal'));
+        pinModal.show();
+    });
+
+    // Handle PIN confirmation
+    document.getElementById('confirmPin').addEventListener('click', function() {
+        const transactionPin = document.getElementById('transaction_pin').value;
+        const pinError = document.getElementById('pinError');
+        const pinAttempts = document.getElementById('pinAttempts');
+        
+        // Clear previous errors
+        pinError.style.display = 'none';
+        pinAttempts.style.display = 'none';
+        
+        if (!transactionPin) {
+            pinError.textContent = 'Please enter your 4-digit transaction PIN';
+            pinError.style.display = 'block';
             return;
         }
 
-        // Submit the form
-        document.getElementById('payment-form').submit();
+        if (!/^\d{4}$/.test(transactionPin)) {
+            pinError.textContent = 'Transaction PIN must be exactly 4 digits';
+            pinError.style.display = 'block';
+            return;
+        }
+
+        // Verify transaction PIN via AJAX
+        fetch('{{ route("user.verify.transaction.pin") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ transaction_pin: transactionPin })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // PIN is correct, proceed with form submission
+                const row = document.querySelector('.cart__table tbody tr');
+                const availableSizeElement = row.querySelector('.available-size');
+                const remainingSize = availableSizeElement.textContent.trim().split(' ')[0]; 
+                const amount = row.querySelector('.amount-input').value.trim();
+                const calculatedSize = row.querySelector('.calculated-size').textContent.trim().split(' ')[0];
+                const totalPrice = row.querySelector('.total-price').textContent.replace(/₦|,/g, '').trim();
+
+                // Update hidden input fields
+                document.getElementById('remaining_size').value = remainingSize;
+                document.getElementById('amount').value = amount;
+                document.getElementById('calculated_size').value = calculatedSize;
+                document.getElementById('total_price').value = totalPrice;
+
+                // Hide modal and submit form
+                const pinModal = bootstrap.Modal.getInstance(document.getElementById('pinModal'));
+                pinModal.hide();
+                
+                // Submit the form
+                document.getElementById('payment-form').submit();
+            } else {
+                // PIN is incorrect or other error
+                if (data.redirect_url) {
+                    // Redirect to PIN setup page
+                    window.location.href = data.redirect_url;
+                    return;
+                }
+
+                if (data.lockout_time) {
+                    pinError.textContent = 'Too many failed attempts. Try again after 15 minutes.';
+                    pinError.style.display = 'block';
+                    document.getElementById('transaction_pin').disabled = true;
+                    document.getElementById('confirmPin').disabled = true;
+                    return;
+                }
+
+                if (data.attempts_remaining !== undefined) {
+                    pinError.textContent = data.message || 'Invalid transaction PIN';
+                    pinError.style.display = 'block';
+                    pinAttempts.textContent = `${data.attempts_remaining} attempt(s) remaining`;
+                    pinAttempts.style.display = 'block';
+                } else {
+                    pinError.textContent = data.message || 'Invalid transaction PIN. Please try again.';
+                    pinError.style.display = 'block';
+                }
+                
+                document.getElementById('transaction_pin').value = '';
+                document.getElementById('transaction_pin').focus();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            pinError.textContent = 'An error occurred. Please try again.';
+            pinError.style.display = 'block';
+        });
+    });
+
+    // Clear PIN field when modal is closed
+    document.getElementById('pinModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('transaction_pin').value = '';
+        document.getElementById('transaction_pin').disabled = false;
+        document.getElementById('confirmPin').disabled = false;
+        document.getElementById('pinError').style.display = 'none';
+        document.getElementById('pinAttempts').style.display = 'none';
+    });
+
+    // Allow pressing Enter in PIN field to confirm
+    document.getElementById('transaction_pin').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('confirmPin').click();
+        }
+    });
+
+    // Only allow numeric input for PIN field
+    document.getElementById('transaction_pin').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 4) {
+            this.value = this.value.slice(0, 4);
+        }
     });
 </script>
 @endsection
