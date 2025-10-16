@@ -110,7 +110,7 @@ class SellPropertyController extends Controller
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'property_id' => $propertyData->id,
-                'amount' => -$amount, // Negative amount to deduct from total assets
+                'amount' => $amount, // Negative amount to deduct from total assets
                 'reference' => $reference,
                 'status' => 'completed',
                 'transaction_type' => 'sale',
