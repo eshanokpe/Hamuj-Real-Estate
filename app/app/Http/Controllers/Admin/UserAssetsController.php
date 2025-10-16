@@ -120,7 +120,7 @@ class UserAssetsController extends Controller
             ->where('transaction_type', 'sale')
             ->whereNotNull('property_id')
             ->sum('amount');  
-        $totalPropertyAmount = $totalPropertyPurchases + $totalPropertySales;
+        $totalPropertyAmount = $totalPropertyPurchases - $totalPropertySales;
         // dd($totalPropertyAmount); 
         return max(0, $totalPropertyAmount); // Ensure non-negative
     }

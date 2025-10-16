@@ -105,23 +105,8 @@ class SellPropertyController extends Controller
             $property->update([
                 'available_size' => $result
             ]);
-        
-            // Create the sell record
-            $sell = Sell::create([
-                'property_id' => $propertyData->id,
-                'property_name' => $propertyData->name,
-                'selected_size_land' => $selectedSizeLand,
-                'remaining_size' => $remainingSize,
-                'available_size' => $result,
-                'user_id' => $user->id,
-                'user_email' => $user->email,
-                'reference' => $reference,
-                'total_price' => $amount,
-                'status' => 'completed',
-            ]);  
-            
             // Create a transaction record for the sale (use negative amount for deduction)
-            Transaction::create([
+            $transaction = Transaction::create([
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'property_id' => $propertyData->id,
@@ -132,6 +117,23 @@ class SellPropertyController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+        
+            // Create the sell record
+            $sell = Sell::create([
+                'property_id' => $propertyData->id,
+                'property_name' => $propertyData->name,
+                'transaction_id'=> $transaction->id,
+                'selected_size_land' => $selectedSizeLand,
+                'remaining_size' => $remainingSize,
+                'available_size' => $result,
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'reference' => $reference,
+                'total_price' => $amount,
+                'status' => 'completed',
+            ]);  
+            
+            
             
             // Deduct the sold land size from user's Buy records (FIFO)
             $landToDeduct = $selectedSizeLand;

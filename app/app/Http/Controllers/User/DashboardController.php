@@ -51,7 +51,7 @@ class DashboardController extends Controller
                                         ->whereNotNull('property_id')  
                                         ->sum('amount');
         // Net property amount (purchases - sales)
-        $data['totalPropertyAmount'] = $totalPropertyPurchases + $totalPropertySales; // sales are negative, so we add
+        $data['totalPropertyAmount'] = $totalPropertyPurchases - $totalPropertySales; // sales are negative, so we add
   
         $data['totalTransactionsAssets'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
