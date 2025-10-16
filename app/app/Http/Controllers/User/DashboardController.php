@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User;
 use Auth;
 
 use Carbon\Carbon;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;  
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Faqs;
@@ -37,11 +37,21 @@ class DashboardController extends Controller
                                             ->where('transaction_type', 'wallet')
                                             ->sum('amount');
 
-        $data['totalPropertyAmount'] = Transaction::where('user_id', $user->id)
+        // Calculate gross property purchases
+        $totalPropertyPurchases = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
                                             ->where('transaction_type', 'buy')
-                                            // ->whereNotNull('property_id')  
-                                            ->sum('amount'); 
+                                            ->whereNotNull('property_id')  
+                                            ->sum('amount');
+        
+        // Calculate property sales (negative amounts)
+        $totalPropertySales = Transaction::where('user_id', $user->id)
+                                        ->where('email', $user->email)
+                                        ->where('transaction_type', 'sale')
+                                        ->whereNotNull('property_id')  
+                                        ->sum('amount');
+        // Net property amount (purchases - sales)
+        $data['totalPropertyAmount'] = $totalPropertyPurchases + $totalPropertySales; // sales are negative, so we add
   
         $data['totalTransactionsAssets'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)

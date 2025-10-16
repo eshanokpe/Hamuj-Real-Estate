@@ -75,7 +75,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/payment/balance', [TransferController::class, 'balance']);
      
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties'); 
-    Route::get('api/properties', [PropertyController::class, 'indexAPI']); 
+    Route::get('api/properties', [PropertyController::class, 'indexAPI']);  
   
     Route::get('/my-properties', [DashboardController::class, 'properties'])->name('myProperties');
  
@@ -98,7 +98,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     
     Route::get('/purchases', [DashboardController::class, 'purchases'])->name('purchases');
     Route::get('/sell', [SellPropertyController::class, 'index'])->name('sell');
-    Route::post('/sell/property', [SellPropertyController::class, 'sellProperty'])->name('sell.property');
+    Route::post('/sell/property', [SellPropertyController::class, 'sellProperty'])->name('sell.property'); 
     Route::get('/sell/property/history', [SellPropertyController::class, 'sellPropertyHistory'])->name('sell.history');
       
     Route::resource('profile', ProfileController::class);

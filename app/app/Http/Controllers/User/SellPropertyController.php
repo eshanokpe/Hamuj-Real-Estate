@@ -50,7 +50,6 @@ class SellPropertyController extends Controller
 
     public function sellProperty(Request $request)
     {
-        // dd($request->all());
         $request->validate([ 
             'acquired_size_land' => 'required',
             'remaining_size' => 'required',
