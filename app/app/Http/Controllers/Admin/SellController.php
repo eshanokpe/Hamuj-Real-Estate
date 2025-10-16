@@ -164,11 +164,17 @@ class SellController extends Controller
         if (!$user) return 0;
          
         // Total property assets (purchases - sales)
-        $totalPropertyAmount = Transaction::where('user_id', $user->id)
+       $totalPropertyPurchases = Transaction::where('user_id', $user->id)
             ->where('email', $user->email)
             ->where('transaction_type', 'buy')
             ->whereNotNull('property_id')
-            ->sum('amount'); 
+            ->sum('amount');  
+        $totalPropertySales = Transaction::where('user_id', $user->id)
+            ->where('email', $user->email)
+            ->where('transaction_type', 'sale')
+            ->whereNotNull('property_id')
+            ->sum('amount');  
+        $totalPropertyAmount = $totalPropertyPurchases - $totalPropertySales;
         
         // Wallet balance
         $walletBalance = $user->wallet->balance ?? 0;
