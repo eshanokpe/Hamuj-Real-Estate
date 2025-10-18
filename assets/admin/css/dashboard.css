@@ -54,7 +54,7 @@
 }
 @media only screen and (max-width: 575px) {
     .main__content_wrapper {
-        padding-top: 11rem;
+        padding-top: 8rem;
     }
 }
 .dashboard__sidebar{
