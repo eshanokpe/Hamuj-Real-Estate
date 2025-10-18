@@ -196,7 +196,7 @@ class PropertyController extends Controller
                 unlink(public_path($property->$field));
             }
              
-            // $folder = str_replace('_', '', $field) . 's'; 
+            $folder = str_replace('_', '', $field) . 's'; 
             // Convert 'property_images' to 'propertyimages'
             $filePath = $request->file($field)->move(
                 public_path('assets/images/' . $folder),
