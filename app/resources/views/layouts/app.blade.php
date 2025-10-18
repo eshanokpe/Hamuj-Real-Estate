@@ -23,7 +23,7 @@
   <link rel="stylesheet" href="{{ asset('assets/css/plugins/swiper-bundle.min.css')}}">
   <link rel="stylesheet" href="{{ asset('assets/css/plugins/glightbox.min.css')}}">
   <link rel="stylesheet" href="{{ asset('assets/css/plugins/aos.css')}}">
-
+ 
   <!-- Custom Style CSS --> 
   <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">
   <link rel="stylesheet" href="{{ asset('assets/css/rtl.css')}}">

@@ -146,8 +146,10 @@
                                 <div class="featured__card--list__thumbnail position-relative">
                                     <div class="media">
                                         <a class="featured__thumbnail--link" href="{{ route('home.properties.show',  $recentProperty->slug ) }}"> 
-                                            <img style="max-width: 100%; max-height: 100%;  width: 450px; height: 200px; object-fit: cover;" class="featured__thumbnail--img" src="{{ asset($recentProperty->property_images) }}" alt="featured-img">
+                                            <img style="max-width: 100%; max-height: 100%;  width: 450px; height: 200px; object-fit: cover;" 
+                                            class="featured__thumbnail--img" src="{{ asset($recentProperty->property_images) }}" alt="featured-img">
                                         </a>
+                                        {{ asset($recentProperty->property_images) }}
                                     </div>
                                     <div class="featured__badge">
                                         <span class="badge__field style2">{{ ucfirst($recentProperty->status)}}</span>
