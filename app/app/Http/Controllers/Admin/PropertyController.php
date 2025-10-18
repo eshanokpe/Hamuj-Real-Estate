@@ -16,7 +16,7 @@ use App\Models\PropertyValuationSummary;
 use App\Models\PropertyValuationPrediction;
 use App\Notifications\PropertyValuationNotification;
 use App\Notifications\PropertyValuationPredictionNotification;
-
+ 
   
 class PropertyController extends Controller
 { 
@@ -196,7 +196,8 @@ class PropertyController extends Controller
                 unlink(public_path($property->$field));
             }
              
-            $folder = str_replace('_', '', $field) . 's'; // Convert 'property_images' to 'propertyimages'
+            // $folder = str_replace('_', '', $field) . 's'; 
+            // Convert 'property_images' to 'propertyimages'
             $filePath = $request->file($field)->move(
                 public_path('assets/images/' . $folder),
                 time() . '_' . $request->file($field)->getClientOriginalName()

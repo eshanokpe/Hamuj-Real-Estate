@@ -149,6 +149,7 @@
                                             <img style="max-width: 100%; max-height: 100%;  width: 450px; height: 200px; object-fit: cover;" 
                                             class="featured__thumbnail--img" src="{{ asset($recentProperty->property_images) }}" alt="featured-img">
                                         </a>
+                                        {{-- {{ asset($recentProperty->property_images) }} --}}
                                     </div>
                                     <div class="featured__badge">
                                         <span class="badge__field style2">{{ ucfirst($recentProperty->status)}}</span>
