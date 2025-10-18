@@ -38,10 +38,10 @@
 
 @section('content')
 
-<div class="page__body--wrapper" id="dashbody__page--body__wrapper">
+<div class="page__body--wrapper"  id="dashbody__page--body__wrapper">
    
     <!-- End header area -->
-    <main class="main__content_wrapper">
+    <main class="main__content_wrapper" >
         <!-- dashboard container -->
         <div class="dashboard__container d-flex">
             <div class="main__content--left">

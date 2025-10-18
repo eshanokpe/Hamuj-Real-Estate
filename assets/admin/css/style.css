@@ -1521,7 +1521,7 @@ body.overlay__active::before,
 }
 
 
-.header__left{
+.header__left{ 
   gap: 1.5rem;
 }
 .search__box--form{

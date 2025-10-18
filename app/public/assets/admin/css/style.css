@@ -1521,9 +1521,7 @@ body.overlay__active::before,
 }
 
 
-.header__left{
-  gap: 1.5rem;
-}
+
 .search__box--form{
   width: 23.5rem;
   position: relative;
