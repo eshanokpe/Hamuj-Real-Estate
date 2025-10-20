@@ -1,6 +1,175 @@
 @extends('layouts.dashboard')
 
 @section('content')
+<style>
+    /* Mobile-responsive styles for Sell Property Form */
+    @media screen and (max-width: 768px) {
+        .cart__table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .cart__table thead {
+            display: none; /* Hide table headers on mobile */
+        }
+        
+        .cart__table tbody tr {
+            display: block;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            background: white;
+        }
+        
+        .cart__table tbody td {
+            display: flex;
+            flex-direction: column;
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: center;
+        }
+        
+        .cart__table tbody td:last-child {
+            border-bottom: none;
+        }
+        
+        .cart__table tbody td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+        
+        /* Special handling for the image column */
+        .cart__table tbody td:first-child {
+            display: block;
+            padding: 0;
+            border-bottom: none;
+            text-align: left;
+        }
+        
+        .cart__table tbody td:first-child:before {
+            display: none;
+        }
+        
+        /* Adjust property author layout for mobile */
+        .properties__author {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .properties__author--thumb {
+            margin-bottom: 1rem;
+        }
+        
+        .properties__author--thumb img {
+            width: 80px !important;
+            height: 80px !important;
+        }
+        
+        .reviews__author--text {
+            text-align: center;
+        }
+        
+        /* Input field styling for mobile */
+        .amount-input {
+            width: 100% !important;
+            margin: 0.5rem 0 !important;
+            padding: 0.75rem;
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+        
+        /* Button styling for mobile */
+        .solid__btn {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+        }
+        
+        /* Modal adjustments for mobile */
+        .modal-dialog {
+            margin: 1rem;
+        }
+        
+        .modal-content {
+            border-radius: 12px;
+        }
+        
+        /* Text sizing for mobile */
+        .reviews__author--title {
+            font-size: 1.1rem;
+        }
+        
+        .reviews__author--subtitle {
+            font-size: 0.9rem;
+        }
+        
+        .properties__author--price {
+            font-size: 0.85rem;
+        }
+        
+        /* Ensure calculated values are prominent */
+        .calculated-size, .total-price {
+            font-size: 1rem !important;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+            margin: 0.25rem 0;
+        }
+        
+        /* Hide small text on mobile to save space */
+        .text-muted small {
+            display: block;
+            margin-top: 0.25rem;
+        }
+    }
+
+    /* Ensure table cells have data labels for mobile */
+    @media screen and (max-width: 768px) {
+        .cart__table tbody td:nth-child(2):before { content: "Price per SQM"; }
+        .cart__table tbody td:nth-child(3):before { content: "Actual Land Size"; }
+        .cart__table tbody td:nth-child(4):before { content: "Your Available Size"; }
+        .cart__table tbody td:nth-child(5):before { content: "Enter Sale Amount"; }
+        .cart__table tbody td:nth-child(6):before { content: "Calculated Size to Sell"; }
+        .cart__table tbody td:nth-child(7):before { content: "Total Sale Value"; }
+    }
+
+    /* Additional mobile optimizations */
+    @media screen and (max-width: 480px) {
+        .dashboard__container {
+            padding: 0.5rem;
+        }
+        
+        .reviews__heading--title {
+            font-size: 1.5rem;
+        }
+        
+        .reviews__heading--desc {
+            font-size: 0.9rem;
+        }
+        
+        .cart__table tbody tr {
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+    }
+
+    /* Prevent horizontal scrolling */
+    .table-responsive {
+        overflow-x: visible;
+    }
+    
+    @media screen and (max-width: 768px) {
+        .table-responsive {
+            border: none;
+        }
+    }
+</style>
+
 <div class="dashboard__page--wrapper">
     <!-- Dashboard sidebar -->
     <div class="page__body--wrapper" id="dashbody__page--body__wrapper">
@@ -27,7 +196,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>
+                                    <td data-label="Property">
                                         <div class="properties__author d-flex align-items-center">
                                             <div class="properties__author--thumb">
                                                 <img src="{{ asset($property->property_images) }}" alt="img" 
@@ -40,32 +209,32 @@
                                         </div> 
                                     </td>
                                     @if($property->valuationSummary) 
-                                        <td>
+                                        <td data-label="Price">
                                             <span class="item-price" data-price="{{ $property->valuationSummary->current_value_sum }}">₦{{ number_format($property->valuationSummary->current_value_sum, 2) }} per/sqm</span>
                                         </td>
                                     @else
-                                        <td>
+                                        <td data-label="Price">
                                             <span class="item-price" data-price="{{ $property->price }}">₦{{ number_format($property->price, 2) }} per/sqm</span>
                                         </td>
                                     @endif 
-                                    <td>
+                                    <td data-label="Actual Size">
                                         <span class="actual-size" data-size="{{ $property->size }}">{{ $property->size }} SQM</span>
                                     </td>
                                     
-                                    <td class="available-size" data-initial-size="{{ $property->buys->sum('selected_size_land') }}">
+                                    <td data-label="Your Size" class="available-size" data-initial-size="{{ $property->buys->sum('selected_size_land') }}">
                                         {{ number_format($property->buys->sum('selected_size_land'), 4) }} SQM
                                     </td> 
-                                    <td>
-                                        <div class="d-flex align-items-center">
+                                    <td data-label="Enter Amount">
+                                        <div class="d-flex align-items-center justify-content-center">
                                             <input type="number" class="amount-input text-center mx-2"
                                                 style="width: 120px;" min="1000" step="100" placeholder="Enter amount">
                                         </div>
                                         <small class="text-muted">Minimum: ₦1,000</small>
                                     </td>
-                                    <td>
+                                    <td data-label="Calculated Size">
                                         <span class="calculated-size" style="color: #47008E; font-weight: bold">0.0000 SQM</span>
                                     </td>
-                                    <td>
+                                    <td data-label="Total Value">
                                         <span class="total-price" style="color: #47008E; font-weight: bold">₦0.00</span>
                                     </td>
                                 </tr>
@@ -77,8 +246,8 @@
 
             <div class="dashboard__container dashboard__reviews--container">
                 <div class="cart__footer d-flex justify-content-end align-items-center mt-4">
-                    <div>
-                        <a href="#" class="solid__btn" id="make-payment-btn" style="opacity: 0.6; cursor: not-allowed;" disabled>Submit Request</a>
+                    <div style="width: 100%; max-width: 300px;">
+                        <a href="#" class="solid__btn" id="make-payment-btn" style="opacity: 0.6; cursor: not-allowed; width: 100%;" disabled>Submit Request</a>
                     </div>
                 </div> 
                 <!-- Hidden Form to Pass Data for Payment --> 

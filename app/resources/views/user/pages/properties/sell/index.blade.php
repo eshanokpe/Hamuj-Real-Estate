@@ -1,6 +1,133 @@
 @extends('layouts.dashboard')
 
 @section('content')
+<style>
+    /* Mobile-responsive table styles for Sell Property */
+    @media screen and (max-width: 768px) {
+        .properties__table {
+            overflow-x: visible;
+        }
+        
+        .properties__table--wrapper {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .properties__table--wrapper thead {
+            display: none; /* Hide table headers on mobile */
+        }
+        
+        .properties__table--wrapper tbody tr {
+            display: block;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            background: white;
+        }
+        
+        .properties__table--wrapper tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: right;
+        }
+        
+        .properties__table--wrapper tbody td:last-child {
+            border-bottom: none;
+        }
+        
+        .properties__table--wrapper tbody td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            text-align: left;
+            margin-right: 1rem;
+            color: #475569;
+            flex-shrink: 0;
+        }
+        
+        /* Special handling for the image column */
+        .properties__table--wrapper tbody td:first-child {
+            display: block;
+            padding: 0;
+            border-bottom: none;
+        }
+        
+        .properties__table--wrapper tbody td:first-child:before {
+            display: none;
+        }
+        
+        /* Action columns styling */
+        .properties__table--wrapper tbody td:nth-child(4),
+        .properties__table--wrapper tbody td:nth-child(5) {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .properties__table--wrapper tbody td:nth-child(4):before {
+            content: "View Property";
+        }
+        
+        .properties__table--wrapper tbody td:nth-child(5):before {
+            content: "Sell Property";
+        }
+        
+        /* Button styling for mobile */
+        .properties__table--wrapper tbody td .status__btn {
+            display: inline-block;
+            margin: 0.25rem 0;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        /* Empty state styling */
+        .properties__table--wrapper tbody td[colspan] {
+            display: block;
+            text-align: center;
+            padding: 2rem !important;
+        }
+        
+        .properties__table--wrapper tbody td[colspan] .text-center {
+            padding: 0;
+        }
+    }
+
+    /* Ensure table cells have data labels for mobile */
+    @media screen and (max-width: 768px) {
+        .properties__table--wrapper tbody td:nth-child(2):before { content: "Date Acquired"; }
+        .properties__table--wrapper tbody td:nth-child(3):before { content: "Acquired Size"; }
+    }
+
+    /* Improve pagination for mobile */
+    @media screen and (max-width: 768px) {
+        .pagination__menu {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .pagination__menu--items {
+            margin: 0;
+        }
+    }
+
+    /* Enhanced empty state for mobile */
+    @media screen and (max-width: 768px) {
+        .properties__table--wrapper tbody td[colspan] .fa-store-slash {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .properties__table--wrapper tbody td[colspan] h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+    }
+</style>
 
 <div class="page__body--wrapper" id="dashbody__page--body__wrapper">
 
@@ -60,21 +187,21 @@
                                         </div>
                                     </div>
                                 </td> 
-                                <td>
+                                <td data-label="Date Acquired">
                                     <span class="reviews__date">
                                         {{  \Carbon\Carbon::parse($property->latest_created_at)->format('d F, Y')  }} 
                                     </span>
                                 </td> 
-                                <td class="text-nowrap align-middle fw-bold"> {{-- Align vertically, make bold --}}
+                                <td data-label="Acquired Size" class="text-nowrap align-middle fw-bold"> {{-- Align vertically, make bold --}}
                                     <span class="properties__views">{{ number_format($property->total_selected_size_land, 4) }} SQM</span>
                                 </td>  
-                                <td>
+                                <td data-label="View Property">
                                     <span class="status__btn pending2"> 
                                         <a href="{{ route('user.properties.show', encrypt($property->property->id))}}">
                                         View</a>
                                     </span> 
                                 </td>
-                                <td> 
+                                <td data-label="Sell Property"> 
                                     <span class="status__btn pending2 " style="background-color: #47008E; ">
                                         <a class="text-white" href="{{ route('user.cart.sell.index', encrypt($property->property->id))}}">
                                         Sell</a>
