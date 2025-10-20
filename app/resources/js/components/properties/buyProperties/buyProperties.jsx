@@ -17,6 +17,19 @@ const PaymentSuccess = () => {
     );
 };
 
+// Helper function to parse numeric strings with commas
+const parseNumericString = (value) => {
+    if (value === null || value === undefined) return 0;
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') {
+        // Remove commas and convert to number
+        const cleanedValue = value.replace(/,/g, '');
+        const parsed = parseFloat(cleanedValue);
+        return isNaN(parsed) ? 0 : parsed;
+    }
+    return 0;
+};
+
 // Main Payment Component
 const BuyProperties = () => {
     const navigate = useNavigate();
@@ -50,7 +63,6 @@ const BuyProperties = () => {
     }, [remainingSize, property, calculatedLandSize]);
 
     // Fetch property details
-    // After fetching property, log the price values
     useEffect(() => {
         if (!slug) {
             setError("No property identifier provided in the URL.");
@@ -76,9 +88,9 @@ const BuyProperties = () => {
                 const pricePerSqm = response.data.property.valuationSummary?.current_value_sum || response.data.property.price;
                 console.log('Calculated pricePerSqm:', pricePerSqm);
                 
-                // Ensure remainingSize is always a number, not null
-                const availableSize = response.data.property.available_size;
-                setRemainingSize(availableSize !== null ? availableSize : 0);
+                // Parse available_size to handle comma-separated numbers
+                const availableSize = parseNumericString(response.data.property.available_size);
+                setRemainingSize(availableSize);
             } catch (err) {
                 console.error('Error fetching property:', err);
                 setError(err.response?.data?.message || err.message || 'Failed to fetch property details.');
@@ -141,9 +153,11 @@ const BuyProperties = () => {
         
         setTotalPrice(finalTotal);
         
-        // Ensure remainingSize is always a number
-        const currentRemainingSize = property.available_size !== null ? property.available_size : 0;
-        setRemainingSize(Math.max(currentRemainingSize - landSize, 0));
+        // Parse available_size to handle comma-separated numbers and ensure it's a number
+        const currentAvailableSize = parseNumericString(property.available_size);
+        const newRemainingSize = Math.max(currentAvailableSize - landSize, 0);
+        setRemainingSize(newRemainingSize);
+
     }, [inputAmount, applyCommission, property, user]);
 
     // Amount handlers
@@ -194,7 +208,6 @@ const BuyProperties = () => {
     };
 
     // Format land size (square meters)
-    // Format land size (square meters)
     const formatLandSize = (size) => {
         if (isNaN(size) || !isFinite(size)) {
             return '0.0000 SQM';
@@ -204,14 +217,21 @@ const BuyProperties = () => {
 
     // Helper function to safely get remaining size for display
     const getDisplayRemainingSize = () => {
-        const value = remainingSize !== null ? remainingSize : (property?.available_size || 0);
-        return Number.parseFloat(value).toPrecision(4);
+        const value = parseNumericString(remainingSize);
+        return value.toFixed(4);
+    };
+
+    // Helper function to get available size from property
+    const getAvailableSize = () => {
+        if (!property) return 0;
+        return parseNumericString(property.available_size);
     };
  
     // Payment handlers
     const handleMakePayment = (e) => {
         e.preventDefault();
         const amount = parseFloat(inputAmount) || 0;
+        const availableSize = getAvailableSize();
         
         if (amount < MINIMUM_AMOUNT) {
             alert(`Minimum amount required is ${formatCurrency(MINIMUM_AMOUNT)}`);
@@ -223,8 +243,8 @@ const BuyProperties = () => {
             return;
         }
         
-        if (calculatedLandSize > property.available_size) {
-            alert(`The calculated land size (${formatLandSize(calculatedLandSize)}) exceeds the available size of ${property.available_size} SQM. Please enter a smaller amount.`);
+        if (calculatedLandSize > availableSize) {
+            alert(`The calculated land size (${formatLandSize(calculatedLandSize)}) exceeds the available size of ${availableSize.toFixed(4)} SQM. Please enter a smaller amount.`);
             return;
         }
         
@@ -273,14 +293,14 @@ const BuyProperties = () => {
             return;
         }
 
-        // Validate remainingSize is a number
-        const validRemainingSize = remainingSize !== null ? remainingSize : 0;
+        // Use parsed remaining size
+        const validRemainingSize = parseNumericString(remainingSize);
 
         setPaymentProcessing(true);
 
-        try {
+        try { 
             const response = await axios.post('/user/payment/initiate', {
-                remaining_size: validRemainingSize, // Use validated value
+                remaining_size: validRemainingSize,
                 property_slug: property.slug,
                 quantity: calculatedLandSize,
                 total_price: totalPrice,
@@ -321,6 +341,7 @@ const BuyProperties = () => {
     const pricePerSqm = property.valuationSummary?.current_value_sum || property.price;
     const amount = parseFloat(inputAmount) || 0;
     const isAmountValid = amount >= MINIMUM_AMOUNT;
+    const availableSize = getAvailableSize();
 
     return (
         <div className="dashboard__page--wrapper">
@@ -414,7 +435,7 @@ const BuyProperties = () => {
                                                     )}
                                                     
                                                     <div className="text-muted small">
-                                                        Minimum amount: {formatCurrency(MINIMUM_AMOUNT)}
+                                                        TestMinimum amount: {formatCurrency(MINIMUM_AMOUNT)}
                                                     </div>
                                                 </div>
                                             </td>
@@ -462,7 +483,7 @@ const BuyProperties = () => {
                                 <button 
                                     className="solid__btn" 
                                     onClick={handleMakePayment}
-                                    disabled={!isAmountValid || calculatedLandSize <= 0 || calculatedLandSize > property.available_size || amountError}
+                                    disabled={!isAmountValid || calculatedLandSize <= 0 || calculatedLandSize > availableSize || amountError}
                                 >
                                     Make Payment
                                 </button>
