@@ -435,7 +435,7 @@ const BuyProperties = () => {
                                                     )}
                                                     
                                                     <div className="text-muted small">
-                                                        TestMinimum amount: {formatCurrency(MINIMUM_AMOUNT)}
+                                                        Minimum amount: {formatCurrency(MINIMUM_AMOUNT)}
                                                     </div>
                                                 </div>
                                             </td>
