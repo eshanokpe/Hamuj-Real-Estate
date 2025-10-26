@@ -97,7 +97,7 @@ class SellPropertyController extends Controller
         }
 
         // Prepare the data to send to Paystack
-        try {
+        try { 
             // Calculate new available size for the property
             $acquiredSizeLand = $request->input('acquired_size_land');
             $result = $property->available_size - $acquiredSizeLand;
