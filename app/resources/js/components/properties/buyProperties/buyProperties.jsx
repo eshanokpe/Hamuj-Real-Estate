@@ -354,7 +354,86 @@ const BuyProperties = () => {
                         </div>
 
                         <div className="properties__wrapper">
-                            <div className="properties__table table-responsive">
+                            {/* Mobile Card View */}
+                            <div className="mobile-property-card d-block d-md-none">
+                                <div className="property-card">
+                                    <div className="property-header">
+                                        <div className="property-image">
+                                            <img
+                                                src={
+                                                    property.property_images
+                                                        ? (property.property_images.startsWith('http') || property.property_images.startsWith('/'))
+                                                            ? property.property_images
+                                                            : `/${property.property_images.replace(/^\/+/, '')}`
+                                                        : '/images/placeholder-property.jpg'
+                                                }
+                                                alt={property.name}
+                                                onError={(e) => {
+                                                    e.target.src = '/images/placeholder-property.jpg';
+                                                    e.target.onerror = null;
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="property-info">
+                                            <h3>{property.name}</h3>
+                                            <div className="property-price">
+                                                {formatCurrency(pricePerSqm)} per/sqm
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="property-details">
+                                        <div className="detail-item">
+                                            <span className="label">Actual Land Size:</span>
+                                            <span className="value">{property.size} SQM</span>
+                                        </div>
+                                        <div className="detail-item">
+                                            <span className="label">Available Size:</span>
+                                            <span className="value">{getDisplayRemainingSize()} SQM</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="amount-section">
+                                        <label className="form-label">Enter Amount (₦)</label>
+                                        <input 
+                                            type="number" 
+                                            value={inputAmount}
+                                            onChange={handleAmountChange}
+                                            onFocus={handleInputFocus}
+                                            onBlur={handleInputBlur}
+                                            className={`form-control ${amountError ? 'is-invalid' : ''}`}
+                                            placeholder={`Minimum ${formatCurrency(MINIMUM_AMOUNT)}`}
+                                            min={MINIMUM_AMOUNT}
+                                            step="100"
+                                        />
+                                        {amountError && (
+                                            <div className="text-danger small mt-1">{amountError}</div>
+                                        )}
+                                        <div className="text-muted small mt-1">
+                                            Minimum amount: {formatCurrency(MINIMUM_AMOUNT)}
+                                        </div>
+                                    </div>
+
+                                    <div className="calculation-results">
+                                        <div className="result-item">
+                                            <span className="label">Calculated Land Size:</span>
+                                            <span className="value highlight">{formatLandSize(calculatedLandSize)}</span>
+                                        </div>
+                                        <div className="result-item">
+                                            <span className="label">Total to Pay:</span>
+                                            <span className="value highlight">{formatCurrency(totalPrice)}</span>
+                                        </div>
+                                        {applyCommission && user?.commission_balance && (
+                                            <div className="commission-applied text-success small">
+                                                Commission applied: -{formatCurrency(user.commission_balance)}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Desktop Table View */}
+                            <div className="properties__table table-responsive d-none d-md-block">
                                 <table className="properties__table--wrapper cart__table">
                                     <thead>
                                         <tr>
@@ -569,6 +648,133 @@ const BuyProperties = () => {
                             </div>
                         )}
                     </div>
+
+                    {/* Mobile-specific CSS */}
+                    <style jsx>{`
+                        .mobile-property-card {
+                            background: white;
+                            border-radius: 12px;
+                            padding: 1rem;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .property-header {
+                            display: flex;
+                            align-items: center;
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .property-image img {
+                            width: 80px;
+                            height: 80px;
+                            object-fit: cover;
+                            border-radius: 8px;
+                            margin-right: 1rem;
+                        }
+                        
+                        .property-info h3 {
+                            margin: 0 0 0.5rem 0;
+                            font-size: 1.2rem;
+                            color: #333;
+                        }
+                        
+                        .property-price {
+                            color: #47008E;
+                            font-weight: bold;
+                            font-size: 0.9rem;
+                        }
+                        
+                        .property-details {
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .detail-item {
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 0.5rem 0;
+                            border-bottom: 1px solid #f0f0f0;
+                        }
+                        
+                        .detail-item .label {
+                            color: #666;
+                            font-weight: 500;
+                        }
+                        
+                        .detail-item .value {
+                            color: #333;
+                            font-weight: 600;
+                        }
+                        
+                        .amount-section {
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .amount-section .form-control {
+                            padding: 0.75rem;
+                            font-size: 16px; /* Prevents zoom on iOS */
+                            border: 2px solid #e0e0e0;
+                            border-radius: 8px;
+                        }
+                        
+                        .calculation-results {
+                            background: #f8f9fa;
+                            padding: 1rem;
+                            border-radius: 8px;
+                            margin-top: 1rem;
+                        }
+                        
+                        .result-item {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 0.5rem 0;
+                        }
+                        
+                        .result-item .label {
+                            color: #666;
+                            font-weight: 500;
+                        }
+                        
+                        .result-item .value {
+                            font-weight: 600;
+                        }
+                        
+                        .result-item .value.highlight {
+                            color: #47008E;
+                            font-size: 1.1rem;
+                        }
+                        
+                        .commission-applied {
+                            text-align: center;
+                            margin-top: 0.5rem;
+                            padding: 0.25rem;
+                            background: #d4edda;
+                            border-radius: 4px;
+                        }
+                        
+                        @media (max-width: 480px) {
+                            .property-header {
+                                flex-direction: column;
+                                text-align: center;
+                            }
+                            
+                            .property-image img {
+                                margin-right: 0;
+                                margin-bottom: 0.5rem;
+                            }
+                            
+                            .cart__footer {
+                                flex-direction: column;
+                                gap: 1rem;
+                            }
+                            
+                            .cart__footer .solid__btn {
+                                width: 100%;
+                                text-align: center;
+                            }
+                        }
+                    `}</style>
                 </main>
             </div>
         </div>

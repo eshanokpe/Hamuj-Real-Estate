@@ -70,8 +70,6 @@ class BuyPropertyController extends Controller
         $reference = 'TRXDOHREF-' . strtoupper(Str::random(8));
     
         // Deduct from wallet
-        // $wallet->balance -= $totalPrice;
-        // $wallet->save();
         $wallet->decrement('balance', $totalPrice);
 
         // Create transaction record
@@ -102,7 +100,7 @@ class BuyPropertyController extends Controller
             'total_price' => $totalPrice,
             'transaction_id' => $transaction->id,
             'selected_size_land' => $selectedSizeLand,
-            'remaining_size' => $remainingSize - $selectedSizeLand,
+            'remaining_size' => $remainingSize,
             'use_referral' => $request->use_referral,
             'referral_amount' => $request->use_referral ? $request->referral_amount : 0,
             'status' => 'available',
