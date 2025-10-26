@@ -81,7 +81,7 @@ public function initializePayment(Request $request)
             'attempts_remaining' => $remainingAttempts
         ]);
     }
-
+ 
     // Reset attempt counter on successful verification
     $user->update([
         'failed_pin_attempts' => 0,

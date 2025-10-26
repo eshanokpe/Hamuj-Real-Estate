@@ -76,6 +76,7 @@ class BuyPropertyController extends Controller
         $transaction = Transaction::create([
             'user_id' => $user->id,
             'email' => $user->email,
+            'transaction_type' => 'buy',
             'property_id' => $property->id,
             'property_name' => $property->name,
             'amount' => $totalPrice,
@@ -88,6 +89,8 @@ class BuyPropertyController extends Controller
                 'property_name' => $property->name,
                 'remaining_size' => $remainingSize,
                 'selected_size_land' => $selectedSizeLand,
+                'payment_method' => 'wallet',
+                'property_mode' => 'buy_property',
             ],
         ]);
     

@@ -91,7 +91,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/cart/transfer/{id}', [CartController::class, 'transfer'])->name('cart.transfer.index');
     Route::post('/payment/initiate', [PaymentController::class, 'initializePayment'])->name('payment.initiate'); 
     Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
-     
+      
     Route::get('/payment/failed', [OrderController::class, 'failed'])->name('payment.failed');
     Route::get('success/', [OrderController::class, 'success']);
     
