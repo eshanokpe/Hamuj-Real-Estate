@@ -87,7 +87,7 @@
                                                     </span>
                                                 </td>
                                                 <td>{{ $sell->property->name }}</td>
-                                                <td>{{ number_format($sell->selected_size_land, 2) }} SQM</td>
+                                                <td>{{ number_format($sell->selected_size_land, 5) }} SQM</td>
                                                 <td>{{ number_format($sell->available_size ?? 'N/A', 2) }} SQM</td>
                                                 <td>₦{{ number_format($sell->total_price, 2) }}</td>
                                                 <td>
