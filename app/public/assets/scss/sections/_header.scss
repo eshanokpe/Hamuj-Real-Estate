@@ -1,0 +1,487 @@
+
+@use "./../abstract";
+
+/* Transparent Header */ 
+
+.transparent-header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+/*  Header Area */ 
+
+.header-area{
+    position: relative;
+    z-index: 9999;
+}
+
+/* Header Navigation */
+
+.header-navigation{
+    @include respond(xl){
+        padding: 20px 0;
+    }
+    & .primary-menu{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    & .main-menu{
+        & ul{
+            & > li{
+                display: inline-block;
+                position: relative;
+                margin-left: 17px;
+                margin-right: 17px;
+                @include respond(xl){
+                    margin-left: 10px;
+                    margin-right: 10px;
+                }
+                & > a {
+                    position: relative;
+                    display: block;
+                    font: 600 16px $heading-font;
+                    text-transform: capitalize;
+                    line-height: 1;
+                    color: $heading-color;
+                    padding: 40px 0;
+                    @include respond(xl){
+                        font-size: 16px;
+                    }
+                    & span.dd-trigger{
+                        margin-left: 5px;
+                    }
+                }
+                & .sub-menu {
+                    position: absolute;
+                    left: 0;
+                    top: 120%;
+                    width: 250px;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.2s;
+                    z-index: 99;
+                    padding: 10px 0;
+                    background-color: $white-color;
+                    height: auto;
+                    text-align: left;
+                    box-shadow: 0px 30px 80px 15px rgba(0, 0, 0, 0.09);
+                    border-radius: 7px;
+                    & li {
+                        display: block;
+                        margin: 0;
+                        & a {
+                            display: flex;
+                            align-items: center;
+                            padding: 0 30px;
+                            position: relative;
+                            line-height: 2.5;
+                            margin: 0;
+                            color: $heading-color;
+                            @include transition(.3s);
+                            & span.dd-trigger{
+                                margin-left: auto;
+                            }
+                            &::after{
+                                display: none;
+                            }
+                            &:hover {
+                                color: $primary-color;
+                            }
+                        }
+                        & .sub-menu {
+                            left: 100%;
+                            top: 50%;
+                            @include respond(tablet){
+                                left: auto;
+                                right: 100%;
+                                top: 50%;
+                            }
+                            @include respond(laptop){
+                                left: auto;
+                                right: 100%;
+                                top: 50%;
+                            }
+                        }
+                        &:hover {
+                            & .sub-menu {
+                                top: 0%;
+                            }
+                            & > a{
+                                margin-left: 5px;
+                                color: $secondary-color;
+                            }
+                        }
+                    }
+                }
+                &:hover {
+                    & > a{
+                        color: $secondary-color;
+                        &:after{
+                            left: 0;
+                            right: auto;
+                            width: 100%;
+                        }
+                    }
+                    & > .sub-menu {
+                        opacity: 1;
+                        visibility: visible;
+                        top: 100%;
+                    }
+                }
+            }
+		}
+    }
+    & .navbar-toggler {
+		padding: 11px 7px;
+		border: 1px solid $heading-color;
+		background-color: transparent;
+		cursor: pointer;
+        display: none;
+        border-radius: 5px;
+        margin-left: 20px;
+		& span {
+			position: relative;
+			border-radius: 3px;
+			display: block;
+			height: 2px;
+			padding: 0;
+			width: 30px;
+			cursor: pointer;
+			display: block;
+            @include transition(.3s);
+            background-color: $heading-color;
+            &:not(:first-child){
+                margin-top: 5px;
+            }
+		}
+		&.active {
+			span:nth-of-type(1) {
+				transform: rotate3d(0, 0, 1, 45deg);
+				top: 7px;
+			}
+			span:nth-of-type(2) {
+				opacity: 0;
+			}
+			span:nth-of-type(3) {
+				transform: rotate3d(0, 0, 1, -45deg);
+				top: -7px;
+			}
+		}
+	}
+    @include respond(xl){
+        & .theme-nav-menu{
+            text-align: left;
+            position: fixed;
+            top: 0;
+            left: -290px;
+            width: 290px;
+            height: 100%;
+            transition-duration: 500ms;
+            padding: 20px 20px 30px;
+            display: block;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            z-index: 9999;
+            background-color: $white-color;
+            &.menu-on {
+                left: 0;
+            }
+            & .main-menu {
+                margin-top: 30px;
+                & ul li {
+                    display: block;
+                    margin: 0;
+                    &:not(:last-child){
+                        border-bottom: 1px solid $border-color;
+                    }
+                    & a {
+                        display: block;
+                        padding: 12px 0;
+                        font-size: 18px;
+                        &:after{
+                            display: none;
+                        }
+                    }   
+                    & .sub-menu {
+                        width: 100%;
+                        position: relative;
+                        top: 0;
+                        left: 0;
+                        padding: 0;
+                        box-shadow: none;
+                        background-color: transparent;
+                        visibility: visible;
+                        opacity: 1;
+                        display: none;
+                        transition: none;
+                        & > li {
+                            & > a{
+                                padding: 5px 20px;
+                            }
+                            & .sub-menu{
+                                width: 100%;
+                                position: relative;
+                                top: 0;
+                                left: 0;
+                                padding: 0;
+                                box-shadow: none;
+                                background-color: transparent;
+                                visibility: visible;
+                                opacity: 1;
+                                display: none;
+                                transition: none;
+                                margin-left: 30px;
+                            }
+                        }
+                    }
+                    & .dd-trigger {
+                        position: absolute;
+                        right: 0;
+                        top: 10px;
+                        height: 25px;
+                        width: 25px;
+                        border-radius: 3px;
+                        z-index: 2;
+                        cursor: pointer;
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+        & .navbar-close{
+            width: 35px;
+            height: 35px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid $border-color;
+            font-size: 16px;
+        }
+        & .navbar-toggler{
+            display: block;
+        }
+        & .theme-menu-bottom{
+            & h5{
+                margin-bottom: 25px;
+            }
+            & .social-link{
+                & li{
+                    display: inline-block;
+                    margin-right: 10px;
+                    & a{
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        border: 1px solid $border-color;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        &:hover{
+                            background-color: $primary-color;
+                            color: $white-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Nav Right Item */ 
+
+.nav-right-item{
+    display: flex;
+    align-items: center;
+    & .theme-btn{
+        &.style-one{
+            color: $heading-color;
+            background-color: $primary-color;
+            &:hover{
+                background-color: $secondary-color;
+                color: $white-color;
+            }
+        }
+    }
+}
+
+.header-top-bar{
+    background-color: $primary-black-color;
+    padding: 14px 0;
+    @include respond(lg){
+        display: none;
+    }
+    & .social-box{
+        & a{
+            color: $white-color;
+            &:not(:last-child){
+                margin-right: 15px;
+            }
+        }
+    }
+    & .top-right{
+        float: right;
+        & span{
+            color: $white-color;
+            font-weight: 300;
+            & i{
+                color: $white-color;
+                margin-right: 8px;
+            }
+            &:not(:last-child){
+                &:after{
+                    display: inline-block;
+                    content: '|';
+                    margin-left: 20px;
+                    margin-right: 20px;
+                }
+            }
+        }
+    }
+}
+
+.header-one{
+    border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+    & .container-fluid{
+        padding-left: 150px;
+        padding-right: 150px;
+        @include respond(xxxl){
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+        @include respond(xl){
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+    }
+    & .header-navigation{
+        & .main-menu{
+            & ul{
+                & > li{
+                    & > a {
+                        color: $white-color;
+                        @include respond(xl){
+                            color: $heading-color;
+                        }
+                    }
+                    & .sub-menu {
+                        & li {
+                            & a {
+                                color: $heading-color;
+                                &:hover {
+                                    color: $primary-color;
+                                }
+                            }
+                            &:hover {
+                                & > a{
+                                    color: $primary-color;
+                                }
+                            }
+                        }
+                    }
+                    &:hover {
+                        & > a{
+                            color: $primary-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    & .nav-right-item{
+        & .navbar-toggler{
+            border-color: rgba(255, 255, 255, 0.70);
+            & span{
+                background-color: rgba(255, 255, 255, 0.70);
+            }
+        }
+    }
+}
+
+
+.header-two{
+    & .header-top{
+        background-color: $primary-black-color;
+    }
+    & .container-fluid{
+        padding-left: 150px;
+        padding-right: 150px;
+        @include respond(xxxl){
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+        @include respond(xl){
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+    }
+    & .header-navigation{
+        background: radial-gradient(258.86% 216.49% at -18.48% -74.46%, rgba(255, 255, 255, 0.40) 0%, rgba(255, 255, 255, 0.00) 100%);
+        backdrop-filter: blur(25px);
+        @include respond(xl){
+            backdrop-filter: inherit;
+        }
+        & .main-menu{
+            & ul{
+                & > li{
+                    & > a {
+                        color: $white-color;
+                        @include respond(xl){
+                            color: $heading-color;
+                        }
+                    }
+                    & .sub-menu {
+                        & li {
+                            & a {
+                                color: $heading-color;
+                                &:hover {
+                                    color: $primary-color;
+                                }
+                            }
+                            &:hover {
+                                & > a{
+                                    color: $primary-color;
+                                }
+                            }
+                        }
+                    }
+                    &:hover {
+                        & > a{
+                            color: $primary-color;
+                        }
+                    }
+                }
+            }
+        }
+        & .nav-right-item{
+            & .navbar-toggler{
+                border-color: rgba(255, 255, 255, 0.70);
+                & span{
+                    background-color: rgba(255, 255, 255, 0.70);
+                }
+            }
+        }
+    }
+}
+
+.header-three{
+    & .container-fluid{
+        padding-left: 150px;
+        padding-right: 150px;
+        @include respond(xxxl){
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+        @include respond(xl){
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+    }
+    & .header-navigation{
+        border-bottom: 1px solid $border-color;
+    }
+}

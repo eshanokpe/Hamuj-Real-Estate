@@ -9,9 +9,25 @@ use Illuminate\Notifications\Notifiable;
 class Admin extends Authenticatable
 {
     use HasFactory, Notifiable;
-    
+
+    protected $guard = 'admin';
 
     protected $fillable = [
-        'name', 'email', 'password', 'phone', 'last_login', 'login_ip', 'otp'
+        'name',
+        'email',
+        'password',
+        'is_admin',
+        'is_active',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean',
+        'is_active' => 'boolean',
     ];
 }

@@ -1,0 +1,269 @@
+
+/*======================
+    About Section  CSS
+=======================*/
+
+.bizzen-about_one{
+    & .bizzen-image{
+        margin-right: 30px;
+        @include respond(xxxl){
+            margin-right: 15px;
+        }
+    }
+    & .bizzen-content-box{
+        & .experience-text-wrap{
+            display: flex;
+            align-items: center;
+            @include respond(md){
+                align-items: flex-start;
+                flex-direction: column;
+            }
+            & .experience-box{
+                & h2{
+                    font-size: 165px;
+                    line-height: 1;
+                    & span{
+                        display: block;
+                        font-size: 24px;
+                        line-height: 34px;
+                        font-weight: 500;
+                        text-transform: capitalize;
+                    }
+                    @include respond(lg){
+                        font-size: 120px;
+                    }
+                }
+            }
+            & .text-box{
+                margin-left: 30px;
+                padding-left: 40px;
+                border-left: 1px solid $border-color;
+                @include respond(xxxl){
+                    padding-left: 30px;
+                }
+                @include respond(md){
+                    padding-left: 0;
+                    margin-top: 30px;
+                    margin-left: 0;
+                    border-left: none;
+                }
+                & p{
+                    margin-bottom: 30px;
+                    @include respond(xxxl){
+                        margin-bottom: 20px;
+                    }
+                    @include respond(xl){
+                        margin-bottom: 30px;  
+                    }
+                }
+                & .check-list{
+                    margin-bottom: 40px;
+                    @include respond(xxxl){
+                        margin-bottom: 20px;
+                    }
+                    @include respond(xl){
+                        margin-bottom: 40px;  
+                    }
+                    & li{
+                        &:not(:last-child){
+                            margin-bottom: 22px;
+                            @include respond(xxxl){
+                            margin-bottom: 17px;
+                        }
+                        }
+                        i{
+                            color: $primary-black-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.bizzen-about_two{
+    & .about-wrapper{
+        position: relative;
+        z-index: 1;
+    }
+    & .bizzen-image{
+        position: absolute;
+        max-width: 450px;
+        @include respond(xl){
+            max-width: 380px;
+        }
+        @include respond(lg){
+            display: none;
+        }
+        & img{
+            @include respond(xl){
+                width: 70%;
+            }
+        }
+        &.image-one{
+            bottom: 40px;
+            left: 0;
+            z-index: 1;
+            @include respond(xxxl){
+                left: -70px;
+            }
+            @include respond(xl){
+                left: -20px;
+            }
+        }
+        &.image-two{
+            top: 0;
+            right: -50px;
+            z-index: 1;
+            text-align: right;
+            @include respond(xxxl){
+                right: -85px;
+            }
+            @include respond(xl){
+                top: 70px;
+                right: -30px;
+            }
+        }
+    }
+    & .bizzen-content-box{
+        border: 1px solid $border-color;
+        border-radius: 30px;
+        padding: 80px 40px 40px 150px;
+        @include respond(xl){
+            padding: 40px 30px;
+        }
+        & .content-wrap{
+            max-width: 400px;
+            margin: 0 auto;
+            @include respond(lg){
+                margin: inherit;
+            }
+        }
+        & h6{
+            margin-bottom: 15px;
+        }
+        & .check-list{
+            &.style-one{
+                & li{
+                    &:not(:last-child){
+                        margin-bottom: 20px;
+                    }
+                    & i{
+                        color: $secondary-color;
+                        margin-right: 8px;
+                    }
+                }
+            }
+        }
+    }
+    & .bizzen-experience-box{
+        position: absolute;
+        bottom: 30px;
+        right: -50px;
+        max-width: 300px;
+        & .arrow-shape{
+            text-align: right;
+        }
+        & .content{
+            & h2{
+                & span{
+                    display: block;
+                    font-size: 24px;
+                    line-height: 34px;
+                    font-weight: 500;
+                }
+            }
+        }
+        @include respond(xl){
+            right: -20px;
+        }
+        @include respond(lg){
+            display: none;
+        }
+    }
+}
+
+.bizzen-iconic-item{
+    &.style-one{
+        padding: 70px 70px 65px;
+        @include respond(xl){
+            padding: 70px 50px 65px
+        }
+        @include respond(lg){
+            padding: 50px 40px 40px;
+        }
+        & .icon{
+            margin-bottom: 20px;
+        }
+        & .content{
+            & h4{
+                margin-bottom: 10px;
+            }
+        }
+    }
+}
+
+.bizzen-about_three{
+    & .about-wrapper{
+        border-bottom: 1px solid $border-color;
+        @include respond(lg){
+            padding-bottom: 120px;
+        }
+    }
+    & .bizzen-item-list{
+        border-right: 1px solid $border-color;
+        @include respond(lg){
+            border-right: none;
+        }
+        & .bizzen-iconic-item{
+            &.style-one{
+                padding-left: 0;
+                &:first-child{
+                    padding-top: 0;
+                }
+                &:not(:last-child){
+                    border-bottom: 1px solid $border-color;
+                }
+                @include respond(lg){
+                    border: 1px solid $border-color;
+                    padding-left: 40px;
+                    margin-bottom: 40px;
+                    &:first-child{
+                        padding-top: 40px;
+                    }
+                }
+            }
+        }
+    }
+    & .bizzen-content-box{
+        padding-left: 30px;
+        @include respond(xl){
+            padding-left: 0;
+        }
+        & .section-title{
+            & h2{
+                @include respond(xl){
+                    font-size: 32px;
+                }
+                @include respond(md){
+                    font-size: 28px;
+                }
+            }
+        }
+    }
+}
+
+.bizzen-grow-sec{
+    & .bizzen-content-box{
+        padding-right: 70px;
+        & > p{
+            font-size: 20px;
+            line-height: 30px;
+            margin-bottom: 20px;
+        }
+        & .counter-wrap{
+            padding-top: 30px;
+            border-top: 1px solid $border-color;
+        }
+    }
+}

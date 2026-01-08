@@ -1,0 +1,546 @@
+
+/*======================
+    Hero Section  CSS
+=======================*/
+
+.bizzen-hero_one{
+    padding: 220px 0 120px;
+    position: relative;
+    z-index: 1;
+    @include respond(md){
+        padding: 180px 0 95px;
+    }
+    & .hero-bg-shape{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        max-width: 865px;
+        width: 100%;
+        height: 1040px;
+        background-color: $primary-color;
+        z-index: -1;
+        @include respond(xxxl){
+            height: 850px;
+        }
+        @include respond(xl){
+            height: 700px;
+        }
+        @include respond(lg){
+            display: none;
+        }
+    }
+    & .container-fluid{
+        padding-left: 150px;
+        padding-right: 150px;
+        @include respond(xxxl){
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+        @include respond(xl){
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+    }
+    & .hero-content{
+        margin-bottom: 130px;
+        @include respond(lg){
+            margin-bottom: 60px;
+        }
+        & .sub-title{
+            margin-bottom: 7px;
+            &:after{
+                display: none;
+            }
+        }
+        & h1{
+            color: $white-color;
+            margin-bottom: 35px;
+            & img{
+                border-radius: 100px;
+                @include respond(md){
+                    display: none;
+                }
+            }
+            @include respond(xxxl){
+                font-size: 70px;
+            }
+            @include respond(md){
+                font-size: 32px;
+                line-height: 1.5em;
+            }
+        }
+        & .theme-btn{
+            &.style-one{
+                color: $heading-color;
+                background-color: $primary-color;
+                &:hover{
+                    background-color: $secondary-color;
+                    color: $white-color;
+                }
+            }
+        }
+    }
+    & .text-box{
+        margin-left: 70px;
+        max-width: 400px;
+        @include respond(xxxl){
+            margin-left: 20px;
+        }
+        @include respond(lg){
+            margin-left: 0;
+            display: none;
+        }
+        @include respond(md){
+            display: block;
+        }
+        & .avatar-list{
+            margin-bottom: 15px;
+            & img{
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                border: 2px solid $white-color;
+                &:not(:first-child){
+                    margin-left: -20px;
+                }
+            }
+        }
+        & h4{
+            color: $white-color;
+            margin-bottom: 15px;
+            & span{
+                font-size: 16px;
+            }
+        }
+        & p{
+            color: $white-color;
+        }
+    }
+    & .hero-image{
+        position: relative;
+        & img{
+            min-height: 350px;
+            object-fit: cover;
+        }
+        & .hero-rating-box{
+            text-align: left;
+            padding: 25px 40px 30px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            max-width: 210px;
+            background-color: $white-color;
+            & h2{
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+
+.bizzen-avatar-box{
+    & ul{
+        display: inline-flex;
+        align-items: center;
+        & li{
+            display: inline-block;
+            & img{
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                border: 2px solid $white-color;
+            }
+            &:not(:first-child){
+                margin-left: -10px;
+            }
+            &:last-child{
+                margin-left: 20px;
+            }
+            & span{
+                color: $white-color;
+            }
+        }
+    }
+}
+
+/* Hero Two */ 
+
+.bizzen-hero_two{
+    & .single-slider{
+        padding: 295px 40px 160px;
+        position: relative;
+        z-index: 1;
+        @include respond(xl){
+            padding: 295px 15px 160px;
+        }
+        @include respond(lg){
+            padding: 295px 0 160px;
+        }
+        @include respond(md){
+            padding: 200px 0 100px;
+        }
+    }
+    & .image-layer{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: all 1.4s cubic-bezier(0.7, 0, 0.3, 1);
+        @include transform(scale(1.2));
+        z-index: -1;
+        &:after{
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: '';
+            width: 100%;
+            height: 100%;
+            background-color: rgba(6, 50, 50, 0.70);
+            z-index: -1;
+        }
+    }
+    &.slick-current{
+        & .image-layer{
+            @include transform(scale(1));
+        }
+    }
+    & .container{
+        max-width: 1640px;
+    }
+    & .hero-content{
+        @include respond(lg){
+            text-align: center;
+        }
+        & h1{
+            font-weight: 400;
+            color: $white-color;
+            margin-bottom: 20px;
+            & span{
+                font-weight: 700;
+            }
+            @include respond(xxxl){
+                font-size: 70px;
+            }
+            @include respond(md){
+                font-size: 32px;
+                line-height: 1.5em;
+            }
+        }
+        & p{
+            max-width: 610px;
+            color: $white-color;
+            margin-bottom: 30px;
+        }
+        & .hero-button-wrap{
+            display: flex;
+            align-items: center;
+            @include respond(lg){
+                justify-content: center;
+            }
+            & .theme-btn{
+                &.style-one{
+                    color: $heading-color;
+                    background-color: $primary-color;
+                    &:hover{
+                        background-color: $secondary-color;
+                        color: $white-color;
+                    }
+                }
+            }
+            & .bizzen-avatar-box{
+                margin-left: 30px;
+            }
+            @include respond(md){
+                flex-direction: column;
+                & .bizzen-avatar-box{
+                    margin-left: 0;
+                    margin-top: 30px;
+                }
+            }
+        }
+        & .bizzen-experience-wrap{
+            display: flex;
+            justify-content: space-between;
+            max-width: 570px;
+            @include respond(lg){
+                margin: 0 auto;
+            }
+            & .arrow-wrap{
+                @include respond(md){
+                    display: none;
+                }
+            }
+        }
+        & .bizzen-experience-box{
+            display: flex;
+            align-items: center;
+            & .thumbnail{
+                flex: 0 0 auto;
+                margin-right: 40px;
+            }
+            & .content{
+                text-align: left;
+                & h2{
+                    color: $white-color;
+                    margin-bottom: 15px;
+                }
+                & p{
+                    color: $white-color;
+                    font-size: 24px;
+                    font-weight: 500;
+                    font-family: $heading-font;
+                    max-width: 140px;
+                }
+            }
+        }
+    }
+}
+
+/* Hero Three */ 
+
+.bizzen-hero_three{
+    position: relative;
+    z-index: 1;
+    // padding: 120px 40px 0;
+    background-color: $gray-color;
+    @include respond(xl){
+        padding: 220px 40px 0;
+    }
+    @include respond(xl){
+        padding: 220px 40px 0;
+    }
+    @include respond(lg){
+        padding: 220px 0 110px;
+    }
+    & .shape{
+        position: absolute;
+        z-index: -1;
+        &.shape-one{
+            top: 30%;
+            left: 10%;
+            @include respond(xl){
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+        &.shape-two{
+            top: 20%;
+            right: 40%;
+            @include respond(xl){
+                right: 30px;
+                top: 20%;
+            }
+        }
+    }
+    & .container{
+        max-width: 1640px;
+    }
+    & .hero-content{
+        padding-bottom: 130px;
+        @include respond(xl){
+            text-align: center;
+        }
+        & .sub-title{
+            color: $secondary-color;
+            margin-bottom: 12px;
+            @include respond(md){
+                font-size: 14px;
+                margin-bottom: 15px;
+            }
+        }
+        & h1{
+            margin-bottom: 30px;
+            & span{
+                font-size: 30px;
+                border: 2px solid $secondary-color;
+                padding: 14px 30px;
+                border-radius: 50px;
+                line-height: 1;
+                vertical-align: middle;
+                @include respond(md){
+                    padding: 5px 15px;
+                    font-size: 16px;
+                }
+            }
+            @include respond(xxxl){
+                font-size: 70px;
+            }
+            @include respond(lg){
+                font-size: 56px;
+                line-height: 1.5em;
+            }
+            @include respond(md){
+                font-size: 32px;
+                line-height: 1.5em;
+            }
+        }
+        & p{
+            margin-bottom: 35px;
+            max-width: 740px;
+        }
+    }
+    & .hero-image-box{
+        position: relative;
+        z-index: 1;
+        @include respond(lg){
+            display: none;
+        }
+        & .circle-shape{
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            width: 100%;
+            text-align: center;
+        }
+        & .bizzen-avatar-box{
+            max-width: 170px;
+            position: absolute;
+            left: -20%;
+            bottom: 17%;
+            @include respond(xxxl){
+                left: -35%;
+            }
+            @include respond(xl){
+                left: 0;
+            }
+            & ul{
+                & li{
+                    &:last-child{
+                        margin-left: 0;
+                    }
+                    & img{
+                        width: 50px;
+                        height: 50px;
+                        border: 2px solid $white-color;
+                    }
+                    & span{
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: $secondary-color;
+                    }
+                }
+            }
+        }
+        & .arrow-shape{
+            position: absolute;
+            bottom: 35%;
+            left: -5%;
+            @include respond(xxxl){
+                left: -17%;
+            }
+            @include respond(xl){
+                left: 7%;
+            }
+        }
+        & .bizzen-iconic-text-box{
+            position: absolute;
+            top: 20%;
+            right: -55px;
+            background-color: $white-color;
+            border-radius: 100px;
+            padding: 20px 30px;
+            display: inline-flex;
+            align-items: center;
+            @include respond(xxxl){
+                top: 27%;
+                right: -7%;
+            }
+            @include respond(xl){
+                top: 15%;
+                right: 7%;
+            }
+            & .icon{
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex: 0 0 auto;
+                margin-right: 16px;
+                background-color: $secondary-color;
+            }
+            & .text{
+                & h3{
+                    line-height: 40px;
+                }
+            }
+        }
+    }
+}
+
+
+/* Page Hero */ 
+
+.page-hero{
+    padding: 230px 0 145px;
+    @include respond(md){
+        padding: 160px 0 75px;
+    }
+    &:after{
+        position: absolute;
+        top: 0;
+        left: 0;
+        content: '';
+        width: 100%;
+        height: 100%;
+        background-color: rgba(31, 31, 31, 0.94);
+        z-index: -1;
+    }
+    & .page-content{
+        padding-left: 70px;
+        @include respond(xl){
+            padding-left: 0;
+        }
+        & h1{
+            font-size: 60px;
+            color: $white-color;
+            text-transform: capitalize;
+            margin-bottom: 25px;
+            @include respond(xl){
+                font-size: 44px;
+                line-height: 1.6;
+            }
+            @include respond(md){
+                font-size: 32px;
+                line-height: 40px;
+            }
+        }
+        & ul{
+            position: relative;
+            display: inline-block;
+            &:after{
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                content: "";
+                width: 100%;
+                height: 1px;
+                background-color: $white-color;
+            }
+            & li{
+                display: inline-block;
+                color: $white-color;
+                font-size: 18px;
+                font-family: $heading-font;
+                font-weight: 600;
+                letter-spacing: 0.02em;
+                line-height: 28px;
+                &:not(:last-child){
+                    &:after{
+                        display: inline-block;
+                        content: '/';
+                        margin-left: 5px;
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+    }
+}

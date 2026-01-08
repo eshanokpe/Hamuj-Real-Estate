@@ -27,27 +27,27 @@ Laravel has the most extensive and thorough [documentation](https://laravel.com/
 
 You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
 ## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
 ### Premium Partners
 
 - **[Vehikl](https://vehikl.com/)**
 - **[Tighten Co.](https://tighten.co)**
+- **[WebReinvent](https://webreinvent.com/)**
 - **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
 - **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
 - **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Jump24](https://jump24.co.uk)**
+- **[Redberry](https://redberry.international/laravel/)**
+- **[Active Logic](https://activelogic.com)**
+- **[byte5](https://byte5.de)**
 - **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
 
 ## Contributing
 
@@ -65,22 +65,13 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-Test BVN = 54651333604
-Test -NIN = 12345678901
-Real Bvn = 54651333604
-Real Bvn = 22261960293
-Real NIN = 22219825220
-Real NIN = 17335778953
+ <!-- php artisan make:livewire MyLearning -->
+<!-- composer require livewire/livewire && php artisan vendor:publish --tag=livewire:assets --force 
+php artisan optimize:clear
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
 
-${verifiedData.dob ? buildDetailRow('Date of Birth', formatDobDisplay(verifiedData.dob)) : ''}
-${verifiedData.phone ? buildDetailRow('Phone Number', formatPhoneDisplay(verifiedData.phone)) : ''}
-
-TransactionPIN:
-$2y$10$K1c/HEI5PVVjLZMLdyHwZ.t/572wqaPbwrnbBCJnBZBKAQOIFuYvG
-
-
-Hamuj6061@
-Something went wrong:SQLSTATE[HY000]: General error: 1364 Field 'wallet_id' doesn't have a default value (SQL: insert into `wallet_transactions` (`user_id`, `type`, `amount`, `reference`, `status`, `updated_at`, `created_at`) values (1, credit, 1000.00, SELLDOHREF-1759569523-IZE0V5XQ, completed, 2025-10-04 09:18:44, 2025-10-04 09:18:44))
-
-$2y$10$B09Lpvm6VE37n2h0dtd5qOPmMqty1CAceeEYeYV.7vVqaawQeXf1G
-
+php artisan storage:link
+-->

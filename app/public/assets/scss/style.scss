@@ -1,62 +1,70 @@
-@charset "UTF-8";
-/*
-  Template Name: NewVilla - Real Estate HTML Template
-  Author Name: Hook theme
-  Author URL: https://themeforest.net/user/hooktheme
-  Version: 1.0.0
 
-  ----------------------------
-  [Table of contents CSS] 
-  ----------------------------
+/*----------------------------------------------------------------------------------- 
 
-    1. Base CSS
-    2. Header css
-    3. Hero css
-    4. About css
-    5. Blog css
-    6. Banner css
-    7. Account css
-    8. Add listing css
-    9. Amenities css
-    10. Categories css
-    11. Contact css
-    12. Featured css
-    13. Footer css
-    14. Gallery css
-    15. Listing page css
-    16. listing details css
-    17. Location css
-    18. Other css
-    19. preloader css 
-    20. Project css
-    21. Property css
-    22. Testimonial css
-
-*/
-
-@import 'global';
-@import 'elements/header';
-@import 'elements/preloader';
-@import 'elements/hero';
-@import 'elements/about';
-@import 'elements/featured';
-@import 'elements/location';
-@import 'elements/property';
-@import 'elements/testimonial';
-@import 'elements/amenities';
-@import 'elements/blog';
-@import 'elements/other';
-@import 'elements/categories';
-@import 'elements/footer';
-@import 'elements/listing';
-@import 'elements/listing-details';
-@import 'elements/add-listing';
-@import 'elements/contact';
-@import 'elements/project';
-@import 'elements/account';
-@import 'elements/banner';
-@import 'elements/gallery';
+Template Name: Bizzen - Business Consulting HTML Template
+URI: https://nayonacademy.com/
+Description: Bizzen – Business Consulting HTML5 Template is a modern, clean, and fully responsive HTML5 template designed for business consulting, finance, corporate, and professional services websites.
+Author: Themeservices
+Author URI: https://themeforest.net/user/themeservices
+Version: 1.0 
 
 
+------------------------------------------------------
+   CSS INDEX
+-----------------------------------------------------
+
+    # Components
+        # Base CSS
+        # Common CSS
+        # Preloader CSS
+        # Offcanvas CSS
+        # Animation CSS
+        # Button CSS
+    # Sections
+       # Header CSS
+       # Hero Section CSS
+       # About Section CSS
+       # Features Section CSS
+       # Service Section CSS
+       # Counter Section CSS
+       # Process Section CSS
+       # Project Section CSS
+       # Pricing Section CSS
+       # Faq Section CSS
+       # Testimonial Section CSS
+       # Company Section CSS
+       # CTA Section CSS
+       # Contact Section CSS
+       # Error Section CSS
+       # Footer CSS
+-------------------------------------------------------    */
 
 
+// Abstract
+
+@import "abstract";
+
+@import 'components/base';
+@import 'components/common';
+@import 'components/preloader';
+@import 'components/offcanvas';
+@import 'components/animations';
+@import 'components/buttons';
+@import 'sections/header';
+@import 'sections/hero';
+@import 'sections/about';
+@import 'sections/features';
+@import 'sections/service';
+@import 'sections/counter';
+@import 'sections/process';
+@import 'sections/project';
+@import 'sections/pricing';
+@import 'sections/faq';
+@import 'sections/team';
+@import 'sections/testimonial';
+@import 'sections/blog';
+@import 'sections/company';
+@import 'sections/cta';
+@import 'sections/contact';
+@import 'sections/error';
+@import 'sections/footer';

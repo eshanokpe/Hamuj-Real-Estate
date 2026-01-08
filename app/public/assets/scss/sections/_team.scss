@@ -1,0 +1,302 @@
+
+/*======================
+    Team Section  CSS
+=======================*/
+
+.bizzen-team_one{
+    & .team-bg{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 550px;
+        z-index: -1;
+    }
+    & .container-fluid{
+        padding-left: 95px;
+        padding-right: 95px;
+        @include respond(xxxl){
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        @include respond(xl){
+            padding-left: 15px;
+            padding-right: 14px;
+        }
+    }
+}
+
+.bizzen-team-item{
+    &.style-one{
+        &:hover{
+            & .member-image{
+                & .social-box{
+                    transform: translateY(30px);
+                    visibility: visible;
+                    opacity: 1;
+                }
+                & .member-info{
+                    padding: 43px 40px 25px;
+                }
+            }
+        }
+        & .member-image{
+            position: relative;
+            & img{
+                width: 100%;
+            }
+            & .hover-content{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+                padding: 30px;
+            }
+            & .content-wrap{
+                width: 100%;
+                text-align: center;
+            }
+            & .social-box{
+                background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+                padding: 10px;
+                display: inline-flex;
+                gap: 10px;
+                border: 1px solid $border-color;
+                visibility: hidden;
+                opacity: 0;
+                transition: all .3s;
+                & a{
+                    width: 40px;
+                    height: 40px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: $heading-color;
+                    background-color: $white-color;
+                    &:hover{
+                        background-color: $secondary-color;
+                        color: $white-color;
+                    }
+                }
+            }
+            & .member-info{
+                padding: 23px 40px 25px;
+                background-color: $primary-black-color;
+                transition: all .4s;
+                & h4{
+                    color: $white-color;
+                }
+                & .position{
+                    color: rgba(255,255,255,0.8);
+                }
+            }
+        }
+    }
+    &.style-two{
+        &:hover{
+            & .member-image{
+                & .hover-content{
+                    visibility: visible;
+                    opacity: 1;
+                }
+                & .social-box{
+                    bottom: 0;
+                }
+            }
+        }
+        & .member-image{
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            & img{
+                width: 100%;
+            }
+            & .hover-content{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color:rgba(0, 0, 0, 0.3);
+                visibility: hidden;
+                opacity: 0;
+                transition: all .3s;
+            }
+            & .social-box{
+                position: absolute;
+                bottom: -50%;
+                right: 0;
+                background-color: $primary-black-color;
+                padding: 10px 20px;
+                transition: all .4s;
+                & a{
+                    color: $white-color;
+                    display: block;
+                    font-size: 14px;
+                    &:not(:last-child){
+                        margin-bottom: 5px;
+                    }
+                }
+            }
+        }
+        & .member-info{
+            padding-top: 20px;
+        }
+    }
+}
+
+
+/* Team Details page css */ 
+
+.bizzen-member-info-box{
+    border: 1px solid $border-color;
+    display: flex;
+    align-items: center;
+    padding: 20px 30px;
+    @include respond(xxxl){
+        padding: 20px 20px;
+    }
+    @include respond(lg){
+        padding: 20px 30px;
+    }
+    & .icon{
+        margin-right: 20px;
+        flex: 0 0 auto;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 50px #E8E8E8;
+        color: $secondary-color;
+    }
+    & .content{
+        h4{
+            font-size: 20px;
+            @include respond(xl){
+                font-size: 18px;
+            }
+        }
+    }
+}
+
+
+.team-details-wrapper{
+    min-height: 1000px;
+    & .member-info{
+        padding-left: 40px;
+        @include respond(xxxl){
+            padding-left: 20px;
+        }
+        @include respond(xl){
+            padding-left: 0;
+        }
+        & .title{
+            font-size: 30px;
+            line-height: 1.15em;
+            margin-bottom: 20px;
+        }
+        & .position{
+            margin-bottom: 10px;
+        }
+        & .member-info-list{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            & .bizzen-member-info-box{
+                &:nth-child(1)
+                &:nth-child(2){
+                    margin-bottom: -1px;
+                }
+            }
+            @include respond(xl){
+                margin-bottom: 0;
+                & .bizzen-member-info-box{
+                    margin-bottom: 40px;
+                }
+            }
+        }
+        & .social-box{
+            margin-bottom: 30px;
+            & a{
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background-color: $gray-color;
+                color: $primary-black-color;
+                &:not(:last-child){
+                    margin-right: 10px;
+                }
+                &:hover{
+                    background-color: $secondary-color;
+                    color: $white-color;
+                }
+            }
+        }
+        & .check-list{
+            &.style-one{
+                & li{
+                    & i{
+                        width: 22px;
+                        height: 22px;
+                        border-radius: 50%;
+                        background-color: $primary-black-color;
+                        color: $white-color;
+                        font-size: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+        & .bizzen-content-box{
+            & h3{
+                margin-bottom: 20px;
+            }
+            & p{
+                margin-bottom: 25px;
+            }
+        }
+    }
+}
+
+.bizzen-skill-item{
+    & .progress-title{
+        & h6{
+            text-transform: capitalize;
+            margin-bottom: 15px;
+            & span{
+                float: right;
+            }
+        }
+    }
+    & .progress{
+        border: 1px solid $primary-black-color;
+        background-color: transparent;
+        height: 10px;
+        padding: 2px;
+        & .progress-bar{
+            background-color: $primary-black-color;
+        }
+    }
+}
+
+.bizzen-team-contact{
+    & .contact-form{
+        & .form_control{
+            padding: 13px 20px;
+            border: none;
+            font-weight: 300;
+            background-color: $white-color;
+            margin-bottom: 30px;
+        }
+    }
+}

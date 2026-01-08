@@ -1,0 +1,106 @@
+
+@use "./../abstract";
+
+/* Offcanvas Overlay */
+
+.offcanvas__overlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background: #151515;
+    z-index: 1000;
+    top: 0;
+    opacity: 0;
+    visibility: hidden;
+    right: 0;
+    transition: all .3s;
+    &.overlay-open{
+        opacity: 0.8;
+        visibility: visible;
+    }
+}
+
+.sidebar-btn{
+    margin-left: 15px;
+    cursor: pointer;
+    text-align: right;
+}
+
+.sidebar-btn span{
+    width: 30px;
+    display: block;
+    height: 2px;
+    background-color: $heading-color;
+    &:nth-child(2){
+        margin-top: 5px;
+        margin-bottom: 5px;
+        width: 25px;
+        margin-left: auto;
+    }
+}
+
+.sidebar-panel{
+    position: fixed;
+    z-index: 1111;
+    right: 0;
+    top: 0;
+    width: 350px;
+    height: 100%;
+    opacity: 1;
+    background-color: $white-color;
+    transition: transform 0.45s ease-in-out, opacity 0.45s ease-in-out;
+    transform: translateX(calc(100% + 80px));
+    padding: 40px 30px;
+    overflow: auto;
+    &.info-open{    
+        transform: translateX(0);
+        opacity: 1;
+    }
+    & .panel-close{
+        & .panel-close-btn{
+            width: 40px;
+            height: 40px;
+            border: 1px solid $border-color;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+        }
+    }
+    & .panel-body{
+        & .panel-box{
+            & h5{
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid $border-color;
+            }
+            & p{
+                margin-bottom: 15px;
+                & i{
+                    width: 20px;
+                    margin-right: 10px;
+                    color: $primary-color;
+                }
+            }
+            & ul.social-link{
+                & li{
+                    display: inline-block;
+                    margin-right: 5px;
+                    & a{
+                        width: 40px;
+                        height: 40px;
+                        border: 1px solid $border-color;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 50%;
+                        &:hover{
+                            background-color: $primary-color;
+                            color: $white-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

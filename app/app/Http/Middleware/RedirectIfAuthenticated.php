@@ -6,25 +6,22 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class RedirectIfAuthenticated
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @param  string|null  ...$guards
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, ...$guards)
+    public function handle(Request $request, Closure $next, string ...$guards): Response
     {
+        $guards = empty($guards) ? [null] : $guards;
+
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                // Redirect based on the guard
-                return $guard === 'admin'
-                    ? redirect()->route('admin.index')
-                    : redirect()->route('index');
+                return redirect(RouteServiceProvider::HOME);
             }
         }
 

@@ -1,0 +1,264 @@
+
+
+/*---- 
+
+====================
+01. Base CSS
+    # Common CSS
+====================
+
+----*/ 
+
+
+@use "./../abstract";
+
+@media (min-width: 1451px) {
+    .container{
+        max-width: 1314px;
+    }
+}
+@media (min-width: 1200px) and (max-width: 1450px) {
+    .container{
+        max-width: 1200px;
+    }
+}
+#smooth-wrapper{
+    z-index: 1;
+}
+.p-r{
+    position: relative;
+}
+.bg_cover{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 100% 100%;
+}
+.font-200{
+    font-weight: 200;
+}
+.form-group{
+    position: relative;
+}
+label{
+    margin-bottom: 0;
+}
+.form_control{
+    width: 100%;
+}
+.text-white{
+    p,
+    h6,
+    h5,
+    h4,
+    h3,
+    h2,
+    & h1{
+        color: $white-color;
+    }
+}
+.gray-color{
+    background-color: $gray-color;
+}
+
+/* Section Title */
+
+.sub-title{
+    font-size: 20px;
+    line-height: 1;
+    font-family: $heading-font;
+    color: $primary-color;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: flex-end;
+    &:after{
+        display: inline-flex;
+        content: '';
+        width: 40px;
+        height: 1px;
+        background-color: $secondary-color;
+    }
+}
+.section-title{
+    & .sub-title{
+        color: $secondary-color;
+        margin-bottom: 13px;
+    }
+    & h2{
+        margin-bottom: 20px;
+        @include respond(lg){
+            font-size: 40px;
+            line-height: 55px;
+        }
+        @include respond(sm){
+            font-size: 28px;
+            line-height: 1.5em;
+        }
+    }
+}
+.text-white{
+    & .sub-title{
+        color: $primary-color;
+        &:after{
+            background-color: $primary-color;
+        }
+    }
+}
+
+/* Check List */ 
+
+.check-list{
+    & li{
+        color: $heading-color;
+    }
+    &.style-one{
+        & li{
+            display: flex;
+            align-items: center;
+            line-height: 1;
+            &:not(:last-child){
+                margin-bottom: 13px;
+            }
+            & i{
+                margin-right: 10px;
+                color: $primary-color;
+            }
+        }
+    }
+    &.style-two{
+        & li{
+            position: relative;
+            padding-left: 25px;
+            &:not(:last-child){
+                margin-bottom: 10px;
+            }
+            &:before{
+                position: absolute;
+                top: 11px;
+                left: 0;
+                content: '';
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background-color: $secondary-color;
+            }
+        }
+    }
+}
+
+/* Floatig Animation */
+
+.animate-float-bob-x {
+    animation-name: float-bob-x;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; 
+}
+.animate-float-bob-y {
+    animation-name: float-bob-y;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; 
+}
+
+/* Rotate360 */ 
+
+.rotate360 {
+    -webkit-animation: spin 7s linear infinite;
+            animation: spin 7s linear infinite;
+}
+
+/* ZoomInOut */ 
+
+.zoomInOut{
+    animation: zoomInOut 6s linear infinite;
+}
+
+
+/* Ratings */ 
+
+.ratings{
+    & i{
+        color: $secondary-color;
+    }
+}
+
+/* Switch Box */
+
+.theme-switch-box{
+    display: flex;
+    align-items: center;
+    & span{
+        font-size: 18px;
+        color: $heading-color;
+        &.left{
+            margin-right: 10px;
+        }
+        &.right{
+            margin-left: 10px;
+        }
+    }
+    & .switch{
+        display: inline-block;
+        height: 26px;
+        position: relative;
+        width: 60px;
+        & input{
+            display: none;
+            &:checked + .slider:before{
+                transform: translateX(33px);
+            }
+        }
+        & .slider{
+            background-color: $primary-black-color;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            top: 0;
+            margin-right: 0;
+            cursor: pointer;
+            &.round{
+                border-radius: 15px;
+            }
+            &:before{
+                background-color: $white-color;
+                position: absolute;
+                bottom: 3px;
+                left: 3px;
+                content: "";
+                height: 20px;
+                width: 20px;
+                border-radius: 50%;
+                transition: all .3s;
+            }
+        }
+    }
+}
+
+/* Pagination */
+
+.theme-pagination{
+    & ul{
+        li{
+            display: inline-block;
+            margin-left: 2.5px;
+            margin-right: 2.5px;
+            & a{
+                width: 50px;
+                height: 50px;
+                border: 1px solid $border-color;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                color: $heading-color;
+                &:hover{
+                    background-color: $primary-black-color;
+                    color: $white-color;
+                    border-color: transparent;
+                }
+            }
+        }
+    }
+}

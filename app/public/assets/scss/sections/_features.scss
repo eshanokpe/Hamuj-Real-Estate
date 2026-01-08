@@ -1,0 +1,115 @@
+
+/*======================
+    Features Section  CSS
+=======================*/
+
+.bizzen-features_one{
+    & .features-wrapper{
+        border-top: 1px solid #D8DDE1;
+        @include respond(xl){
+            border-top: none;
+        }
+        & .item-column{
+            &:not(:last-child){
+                border-right: 1px solid #D8DDE1;
+                @include respond(xl){
+                    border-right: none;
+                    & .bizzen-features-item{
+                        &.style-one{
+                            margin-bottom: 40px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.bizzen-features_two{
+    position: relative;
+    z-index: 1;
+    &:after{
+        position: absolute;
+        top: 0;
+        left: 0;
+        content: '';
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-color: rgba(6, 50, 50, 0.98);
+    }
+    & .bizzen-features-item{
+        &.style-two{
+            & .content{
+                & h4{
+                    color: $white-color;
+                }
+                & p{
+                    color: rgba(255, 255, 255, 0.40);
+                }
+            }
+        }
+    }
+    & .bizzen-features-bg{
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 42%;
+        height: 100%;
+        @include respond(xl){
+            display: none;
+        }
+        & .bizzen-ratings-box{
+            background-color: $white-color;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 30px;
+            & h3{
+                font-size: 48px;
+            }
+            & .ratings{
+                & i{
+                    color: $secondary-color;
+                }
+            }
+        }
+    }
+}
+
+.bizzen-features_three{
+    background-color: $gray-color;
+}
+
+.bizzen-features-item{
+    &.style-one{
+        padding: 50px 30px 55px;
+        text-align: center;
+        @include respond(xl){
+            border: 1px solid $border-color;
+            padding: 50px 40px 55px
+        }
+        & .content{
+            & h4{
+                margin-bottom: 20px;
+            }
+            & .icon{
+                margin-bottom: 20px;
+            }
+            & p{
+                color: $heading-color;
+            }
+        }
+    }
+    &.style-two{
+        & .icon{
+            margin-bottom: 20px;
+        }
+        & .content{
+            & h4{
+                color: $white-color;
+                margin-bottom: 10px;
+            }
+        }
+    }
+}

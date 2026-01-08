@@ -1,0 +1,83 @@
+
+
+/*======================
+    Faq Section  CSS
+=======================*/
+
+.bizzen-faq_one{
+    position: relative;
+    z-index: 1;
+    & .bizzen-image{
+        padding-left: 50px;
+        @include respond(xxxl){
+            padding-left: 20px;
+        }
+        @include respond(xl){
+            padding-left: 0;
+        }
+    }
+}
+
+.accordion-card{
+    & .accordion-header{
+        & .accordion-title{
+            display: flex;
+            align-items: center;
+            padding-bottom: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            &:after{
+                flex: 0 0 auto;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                content: '\f105';
+                font-family: 'Font Awesome 5 Pro';
+                font-weight: 900;
+                font-size: 18px;
+                color: $primary-color;
+                margin-left: auto;
+                transition: all .3s;
+            }
+        }
+        & .accordion-title[aria-expanded=true]{
+            &:after{
+                content: '\f107';
+            }
+        }
+    }
+    & .accordion-content{
+            padding-bottom: 20px;
+        }
+    &.style-one{
+        border-bottom: 1px solid rgba(216, 221, 225, 0.25);
+        & .accordion-header{
+            & .accordion-title{
+                color: $white-color;
+                &:after{
+                    color: $primary-color;
+                }
+            }
+        }
+        & .accordion-content{
+            & p{
+                color: rgba(255, 255, 255, 0.40);
+            }
+        }
+    }
+    &.style-two{
+        border-bottom: 1px solid $border-color;
+        & .accordion-header{
+            & .accordion-title{
+                &:after{
+                    color: $secondary-color;
+                }
+            }
+        }
+        & .accordion-content{
+            & p{
+                padding-bottom: 20px;
+            }
+        }
+    }
+}

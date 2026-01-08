@@ -10,7 +10,7 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
-        } 
+        }
         .email-container {
             background-color: #ffffff;
             padding: 20px;
@@ -40,7 +40,7 @@
         .button {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #47008E;
+            background-color: #293567;
             color: #ffffff;
             text-decoration: none;
             border-radius: 5px;
@@ -61,52 +61,29 @@
     <div class="email-container">
         <!-- Header Section with Logo -->
         <div class="header">
-            <img src="{{ asset('assets/admin/img/logo/nav-log-white.jpg')}}" alt="Dohmayn Logo">
-            <h1>Welcome to Dohmayn</h1>
+            <img src="{{ asset('assets/images/home-three/logo/logo-main.png')}}" alt="IGRCFP Logo">
+            <h1>Welcome to IGRCFP!</h1> 
         </div>
- 
+
         <!-- Content Section -->
         <div class="content">
-            <p>Dear {{ $first_name}} {{ $last_name }},</p>
-            <p>Welcome to Dohmayn, your trusted partner in finding premium landed properties. We are excited to have you on board and look forward to helping you make informed decisions in the real estate market.</p>
-            
-            <p>To complete your registration and gain access to your exclusive property dashboard, please verify your email address by clicking the button below:</p>
-            
+            <p>Dear {{ $name }},</p>
+            <p>Thank you for your interest in joining the Institute of Governance, Risk & Compliance & Financial Crime Prevention (IGRCFP).</p>
+            <p>To complete your registration and access your membership portal, please verify your email address by clicking the button below:</p>
             <p style="text-align: center;">
-                {{-- <a href="{{ $verifyUrl }} " target="_blank" class="button">Verify Your Email</a> --}}
-                {{-- <a href="{{ route('verification.notice', ['user_id' => encrypt($user_id)]) }} " target="_blank" class="button">Verify Your Account</a> --}}
-                
+                <a href="{{ $verifyUrl }}" target="_blank" class="button">Verify Email Address</a>
             </p>
-            
-            <p>This link will expire in 24 hours, so please verify your email promptly to continue exploring our available properties and services.</p>
-
-            @if(isset($referralCode))
-                <p>Your referral code is <strong>{{ $referralCode }}</strong>. Share it with your friends and earn rewards when they sign up.</p>
-            @endif
-            
+            <p>This link will expire in 24 hours, so please verify your email promptly.</p>
             <p>If you did not initiate this request, please disregard this email.</p>
-
-            <p>We are also excited to inform you that your virtual account has been successfully created with us! Below are your account details:</p>
-
-            <p><strong>Bank Name:</strong> {{ $bankName }}</p>
-            <p><strong>Account Name:</strong> {{ $accountName }}</p>
-            <p><strong>Account Number:</strong> {{ $accountNumber }}</p>
-            <p><strong>Currency:</strong> {{ $currency }}</p>
-            <p><strong>Customer Code:</strong> {{ $customerCode }}</p>
-            
-            <p>If you have any questions or need further assistance, please don't hesitate to reach out to us.</p>
-
-            <p>Thank you for choosing Dohmayn!</p>
-
             <p>Warm regards,</p>
-            <p><strong>The Dohmayn Team</strong></p>
+            <p><strong>The IGRCFP Team</strong></p>
         </div>
 
         <!-- Footer Section -->
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Dohmayn. All rights reserved.</p>
-            <p> Your Gateway to Landed Properties!</p>
-            <p><a href="https://www.dohmayn.com" style="color: #555; text-decoration: none;">www.dohmayn.com</a></p>
+            <p>&copy; {{ date('Y') }} IGRCFP. All rights reserved.</p>
+            <p>The Institute of Governance, Risk & Compliance & Financial Crime Prevention (IGRCFP)</p>
+            <p><a href="https://www.igrcfp.org" style="color: #555; text-decoration: none;">www.igrcfp.org</a></p>
         </div>
     </div>
 </body>

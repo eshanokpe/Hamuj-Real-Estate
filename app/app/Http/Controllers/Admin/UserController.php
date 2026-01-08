@@ -3,63 +3,143 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index(){
-        $users = User::latest()->paginate(20);
-        return view('admin.home.user.index', compact('users'));
-    } 
-
-    public function toggleActive(User $user)
+    public function index(Request $request)
     {
-        $user->active = !$user->active; // Toggle the boolean value
-        $user->save();
+        $search = $request->get('search');
+        $status = $request->get('status');
+        $perPage = $request->get('per_page', 10);
 
-        $statusMessage = $user->active ? 'activated' : 'deactivated';
-        return redirect()->back()->with('success', "User {$statusMessage} successfully.");
+        $users = User::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+            })
+            ->when($status, function ($query) use ($status) {
+                if ($status === 'active') {
+                    $query->where('is_active', true);
+                } elseif ($status === 'inactive') {
+                    $query->where('is_active', false);
+                }
+            })
+            ->latest()
+            ->paginate($perPage);
+
+        return view('admin.users.index', compact('users', 'search', 'status', 'perPage'));
     }
 
-    public function edit($id)
+    public function create()
     {
-        $user = User::findOrFail(decrypt($id));
-        return view('admin.home.user.edit', compact('user'));
+        return view('admin.users.create');
     }
 
-    public function destroy($id)
+    public function store(Request $request)
     {
-        $user = User::findOrFail(decrypt($id)); 
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8|confirmed',
+            'is_admin' => 'boolean',
+            'department' => 'nullable|string|max:255',
+            'designation' => 'nullable|string|max:255',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'is_admin' => $request->is_admin ?? false,
+            'is_active' => true,
+            'department' => $request->department,
+            'designation' => $request->designation,
+        ]);
+
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
+    }
+
+    public function show(User $user)
+    {
+        return view('admin.users.show', compact('user'));
+    }
+
+    public function edit(User $user)
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:8|confirmed',
+            'is_admin' => 'boolean',
+            'department' => 'nullable|string|max:255',
+            'designation' => 'nullable|string|max:255',
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'is_admin' => $request->is_admin ?? false,
+            'department' => $request->department,
+            'designation' => $request->designation,
+        ];
+
+        if ($request->password) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
+
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
+    }
+
+    public function destroy(User $user)
+    {
         $user->delete();
-
-        return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
     }
 
-    public function update(Request $request, $id)
+    public function toggleStatus(User $user)
     {
-       
-            $validated = $request->validate([
-                'first_name' => 'required',
-                'last_name' => 'required',
-                'phone' => 'required',
-            ]);
-
-            //$user = User::findOrFail($id);
-            $user = User::findOrFail(decrypt($id));
-
-
-            $updateData = [
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'phone' => $request->phone,
-            ];
-
-            $user->update($updateData);
-
-            return redirect()->route('admin.users')->with('success', 'User updated successfully.');
-
+        $user->update(['is_active' => !$user->is_active]);
+        $status = $user->is_active ? 'activated' : 'deactivated';
         
+        return back()->with('success', "User {$status} successfully.");
     }
-    
+
+    public function bulkAction(Request $request)
+    {
+        $action = $request->action;
+        $userIds = $request->user_ids;
+
+        if (!$userIds) {
+            return back()->with('error', 'Please select at least one user.');
+        }
+
+        switch ($action) {
+            case 'activate':
+                User::whereIn('id', $userIds)->update(['is_active' => true]);
+                $message = 'Selected users activated successfully.';
+                break;
+            case 'deactivate':
+                User::whereIn('id', $userIds)->update(['is_active' => false]);
+                $message = 'Selected users deactivated successfully.';
+                break;
+            case 'delete':
+                User::whereIn('id', $userIds)->delete();
+                $message = 'Selected users deleted successfully.';
+                break;
+            default:
+                return back()->with('error', 'Invalid action.');
+        }
+
+        return back()->with('success', $message);
+    }
 }

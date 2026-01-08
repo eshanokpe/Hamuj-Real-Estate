@@ -1,0 +1,136 @@
+
+/*========================
+    Contact Section  CSS
+==========================*/
+
+.bizzen-contact_one{
+    & .contact-wrapper{
+        display: flex;
+        overflow: hidden;
+        & .contact-bg-wrap{
+            width: 60%;
+            min-height: 100%;
+            & .contact-bg{
+                width: 100%;
+                height: 100%;
+            }
+            @include respond(xl){
+                display: none;
+            }
+        }
+        & .contact-form-wrapper{
+            width: 47%;
+            background-color: $primary-black-color;
+            padding: 100px 60px 120px;
+            margin-left: -120px;
+            @include respond(xl){
+                width: 90%;
+                margin: 0 auto;
+            }
+            @include respond(md){
+                width: 100%;
+                padding: 50px 30px 70px;
+            }
+            & .bizzen-content-box{
+                max-width: 575px;
+                & p{
+                    color: rgba(255, 255, 255, 0.40);
+                }
+                & .contact-form{
+                    & label{
+                       color: rgba(255, 255, 255, 0.40);
+                       line-height: 1;
+                    }
+                    & .form_control{
+                        background-color: transparent;
+                        line-height: 20px;
+                        color: rgba(255, 255, 255, 0.40);
+                        border: none;
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.40);
+                        margin-bottom: 25px;
+                        color: rgba(255, 255, 255, 0.70);
+                        &::placeholder{
+                            color: rgba(255, 255, 255, 0.70);
+                        }
+                    }
+                    & .theme-btn{
+                        &.style-one{
+                            background-color: $primary-color;
+                            color: $heading-color;
+                            &:hover{
+                                background-color: $secondary-color;
+                                color: $white-color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Contact Page CSS */ 
+
+.bizzen-info-left-box{
+    display: flex;
+    align-items: center;
+    border: 1px solid $border-color;
+    padding: 30px;
+    @include respond(xxxl){
+        padding: 30px 20px;
+    }
+    & .icon{
+        flex: 0 0 auto;
+        width: 80px;
+        height: 80px;
+        background-color: $gray-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        color: $heading-color;
+        margin-right: 20px;
+        border: 1px solid $border-color;
+    }
+    & .content{
+        & h5{
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+        & p{
+            line-height: 26px;
+        }
+    }
+}
+.map-box{
+    & iframe{
+        height: 690px;
+    }
+}
+.bizzen-contact_two{
+    & .contact-wrapper{
+        border: 1px solid $border-color;
+        padding: 35px 60px 50px;
+        @include respond(md){
+            padding: 40px 30px 50px;
+        }
+        & h2{
+            margin-bottom: 25px;
+            @include respond(lg){
+                font-size: 40px;
+                line-height: 1.4em;
+            }
+            @include respond(md){
+                font-size: 28px;
+                line-height: 1.3em;
+            }
+        }
+        & .contact-form{
+            & .form_control{
+                padding: 12px 30px;
+                margin-bottom: 30px;
+                // border: 1px solid $border-color;
+            }
+        }
+    }
+}

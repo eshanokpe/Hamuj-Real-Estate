@@ -1,0 +1,227 @@
+
+/*============================
+    Testimonial Section  CSS
+=============================*/
+
+
+.bizzen-testimonial_one{
+    position: relative;
+    z-index: 1;
+    & .testimonial-map-bg{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: -1;
+        text-align: center;
+        width: 90%;
+        height: 100%;
+    }
+}
+
+.testimonial-slider{
+    & .slick-arrow{
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid $border-color;
+        color: $heading-color;
+        z-index: 1;
+        cursor: pointer;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all .3s;
+        &.prev{
+            left: -100px;
+        }
+        &.next{
+            right: -100px;
+        }
+        &:hover{
+            background-color: $secondary-color;
+            color: $white-color;
+        }
+    }
+}
+
+.author-thumb-item{
+    display: inline-flex;
+    align-items: center;
+    text-align: left;
+    & .author-thumb{
+        flex: 0 0 auto;
+        margin-right: 15px;
+    }
+}
+
+.testimonial-arrows{
+    & .slick-arrow{
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1;
+        background-color: $primary-black-color;
+        color: $white-color;
+        transition: all .3s;
+        &.prev{
+            margin-right: 10px;
+        }
+        &:hover{
+            color: $white-color;
+            background-color: $secondary-color;
+        }
+    }
+}
+
+.bizzen-testimonial_two{
+    & .bizzen-image{
+        & img{
+            max-width: 445px;
+            margin-right: -30px;
+            @include respond(xl){
+                margin-right: 0;
+                max-width: 100%;
+            }
+        }
+    }
+    & .bizzen-content-box{
+        position: relative;
+        padding-left: 60px;
+        @include respond(xl){
+            padding-left: 0;
+        }
+        & h4{
+            position: relative;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            &:before{
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                content: '';
+                width: 110px;
+                height: 3px;
+                background-color: $primary-black-color;
+            }
+            &:after{
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                display: block;
+                content: '';
+                width: 70%;
+                height: 1px;
+                background-color: $border-color;
+            }
+        }
+        & .testimonial-arrows{
+            position: absolute;
+            bottom: 20px;
+            right: 0;
+            display:flex;
+            @include respond(xl){
+                bottom: auto;
+                right: auto;
+                position: relative;
+            }
+        }
+    }
+}
+
+.bizzen-testimonial_three{
+    overflow: hidden;
+    & .testimonial-arrows{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        @include respond(lg){
+            justify-content: flex-start;
+        }
+    }
+    & .testimonial-slider-three{
+        margin-right: -50%;
+        @include respond(md){
+            margin-left: -12px;
+            margin-right: -12px;
+        }
+        & .slick-slide{
+            margin-right: 30px;
+            @include respond(md){
+                margin-left: 12px;
+                margin-right: 12px;
+            }
+        }
+    }
+}
+
+.bizzen-testimonial-item{
+    &.style-one{
+        text-align: center;
+        & .testimonial-content{
+            & p{
+                margin-bottom: 30px;
+                font-size: 20px;
+                font-weight: 400;
+                line-height: 30px;
+                color: $heading-color;
+            }
+            & .ratings{
+                margin-bottom: 30px;
+            }
+            & .author-thumb-item{
+                & .author-thumb{
+                    & img{
+                        width: 60px;
+                        height: 60px;
+                    }
+                }
+            }
+        }
+    }
+    &.style-two{
+        & .testimonial-content{
+            & .quote-ratings-wrap{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 35px;
+                & .ratings{
+                    & i{
+                        color: $secondary-color;
+                    }
+                }
+            }
+            & p{
+                margin-bottom: 30px;
+                padding-bottom: 30px;
+                border-bottom: 1px solid $border-color;
+            }
+        }
+    }
+    &.style-three{
+        border: 1px solid $border-color;
+        padding: 30px;
+        & .testimonial-content{
+            & .quote-ratings-wrap{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 30px;
+                & .ratings{
+                    & i{
+                        color: $secondary-color;
+                    }
+                }
+            }
+            & > p{
+                margin-bottom: 20px;
+            }
+        }
+    }
+}

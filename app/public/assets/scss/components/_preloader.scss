@@ -1,0 +1,54 @@
+
+@use "./../abstract";
+
+/* Preloader CSS */ 
+
+.preloader{
+    bottom: 0;
+    height: 100vh;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100vw;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $white-color;
+    & .loading,
+    & .loading-wrapper{
+        height: 100px;
+        position: relative;
+        width: 100px;
+        border-radius: 100%;
+    }
+    & .loading-wrapper{
+        margin: 40px auto;
+        & .loading{
+            border: 1px solid transparent;
+            border-color: transparent var(--primary-black-color) transparent var(--primary-black-color);
+            animation: rotate-loading 1.5s linear 0s infinite normal;
+            transform-origin: 50% 50%;
+            transition: all 0.5s ease-in-out;
+        }
+        #loading-icon{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            & img{
+                width: 40px;
+            }
+        }
+    }
+}
+@keyframes rotate-loading{
+	0%{
+		transform: rotate(0deg);
+	}
+
+	100%{
+		transform: rotate(360deg);
+	}
+}

@@ -1,178 +1,72 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-use Cache;
-use App\Models\UserActivity;
-use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth; 
-use Illuminate\Validation\ValidationException;
-use App\Services\OtpService;
-use App\Notifications\SmsOtpNotification;
-use App\Notifications\EmailOtpNotification;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
+     * Show the application's login form.
      */
-    protected $redirectTo = '/home';
- 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function showLoginForm()
     {
-        $this->middleware('guest')->except('logout');
-        $this->middleware('auth')->only('logout');
+        return view('auth.login');
     }
 
+    /**
+     * Handle a login request to the application.
+     */
     public function login(Request $request)
-    { 
-        $this->validateLogin($request);
-
-        $credentials = $this->credentials($request);
-        
-        // Attempt to log in with credentials
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user(); 
-            // Check if the user account is active
-            if (!$user->active) {
-                Auth::logout();
-                if ($request->wantsJson()) {
-                    return response()->json([
-                        'message' => 'Account deactivated.',
-                        'error' => 'Your account has been deactivated. Please contact support.',
-                    ], 403);
-                }
-
-                return back()->withErrors([
-                    'login_error' => 'Your account has been deactivated. Please contact support.',
-                ])->onlyInput('email');
-            }
-            if (Auth::user()->hasVerifiedEmail()) {
-                $user->update([ 
-                    'last_login_at' => now(),
-                    'last_login_ip' => $request->ip(),
-                ]);
-                Cache::put('user-is-online-' . $user->id, true, now()->addMinutes(5));
-
-                $user->load('virtualAccounts'); 
-                $user->load('postProperty'); 
-                // Log user activity
-                UserActivity::create([
-                    'user_id' => $user->id,
-                    'activity' => 'logged in',
-                    'ip_address' => $request->ip(),
-                ]);
-                
-                if ($request->wantsJson()) {
-                    return response()->json([ 
-                        'message' => 'Login successful',
-                        'user' => $user, 
-                        'token' => Auth::user()->createToken('dohmayn')->plainTextToken, // For API Token
-                    ], 200); 
-                } 
-                return redirect()->route('user.dashboard');
-            }
-            Auth::logout();
-            return $this->sendFailedLoginResponse($request);
-        }
-        if ($request->wantsJson()) {
-            return response()->json([
-                'message' => 'Login failed',
-                'error' => 'Invalid email or password.',
-            ], 401);
-        }
-        return back()->withErrors([
-            'login_error' => 'Invalid email or password.',
-        ])->onlyInput('email'); 
-    }
-
-    
-    protected function sendFailedLoginResponse(Request $request)
     {
-        $user = Auth::getProvider()->retrieveByCredentials($this->credentials($request));
-        if ($request->wantsJson()) {
-            // For API response. 
-            return response()->json([
-                'message' => 'Login failed',
-                'error' => 'Your account has not been verified. Please check your email or sms for the OTP code.',
-                'user_id' => $user ? $user->id : null,
-                'phone' => $user ? $user->phone : null,
-            ], 401); // Unauthorized
-        }
-
-        // For web response, redirect to verify.otp with the email
-         if ($user && !$user->hasVerifiedEmail()) {
-             \Log::error('hasVerifiedEmail:');
-            
-            // Send email OTP
-            try {
-                $user->notify(new EmailOtpNotification($otps['otp']));
-                \Log::info('Email OTP sent successfully to ' . $user->email);
-            } catch (\Exception $e) {
-                \Log::error('Email OTP sending failed: ' . $e->getMessage());
-            }
-
-            // Send SMS OTP (you'll need to implement your SMS service)
-            try {
-                $user->notify(new SmsOtpNotification($otps['otp']));
-            } catch (\Exception $e) {
-                \Log::error('SMS OTP sending failed: ' . $e->getMessage());
-            }
-            return redirect()->route('verification.notice', ['user_id' => encrypt($user->id)])
-                ->with('email', $user->email);
-        }
-    
-
-        throw ValidationException::withMessages([
-            $this->username() => 'Your account has not been verified. Please check your email or sms for the OTP code.',
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
+
+        if (Auth::attempt($credentials, $request->remember)) {
+            $request->session()->regenerate();
+            
+            $user = Auth::user();
+            
+            // Update last login timestamp
+            $user->update(['last_login_at' => now()]);
+            
+            // Redirect based on user role
+            return $this->authenticated($request, $user);
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 
-  
+    /**
+     * Handle response after user authenticated
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        // Redirect based on user role
+        if ($user->role === 'tutor') {
+            return redirect()->route('tutor.dashboard');
+        } else {
+            return redirect()->route('learner.dashboard');
+        }
+    }
 
-   
-
+    /**
+     * Log the user out of the application.
+     */
     public function logout(Request $request)
     {
-        $user = Auth::user();
-        Cache::forget('user-is-online-' . $user->id);
-        $user->tokens()->delete();
         Auth::logout();
-        UserActivity::create([
-            'user_id' => $user->id,
-            'activity' => 'logged out',
-            'ip_address' => $request->ip(),
-        ]);
-        // Invalidate and regenerate session
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        if ($request->wantsJson()) {
-            return response()->json(['message' => 'Logged out successfully.'], 200);
-        }
-
-        return redirect('user/login'); 
+        return redirect('/');
     }
-
 }

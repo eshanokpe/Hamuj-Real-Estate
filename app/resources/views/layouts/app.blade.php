@@ -1,72 +1,82 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head> 
-  <meta charset="utf-8">
-  <title>{{  $contactDetials->company_name }}</title>
-  <meta name="description" content="">
-  @auth
-      <meta name="user-id" content="{{ auth()->id() }}">
-  @endauth
-  
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <!-- CSRF Token -->
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <link rel="shortcut icon" type="image/x-icon" href="{{ asset($contactDetials->favicon) }}">
-     
-   <!-- ======= All CSS Plugins here ======== -->
-  <link rel="stylesheet" href="{{ asset('assets/css/plugins/swiper-bundle.min.css')}}">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="zxx">
+    <head> 
+        <!--====== Required meta tags ======-->
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="Institute of Governance, Risk & Compliance & Financial Crime Prevention (IGRCFP), Finance">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!--====== Title ======--> 
+        <title>IGRCFP</title>  
+        <!--====== Favicon Icon ======-->
+        <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}" type="image/png">
+        <!--====== Google Fonts ======--> 
+        <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+        <!--====== FontAwesome css ======-->
+        <link rel="stylesheet" href="{{asset('assets/fonts/fontawesome/css/all.min.css')}}">
+        <!--====== Bootstrap css ======-->
+        <link rel="stylesheet" href="{{asset('assets/css/plugins/bootstrap.min.css')}}">
+        <!--====== Slick-popup css ======-->
+        <link rel="stylesheet" href="{{asset('assets/css/plugins/slick.css')}}">
+        <!--====== Magnific-popup css ======-->
+        <link rel="stylesheet" href="{{asset('assets/css/plugins/magnific-popup.css')}}">
+        <!--====== Aos css ======-->
+        <link rel="stylesheet" href="{{asset('assets/css/plugins/aos.css')}}">
+        <!--====== Default css ======-->
+        <link rel="stylesheet" href="{{asset('assets/css/spacings.css')}}">
+        <!--====== Default css ======-->
+        <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+        
+        <!-- Livewire Styles - MUST be in head -->
+        @livewireStyles
+        
+        <!-- Page-specific styles -->
+        @stack('styles')
+    </head>
+    <body>
+        {{-- <!--====== Start Preloader ======-->
+        <div class="preloader">
+            <div class="loading-wrapper">
+                <div class="loading"></div>
+                <div id="loading-icon">
+                    <img src="{{ asset('assets/images/loader.png')}}" alt="loader"  ></div>
+            </div>
+        </div>
+        <!--====== End Preloader ======--> --}}
 
-  <!-- Plugin css -->
-  <link rel="stylesheet" href="{{ asset('assets/css/vendor/bootstrap.min.css')}}">
-  <link rel="stylesheet" href="{{ asset('assets/css/plugins/swiper-bundle.min.css')}}">
-  <link rel="stylesheet" href="{{ asset('assets/css/plugins/glightbox.min.css')}}">
-  <link rel="stylesheet" href="{{ asset('assets/css/plugins/aos.css')}}">
- 
-  <!-- Custom Style CSS --> 
-  <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">
-  <link rel="stylesheet" href="{{ asset('assets/css/rtl.css')}}">
-  <link rel="stylesheet" href="{{ asset('assets/css/chatWidget.css')}}">
+        <!--====== Start Overlay ======-->
+        <div class="offcanvas__overlay"></div>
 
-  <!-- Scripts -->
-  @viteReactRefresh
-  @vite('resources/js/app.jsx')
-  <!-- Add Toastr CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        @include('layouts.navbar')
 
-  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E9JFRZR724"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        <!--======  Smooth Wrapper  ======-->
+        <div id="smooth-wrapper">
+            <div id="smooth-content">
+                <main>
+                    @yield('content')
+                </main>
+               
+                @include('layouts.footer')
+            </div>
+        </div>
 
-    gtag('config', 'G-E9JFRZR724');
-  </script>
-  <style>
-    /* Add to your CSS */
-    input:disabled {
-        background-color: #f8f9fa;
-        cursor: not-allowed;
-    }
-  </style>
-</head>
-
-<body>
-    
-    @include('home.partial.navbar')
-
-    @yield('content')
-   
-    @include('home.partial.footer')
-    
-    {{-- @include('chattle::chat')  --}}
-    
-    
-</body>
+        <!-- jQuery (optional, but good for AJAX) -->
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        
+        <!-- AOS Animation -->
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        
+        <!-- Livewire Scripts - MUST be before closing body tag -->
+        @livewireScripts
+        <!-- For Livewire v3 -->
+        @livewireScriptConfig
+        
+        <!-- Alpine.js - Required for Livewire v3 -->
+        <script src="//unpkg.com/alpinejs" defer></script>
+        
+       
+        <!-- Page-specific scripts -->
+        @stack('scripts')
+    </body>
 </html>

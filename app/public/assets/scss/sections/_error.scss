@@ -1,0 +1,26 @@
+
+/*======================
+    Error Section  CSS
+=======================*/
+
+.bizzen-error-sec{
+    & .bizzen-content-box{
+        & h1{
+            margin-bottom: 30px;
+            & span{
+                font-weight: 300;
+                font-family: $heading-font;
+            }
+            @include respond(xl){
+                font-size: 60px;
+            }
+            @include respond(md){
+                font-size: 32px;
+            }
+        }
+        & p{
+            margin-bottom: 40px;
+            font-size: 20px;
+        }
+    }
+}

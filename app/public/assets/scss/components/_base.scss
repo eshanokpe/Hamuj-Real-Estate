@@ -1,0 +1,145 @@
+
+/*---- 
+
+====================
+1. Base CSS
+    # base  CSS
+====================
+
+----*/ 
+
+@use "./../abstract";
+
+
+/* Base CSS */
+
+:root {
+    --primary-color: #C2DF93;
+    --secondary-color: #E3572B;
+    --heading-color: #1F1F1F;
+    --primary-black-color: #063232;
+    --gray-color: #F4F8EC;
+    --white-color: #ffffff;
+    --text-color: #797E88;
+    --border-color: #D8DDE1;
+    --heading-font: "Plus Jakarta Sans", sans-serif;
+    --body-font: "Kanit", sans-serif;
+}
+html{
+    font-size: 100%;
+}
+*{
+    margin: 0;
+    padding: 0;
+    @include box-sizing (border-box);
+}
+a{
+    color: inherit;
+    text-decoration: none;
+    @include transition(.3s);
+    &:hover,&:focus{
+        color: inherit;
+        text-decoration: none;
+    }
+}
+a:focus,
+input:focus,
+textarea:focus,
+button:focus {
+    text-decoration: none;
+    outline: none;
+}
+
+i,
+span,
+a{
+    display: inline-block;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+    font-weight: 700;
+    margin: 0px;
+    color: $heading-color;
+    font-family: $heading-font;
+}
+h1{
+    font-size: $h1-font;
+    line-height: 1.15em;
+}
+h2{
+    font-size: $h2-font;
+    line-height: 1.25em;
+}
+h3{
+    font-size: $h3-font;
+    line-height: 1.33em;
+}
+h4{
+    font-size: $h4-font;
+    line-height:  1.3em;
+}
+h5{
+    font-size: $h5-font;
+    line-height: 1.1;
+}
+h6{
+    font-size: $h6-font;
+    line-height: 28px;
+}
+ul,ol {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+}
+p{
+    margin: 0px;
+}
+input,textarea{
+    display: inherit;
+}
+button{
+    border: none;
+}
+label{
+    margin-bottom: 0;
+}
+iframe{
+    width: 100%;
+    border: none;
+    display: inherit;
+}
+img{
+    max-width: 100%;
+}
+body {
+    font-weight: normal;
+    font-style: normal;
+    font-weight: 300;
+    color: $text-color;
+    font-family: $body-font;
+    font-size: 16px;
+    line-height: 30px;
+    overflow-x: hidden;
+    
+}
+main{
+    display: inline-block;
+    width: 100%;
+}
+
+
+/*===== Scrollbar =====*/
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+::-webkit-scrollbar-track {
+    background: #abafb9; 
+}
+::-webkit-scrollbar-thumb {
+    background-color:#13172b;
+}

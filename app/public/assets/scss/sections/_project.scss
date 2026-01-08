@@ -1,0 +1,468 @@
+
+/*======================
+    Project Section  CSS
+=======================*/
+
+
+.bizzen-project-item{
+    &.style-one{
+        & .project-inner{
+            padding: 60px;
+            @include respond(md){
+                padding: 100px 20px 20px;
+            }
+            & .content{
+                background-color: $white-color;
+                max-width: 550px;
+                padding: 50px 60px 60px;
+                @include respond(md){
+                    padding: 30px 20px 40px;
+                }
+                & .sub-title{
+                    margin-bottom: 20px;
+                    color: $secondary-color;
+                    &:after{
+                        display: none;
+                    }
+                }
+                & .title{
+                    margin-bottom: 20px;
+                    font-size: 30px;
+                    &:hover{
+                        color: $secondary-color;
+                    }
+                    @include respond(md){
+                        font-size: 20px;
+                    }
+                }
+                & p{
+                    margin-bottom: 30px;
+                    @include respond(md){
+                        display: none;
+                    }
+                }
+                & .tag-button{
+                    & .theme-btn{
+                        margin-right: 10px;
+                        &.style-two{
+                            font-size: 14px;
+                            padding: 10px 20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.style-two{
+        &:hover{
+            & .project-thumbnail{
+                & .hover-content{
+                    padding: 0;
+                }
+                & .content{
+                    display: none;
+                }
+                & .content-wrap{
+                    bottom: 0;
+                }
+            }
+        }
+        & .project-thumbnail{
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            & img{
+                width: 100%;
+            }
+            & .hover-content{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(31, 31, 31, 0.85);
+                border-right: 1px solid rgba(255, 255, 255, 0.25);
+                padding: 30px;
+            }
+            & .content{
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                padding: 30px;
+                & h4{
+                    color: $white-color;
+                    margin-bottom: 5px;
+                }
+                & .tag-links{
+                    &:after{
+                        display: block;
+                        content: '';
+                        width: 170px;
+                        height: 1px;
+                        background-color: $secondary-color;
+                        margin-top: 10px;
+                    }
+                    & a{
+                        color: $white-color;
+                    }
+                }
+            }
+            & .content-wrap{
+                position: absolute;
+                bottom: -100%;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                background-color: $white-color;
+                padding: 30px 30px 40px;
+                transition: all .7s;
+                & h4{
+                    margin-bottom: 5px;
+                }
+                & .tag-links{
+                    &:after{
+                        display: block;
+                        content: '';
+                        width: 170px;
+                        height: 1px;
+                        background-color: $secondary-color;
+                        margin-top: 10px;
+                        margin-bottom: 30px;
+                    }
+                }
+                & p{
+                    margin-bottom: 25px;
+                }
+                & .icon-btn{
+                    width: 50px;
+                    height: 50px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: $primary-black-color;
+                    color: $white-color;
+                }
+            }
+        }
+    }
+    &.style-three{
+        &:hover{
+            & .project-thumbnail{
+                & .hover-overlay{
+                    visibility: visible;
+                    opacity: 1;
+                }
+                & .project-content{
+                    & .icon-button{
+                        & .icon-btn{
+                            background-color: $primary-black-color;
+                            color: $white-color;
+                        }
+                    }
+                }
+            }
+        }
+        & .project-thumbnail{
+            position: relative;
+            & .hover-overlay{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(6, 50, 50, 0.40);
+                visibility: hidden;
+                opacity: 0;
+                transition: all .3s;
+            }
+            & .hover-content{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                padding: 20px;
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+            }
+            & .project-content{
+                padding: 10px;
+                background-color: $white-color;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                & .content{
+                    padding: 20px;
+                }
+                & .icon-button{
+                    & .icon-btn{
+                        width: 55px;
+                        height: 90px;
+                        border-radius: 24px;
+                        background-color: $gray-color;
+                        color: $heading-color;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+    }
+    &.style-four{
+        &:hover{
+            & .project-thumbnail{
+                & .hover-content{
+                    visibility: visible;
+                    opacity: 1;
+                }
+                & .project-content{
+                    transform: translateY(0);
+                }
+            }
+        }
+        & .project-thumbnail{
+            position: relative;
+            overflow: hidden;
+            & img{
+                width: 100%;
+            }
+            & .hover-content{
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(61deg, rgba(6, 50, 50, 0.90) 0%, rgba(194, 223, 147, 0.60) 100%);
+                padding: 40px;
+                display: flex;
+                align-items: flex-end;
+                visibility: hidden;
+                opacity: 0;
+                transition: all .3s;
+                @include respond(xxxl){
+                    padding: 20px 30px;
+                }
+                @include respond(xl){
+                    padding: 30px;
+                }
+                @include respond(sm){
+                    padding: 20px 30px;
+                }
+            }
+            & .project-content{
+                transform: translateY(-50px);
+                transition: all .4s;
+                & h4{
+                    color: $white-color;
+                    margin-bottom: 15px;
+                }
+                & .category-button{
+                    & a{
+                        padding: 7px 24px;
+                        border: 1px solid $white-color;
+                        font-size: 14px;
+                        font-weight: 500;
+                        font-family: $heading-font;
+                        line-height: 24px;
+                        color: $white-color;
+                        text-transform: capitalize;
+                        &:not(:last-child){
+                            margin-right: 7px;
+                        }
+                        @include respond(xxxl){
+                            padding: 5px 10px;
+                        }
+                        @include respond(xl){
+                            padding: 7px 20px;
+                        }
+                        @include respond(sm){
+                            padding: 5px 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.bizzen-project_two{
+    overflow: hidden;
+    & .project-slider{
+        margin-right: -50%;
+        @include respond(lg){
+            margin-right: -12px;
+            margin-left: -12px;
+            & .slick-slide{
+                margin-left: 12px;
+                margin-right: 12px;
+            }
+        }
+    }
+}
+
+.bizzen-project_three{
+    & .project-slider{
+        @include respond(md){
+            padding: 0 12px;
+        }
+        & .slick-slide{
+            margin-right: 30px;
+            @include respond(md){
+                margin-right: 0;
+            }
+        }
+        & .slick-track{
+            & .bizzen-project-item{
+                &:nth-child(even){
+                    margin-top: 60px;
+                    @include respond(md){
+                        margin-top: 0;
+                    }
+                }
+            }
+            
+        }
+    }
+}
+
+
+/* Project Details Page CSS */ 
+
+.bizzen-content-item{
+    & .content{
+        & h4{
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 15px;
+            & .icon{
+                flex: 0 0  auto;
+                margin-right: 12px;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                display: inline-flex;   
+                align-items: center;
+                justify-content: center;
+                background-color: $primary-black-color;
+            }
+        }
+    }
+}
+.bizzen-project-details-sec{
+    & .project-details-wrapper{
+        & .project-thumbnail{
+            & img{
+                min-height: 400px;
+                object-fit: cover;
+            }
+        }
+        & .project-content{
+            & .title{
+                margin-bottom: 20px;
+                font-size: 30px;
+                line-height: 1.45em;
+                @include respond(md){
+                    font-size: 22px;
+                }
+            }
+            & P{
+                margin-bottom: 25px;
+            }
+            & h3{
+                margin-bottom: 20px;
+                @include respond(md){
+                    font-size: 18px;
+                }
+            }
+            & .check-list{
+                &.style-one{
+                    & li{
+                        color: $heading-color;
+                        font-weight: 500;
+                        & i{
+                            width: 20px;
+                            height: 20px;
+                            border: 1px solid $secondary-color;
+                            display: flex;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: $secondary-color;
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+        }
+        & .project-info-box{
+            margin-top: -140px;
+            position: relative;
+            background-color: $white-color;
+            padding: 40px 30px;
+            border-top: 4px solid $primary-black-color;
+            box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.06);
+            margin-right: 60px;
+            @include respond(xl){
+                margin-right: 20px;
+            }
+            @include respond(lg){
+                margin-bottom: 40px;
+                margin-right: 0;
+            }
+            & h4{
+                margin-bottom: 15px;
+            }
+            & ul{
+                & li{
+                    padding: 15px 0;
+                    border-bottom: 1px solid $border-color;
+                    &:first-child{
+                        border-top: 1px solid $border-color;
+                    }
+                    & span{
+                        float: right;
+                        & a{
+                            &:not(:last-child){
+                                margin-right: 15px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    & .post-navigation-wrapper{
+        border-top: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
+        padding: 20px 0;
+        & .post-navigation-item{
+            display: flex;
+            align-items: center;
+            @include respond(md){
+                padding: 0 30px;
+            }
+            & .thumbnail{
+                flex: 0 0 auto;
+                margin-inline-end: 15px;
+                & img{
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                }
+            }
+            &.next-item{
+                direction: rtl;
+                
+            }
+        }
+        & .icon{
+            @include respond(md){
+                margin-bottom: 40px;
+                margin-top: 40px; 
+            }
+        }
+    }
+}

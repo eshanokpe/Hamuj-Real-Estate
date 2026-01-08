@@ -1,0 +1,257 @@
+
+/*=========================
+    Pricing Section  CSS
+==========================*/
+
+.bizzen-pricing-item{
+    &.style-one{
+        border: 1px solid $border-color;
+        padding: 40px;
+        position: relative;
+        transition: all .3s;
+        & .ribbon{
+            position: absolute;
+            top: 20px;
+            right: 0;
+            padding: 2px 15px;
+            color: $white-color;
+            font-weight: 400;
+            text-align: center;
+            background-color: $secondary-color;
+            &:after{
+                display: inline-block;
+                content: "";
+                position: absolute;
+                left: -9px;
+                top: 0;
+                border: 9px solid transparent;
+                border-width: 17px 8px;
+                border-color: $secondary-color;
+                border-left-color: transparent;
+                left: -9px;
+            }
+        }
+        & .pricing-header{
+            padding-bottom: 25px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid $border-color;
+            & h2{
+                font-size: 48px;
+                & .currency{
+                    font-size: 16px;
+                }
+                & .duration{
+                    font-size: 16px;
+                    color: $text-color;
+                    font-weight: 400;
+                    font-family: $body-font;
+                }
+            }
+            & h4{
+                margin-bottom: 10px;
+            }
+        }
+        & .pricing-body{
+            margin-bottom: 40px;
+            & h4{
+                margin-bottom: 15px;
+            }
+            & .check-list{
+                &.style-one{
+                    & li{
+                        color: $heading-color;
+                        &:not(:last-child){
+                            margin-bottom: 20px;
+                        }
+                        & i{
+                            color: $secondary-color;
+                        }
+                    }
+                }
+                & li{
+                    &.uncheck{
+                        color: $text-color;
+                        & i{
+                            color: $text-color;
+                        }
+                    }
+                }
+            }
+        }
+        & .pricing-footer{
+            & .theme-btn{
+                width: 100%;
+            }
+        }
+        &:hover{
+            background-color: $primary-black-color;
+            color: $white-color;
+            & .pricing-header{
+                & h2{
+                    color: $white-color;
+                }
+                & h4{
+                    color: $white-color;
+                }
+                & p{
+                    color: $white-color;
+                }
+            }
+            & .pricing-body{
+                & h4{
+                    color: $white-color;
+                }
+                & .check-list{
+                    & li{
+                        color: $white-color;
+                        &.uncheck{
+                            color: $text-color;
+                            & i{
+                                color: $text-color;
+                            }
+                        }
+                    }
+                }
+            }
+            & .pricing-footer{
+                & .theme-btn{
+                    &.style-one{
+                        background-color: $secondary-color;
+                        color: $white-color;
+                    }
+                }
+            }
+        }
+    }
+    &.style-two{
+        min-width: 800px;
+        & .pricing-header-wrap{
+            display: flex;
+            & .pricing-title{
+                width: 25%;
+                padding-top: 20px;
+            }
+            & .pricing-header{
+                width: 20%;
+                padding: 20px;
+                & .plan{
+                    display: block;
+                    font-size: 16px;
+                    font: 600 18px $heading-font;
+                    color: $heading-color;
+                    margin-bottom: 15px;
+                }
+                & h2.price{
+                    font-size: 30px;
+                    font-weight: 600;
+                    line-height: 1;
+                    margin-bottom: 15px;
+                    & span.duration{
+                        color: $text-color;
+                        font-size: 16px;
+                        line-height: 30px;
+                    }
+                }
+                & .theme-btn{
+                    &.style-two{
+                        padding: 14px 25px;
+                        background-color: transparent;
+                        color: $heading-color;
+                        &:hover{
+                            background-color: $secondary-color;
+                            color: $white-color;
+                        }
+                    }
+                }
+                &.bg-active{
+                    border-bottom: none;
+                    background-color: $primary-black-color;
+                    padding: 20px 30px;
+                    & .plan{
+                        color: $white-color;
+                    }
+                    & h2{
+                        color: $white-color;
+                    }
+                    & .theme-btn{
+                        &.style-two{
+                            padding: 14px 25px;
+                            background-color: $primary-color;
+                            color: $heading-color;
+                            border-color: transparent;
+                        }
+                    }
+                }
+            }
+        }
+        & .pricing-body{
+            & .pricing-body-item{
+                display: flex;
+                &:last-child{
+                    & .pricing-list{
+                        border-bottom: none;
+                    }
+                }
+                & .pricing-title{
+                    padding: 20px 0 20px;
+                    width: 25%;
+                    color: $heading-color;
+                    font: 600 16px $heading-font;
+                }
+                & .pricing-list{
+                    padding: 20px;
+                    width: 20%;
+                    text-align: center;
+                    font-weight: 600;
+                    font-size: 18px;
+                    color: $heading-color;
+                    border-bottom: 1px solid $border-color;
+                    &.bg-active{
+                        padding: 20px;
+                        background-color: $primary-black-color;
+                        border-color: rgba(255, 255, 255, 0.10);
+                        & i{
+                            color: $primary-color;
+                        }
+                        margin-left: -2px;
+                    }
+                    & i{
+                        color: $primary-black-color;
+                        font-size: 24px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.bizzen-pricing-_two{
+    & .table-area {
+        @include respond(xl){
+            width: 1300px;
+        }
+    }
+}
+
+.book-call-widget{
+    background-color: $primary-black-color;
+    max-width: 160px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    & .thumb{
+        flex: 0 0 auto;
+        width: 40px;
+        margin-right: 8px;
+        & img{
+            width: 40px;
+        }
+    }
+    & .content{
+        & h6{
+            font-weight: 500;
+            font-size: 16px;
+            color: $white-color;
+        }
+    }
+}

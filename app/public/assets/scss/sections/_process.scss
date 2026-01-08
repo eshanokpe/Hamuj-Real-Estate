@@ -1,0 +1,242 @@
+
+/*=========================
+    Process Section  CSS
+==========================*/
+
+.bizzen-proces_one{
+    background-color: $gray-color;
+    & .bizzen-work-list{
+        border-left: 1px solid #D8DDE1;
+        border-right: 1px solid #D8DDE1;
+        @include respond(xl){
+            border: 1px solid $border-color;
+        }
+    }
+    & .text-box{
+        padding: 0 30px;
+        & span{
+            margin-bottom: 120px;
+            color: $heading-color;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: $heading-font;
+        }
+        & h2{
+            font-size: 114px;
+            font-weight: 700;
+            line-height: 1;
+        }
+    }
+}
+
+.bizzen-process_two{
+    background-color: $gray-color;
+    & .text-box{
+        max-width: 380px;
+        @include respond(lg){
+            max-width: 100%;
+        }
+    }
+    & .process-wrapper{
+        border-top: 1px solid $border-color;;
+        @include respond(lg){
+            border-top: none;
+            padding: 0 15px;
+        }
+        & .item-column{
+            &:not(:last-child){
+                border-right: 1px solid $border-color;
+                @include respond(lg){
+                    border-right: none;
+                    & .bizzen-process-item{
+                        &.style-two{
+                            margin-bottom: 40px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.bizzen-process-item{
+    &.style-one{
+        padding: 50px 60px 52px;
+        display: flex;
+        & .number{
+            width: 20px;
+            flex: 0 0 auto;
+            font-weight: 700;
+            color: $heading-color;
+            margin-right: 30px;
+        }
+        & .content{
+            & h4{
+                max-width: 150px;
+            }
+        }
+        &:not(:last-child){
+            border-bottom: 1px solid #D8DDE1;
+        }
+    }
+    &.style-two{
+        padding: 40px 30px;
+        @include respond(xxxl){
+            padding: 40px 20px;
+        }
+        @include respond(lg){
+            border: 1px solid $border-color;
+        }
+        &:hover{
+            & .content{
+                & p{
+                    opacity: 1;
+                }
+            }
+        }
+        &.item-active{
+            & .content{
+                & p{
+                    opacity: 1;
+                }
+            }
+        }
+        & .content{
+            & h4{
+                margin-bottom: 20px;
+                & span{
+                    color: $secondary-color;
+                    @include respond(xl){
+                        display: block;
+                    }
+                }
+                @include respond(xxxl){
+                    font-size: 20px;
+                }
+                @include respond(xl){
+                    font-size: 22px;
+                }
+            }
+            & p{
+                opacity: 0;
+                transition: all .3s;
+            }
+        }
+    }
+    &.style-three{
+        & .number{
+            font-size: 48px;
+            line-height: 1.15em;
+            font-weight: 700;
+            color: transparent;
+            font-family: $heading-font;
+            -webkit-text-stroke-width: 1px;
+            -webkit-text-stroke-color: #797E88;
+            margin-bottom: 15px;
+        }
+        & .content{
+            & h4{
+                margin-bottom: 15px;
+            }
+        }
+    }
+}
+
+.bizzen-intro_one{
+    position: relative;
+    z-index: 1;
+    &:after{
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(6, 50, 50, 0.50);
+        z-index: -1;
+    }
+}
+
+.bizzen-experience-sec{
+    position: relative;
+    z-index: 1;
+    & .shape{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        & img{
+            opacity: .1;
+        }
+    }
+    & .bizzen-experience-wrap{
+        position: relative;
+        & .arrow-shape{
+            position: absolute;
+            bottom: 50px;
+            left: 40%;
+            @include respond(md){
+                display: none;
+            }
+        }
+        & .experience-year{
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background-color: $primary-black-color;
+            border-radius: 500px 0 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include respond(md){
+                height: 300px;
+            }
+            & h2{
+                color: $white-color;
+                font-size: 200px;
+                margin-top: 40px;
+                margin-left: 40px;
+                @include respond(md){
+                    font-size: 100px;
+                }
+            }
+        }
+        & .experience-content{
+            padding-top: 150px;
+            margin-left: 30px;
+            @include respond(md){
+                padding-top: 50px;
+                margin-left: 0;
+            }
+            & h3{
+                font-size: 48px;
+                margin-bottom: 25px;
+                @include respond(lg){
+                    font-size: 30px;
+                }
+            }
+            & p{
+                & span{
+                    color: $heading-color;
+                }
+                margin-bottom: 50px;
+            }
+            & .symbol{
+                width: 100%;
+                height: 270px;
+                border-radius: 0 0 270px 0;
+                background-color: $primary-color;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                & h4{
+                    font-size: 170px;
+                    margin-bottom: 80px;
+                    margin-right: 40px;
+                    @include respond(md){
+                        margin-right: 20px;
+                    }
+                }
+            }
+        }
+    }
+}

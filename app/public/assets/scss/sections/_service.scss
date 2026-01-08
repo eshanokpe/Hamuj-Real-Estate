@@ -1,0 +1,523 @@
+
+/*======================
+    Service Section  CSS
+=======================*/
+
+.bizzen-service_one{
+    background-color: rgba(246, 246, 246, 0.40);
+    & .text-box{
+        & p{
+            & a{
+                color: $heading-color;
+            }
+        }
+    }
+}
+
+.bizzen-service_two{
+    background-color: $primary-black-color;
+    & .service-slider{
+        margin-right: -40%;
+        @include respond(md){
+            margin-left: -12px;
+            margin-right: -12px;
+        }
+        & .slick-slide{
+            margin-right: 30px;
+            @include respond(md){
+                margin-left: 12px;
+                margin-right: 12px;
+            }
+        }
+    }
+}
+
+.bizzen-avatar-box-two{
+    & ul{
+        display: inline-flex;
+        align-items: center;
+        & li{
+            display: inline-flex;
+            & img{
+                flex: 0 0 auto;
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                border: 1px solid $white-color;
+            }
+            &:not(:first-child){
+                margin-left: -10px;
+            }
+            & span{
+                width: 48px;
+                height: 48px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background-color: $secondary-color;
+                color: $white-color;
+                border-radius: 50%;
+            }
+        }
+    }
+}
+
+.bizzen-service_three{
+    background-color: $primary-black-color;
+    position: relative;
+    z-index: 1;
+    & .service-overlay{
+        position: absolute;
+        top: -100px;
+        right: 0;
+        width: 90%;
+        height: 84%;
+        background-color: $white-color;
+        z-index: -1;
+        @include respond(xxxl){
+            width: 97%;
+        }
+        @include respond(xl){
+            width: 100%;
+            height: 100%;
+        }
+    }
+    & .bizzen-discussion{
+        position: relative;
+        z-index: 1;
+        &:after{
+            position: absolute;
+            content: '';
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(88deg, #063232 23.71%, rgba(6, 50, 50, 0.70) 49.54%, #063232 75.38%);
+            z-index: -1;
+        }
+        & .section-title{
+            & h2{
+                color: $white-color;
+                & .text{
+                    text-decoration: underline;
+                    font-style: italic;
+                }
+                & .thin{
+                    font-weight: 400;
+                }
+            }
+        }
+        & .text-box{
+            & h2{
+                color: $white-color;
+                & span{
+                    display: block;
+                    font-size: 20px;
+                    line-height: 30px;
+                }
+            }
+        }
+    }
+    & .avatar-ratings-wrapper{
+        border-top: 1px solid $border-color;
+        padding: 60px 0;
+        & .avatar-text{
+            display: flex;
+            align-items: center;
+            @include respond(lg){
+                flex-direction: column;
+                justify-content: center;
+            }
+            & h6{
+                font-weight: 400;
+                margin-left: 15px;
+                & a{
+                    font-weight: 700;
+                }
+            }
+        }
+        & .rating-box{
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            @include respond(lg){
+                justify-content: center;
+                margin-top: 40px;
+            }
+            & .image{
+                flex: 0 0 auto;
+                margin-right: 20px;
+            }
+        }
+    }
+}
+.bizzen-service-item{
+    &.style-one{
+        padding: 10px;
+        border: 1px solid $border-color;
+        & .service-inner-content{
+            background: linear-gradient(0deg, #F4F8EC 0%, rgba(255, 255, 255, 0.00) 155.15%);
+            padding: 40px 20px 30px;
+            & .content{
+                margin-top: 70px;
+                & h4{
+                    margin-bottom: 15px;
+                    @include respond(xxxl){
+                        font-size: 20px;
+                    }
+                    &:hover{
+                        color: $secondary-color;
+                    }
+                }
+                & p{
+                    margin-bottom: 20px;
+                }
+            }
+        }
+    }
+    &.style-two{
+        padding: 40px;
+        background-color: $white-color;
+        transition: all .3s;
+        &:hover{
+            background-color: $primary-color;
+        }
+        & .icon-count-wrap{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 100px;
+            & .number{
+                font-size: 64px;
+                line-height: 1.15em;
+                font-weight: 700;
+                color: transparent;
+                font-family: $heading-font;
+                -webkit-text-stroke-width: 1px;
+                -webkit-text-stroke-color: #797E88;
+            }
+        }
+        & .content{
+            & h4{
+                max-width: 300px;
+                margin-bottom: 20px;
+                &:hover{
+                    color: $secondary-color;
+                }
+            }
+            & p{
+                margin-bottom: 20px;
+            }
+        }
+    }
+    &.style-three{
+        background-color: #F6F6F6;
+        padding: 30px 20px;
+        position: relative;
+        transition: all .3s;
+        &:hover{
+            background-color: $primary-black-color;
+            & .hover-shape{
+                top: 20px;
+                opacity: 1;
+            }
+            & .icon{
+                & .dark-icon{
+                    visibility: hidden;
+                    opacity: 0;
+                }
+                & .white-icon{
+                    visibility: visible;
+                    opacity: 1;
+                }
+            }
+            & .content{
+                border-color: rgba(216, 221, 225, 0.25);
+                & h4{
+                    color: $white-color;
+                }
+                & p{
+                    color: $white-color;
+                }
+            }
+        }
+        @include respond(xxxl){
+            padding: 30px 15px 25px;
+        }
+        @include respond(xl){
+            padding: 30px 30px 25px;
+        }
+        & .hover-shape{
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            opacity: 0;
+            transition: all .3s;
+        }
+        & .icon{
+            position: relative;
+            margin-bottom: 50px;
+            & .white-icon{
+                position: absolute;
+                top: 0;
+                left: 0;
+                visibility: hidden;
+                opacity: 0;
+            }
+        }
+        & .content{
+            border-top: 1px solid $border-color;
+            padding-top: 15px;
+            & h4{
+                margin-bottom: 15px;
+            }
+        }
+    }
+}
+
+
+/* Who We Section */ 
+
+.bizzen-we_one{
+    & .bizzen-content-box{
+        & .check-list{
+            & li{
+                & i{
+                    margin-right: 7px;
+                    color: $primary-black-color;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+.bizzen-skill-item{
+    & .progress-title{
+        & h6{
+            text-transform: capitalize;
+            margin-bottom: 10px;
+            & span{
+                float: right;
+            }
+        }
+    }
+    & .progress{
+        background-color: transparent;
+        height: 4px;
+        & .progress-bar{
+            background-color: $primary-black-color;
+        }
+    }
+}
+
+.bizzen-we_two{
+    & .bizzen-image-box{
+        position: relative;
+        & .bizzen-image{
+            &.image-two{
+                position: absolute;
+                top: 75px;
+                left: -125px;
+                & img{
+                    box-shadow: 0 24px 50px -12px rgba(45, 54, 67, 0.12);
+                }
+                @include respond(xxxl){
+                    left: -70px;
+                }
+                @include respond(xxxl){
+                    left: auto;
+                    right: 30px;
+                }
+                @include respond(md){
+                    right: 0;
+                    bottom: 0;
+                    top: auto;
+                }
+            }
+        }
+    }
+    & .bizzen-content-box{
+        & .content-wrap{
+            border-left: 1px solid $border-color;
+            @include respond(md){
+                border-left: none;
+            }
+            & > p{
+                padding-left: 40px;
+                margin-bottom: 25px;
+                @include respond(md){
+                    padding-left: 0;
+                }
+            }
+            & .bizzen-iconic-left-box{
+                margin-left: 40px;
+                @include respond(md){
+                    margin-left: 0;
+                }
+            }
+            & .bizzen-text-box{
+                border-top: 1px solid $border-color;
+                display: flex;
+                align-items: center;
+                & .number{
+                    padding: 25px 90px;
+                    font-size: 64px;
+                    line-height: 1.15em;
+                    font-weight: 700;
+                    background: linear-gradient(180deg, #797E88 -52.46%, rgba(121, 126, 136, 0.00) 100%);
+                    background-clip: text;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    border-right: 1px solid $border-color;
+                    @include respond(md){
+                        padding: 15px 20px;
+                        font-size: 32px;
+                    }
+                }
+                & .text{
+                    padding: 25px 90px;
+                    @include respond(md){
+                        padding: 15px 20px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.bizzen-iconic-left-box{
+    &.style-one{
+        display: flex;
+        align-items: center;
+        @include respond(md){
+            align-items: flex-start;
+        }
+        & .icon{
+            flex: 0 0 auto;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: $gray-color;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-right: 25px;
+            &:after{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                content: '';
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                border: 1px solid $gray-color;
+                transform: translate(-50%,-50%);
+            }
+        }
+        & .content{
+            & h3{
+                @include respond(md){
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+}
+
+
+/* Service Page CSS */ 
+
+.bizzen-iconic-box{
+    &.style-one{
+        & .icon{
+            margin-bottom: 20px;
+        }
+        & .content{
+            h4{
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+.bizzen-about-service{
+    & .bizzen-content-box{
+        & > p{
+            max-width: 550px;
+            font-size: 20px;
+            line-height: 30px;
+        }
+    }
+    & .bizzen-features-list{
+        padding-left: 60px;
+        @include respond(xl){
+            padding-left: 0;
+        }
+    }
+}
+
+/* Service Details Page CSS */ 
+
+.service-details-wrapper{
+    & .service-item-main{
+        & .service-content{
+            & h4.title{
+                font-size: 48px;
+                line-height: 1.35em;
+                margin-bottom: 30px;
+                text-transform: capitalize;
+                @include respond(lg){
+                    font-size: 40px;
+                    line-height: 55px;
+                }
+                @include respond(md){
+                    font-size: 28px;
+                }
+            }
+            & p{
+                margin-bottom: 30px;
+            }
+        }
+    }
+    & .process-wrapper{
+        border-top: 1px solid rgba(31, 31, 31, 0.25);
+        @include respond(xl){
+            border-top: none
+        }
+        & .bizzen-process-item{
+            & .line{
+                margin-left: 30px;
+                width: 1px;
+                height: 75px;
+                background-color: rgba(31, 31, 31, 0.25);
+                position: relative;
+                &:before{
+                    position: absolute;
+                    top: -5px;
+                    left: -5px;
+                    display: inline-block;
+                    content: '';
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background-color: $heading-color;
+                }
+            }
+            @include respond(xl){
+                border: 1px solid $border-color;
+                padding: 0 30px 25px;
+            }
+        }
+    }
+    & .intro-wrapper{
+        & .bizzen-image-box{
+            position: relative;
+            & .play-button{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+            }
+        }
+    }
+}
