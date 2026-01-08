@@ -233,7 +233,7 @@
                 <div class="bizzen-process-item style-three mb-40" data-aos="fade-up" data-aos-duration="1800">
                 <p>
                     At IGRCFP, our events connect professionals, regulators, and industry leaders worldwide. From global summits to focused workshops, we provide platforms for learning, networking, and shaping the future of governance, compliance, and financial crime prevention.
-                </p>
+                </p>  
                 <h6 class="mb-15">Our Key Events:</h6>
                 <ul class="check-list style-two mb-40" >
                     <li>Global Summits – Annual gatherings in Africa and Europe with keynotes, panels, and networking.</li>
