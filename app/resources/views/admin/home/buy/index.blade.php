@@ -86,7 +86,7 @@
 
             <!-- Summary Cards -->
             <div class="row mb-4">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card border-primary">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card border-success">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
@@ -120,7 +120,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card border-info">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
@@ -137,7 +137,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                {{-- <div class="col-md-3">
                     <div class="card border-warning">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
@@ -160,7 +160,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Property Purchases List -->
