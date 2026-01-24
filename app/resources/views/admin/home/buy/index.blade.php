@@ -106,6 +106,162 @@
                     </div>
                 </div>
             </div>
+            <!-- Footer Table - Total Land Usage Summary -->
+<div class="row mt-4">
+    <div class="col-lg-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="card-title mb-0">Land Usage Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">Total Available Size</th>
+                                <th class="text-center">Total Selected Size</th>
+                                <th class="text-center">Remaining Size</th>
+                                <th class="text-center">Percentage Used</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center fw-bold" style="font-size: 1.1rem;">
+                                    <span class="badge bg-primary rounded-pill p-2">
+                                        11,057 units
+                                    </span>
+                                </td>
+                                <td class="text-center fw-bold" style="font-size: 1.1rem;">
+                                    <span class="badge bg-success rounded-pill p-2">
+                                        {{ number_format($totalSelectedSize, 2) }} units
+                                    </span>
+                                </td>
+                                <td class="text-center fw-bold" style="font-size: 1.1rem;">
+                                    <span class="badge bg-{{ $remainingSize >= 0 ? 'warning' : 'danger' }} rounded-pill p-2">
+                                        {{ number_format($remainingSize, 2) }} units
+                                    </span>
+                                </td>
+                                <td class="text-center fw-bold" style="font-size: 1.1rem;">
+                                    <div class="progress" style="height: 30px;">
+                                        <div class="progress-bar 
+                                            @if($percentageUsed <= 50) bg-success
+                                            @elseif($percentageUsed <= 80) bg-warning
+                                            @else bg-danger
+                                            @endif" 
+                                            role="progressbar" 
+                                            style="width: {{ min($percentageUsed, 100) }}%"
+                                            aria-valuenow="{{ $percentageUsed }}" 
+                                            aria-valuemin="0" 
+                                            aria-valuemax="100">
+                                            {{ number_format($percentageUsed, 2) }}%
+                                        </div>
+                                    </div>
+                                    <small class="text-muted mt-1 d-block">
+                                        {{ number_format($percentageUsed, 2) }}% of total land used
+                                    </small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Additional Stats Row -->
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card border-primary border">
+                            <div class="card-body text-center">
+                                <h6 class="card-title text-primary">Total Properties Purchased</h6>
+                                <h3 class="text-primary">{{ $buys->total() }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-success border">
+                            <div class="card-body text-center">
+                                <h6 class="card-title text-success">Avg. Size per Purchase</h6>
+                                <h3 class="text-success">
+                                    {{ $buys->total() > 0 ? number_format($totalSelectedSize / $buys->total(), 2) : 0 }} units
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-warning border">
+                            <div class="card-body text-center">
+                                <h6 class="card-title text-warning">Available Capacity</h6>
+                                <h3 class="text-warning">
+                                    @if($remainingSize > 0)
+                                        {{ number_format($remainingSize, 2) }} units
+                                    @else
+                                        <span class="text-danger">Over Capacity</span>
+                                    @endif
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-info border">
+                            <div class="card-body text-center">
+                                <h6 class="card-title text-info">Utilization Rate</h6>
+                                <h3 class="text-info">{{ number_format($percentageUsed, 2) }}%</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Usage Distribution Pie Chart (if you want visual representation) -->
+                @if($percentageUsed > 0)
+                <div class="row mt-4">
+                    <div class="col-lg-12">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h5 class="card-title mb-0">Land Distribution</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <canvas id="landDistributionChart" height="200"></canvas>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Category</th>
+                                                        <th class="text-end">Size (units)</th>
+                                                        <th class="text-end">Percentage</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><span class="badge bg-success me-2">●</span> Used Land</td>
+                                                        <td class="text-end">{{ number_format($totalSelectedSize, 2) }}</td>
+                                                        <td class="text-end">{{ number_format($percentageUsed, 2) }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><span class="badge bg-warning me-2">●</span> Available Land</td>
+                                                        <td class="text-end">{{ number_format(max(0, $remainingSize), 2) }}</td>
+                                                        <td class="text-end">{{ number_format(max(0, 100 - $percentageUsed), 2) }}%</td>
+                                                    </tr>
+                                                    <tr class="table-light">
+                                                        <td><strong>Total Land</strong></td>
+                                                        <td class="text-end"><strong>{{ number_format($totalAvailableSize, 2) }}</strong></td>
+                                                        <td class="text-end"><strong>100%</strong></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
 
         </div><!-- container -->
     </div>
