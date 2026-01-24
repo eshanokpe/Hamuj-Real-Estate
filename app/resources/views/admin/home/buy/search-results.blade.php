@@ -220,7 +220,7 @@
                     </span>
                     <small class="text-muted d-block">Remaining from {{ number_format($totalAvailableSize, 0) }} SQM</small>
                 </td>
-                <td colspan="5">
+                <td colspan="5"> 
                     <div class="d-flex flex-column">
                         {{-- <div class="mb-1">
                             <span class="text-primary">
