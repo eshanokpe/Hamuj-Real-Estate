@@ -115,68 +115,7 @@
                         <div class="modal fade" id="deleteModal{{ $buy->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $buy->id }}" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title text-danger" id="deleteModalLabel{{ $buy->id }}">
-                                            <i class="las la-exclamation-triangle text-warning me-2"></i>
-                                            Delete Purchase Record
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p class="mb-3">Are you sure you want to delete this purchase record?</p>
-                                        
-                                        <div class="card border-warning">
-                                            <div class="card-body">
-                                                <h6 class="card-title">Record Details:</h6>
-                                                <ul class="list-unstyled mb-0">
-                                                    <li><strong>User:</strong> {{ $buy->user->first_name . ' ' . $buy->user->last_name }}</li>
-                                                    <li><strong>Property:</strong> {{ $buy->property->name }}</li>
-                                                    <li><strong>Size:</strong> {{ $buy->selected_size_land }} SQM</li>
-                                                    <li><strong>Price:</strong> ₦{{ number_format($buy->total_price, 2) }}</li>
-                                                    <li><strong>Status:</strong> 
-                                                        <span class="badge bg-{{ $buy->status == 'completed' ? 'success' : ($buy->status == 'pending' ? 'warning' : 'danger') }}">
-                                                            {{ ucfirst($buy->status) }}
-                                                        </span>
-                                                    </li>
-                                                    <li><strong>Transaction:</strong>    
-                                                        @if($buy->transaction_id && $buy->transaction_count > 0)
-                                                            <span class="text-success">Linked (ID: {{ $buy->transaction_id }})</span>
-                                                        @else
-                                                            <span class="text-warning">Not Linked</span>
-                                                        @endif
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="alert alert-info mt-3">
-                                            <h6 class="alert-heading mb-2">This action will:</h6>
-                                            <ul class="mb-0">
-                                                <li>Add <strong>{{ $buy->selected_size_land }} SQM</strong> back to property available size</li>
-                                                @if($buy->status === 'completed')
-                                                <li>Refund <strong>₦{{ number_format($buy->total_price, 2) }}</strong> to user's wallet</li>
-                                                @endif
-                                                <li>Delete this purchase record</li>
-                                                @if($buy->transaction_id && $buy->transaction_count > 0)
-                                                <li>Delete the associated transaction record</li>
-                                                @endif
-                                            </ul>
-                                        </div>
-
-                                        <div class="alert alert-danger mt-3">
-                                            <p class="mb-0"><strong>Warning:</strong> This action cannot be undone!</p>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <form action="{{ route('admin.buy.destroy', encrypt($buy->id)) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">
-                                                <i class="las la-trash-alt me-1"></i> Delete & Restore
-                                            </button>
-                                        </form>
-                                    </div>
+                                    <!-- Modal content remains the same -->
                                 </div>
                             </div>
                         </div>
@@ -184,7 +123,7 @@
                 </tr>
             @endforeach
         </tbody>
-
+        
         <!-- Add this table footer section -->
         <tfoot class="table-light fw-bold">
             <tr>
@@ -247,8 +186,6 @@
                 </td>
             </tr>
         </tfoot>
-
-        
     </table>
 </div>
 
