@@ -7772,18 +7772,6 @@
         },
         {
             "name": "symfony/routing",
-<<<<<<< HEAD
-            "version": "v6.4.26",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/routing.git",
-                "reference": "6fc4c445f22857d4b8b40a02b73f423ddab295de"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/routing/zipball/6fc4c445f22857d4b8b40a02b73f423ddab295de",
-                "reference": "6fc4c445f22857d4b8b40a02b73f423ddab295de",
-=======
             "version": "v6.4.22",
             "source": {
                 "type": "git",
@@ -7794,7 +7782,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/routing/zipball/1f5234e8457164a3a0038a4c0a4ba27876a9c670",
                 "reference": "1f5234e8457164a3a0038a4c0a4ba27876a9c670",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -7848,11 +7835,7 @@
                 "url"
             ],
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/routing/tree/v6.4.26"
-=======
                 "source": "https://github.com/symfony/routing/tree/v6.4.22"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             },
             "funding": [
                 {
@@ -7864,22 +7847,11 @@
                     "type": "github"
                 },
                 {
-<<<<<<< HEAD
-                    "url": "https://github.com/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-=======
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2025-09-11T09:57:09+00:00"
-=======
             "time": "2025-04-27T16:08:38+00:00"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
         },
         {
             "name": "symfony/service-contracts",
@@ -7966,18 +7938,6 @@
         },
         {
             "name": "symfony/string",
-<<<<<<< HEAD
-            "version": "v7.3.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/string.git",
-                "reference": "f96476035142921000338bad71e5247fbc138872"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/f96476035142921000338bad71e5247fbc138872",
-                "reference": "f96476035142921000338bad71e5247fbc138872",
-=======
             "version": "v7.3.0",
             "source": {
                 "type": "git",
@@ -7988,7 +7948,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/string/zipball/f3570b8c61ca887a9e2938e85cb6458515d2b125",
                 "reference": "f3570b8c61ca887a9e2938e85cb6458515d2b125",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -8003,10 +7962,7 @@
             },
             "require-dev": {
                 "symfony/emoji": "^7.1",
-<<<<<<< HEAD
-=======
                 "symfony/error-handler": "^6.4|^7.0",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "symfony/http-client": "^6.4|^7.0",
                 "symfony/intl": "^6.4|^7.0",
                 "symfony/translation-contracts": "^2.5|^3.0",
@@ -8049,11 +8005,7 @@
                 "utf8"
             ],
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/string/tree/v7.3.4"
-=======
                 "source": "https://github.com/symfony/string/tree/v7.3.0"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             },
             "funding": [
                 {
@@ -8065,33 +8017,10 @@
                     "type": "github"
                 },
                 {
-<<<<<<< HEAD
-                    "url": "https://github.com/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-=======
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2025-09-11T14:36:48+00:00"
-        },
-        {
-            "name": "symfony/translation",
-            "version": "v6.4.26",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/translation.git",
-                "reference": "c8559fe25c7ee7aa9d28f228903a46db008156a4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/c8559fe25c7ee7aa9d28f228903a46db008156a4",
-                "reference": "c8559fe25c7ee7aa9d28f228903a46db008156a4",
-=======
             "time": "2025-04-20T20:19:01+00:00"
         },
         {
@@ -8106,7 +8035,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/translation/zipball/7e3b3b7146c6fab36ddff304a8041174bf6e17ad",
                 "reference": "7e3b3b7146c6fab36ddff304a8041174bf6e17ad",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -8172,11 +8100,7 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/translation/tree/v6.4.26"
-=======
                 "source": "https://github.com/symfony/translation/tree/v6.4.22"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             },
             "funding": [
                 {
@@ -8188,22 +8112,11 @@
                     "type": "github"
                 },
                 {
-<<<<<<< HEAD
-                    "url": "https://github.com/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-=======
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2025-09-05T18:17:25+00:00"
-=======
             "time": "2025-05-29T07:06:44+00:00"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
         },
         {
             "name": "symfony/translation-contracts",
@@ -8285,18 +8198,6 @@
         },
         {
             "name": "symfony/uid",
-<<<<<<< HEAD
-            "version": "v6.4.24",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/uid.git",
-                "reference": "17da16a750541a42cf2183935e0f6008316c23f7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/uid/zipball/17da16a750541a42cf2183935e0f6008316c23f7",
-                "reference": "17da16a750541a42cf2183935e0f6008316c23f7",
-=======
             "version": "v6.4.13",
             "source": {
                 "type": "git",
@@ -8307,7 +8208,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/uid/zipball/18eb207f0436a993fffbdd811b5b8fa35fa5e007",
                 "reference": "18eb207f0436a993fffbdd811b5b8fa35fa5e007",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -8352,11 +8252,7 @@
                 "uuid"
             ],
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/uid/tree/v6.4.24"
-=======
                 "source": "https://github.com/symfony/uid/tree/v6.4.13"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             },
             "funding": [
                 {
@@ -8368,33 +8264,10 @@
                     "type": "github"
                 },
                 {
-<<<<<<< HEAD
-                    "url": "https://github.com/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-=======
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2025-07-10T08:14:14+00:00"
-        },
-        {
-            "name": "symfony/var-dumper",
-            "version": "v6.4.26",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "cfae1497a2f1eaad78dbc0590311c599c7178d4a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/cfae1497a2f1eaad78dbc0590311c599c7178d4a",
-                "reference": "cfae1497a2f1eaad78dbc0590311c599c7178d4a",
-=======
             "time": "2024-09-25T14:18:03+00:00"
         },
         {
@@ -8409,7 +8282,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/var-dumper/zipball/22560f80c0c5cd58cc0bcaf73455ffd81eb380d5",
                 "reference": "22560f80c0c5cd58cc0bcaf73455ffd81eb380d5",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -8421,10 +8293,7 @@
                 "symfony/console": "<5.4"
             },
             "require-dev": {
-<<<<<<< HEAD
-=======
                 "ext-iconv": "*",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "symfony/console": "^5.4|^6.0|^7.0",
                 "symfony/error-handler": "^6.3|^7.0",
                 "symfony/http-kernel": "^5.4|^6.0|^7.0",
