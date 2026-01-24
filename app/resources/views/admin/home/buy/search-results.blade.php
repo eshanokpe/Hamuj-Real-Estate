@@ -227,9 +227,9 @@
                                 <i class="las la-percentage me-1"></i>
                                 Utilization: {{ $percentageUsed }}%
                             </span>
-                        </div> --}}
+                        </div> --}}  
                         <div class="d-flex justify-content-between small">
-                            <span class="text-success">
+                            <span class="text-success"> 
                                 <i class="las la-check-circle me-1"></i>
                                 Used: {{ number_format($totalSelectedSize, 0) }} SQM
                             </span>
