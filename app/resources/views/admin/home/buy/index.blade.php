@@ -447,51 +447,51 @@ $(document).ready(function() {
     });
 
     // Chart.js for land distribution pie chart
-if (document.getElementById('landDistributionChart')) {
-    const ctx = document.getElementById('landDistributionChart').getContext('2d');
-    const usedLand = {{ $totalSelectedSize }};
-    const availableLand = Math.max(0, {{ $remainingSize }});
-    
-    const landChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Used Land', 'Available Land'],
-            datasets: [{
-                data: [usedLand, availableLand],
-                backgroundColor: [
-                    '#28a745', // Green for used
-                    '#ffc107'  // Yellow for available
-                ],
-                borderColor: '#fff',
-                borderWidth: 2,
-                hoverOffset: 15
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        usePointStyle: true,
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed;
-                            const total = usedLand + availableLand;
-                            const percentage = total > 0 ? ((value / total) * 100).toFixed(2) : 0;
-                            return `${label}: ${value.toFixed(2)} units (${percentage}%)`;
+    if (document.getElementById('landDistributionChart')) {
+        const ctx = document.getElementById('landDistributionChart').getContext('2d');
+        const usedLand = {{ $totalSelectedSize }};
+        const availableLand = Math.max(0, {{ $remainingSize }});
+        
+        const landChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Used Land', 'Available Land'],
+                datasets: [{
+                    data: [usedLand, availableLand],
+                    backgroundColor: [
+                        '#28a745', // Green for used
+                        '#ffc107'  // Yellow for available
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const total = usedLand + availableLand;
+                                const percentage = total > 0 ? ((value / total) * 100).toFixed(2) : 0;
+                                return `${label}: ${value.toFixed(2)} units (${percentage}%)`;
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-}
+        });
+    }
 });
 </script>
 @endpush
