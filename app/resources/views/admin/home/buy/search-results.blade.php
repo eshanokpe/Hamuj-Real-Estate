@@ -184,6 +184,71 @@
                 </tr>
             @endforeach
         </tbody>
+
+        <!-- Add this table footer section -->
+        <tfoot class="table-light fw-bold">
+            <tr>
+                <td colspan="6" class="text-end">
+                    <strong>Totals:</strong>
+                </td>
+                <td class="text-primary">
+                    <span class="d-flex align-items-center">
+                        <i class="las la-calculator me-2"></i>
+                        {{ $totalSelectedSize ?? 0 }} SQM
+                    </span>
+                    <small class="text-muted d-block">Total Selected Size</small>
+                </td>
+                <td>
+                    @php
+                        $percentageUsed = ($totalAvailableSize > 0) ? round(($totalSelectedSize / $totalAvailableSize) * 100, 2) : 0;
+                        $percentageRemaining = ($totalAvailableSize > 0) ? round(($remainingAvailableSize / $totalAvailableSize) * 100, 2) : 0;
+                    @endphp
+                    
+                    <div class="progress mb-2" style="height: 8px;">
+                        <div class="progress-bar bg-success" role="progressbar" 
+                             style="width: {{ $percentageUsed }}%" 
+                             aria-valuenow="{{ $percentageUsed }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100"
+                             title="{{ $percentageUsed }}% Used">
+                        </div>
+                    </div>
+                    
+                    <span class="d-flex align-items-center justify-content-between">
+                        <span class="text-success">
+                            <i class="las la-chart-pie me-1"></i>
+                            {{ $totalAvailableSize - $totalSelectedSize }} SQM
+                        </span>
+                        <span class="badge bg-info">
+                            {{ $percentageRemaining }}%
+                        </span>
+                    </span>
+                    <small class="text-muted d-block">Remaining from {{ $totalAvailableSize }} SQM</small>
+                </td>
+                <td colspan="5">
+                    <div class="d-flex flex-column">
+                        <div class="mb-1">
+                            <span class="text-primary">
+                                <i class="las la-percentage me-1"></i>
+                                Utilization: {{ $percentageUsed }}%
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between small">
+                            <span class="text-success">
+                                <i class="las la-check-circle me-1"></i>
+                                Used: {{ $totalSelectedSize }} SQM
+                            </span>
+                            <span class="text-info">
+                                <i class="las la-space-shuttle me-1"></i>
+                                Available: {{ $remainingAvailableSize }} SQM
+                            </span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+
+        
     </table>
 </div>
 
