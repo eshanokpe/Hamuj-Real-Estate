@@ -11114,11 +11114,7 @@
                     "type": "other"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2025-08-26T08:22:30+00:00"
-=======
             "time": "2024-12-02T13:28:15+00:00"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
         },
         {
             "name": "spatie/flare-client-php",
@@ -11364,18 +11360,6 @@
         },
         {
             "name": "symfony/yaml",
-<<<<<<< HEAD
-            "version": "v7.3.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "d4f4a66866fe2451f61296924767280ab5732d9d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/d4f4a66866fe2451f61296924767280ab5732d9d",
-                "reference": "d4f4a66866fe2451f61296924767280ab5732d9d",
-=======
             "version": "v7.2.3",
             "source": {
                 "type": "git",
@@ -11386,7 +11370,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/yaml/zipball/ac238f173df0c9c1120f862d0f599e17535a87ec",
                 "reference": "ac238f173df0c9c1120f862d0f599e17535a87ec",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -11429,11 +11412,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/yaml/tree/v7.3.3"
-=======
                 "source": "https://github.com/symfony/yaml/tree/v7.2.3"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             },
             "funding": [
                 {
@@ -11445,22 +11424,11 @@
                     "type": "github"
                 },
                 {
-<<<<<<< HEAD
-                    "url": "https://github.com/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-=======
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                     "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2025-08-27T11:34:33+00:00"
-=======
             "time": "2025-01-07T12:55:42+00:00"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
         },
         {
             "name": "theseer/tokenizer",
