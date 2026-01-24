@@ -10,7 +10,7 @@ use App\Models\Buy;
 use App\Models\Property;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\DB;
-
+ 
 class BuyController extends Controller
 {  
     public function index(Request $request)
@@ -43,7 +43,6 @@ class BuyController extends Controller
         foreach ($buys as $buy) {
             $buy->user->total_assets = $this->calculateUserTotalAssets($buy->user);
             
-            // Count associated transaction
             $buy->transaction_count = Transaction::where('id', $buy->transaction_id)->count();
         }
         
