@@ -115,7 +115,68 @@
                         <div class="modal fade" id="deleteModal{{ $buy->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $buy->id }}" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
-                                    <!-- Modal content remains the same -->
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-danger" id="deleteModalLabel{{ $buy->id }}">
+                                            <i class="las la-exclamation-triangle text-warning me-2"></i>
+                                            Delete Purchase Record
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="mb-3">Are you sure you want to delete this purchase record?</p>
+                                        
+                                        <div class="card border-warning">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Record Details:</h6>
+                                                <ul class="list-unstyled mb-0">
+                                                    <li><strong>User:</strong> {{ $buy->user->first_name . ' ' . $buy->user->last_name }}</li>
+                                                    <li><strong>Property:</strong> {{ $buy->property->name }}</li>
+                                                    <li><strong>Size:</strong> {{ $buy->selected_size_land }} SQM</li>
+                                                    <li><strong>Price:</strong> ₦{{ number_format($buy->total_price, 2) }}</li>
+                                                    <li><strong>Status:</strong> 
+                                                        <span class="badge bg-{{ $buy->status == 'completed' ? 'success' : ($buy->status == 'pending' ? 'warning' : 'danger') }}">
+                                                            {{ ucfirst($buy->status) }}
+                                                        </span>
+                                                    </li>
+                                                    <li><strong>Transaction:</strong>    
+                                                        @if($buy->transaction_id && $buy->transaction_count > 0)
+                                                            <span class="text-success">Linked (ID: {{ $buy->transaction_id }})</span>
+                                                        @else
+                                                            <span class="text-warning">Not Linked</span>
+                                                        @endif
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="alert alert-info mt-3">
+                                            <h6 class="alert-heading mb-2">This action will:</h6>
+                                            <ul class="mb-0">
+                                                <li>Add <strong>{{ $buy->selected_size_land }} SQM</strong> back to property available size</li>
+                                                @if($buy->status === 'completed')
+                                                <li>Refund <strong>₦{{ number_format($buy->total_price, 2) }}</strong> to user's wallet</li>
+                                                @endif
+                                                <li>Delete this purchase record</li>
+                                                @if($buy->transaction_id && $buy->transaction_count > 0)
+                                                <li>Delete the associated transaction record</li>
+                                                @endif
+                                            </ul>
+                                        </div>
+
+                                        <div class="alert alert-danger mt-3">
+                                            <p class="mb-0"><strong>Warning:</strong> This action cannot be undone!</p>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <form action="{{ route('admin.buy.destroy', encrypt($buy->id)) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="las la-trash-alt me-1"></i> Delete & Restore
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -124,25 +185,20 @@
             @endforeach
         </tbody>
         
-        <!-- Add this table footer section -->
+        <!-- Table Footer with Totals -->
         <tfoot class="table-light fw-bold">
             <tr>
                 <td colspan="6" class="text-end">
-                    <strong>Totals:</strong>
+                    <strong>TOTALS:</strong>
                 </td>
                 <td class="text-primary">
                     <span class="d-flex align-items-center">
                         <i class="las la-calculator me-2"></i>
-                        {{ $totalSelectedSize ?? 0 }} SQM
+                        {{ number_format($totalSelectedSize, 0) }} SQM
                     </span>
                     <small class="text-muted d-block">Total Selected Size</small>
                 </td>
                 <td>
-                    @php
-                        $percentageUsed = ($totalAvailableSize > 0) ? round(($totalSelectedSize / $totalAvailableSize) * 100, 2) : 0;
-                        $percentageRemaining = ($totalAvailableSize > 0) ? round(($remainingAvailableSize / $totalAvailableSize) * 100, 2) : 0;
-                    @endphp
-                    
                     <div class="progress mb-2" style="height: 8px;">
                         <div class="progress-bar bg-success" role="progressbar" 
                              style="width: {{ $percentageUsed }}%" 
@@ -156,13 +212,13 @@
                     <span class="d-flex align-items-center justify-content-between">
                         <span class="text-success">
                             <i class="las la-chart-pie me-1"></i>
-                            {{ $totalAvailableSize - $totalSelectedSize }} SQM
+                            {{ number_format($remainingAvailableSize, 0) }} SQM
                         </span>
                         <span class="badge bg-info">
-                            {{ $percentageRemaining }}%
+                            {{ 100 - $percentageUsed }}%
                         </span>
                     </span>
-                    <small class="text-muted d-block">Remaining from {{ $totalAvailableSize }} SQM</small>
+                    <small class="text-muted d-block">Remaining from {{ number_format($totalAvailableSize, 0) }} SQM</small>
                 </td>
                 <td colspan="5">
                     <div class="d-flex flex-column">
@@ -175,11 +231,11 @@
                         <div class="d-flex justify-content-between small">
                             <span class="text-success">
                                 <i class="las la-check-circle me-1"></i>
-                                Used: {{ $totalSelectedSize }} SQM
+                                Used: {{ number_format($totalSelectedSize, 0) }} SQM
                             </span>
                             <span class="text-info">
                                 <i class="las la-space-shuttle me-1"></i>
-                                Available: {{ $remainingAvailableSize }} SQM
+                                Available: {{ number_format($remainingAvailableSize, 0) }} SQM
                             </span>
                         </div>
                     </div>
