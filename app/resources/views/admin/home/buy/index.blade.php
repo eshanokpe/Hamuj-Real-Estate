@@ -152,20 +152,20 @@
 
 @push('styles')
 <style>
-.table td {
-    vertical-align: middle;
-}
-.input-group-text {
-    background-color: #f8f9fa;
-    border-color: #dee2e6;
-}
-#searchLoading .spinner-border {
-    width: 1rem;
-    height: 1rem;
-}
-.checkbox-column {
-    width: 40px;
-}
+    .table td {
+        vertical-align: middle;
+    }
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+    }
+    #searchLoading .spinner-border {
+        width: 1rem;
+        height: 1rem;
+    }
+    .checkbox-column {
+        width: 40px;
+    }
 </style>
 @endpush
 

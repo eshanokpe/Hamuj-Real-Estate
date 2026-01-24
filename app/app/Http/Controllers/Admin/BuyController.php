@@ -67,7 +67,8 @@ class BuyController extends Controller
         $percentageUsed = $totalAvailableSize > 0 ? ($totalSelectedSize / $totalAvailableSize) * 100 : 0;
         $remainingSize = $totalAvailableSize - $totalSelectedSize;
         
-        return view('admin.home.buy.index', compact('buys', 'search'));
+        // return view('admin.home.buy.index', compact('buys', 'search'));
+        return view('admin.home.buy.index', compact('buys', 'search', 'totalSelectedSize', 'percentageUsed', 'remainingSize', 'totalAvailableSize'));
     }
 
     /**
