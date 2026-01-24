@@ -13,7 +13,7 @@
                         <h4 class="page-title">Property Purchases</h4>
                     </div>
                 </div>
-            </div>
+            </div> 
 
             <!-- Success/Error Messages -->
             @if(session('success'))
