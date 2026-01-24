@@ -3903,11 +3903,7 @@
             ],
             "support": {
                 "issues": "https://github.com/schmittjoh/php-option/issues",
-<<<<<<< HEAD
-                "source": "https://github.com/schmittjoh/php-option/tree/1.9.4"
-=======
                 "source": "https://github.com/schmittjoh/php-option/tree/1.9.3"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             },
             "funding": [
                 {
@@ -3919,22 +3915,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2025-08-21T11:53:16+00:00"
-        },
-        {
-            "name": "phpseclib/phpseclib",
-            "version": "3.0.47",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "9d6ca36a6c2dd434765b1071b2644a1c683b385d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/9d6ca36a6c2dd434765b1071b2644a1c683b385d",
-                "reference": "9d6ca36a6c2dd434765b1071b2644a1c683b385d",
-=======
             "time": "2024-07-20T21:41:07+00:00"
         },
         {
@@ -3949,7 +3929,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/709ec107af3cb2f385b9617be72af8cf62441d02",
                 "reference": "709ec107af3cb2f385b9617be72af8cf62441d02",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -4030,11 +4009,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-<<<<<<< HEAD
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.47"
-=======
                 "source": "https://github.com/phpseclib/phpseclib/tree/3.0.43"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             },
             "funding": [
                 {
@@ -4050,11 +4025,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2025-10-06T01:07:24+00:00"
-=======
             "time": "2024-12-14T21:12:59+00:00"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
         },
         {
             "name": "psr/clock",
@@ -4470,18 +4441,6 @@
         },
         {
             "name": "psy/psysh",
-<<<<<<< HEAD
-            "version": "v0.12.12",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "cd23863404a40ccfaf733e3af4db2b459837f7e7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/cd23863404a40ccfaf733e3af4db2b459837f7e7",
-                "reference": "cd23863404a40ccfaf733e3af4db2b459837f7e7",
-=======
             "version": "v0.12.7",
             "source": {
                 "type": "git",
@@ -4492,7 +4451,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/bobthecow/psysh/zipball/d73fa3c74918ef4522bb8a3bf9cab39161c4b57c",
                 "reference": "d73fa3c74918ef4522bb8a3bf9cab39161c4b57c",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -4542,20 +4500,12 @@
             "authors": [
                 {
                     "name": "Justin Hileman",
-<<<<<<< HEAD
-                    "email": "justin@justinhileman.info"
-                }
-            ],
-            "description": "An interactive shell for modern PHP.",
-            "homepage": "https://psysh.org",
-=======
                     "email": "justin@justinhileman.info",
                     "homepage": "http://justinhileman.com"
                 }
             ],
             "description": "An interactive shell for modern PHP.",
             "homepage": "http://psysh.org",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             "keywords": [
                 "REPL",
                 "console",
@@ -4564,15 +4514,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-<<<<<<< HEAD
-                "source": "https://github.com/bobthecow/psysh/tree/v0.12.12"
-            },
-            "time": "2025-09-20T13:46:31+00:00"
-=======
                 "source": "https://github.com/bobthecow/psysh/tree/v0.12.7"
             },
             "time": "2024-12-10T01:58:33+00:00"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
         },
         {
             "name": "pusher/pusher-php-server",
@@ -4757,22 +4701,6 @@
         },
         {
             "name": "ramsey/uuid",
-<<<<<<< HEAD
-            "version": "4.9.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ramsey/uuid.git",
-                "reference": "81f941f6f729b1e3ceea61d9d014f8b6c6800440"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/81f941f6f729b1e3ceea61d9d014f8b6c6800440",
-                "reference": "81f941f6f729b1e3ceea61d9d014f8b6c6800440",
-                "shasum": ""
-            },
-            "require": {
-                "brick/math": "^0.8.8 || ^0.9 || ^0.10 || ^0.11 || ^0.12 || ^0.13 || ^0.14",
-=======
             "version": "4.8.1",
             "source": {
                 "type": "git",
@@ -4788,7 +4716,6 @@
             "require": {
                 "brick/math": "^0.8.8 || ^0.9 || ^0.10 || ^0.11 || ^0.12 || ^0.13",
                 "ext-json": "*",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "php": "^8.0",
                 "ramsey/collection": "^1.2 || ^2.0"
             },
@@ -4847,15 +4774,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/uuid/issues",
-<<<<<<< HEAD
-                "source": "https://github.com/ramsey/uuid/tree/4.9.1"
-            },
-            "time": "2025-09-04T20:59:21+00:00"
-=======
                 "source": "https://github.com/ramsey/uuid/tree/4.8.1"
             },
             "time": "2025-06-01T06:28:46+00:00"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
         },
         {
             "name": "ratchet/rfc6455",
@@ -5227,18 +5148,6 @@
         },
         {
             "name": "react/promise",
-<<<<<<< HEAD
-            "version": "v3.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reactphp/promise.git",
-                "reference": "23444f53a813a3296c1368bb104793ce8d88f04a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/23444f53a813a3296c1368bb104793ce8d88f04a",
-                "reference": "23444f53a813a3296c1368bb104793ce8d88f04a",
-=======
             "version": "v3.2.0",
             "source": {
                 "type": "git",
@@ -5249,18 +5158,13 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/reactphp/promise/zipball/8a164643313c71354582dc850b42b33fa12a4b63",
                 "reference": "8a164643313c71354582dc850b42b33fa12a4b63",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1.0"
             },
             "require-dev": {
-<<<<<<< HEAD
-                "phpstan/phpstan": "1.12.28 || 1.4.10",
-=======
                 "phpstan/phpstan": "1.10.39 || 1.4.10",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "phpunit/phpunit": "^9.6 || ^7.5"
             },
             "type": "library",
@@ -5305,11 +5209,7 @@
             ],
             "support": {
                 "issues": "https://github.com/reactphp/promise/issues",
-<<<<<<< HEAD
-                "source": "https://github.com/reactphp/promise/tree/v3.3.0"
-=======
                 "source": "https://github.com/reactphp/promise/tree/v3.2.0"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             },
             "funding": [
                 {
