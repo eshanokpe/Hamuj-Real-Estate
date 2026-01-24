@@ -61,7 +61,7 @@
                     <td>{{ $buy->selected_size_land }} SQM</td>
                     <td>
                         @if($buy->remaining_size > 0)
-                            <span class="badge bg-success">{{ $buy->remaining_size }} SQM</span>
+                            <span class="badge bg-success">{{ number_format($buy->remaining_size, 2) }} SQM</span>
                         @else
                             <span class="badge bg-danger">Sold Out</span>
                         @endif
