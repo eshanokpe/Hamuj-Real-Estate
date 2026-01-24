@@ -795,18 +795,6 @@
         },
         {
             "name": "dompdf/dompdf",
-<<<<<<< HEAD
-            "version": "v3.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dompdf/dompdf.git",
-                "reference": "b3493e35d31a5e76ec24c3b64a29b0034b2f32a6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/b3493e35d31a5e76ec24c3b64a29b0034b2f32a6",
-                "reference": "b3493e35d31a5e76ec24c3b64a29b0034b2f32a6",
-=======
             "version": "v3.1.0",
             "source": {
                 "type": "git",
@@ -817,7 +805,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/dompdf/dompdf/zipball/a51bd7a063a65499446919286fb18b518177155a",
                 "reference": "a51bd7a063a65499446919286fb18b518177155a",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -1490,11 +1477,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-<<<<<<< HEAD
-                "source": "https://github.com/guzzle/guzzle/tree/7.10.0"
-=======
                 "source": "https://github.com/guzzle/guzzle/tree/7.9.3"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             },
             "funding": [
                 {
@@ -1510,22 +1493,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2025-08-23T22:36:01+00:00"
-        },
-        {
-            "name": "guzzlehttp/promises",
-            "version": "2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/promises.git",
-                "reference": "481557b130ef3790cf82b713667b43030dc9c957"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/481557b130ef3790cf82b713667b43030dc9c957",
-                "reference": "481557b130ef3790cf82b713667b43030dc9c957",
-=======
             "time": "2025-03-27T13:37:11+00:00"
         },
         {
@@ -1540,7 +1507,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/guzzle/promises/zipball/7c69f28996b0a6920945dd20b3857e499d9ca96c",
                 "reference": "7c69f28996b0a6920945dd20b3857e499d9ca96c",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -1735,11 +1701,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-<<<<<<< HEAD
-                "source": "https://github.com/guzzle/psr7/tree/2.8.0"
-=======
                 "source": "https://github.com/guzzle/psr7/tree/2.7.1"
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
             },
             "funding": [
                 {
@@ -1755,22 +1717,6 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2025-08-23T21:21:41+00:00"
-        },
-        {
-            "name": "guzzlehttp/uri-template",
-            "version": "v1.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/uri-template.git",
-                "reference": "4f4bbd4e7172148801e76e3decc1e559bdee34e1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/uri-template/zipball/4f4bbd4e7172148801e76e3decc1e559bdee34e1",
-                "reference": "4f4bbd4e7172148801e76e3decc1e559bdee34e1",
-=======
             "time": "2025-03-27T12:30:47+00:00"
         },
         {
@@ -1785,7 +1731,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/guzzle/uri-template/zipball/30e286560c137526eccd4ce21b2de477ab0676d2",
                 "reference": "30e286560c137526eccd4ce21b2de477ab0676d2",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "shasum": ""
             },
             "require": {
@@ -1794,11 +1739,7 @@
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.2",
-<<<<<<< HEAD
-                "phpunit/phpunit": "^8.5.44 || ^9.6.25",
-=======
                 "phpunit/phpunit": "^8.5.36 || ^9.6.15",
->>>>>>> f05b4bbffab5bd853e1aa5c5441f81520cf51ab7
                 "uri-template/tests": "1.0.0"
             },
             "type": "library",
