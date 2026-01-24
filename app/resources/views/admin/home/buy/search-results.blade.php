@@ -222,12 +222,12 @@
                 </td>
                 <td colspan="5">
                     <div class="d-flex flex-column">
-                        <div class="mb-1">
+                        {{-- <div class="mb-1">
                             <span class="text-primary">
                                 <i class="las la-percentage me-1"></i>
                                 Utilization: {{ $percentageUsed }}%
                             </span>
-                        </div>
+                        </div> --}}
                         <div class="d-flex justify-content-between small">
                             <span class="text-success">
                                 <i class="las la-check-circle me-1"></i>
