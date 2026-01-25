@@ -86,7 +86,7 @@ class BuyController extends Controller
         $totalPriceSum = Buy::when($search, function ($query, $search) {
             return $this->applySearchFilters($query, $search);
         })->sum('total_price');
-dd($buys->first()->remaining_size);
+
         // Pass these to the view
          return view('admin.home.buy.index', compact(
             'buys', 

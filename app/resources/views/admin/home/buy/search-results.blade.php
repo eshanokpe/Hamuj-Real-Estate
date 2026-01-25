@@ -62,7 +62,7 @@
                     <td>
                         @if($buy->remaining_size > 0)
                             <span class="badge bg-success">
-                                  {{ floatval($buy->remaining_size) }} 
+                               {{ number_format((float)str_replace(',', '', $buy->remaining_size), 2) }}
                                 SQM</span>
                         @else
                             <span class="badge bg-danger">Sold Out</span>
