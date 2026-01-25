@@ -201,7 +201,7 @@
                 </td>
                 <td class="text-primary">
                 </td>
-                <td class="text-primary">
+                <td class="text-primary w-100">
                     <span class="d-flex align-items-center">
                         {{-- <i class="las la-calculator me-2"></i> --}}
                         {{ number_format($totalSelectedSize, 2) }} SQM
