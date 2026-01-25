@@ -33,7 +33,7 @@
                         <i class="ti ti-layout-grid me-2"></i>
                         <div class="d-flex flex-column" style="padding-right: 30px">
                             <small class="fw-semibold font-11">Available Size</small>
-                            <span class="fw-bold font-12">{{ number_format( x, 4) }} SQM</span>
+                            <span class="fw-bold font-12">{{ number_format( $remainingAvailableSize, 1) }} SQM</span>
                         </div>
                     </div>
                 </a>
