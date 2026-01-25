@@ -83,6 +83,9 @@ class BuyController extends Controller
             
             $buy->transaction_count = Transaction::where('id', $buy->transaction_id)->count();
         }
+        $totalPriceSum = Buy::when($search, function ($query, $search) {
+            return $this->applySearchFilters($query, $search);
+        })->sum('total_price');
 
         // Pass these to the view
          return view('admin.home.buy.index', compact(
@@ -95,6 +98,25 @@ class BuyController extends Controller
             'totalAssetsSum',
             'totalPriceSum'
         ));
+    }
+
+    private function applySearchFilters($query, $search)
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->whereHas('user', function ($userQuery) use ($search) {
+                $userQuery->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+            })
+            ->orWhereHas('property', function ($propertyQuery) use ($search) {
+                $propertyQuery->where('name', 'like', "%{$search}%");
+            })
+            ->orWhere('user_email', 'like', "%{$search}%")
+            ->orWhere('selected_size_land', 'like', "%{$search}%")
+            ->orWhere('remaining_size', 'like', "%{$search}%")
+            ->orWhere('total_price', 'like', "%{$search}%")
+            ->orWhere('status', 'like', "%{$search}%");
+        });
     }
 
     /**
