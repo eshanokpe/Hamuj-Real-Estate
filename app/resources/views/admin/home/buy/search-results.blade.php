@@ -213,10 +213,16 @@
                 <td class="text-primary">
                 </td>
                 <td class="text-primary w-100">
-                    <span class="d-flex align-items-center w-100">
-                        {{-- <i class="las la-calculator me-2"></i> --}}
-                        {{ number_format($totalSelectedSize, 2) }} SQM
-                    </span>
+                     <div class="card border-purple">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted mb-1">Total Selected Size</h6>
+                                    <h3 class="text-purple mb-0">{{ number_format($totalSelectedSize, 2) }} SQM</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
                 <td></td>
                 <td class="text-primary">
