@@ -206,11 +206,6 @@
                                     <h6 class="text-muted mb-1">Total Assets</h6>
                                     <h3 class="text-purple mb-0">₦{{ number_format($totalAssetsSum, 2) }}</h3>
                                 </div>
-                                <div class="avatar-sm">
-                                    <div class="avatar-title bg-purple-subtle rounded-circle">
-                                        <i class="las la-wallet text-purple fs-4"></i>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -267,16 +262,6 @@
                                 Utilization: {{ $percentageUsed }}%
                             </span>
                         </div> --}}  
-                        <div class="d-flex justify-content-between small">
-                            <span class="text-success"> 
-                                <i class="las la-check-circle me-1"></i>
-                                Used: {{ number_format($totalSelectedSize, 0) }} SQM
-                            </span>
-                            <span class="text-info">
-                                <i class="las la-space-shuttle me-1"></i>
-                                Available: {{ number_format($remainingAvailableSize, 0) }} SQM
-                            </span>
-                        </div>
                     </div>
                 </td>
                 <td>
