@@ -188,10 +188,12 @@
         <!-- Table Footer with Totals -->
         <tfoot class="table-light fw-bold">
             <tr>
-                <td colspan="4" class="text-end">
+                <td colspan="2" class="text-end">
                     <strong>TOTALS:</strong>
                 </td>
-                 <td class="text-primary">
+                <td class="text-primary">
+                </td>
+                <td class="text-primary">
                 </td>
                 <td class="text-primary">
                     <span class="d-flex align-items-center">
