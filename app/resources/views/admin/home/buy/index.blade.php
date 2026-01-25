@@ -124,7 +124,7 @@
                     <div class="card border-info">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>
+                                <div> 
                                     <h6 class="text-muted mb-1">Remaining</h6>
                                     <h3 class="text-info mb-0">{{ number_format($remainingAvailableSize, 1) }} SQM</h3>
                                 </div>
