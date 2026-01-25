@@ -70,6 +70,9 @@ class BuyController extends Controller
         $totalAvailableSize = 11057; // Your fixed total available size
         $remainingAvailableSize = $totalAvailableSize - $totalSelectedSize;
         $percentageUsed = ($totalAvailableSize > 0) ? round(($totalSelectedSize / $totalAvailableSize) * 100, 2) : 0;
+        $allUsersTotalAssets = User::all()->sum(function($user) {
+            return $this->calculateUserTotalAssets($user);
+        });
 
         // Pass these to the view
          return view('admin.home.buy.index', compact(
@@ -78,7 +81,8 @@ class BuyController extends Controller
             'totalSelectedSize', 
             'totalAvailableSize', 
             'remainingAvailableSize',
-            'percentageUsed'
+            'percentageUsed',
+            'allUsersTotalAssets'
         ));
     }
 
