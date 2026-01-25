@@ -197,14 +197,15 @@
                 </td>
                 <td class="text-primary">
                 </td>
-                  <td class="text-primary">
+                <td class="text-primary">
+                </td>
+                <td class="text-primary">
                 </td>
                 <td class="text-primary">
                     <span class="d-flex align-items-center">
-                        <i class="las la-calculator me-2"></i>
-                        {{ number_format($totalSelectedSize, 0) }} SQM
+                        {{-- <i class="las la-calculator me-2"></i> --}}
+                        {{ number_format($totalSelectedSize, 2) }} SQM
                     </span>
-                    <small class="text-muted d-block">Total Selected Size</small>
                 </td>
                 <td>
                     <div class="progress mb-2" style="height: 8px;">
