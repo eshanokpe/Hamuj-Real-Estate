@@ -92,7 +92,8 @@ class BuyController extends Controller
             'totalAvailableSize', 
             'remainingAvailableSize',
             'percentageUsed',
-            'totalAssetsSum'
+            'totalAssetsSum',
+            'totalPriceSum'
         ));
     }
 
