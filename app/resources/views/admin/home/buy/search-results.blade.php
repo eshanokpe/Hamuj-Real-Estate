@@ -191,6 +191,8 @@
                 <td colspan="4" class="text-end">
                     <strong>TOTALS:</strong>
                 </td>
+                 <td class="text-primary">
+                </td>
                 <td class="text-primary">
                     <span class="d-flex align-items-center">
                         <i class="las la-calculator me-2"></i>
