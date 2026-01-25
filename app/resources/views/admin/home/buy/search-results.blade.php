@@ -243,7 +243,7 @@
                         </div>
                     </div>
                     
-                    <span class="d-flex align-items-center justify-content-between">
+                    {{-- <span class="d-flex align-items-center justify-content-between">
                         <span class="text-success">
                             <i class="las la-chart-pie me-1"></i>
                             {{ number_format($remainingAvailableSize, 0) }} SQM
@@ -251,8 +251,8 @@
                         <span class="badge bg-info">
                             {{ 100 - $percentageUsed }}%
                         </span>
-                    </span>
-                    <small class="text-muted d-block">Remaining from {{ number_format($totalAvailableSize, 0) }} SQM</small>
+                    </span> --}}
+                    {{-- <small class="text-muted d-block">Remaining from {{ number_format($totalAvailableSize, 0) }} SQM</small> --}}
                 </td>
                 <td colspan="5"> 
                     <div class="d-flex flex-column">
