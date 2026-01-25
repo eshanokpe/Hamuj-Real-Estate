@@ -225,6 +225,22 @@
                 </td>
                 <td></td>
                 <td class="text-primary">
+                    <!-- Add this card to your summary cards row -->
+                    <div class="card border-purple">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted mb-1">Total Assets</h6>
+                                    <h3 class="text-purple mb-0">₦{{ number_format($totalAssetsSum, 2) }}</h3>
+                                </div>
+                                <div class="avatar-sm">
+                                    <div class="avatar-title bg-purple-subtle rounded-circle">
+                                        <i class="las la-wallet text-purple fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <span class="d-flex align-items-center">
                         <i class="las la-money-bill-wave me-2"></i>
                         ₦{{ number_format($totalPriceSum ?? 0, 2) }}
