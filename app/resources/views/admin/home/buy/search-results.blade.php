@@ -223,6 +223,13 @@
                         {{ number_format($totalSelectedSize, 2) }} SQM
                     </span>
                 </td>
+                <td class="text-primary">
+                        <span class="d-flex align-items-center">
+                            <i class="las la-money-bill-wave me-2"></i>
+                            ₦{{ number_format($totalPriceSum ?? 0, 2) }}
+                        </span>
+                        <small class="text-muted d-block">Total Price Sum</small>
+                </td>
                 <td>
                     <div class="progress mb-2" style="height: 8px;">
                         <div class="progress-bar bg-success" role="progressbar" 
@@ -264,6 +271,9 @@
                             </span>
                         </div>
                     </div>
+                </td>
+                <td>
+                   
                 </td>
             </tr>
         </tfoot>
