@@ -58,9 +58,9 @@
                             <i class="las la-search text-success ms-1" title="Match found in property name"></i>
                         @endif
                     </td>
-                    <td>{{ number_format($buy->selected_size_land, 2) }} SQM</td>
+                    <td>{{ ($buy->selected_size_land) }} SQM</td>
                     <td>
-                        @1if($buy->remaining_size > 0)
+                        @if($buy->remaining_size > 0)
                             <span class="badge bg-success">{{ $buy->remaining_size }} SQM</span>
                         @else
                             <span class="badge bg-danger">Sold Out</span>
