@@ -20,11 +20,11 @@
                         <div class="row">
                             <div class="col-2"></div>
                             <div class="setting__profile edit-profile">
-                                <div class="col-8">
+                                <div class="col-12">
                                     <form action="{{ route('user.profile.update', Auth::user()->id) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
-                                        <div class="edit__profile--step">
+                                        <div class="edit__profile--step" >
                                             <h3 class="setting__profile--title">My Profile</h3>
                                             <div class="setting__profile--author d-flex align-items-center">
                                                 <div class="setting__profile--author__thumb">
@@ -57,9 +57,9 @@
                                                 }
 
                                             </script>
-                                            <div class="setting__profile--inner">
+                                            <div class="setting__profile--inner w-100" >
                                                 <!-- Name Input -->
-                                                <div class="add__listing--input__box mb-20">
+                                                <div class="add__listing--input__box mb-20 w-100">
                                                     <label class="add__listing--input__label" for="name">Last name</label>
                                                     <input 
                                                         class="add__listing--input__field" 

@@ -103,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4"> 
                     <div class="card border-success">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
@@ -127,7 +127,7 @@
                                 <div> 
                                     <h6 class="text-muted mb-1">Remaining</h6>
                                     <h3 class="text-info mb-0">{{ number_format($remainingAvailableSize, 1) }} SQM</h3>
-                                </div>
+                                </div> 
                                 <div class="avatar-sm"> 
                                     <div class="avatar-title bg-info-subtle rounded-circle">
                                         <i class="las la-layer-group text-info fs-4"></i>
@@ -137,30 +137,6 @@
                         </div>
                     </div>
                 </div>
-                {{-- <div class="col-md-3">
-                    <div class="card border-warning">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="text-muted mb-1">Utilization Rate</h6>
-                                    <h3 class="text-warning mb-0">{{ $percentageUsed ?? 0 }}%</h3>
-                                </div>
-                                <div class="avatar-sm">
-                                    <div class="avatar-title bg-warning-subtle rounded-circle">
-                                        <i class="las la-chart-pie text-warning fs-4"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="progress mt-3" style="height: 6px;">
-                                <div class="progress-bar bg-warning" role="progressbar" 
-                                     style="width: {{ $percentageUsed ?? 0 }}%" 
-                                     aria-valuenow="{{ $percentageUsed ?? 0 }}" 
-                                     aria-valuemin="0" 
-                                     aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
 
             <!-- Property Purchases List -->

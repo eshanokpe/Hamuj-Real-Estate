@@ -271,21 +271,30 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="pinModalLabel">Verify Transaction PIN</h5>
+                <h3 class="modal-title" id="pinModalLabel"><b>Verify Transaction PIN</b></h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Please enter your 4-digit transaction PIN to confirm the property sale.</p>
-                <div class="mb-3">
+                <p class="text-center"><b>Please enter your 4-digit transaction PIN to confirm the property sale.</b></p>
+                <div class="mb-3"> 
                     <label for="transaction_pin" class="form-label">Transaction PIN</label>
-                    <input type="password" class="form-control" id="transaction_pin" placeholder="Enter 4-digit PIN" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+                    <input type="password" 
+                    style="padding: 10px 10px;"
+                    class="form-control" id="transaction_pin" placeholder="Enter 4-digit PIN" maxlength="4" inputmode="numeric" pattern="[0-9]*">
                     <div id="pinError" class="text-danger mt-1" style="display: none;"></div>
                     <div id="pinAttempts" class="text-warning mt-1" style="display: none;"></div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="confirmPin">Confirm & Submit</button>
+                <button 
+                    type="button" 
+                    style="background-color: white; color: black; border: 1px solid gray;"
+                    class="solid__btn" 
+                    data-bs-dismiss="modal"
+                >
+                    Cancel
+                </button>
+                <button type="button" class="solid__btn" id="confirmPin">Confirm & Submit</button>
             </div>
         </div>
     </div>

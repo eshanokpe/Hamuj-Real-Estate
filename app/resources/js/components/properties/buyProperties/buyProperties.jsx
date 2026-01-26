@@ -51,6 +51,7 @@ const BuyProperties = () => {
     const [transactionPin, setTransactionPin] = useState('');
     const [paymentProcessing, setPaymentProcessing] = useState(false);
     const [amountError, setAmountError] = useState('');
+    const [paymentSuccess, setPaymentSuccess] = useState(false); // NEW STATE
     const revolutCheckoutRef = useRef(null);
 
     const MINIMUM_AMOUNT = 1000;
@@ -314,12 +315,22 @@ const BuyProperties = () => {
             
             if (response.data.success) {
                 if (paymentMethod === 'wallet') {
-                    window.location.href = '/user/dashboard';
+                    try {
+                        // Try to redirect to Laravel dashboard
+                        window.location.href = '/user/dashboard';
+                        // If redirect fails, fallback to showing success component
+                        setTimeout(() => {
+                            setPaymentSuccess(true);
+                        }, 1000);
+                    } catch (err) {
+                        console.error('Redirect failed:', err);
+                        setPaymentSuccess(true);
+                    }
                 } else if (paymentMethod === 'card' && response.data.public_id) {
                     await initializeRevolutPayment(response.data.public_id);
-                } else {
-                    // Fallback redirect
-                    window.location.href = '/user/dashboard';
+                } else { 
+                    // Fallback - show success component
+                    setPaymentSuccess(true);
                 }
             } else {
                 throw new Error(response.data.message || 'Payment failed');
@@ -337,6 +348,11 @@ const BuyProperties = () => {
     if (loading) return <div className="text-center py-5">Loading property details...</div>;
     if (error) return <div className="alert alert-danger">{error}</div>;
     if (!property) return <div className="alert alert-warning">No property found</div>;
+
+    // Show PaymentSuccess component if payment was successful
+    if (paymentSuccess) {
+        return <PaymentSuccess />;
+    }
 
     const pricePerSqm = property.valuationSummary?.current_value_sum || property.price;
     const amount = parseFloat(inputAmount) || 0;
@@ -609,6 +625,7 @@ const BuyProperties = () => {
                                                         </label>
                                                         <input
                                                             type="password"
+                                                            style={{padding: '10px 10px'}}
                                                             className="form-control"
                                                             id="transaction_pin"
                                                             maxLength="4"
@@ -623,7 +640,8 @@ const BuyProperties = () => {
                                                     <div className="d-flex justify-content-between mt-3">
                                                         <button 
                                                             type="button" 
-                                                            className="btn btn-outline-secondary"
+                                                            style={{backgroundColor:'white', color:'black', border: '1px solid gray'}}
+                                                            className="solid__btn"
                                                             onClick={() => {
                                                                 setPaymentMethod(null);
                                                                 setTransactionPin('');
@@ -633,7 +651,7 @@ const BuyProperties = () => {
                                                         </button>
                                                         <button 
                                                             type="button" 
-                                                            className="solid__btn"
+                                                            className="solid__btn "
                                                             onClick={handleConfirmPayment}
                                                             disabled={paymentProcessing}
                                                         >
@@ -791,6 +809,9 @@ const IndexPage = () => {
     );
 };
 
+// Dashboard Component (remove the old one since we're not using it in routes)
+const Dashboard = () => null;
+
 // Main App Component
 const App = () => (
     <BrowserRouter basename="/user/cart">
@@ -798,6 +819,8 @@ const App = () => (
             <Route index element={<IndexPage />} />
             <Route path=":slug" element={<BuyProperties />} />
             <Route path="success" element={<PaymentSuccess />} />
+            {/* You can keep or remove the dashboard route since we're handling it differently */}
+            {/* <Route path="dashboard" element={<Dashboard />} /> */}
         </Routes>
     </BrowserRouter>
 );
@@ -807,4 +830,16 @@ const rootEl = document.getElementById('buyProperties');
 if (rootEl) {
     const root = ReactDOM.createRoot(rootEl);
     root.render(<App />);
+}
+
+// EXPORT STATEMENTS FOR REACT FAST REFRESH
+// Export individual components
+export { PaymentSuccess, IndexPage, App, BuyProperties };
+
+// Export BuyProperties as default (prevents Fast Refresh error)
+export default BuyProperties;
+
+// Add module hot accept for development
+if (import.meta.hot) {
+    import.meta.hot.accept();
 }

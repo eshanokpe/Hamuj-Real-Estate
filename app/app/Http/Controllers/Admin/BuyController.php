@@ -65,7 +65,7 @@ class BuyController extends Controller
                 });
         })
         ->sum('selected_size_land');
-        
+         
 
         $totalAvailableSize = 11057; // Your fixed total available size
         $remainingAvailableSize = $totalAvailableSize - $totalSelectedSize;
@@ -87,6 +87,9 @@ class BuyController extends Controller
             return $this->applySearchFilters($query, $search);
         })->sum('total_price');
 
+        // Calculate totalAssetsSum - sum of unique user assets on current page
+        $currentPageTotalAssets = array_sum($userAssets);
+
         // Pass these to the view
          return view('admin.home.buy.index', compact(
             'buys', 
@@ -96,7 +99,7 @@ class BuyController extends Controller
             'remainingAvailableSize',
             'percentageUsed',
             'totalAssetsSum',
-            'totalPriceSum'
+            'totalPriceSum',
         ));
     }
 

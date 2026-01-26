@@ -339,8 +339,7 @@
                                                 <th>Year sold</th>
                                                 <th style="padding-left: 20px">Sale price</th>
                                             </thead> 
-                                            <tbody class="timeline mt-10" >
-                                                {{-- @forelse ($property->priceUpdates as $item) --}}
+                                            <tbody class=" mt-10" >
                                                 @forelse ($property->priceUpdates->sortByDesc('created_at') as $item)
                                                     <tr class="mt-5" > 
                                                         <div class="">
@@ -396,7 +395,7 @@
                                 <div class="widget__featured--items d-flex">
                                     <div class="widget__featured--thumb">
                                         <a class="widget__featured--thumb__link" href="{{ route('home.properties.show',  $recentProperty->slug ) }}">
-                                            <img style="max-width: 100%; max-height: 100%;  width: 96%; height: 86%; object-fit: cover;"
+                                            <img style="max-width: 100%; max-height: 100%;  width: 30%;  object-fit: cover;"
                                             class="widget__featured--media" src="{{asset($recentProperty->property_images)}}" alt="img">
                                         </a>
                                     </div>

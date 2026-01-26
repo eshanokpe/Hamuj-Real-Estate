@@ -38,9 +38,10 @@ use App\Http\Controllers\User\Wallet\BeneficiaryController;
 
 Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
 
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
     Route::post('/revolut-payment/make', [OrderController::class, 'makePayment'])->name('revolutPayment.make');
       
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/transactions', [DashboardController::class, 'transactionReport'])->name('transactions');
 
     Route::get('/transaction/report', [TransactionController::class, 'index'])->name('transactions.index');

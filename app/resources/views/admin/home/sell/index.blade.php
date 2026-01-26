@@ -13,7 +13,7 @@
                         <h4 class="page-title">Sold Properties</h4>
                     </div>
                 </div>
-            </div>
+            </div> 
 
             <!-- Success/Error Messages -->
             @if(session('success'))
@@ -33,7 +33,111 @@
             @endif
 
             <!-- Search Box and other existing content -->
-            <!-- ... your existing search box code ... -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <form id="searchForm" action="{{ route('admin.sell.index') }}" method="GET" class="row g-3">
+                                <div class="col-lg-10 col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="las la-search"></i>
+                                        </span>
+                                        <input type="text" 
+                                               name="search" 
+                                               id="searchInput"
+                                               class="form-control border-start-0" 
+                                               placeholder="Search by user name, email, property name, size, price, or status..." 
+                                               value="{{ $search ?? '' }}"
+                                               autocomplete="off">
+                                        <span id="searchLoading" class="input-group-text d-none">
+                                            <div class="spinner-border spinner-border-sm" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3">
+                                    <div class="d-grid gap-2 d-md-flex">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="las la-search me-1"></i> Search
+                                        </button>
+                                        @if($search)
+                                            <a href="{{ route('admin.buy.index') }}" class="btn btn-outline-secondary">
+                                                <i class="las la-times me-1"></i> Clear
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            @if($search)
+                                <div class="mt-3">
+                                    <p class="text-muted mb-0">
+                                        Search results for: <strong>"{{ $search }}"</strong>
+                                        <span class="badge bg-primary ms-2">{{ $buys->total() }} result(s) found</span>
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted mb-1">Total Selected</h6>
+                                    <h3 class="text-primary mb-0">{{ number_format($totalSelectedSize ?? 0, 2) }} SQM</h3>
+                                </div>
+                                <div class="avatar-sm">
+                                    <div class="avatar-title bg-primary-subtle rounded-circle">
+                                        <i class="las la-ruler-combined text-primary fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4"> 
+                    <div class="card border-success">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted mb-1">Total Available</h6>
+                                    <h3 class="text-success mb-0">{{ number_format($totalAvailableSize ?? 11057, 0) }} SQM</h3>
+                                </div>
+                                <div class="avatar-sm">
+                                    <div class="avatar-title bg-success-subtle rounded-circle">
+                                        <i class="las la-vector-square text-success fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-info">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div> 
+                                    <h6 class="text-muted mb-1">Remaining</h6>
+                                    <h3 class="text-info mb-0">{{ number_format($remainingAvailableSize, 1) }} SQM</h3>
+                                </div> 
+                                <div class="avatar-sm"> 
+                                    <div class="avatar-title bg-info-subtle rounded-circle">
+                                        <i class="las la-layer-group text-info fs-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Sold Properties List -->
             <div class="row">
@@ -63,7 +167,7 @@
                                             <th>Sold Size</th>
                                             <th>Available Size</th>
                                             <th>Sale Price</th>
-                                            <th>Wallet Impact</th>
+                                            {{-- <th>Wallet Impact</th> --}}
                                             <th>Status</th>
                                             <th>Date</th>
                                             <th class="text-end">Actions</th>
@@ -87,9 +191,9 @@
                                                     </span>
                                                 </td>
                                                 <td>{{ $sell->property->name }}</td>
-                                                <td>{{ number_format($sell->selected_size_land, 5) }} SQM</td>
+                                                <td>{{ number_format($sell->selected_size_land, 2) }} SQM</td>
                                                 <td>{{ number_format($sell->available_size ?? 'N/A', 2) }} SQM</td>
-                                                <td>₦{{ number_format($sell->total_price, 2) }}</td>
+                                                {{-- <td>₦{{ number_format($sell->total_price, 2) }}</td> --}}
                                                 <td>
                                                     <span class="badge bg-danger">
                                                         <i class="las la-minus-circle me-1"></i>
@@ -176,6 +280,62 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="w-100">
+                                            <div class="card border-purple">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <h4 class="text-purple mb-0">₦{{ number_format($totalAssetsSum, 2) }}</h4>
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted mb-1">Total Assets</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                        <td class="w-100">
+                                            <div class="card border-purple">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <h4 class="text-purple mb-0">{{ number_format($totalSelectedSize, 2) }} SQM</h4>
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted mb-1">Sold Size</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td></td>
+                                        {{-- <td class="w-100">
+                                            <div class="card border-purple">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <h4 class="text-purple mb-0">₦{{ number_format($totalPriceSum, 2) }}</h4>
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted mb-1">Total Price</small>
+                                                </div>
+                                            </div>
+                                        </td> --}}
+                                        <td class="w-100">
+                                            <div class="card border-purple">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <h4 class="text-purple mb-0">₦{{ number_format($totalPriceSum, 2) }}</h4>
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted mb-1">Total Wallet </small>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    </tfoot>
                                 </table>
                             </div>
 

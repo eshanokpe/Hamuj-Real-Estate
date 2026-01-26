@@ -6,45 +6,65 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Property;
-use App\Models\Wallet;
+use App\Models\Wallet; 
 use App\Models\Sell;
 Use DB;
 
 class SellController extends Controller
 {
     public function index(Request $request)
-    { 
-        $search = $request->input('search');
+{ 
+    $search = $request->input('search');
+    
+    $sells = Sell::with(['user', 'property', 'user.wallet'])
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->whereHas('user', function ($userQuery) use ($search) {
+                        $userQuery->where('first_name', 'like', "%{$search}%")
+                                ->orWhere('last_name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('property', function ($propertyQuery) use ($search) {
+                        $propertyQuery->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhere('user_email', 'like', "%{$search}%")
+                    ->orWhere('selected_size_land', 'like', "%{$search}%")
+                    ->orWhere('remaining_size', 'like', "%{$search}%")
+                    ->orWhere('total_price', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(20)
+            ->appends(['search' => $search]);
+    
+    // Calculate total assets for each user
+    $userAssets = []; // Track user assets to avoid recalculating
+    foreach ($sells as $sell) {
+        $userId = $sell->user->id;
         
-        $sells = Sell::with(['user', 'property', 'user.wallet'])
-                ->when($search, function ($query, $search) {
-                    return $query->where(function ($q) use ($search) {
-                        $q->whereHas('user', function ($userQuery) use ($search) {
-                            $userQuery->where('first_name', 'like', "%{$search}%")
-                                    ->orWhere('last_name', 'like', "%{$search}%")
-                                    ->orWhere('email', 'like', "%{$search}%");
-                        })
-                        ->orWhereHas('property', function ($propertyQuery) use ($search) {
-                            $propertyQuery->where('name', 'like', "%{$search}%");
-                        })
-                        ->orWhere('user_email', 'like', "%{$search}%")
-                        ->orWhere('selected_size_land', 'like', "%{$search}%")
-                        ->orWhere('remaining_size', 'like', "%{$search}%")
-                        ->orWhere('total_price', 'like', "%{$search}%")
-                        ->orWhere('status', 'like', "%{$search}%");
-                    });
-                })
-                ->latest()
-                ->paginate(20)
-                ->appends(['search' => $search]);
-        
-        // Calculate total assets for each user
-        foreach ($sells as $sell) {
-            $sell->user->total_assets = $this->calculateUserTotalAssets($sell->user);
+        // Calculate only once per user
+        if (!isset($userAssets[$userId])) {
+            $userAssets[$userId] = $this->calculateUserTotalAssets($sell->user);
         }
         
-        return view('admin.home.sell.index', compact('sells','search'));
+        $sell->user->total_assets = $userAssets[$userId];
+        $sell->transaction_count = Transaction::where('id', $sell->transaction_id)->count();
     }
+    
+    // Calculate totalSelectedSize 
+    $totalSelectedSize = Sell::sum('selected_size_land');
+    
+    // Calculate totalPriceSum 
+    $totalPriceSum = Sell::sum('total_price');
+    
+    // Calculate totalAssetsSum - sum of unique user assets
+    $totalAssetsSum = array_sum($userAssets);
+    
+    return view('admin.home.sell.index', compact(
+        'sells', 'search', 'totalSelectedSize', 'totalAssetsSum', 'totalPriceSum'
+    ));
+}
 
     /**
      * AJAX search for real-time results
