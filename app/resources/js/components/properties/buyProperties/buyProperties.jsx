@@ -633,7 +633,7 @@ const BuyProperties = () => {
                                                         </button>
                                                         <button 
                                                             type="button" 
-                                                            className="btn btn-primary"
+                                                            className="solid__btn"
                                                             onClick={handleConfirmPayment}
                                                             disabled={paymentProcessing}
                                                         >
