@@ -159,7 +159,7 @@
                                 <table class="table table-striped align-middle mb-0">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>#</th>
+                                            <th>#</th> 
                                             <th>User Full Name</th>
                                             <th>User Email</th>
                                             <th>Total Assets</th>

@@ -13,7 +13,7 @@
 .env.production
 
 # Testing & debug
-.phpunit.result.cache
+.phpunit.result.cache 
 npm-debug.log
 yarn-error.log
 
