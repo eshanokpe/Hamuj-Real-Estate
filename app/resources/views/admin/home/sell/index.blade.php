@@ -158,7 +158,7 @@
                             <div class="table-responsive">
                                 <table class="table table-striped align-middle mb-0">
                                     <thead class="table-light">
-                                        <tr>
+                                        <tr> 
                                             <th>#</th> 
                                             <th>User Full Name</th>
                                             <th>User Email</th>
