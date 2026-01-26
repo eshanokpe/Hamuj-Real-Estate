@@ -13,7 +13,7 @@ const PaymentSuccess = () => {
                 <p>Your transaction has been completed successfully.</p>
                 <a href="/user/dashboard" className="btn btn-primary">Return to Dashboard</a>
             </div>
-        </div>
+        </div> 
     );
 };
 
