@@ -20,7 +20,7 @@ export default defineConfig({
         react(),
     ],
     build: {
-        manifest: true, // This generates manifest.json
+        manifest: true, 
         outDir: 'public/build',
         rollupOptions: {
             output: {
