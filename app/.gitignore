@@ -27,5 +27,3 @@ auth.json
 /.idea
 /.vscode
 
-# Add this line - Vite/Laravel Mix build directory
-/public/build/
