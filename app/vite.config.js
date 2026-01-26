@@ -19,4 +19,15 @@ export default defineConfig({
         }),
         react(),
     ],
+    build: {
+        manifest: true, // This generates manifest.json
+        outDir: 'public/build',
+        rollupOptions: {
+            output: {
+                entryFileNames: 'assets/[name]-[hash].js',
+                chunkFileNames: 'assets/[name]-[hash].js',
+                assetFileNames: 'assets/[name]-[hash].[ext]'
+            }
+        }
+    },
 });
