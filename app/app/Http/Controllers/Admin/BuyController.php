@@ -87,8 +87,7 @@ class BuyController extends Controller
             return $this->applySearchFilters($query, $search);
         })->sum('total_price');
 
-        // Calculate totalAssetsSum - sum of unique user assets on current page
-        $currentPageTotalAssets = array_sum($userAssets);
+        
 
         // Pass these to the view
          return view('admin.home.buy.index', compact(
