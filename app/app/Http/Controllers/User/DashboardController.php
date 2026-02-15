@@ -13,7 +13,7 @@ use App\Models\Neighborhood;
 use App\Models\Property;
 use App\Models\Transaction;
 use App\Http\Controllers\Controller;
-
+ 
 
 class DashboardController extends Controller
 { 
