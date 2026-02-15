@@ -11,7 +11,7 @@
                 onchange="toggleHideBalance(this)"
                 >
         </div>
-    </a>
+    </a> 
     <!-- Wallet Display -->
     <div class="wallet-dropdown-container position-relative">
         <button class="wallet-balance-display d-flex align-items-center bg-transparent border-0 p-0"
@@ -24,7 +24,7 @@
                     ••••
                 @else
                     @php
-                        $wallet = Auth::user()->wallet ?? null;
+                        $wallet = Auth::user()->wallet ?? null;  
                         $balance = $wallet ? ($wallet->gbp_balance ?? $wallet->balance ?? 0) : 0;
                         $currency = $wallet ? ($wallet->currency ?? 'GBP') : 'GBP';
                         $formattedBalance = number_format($balance, 2);
