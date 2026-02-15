@@ -70,7 +70,7 @@ class DashboardController extends Controller
             return response()->json([
                 'referralsMade' => $data['referralsMade'],
                 'hasMoreReferrals' => $data['hasMoreReferrals'],
-                'balance' => $data['balance'],  
+                'balance' => $balance,  
                 'totalAmount' => $data['totalWalletAmount'],  
                 'totalPropertyAmount' => $data['totalPropertyAmount'],
                 'totalAssets' => $data['totalTransactionsAssets'],
