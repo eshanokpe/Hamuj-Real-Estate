@@ -71,7 +71,7 @@ class DashboardController extends Controller
                 'referralsMade' => $data['referralsMade'],
                 'hasMoreReferrals' => $data['hasMoreReferrals'],
                 'walletBalance' => $balance,  
-                'totalAmount' => $data['totalWalletAmount'],  
+                'totalAmount' => $data['totalPropertyAmount'],  
                 'totalPropertyAmount' => $data['totalPropertyAmount'],
                 'totalAssets' => $data['totalTransactionsAssets'],
                 'transactions' => $data['transactions'],
