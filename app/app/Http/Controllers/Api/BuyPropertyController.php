@@ -132,6 +132,7 @@ class BuyPropertyController extends Controller
         }
     
         return $this->successResponse([
+            "status" => "success",
             'message' => 'Payment successful',
             'transaction_reference' => $reference,
             'remaining_balance' => $wallet->balance,
