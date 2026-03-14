@@ -63,32 +63,32 @@ class SellPropertyController extends Controller
             'amount' => $request->amount,
             'total_price' => $request->total_price,
         ]);
-        // $request->validate([ 
-        //     'acquired_size_land' => 'required',
-        //     'remaining_size' => 'required',
-        //     'available_size' => 'required',
-        //     'property_slug' => 'required',
-        //     'calculated_size' => 'required',
-        //     'amount' => 'required',
-        //     'total_price' => 'required|numeric|min:1',
-        // ]);
+        $request->validate([ 
+            'acquired_size_land' => 'required',
+            'remaining_size' => 'required',
+            'available_size' => 'required',
+            'property_slug' => 'required',
+            'calculated_size' => 'required',
+            'amount' => 'required',
+            'total_price' => 'required|numeric|min:1',
+        ]);
          
-        // $user = Auth::user();
-        // $propertySlug = $request->input('property_slug');
-        // $property = Property::where('slug', $propertySlug)->first();
+        $user = Auth::user();
+        $propertySlug = $request->input('property_slug');
+        $property = Property::where('slug', $propertySlug)->first();
         
-        // // Check if the property exists
-        // if (!$property) {
-        //     return back()->with('error', 'Property not found.');
-        // }
+        // Check if the property exists
+        if (!$property) {
+            return back()->with('error', 'Property not found.');
+        }
 
-        // // Generate a unique transaction reference
-        // $reference = 'SELLDOHREF-' . time() . '-' . strtoupper(Str::random(8));
+        // Generate a unique transaction reference
+        $reference = 'SELLDOHREF-' . time() . '-' . strtoupper(Str::random(8));
 
-        // $selectedSizeLand = $request->input('calculated_size');
-        // $remainingSize = $request->input('remaining_size');
-        // $availableSize = $request->input('available_size');
-        // $amount = $request->input('total_price');
+        $selectedSizeLand = $request->input('calculated_size');
+        $remainingSize = $request->input('remaining_size');
+        $availableSize = $request->input('available_size');
+        $amount = $request->input('total_price');
 
         $propertyId = $property->id;
         $propertyName = $property->name;
