@@ -50,15 +50,28 @@ class SellPropertyController extends Controller
 
     public function sellProperty(Request $request)
     {
-        $request->validate([ 
-            'acquired_size_land' => 'required',
-            'remaining_size' => 'required',
-            'available_size' => 'required',
-            'property_slug' => 'required',
-            'calculated_size' => 'required',
-            'amount' => 'required',
-            'total_price' => 'required|numeric|min:1',
+         // Log all request data
+        \Log::info('Request Data:', $request->all());
+        
+        // Log specific fields for clarity
+        \Log::info('Sell Property Details:', [
+            'acquired_size_land' => $request->acquired_size_land,
+            'remaining_size' => $request->remaining_size,
+            'available_size' => $request->available_size,
+            'property_slug' => $request->property_slug,
+            'calculated_size' => $request->calculated_size,
+            'amount' => $request->amount,
+            'total_price' => $request->total_price,
         ]);
+        // $request->validate([ 
+        //     'acquired_size_land' => 'required',
+        //     'remaining_size' => 'required',
+        //     'available_size' => 'required',
+        //     'property_slug' => 'required',
+        //     'calculated_size' => 'required',
+        //     'amount' => 'required',
+        //     'total_price' => 'required|numeric|min:1',
+        // ]);
          
         $user = Auth::user();
         $propertySlug = $request->input('property_slug');
