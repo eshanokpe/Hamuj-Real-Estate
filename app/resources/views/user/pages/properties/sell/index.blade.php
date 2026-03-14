@@ -8,7 +8,7 @@
             overflow-x: visible;
         }
         
-        .properties__table--wrapper {
+        .properties__table--wrapper { 
             width: 100%;
             border-collapse: collapse;
         }
@@ -132,7 +132,7 @@
 <div class="page__body--wrapper" id="dashbody__page--body__wrapper">
 
     <main class="main__content_wrapper">
-        <!-- dashboard container -->
+        <!-- dashboard container --> 
         <div class="dashboard__container dashboard__reviews--container">
             <div class="reviews__heading mb-30">
                 <h2 class="reviews__heading--title">Sell Property</h2>
