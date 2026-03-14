@@ -17,7 +17,7 @@ class WalletController extends Controller
        
         return response()->json([
             'success' => true,
-            'balance' => $walletBalance,
+            'data' => $walletBalance,
         ]);
     } 
 
