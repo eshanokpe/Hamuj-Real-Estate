@@ -19,7 +19,7 @@ class WalletController extends Controller
             'success' => true,
             'balance' => $walletBalance,
         ]);
-    }
+    } 
 
     public function deductBalance(Request $request)
     {
