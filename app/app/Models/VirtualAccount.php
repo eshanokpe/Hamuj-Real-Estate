@@ -12,7 +12,7 @@ class VirtualAccount extends Model
     protected $fillable = [
         'id',
         'user_id',
-        'user_email',
+        'user_email', 
         'bank_name', 
         'account_name',
         'account_number',
