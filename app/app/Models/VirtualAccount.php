@@ -20,7 +20,7 @@ class VirtualAccount extends Model
         'customer_code',
         'is_active',
     ];
-
+ 
     public function user()
     {
         return $this->belongsTo(User::class);

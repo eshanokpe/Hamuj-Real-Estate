@@ -123,7 +123,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('get/daily-transfer-total', [WalletController::class, 'dailyTransferTotal']);
     //Referral
     Route::get('get/referral', [ReferralController::class, 'index']); 
-
+ 
     Route::get('/get/userProfile', [ProfileController::class, 'index']);
     Route::post('/update/profile', [ProfileController::class, 'update']);
     Route::get('/verify-token', [ProfileController::class, 'verifyToken']);
