@@ -181,7 +181,7 @@ class DashboardController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => $faqs,
+            'data' => $virtualAccount,
         ], 200);
     }
 
