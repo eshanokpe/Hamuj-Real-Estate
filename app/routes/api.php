@@ -96,7 +96,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/wallet/balance', [APIWalletController::class, 'getBalance']);
     Route::post('/wallet/deduct', [APIWalletController::class, 'deductBalance']);
     Route::get('/get/assets', [DashboardController::class, 'index']);
-    Route::get('/get/faqs', [DashboardController::class, 'faqs']);
+    Route::get('/faqs', [DashboardController::class, 'faqs']);
   
     Route::post('/transactions', [APITransactionController::class, 'store']);
     Route::post('/buy/properties', [BuyPropertyController::class, 'walletPayment']);
