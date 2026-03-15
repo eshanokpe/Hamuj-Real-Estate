@@ -147,9 +147,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/biometric-support', [AuthMethodController::class, 'checkBiometricSupport']);
     });      
 
-    Route::prefix('about')->group(function () {
-        Route::get('/index', [HelpSupportController::class, 'contactSupport']);
-    }); 
+    
+    Route::get('/about-us', [HelpSupportController::class, 'contactSupport']);
+  
   
     Route::get('/user-status/{id}', [DashboardController::class, 'checkStatus']);
 
