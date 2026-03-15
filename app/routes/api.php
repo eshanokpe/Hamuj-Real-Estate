@@ -152,6 +152,7 @@ Route::middleware('auth:sanctum')->group(function () {
   
   
     Route::get('/user-status/{id}', [DashboardController::class, 'checkStatus']);
+    Route::get('/virtual-account', [DashboardController::class, 'virtualAccount']);
 
     // Example of other protected routes
     // Route::post('/webhook/paystack', [WebhookController::class, 'handlePaystackWebhook']);
