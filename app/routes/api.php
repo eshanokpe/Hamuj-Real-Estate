@@ -122,7 +122,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('wallet/transactions', [WalletController::class, 'paymentHistory']);
     Route::get('get/daily-transfer-total', [WalletController::class, 'dailyTransferTotal']);
     //Referral
-    Route::get('get/referral', [ReferralController::class, 'index']); 
+    Route::get('referral/data', [ReferralController::class, 'index']); 
  
     Route::get('/get/userProfile', [ProfileController::class, 'index']);
     Route::post('/update/profile', [ProfileController::class, 'update']);
