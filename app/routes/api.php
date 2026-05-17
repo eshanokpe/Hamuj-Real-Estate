@@ -112,7 +112,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/{userId}/transaction/get/pin', [SecurityController::class, 'getTransactionPin']);
     Route::put('/{id}/transaction/verify_pin', [SecurityController::class, 'verifyTransactionPin']);
     Route::put('/{id}/transaction/verify_otp_pin', [SecurityController::class, 'verifyOTP']);
-    Route::put('/{id}/transaction/resend-pin', [SecurityController::class, 'resendOTP']);
+    Route::put('/{id}/transaction/resend-otp', [SecurityController::class, 'resendOTP']);
     Route::post('/{id}/transaction/reset-pin', [SecurityController::class, 'resetTransactionPin']);
    
    
