@@ -139,10 +139,10 @@ class TransferPropertyController extends Controller
             return back()->with('error', 'Transfer failed: ' . $e->getMessage());
         }
     }
-      
+
 
     public function verifyRecipient(Request $request){
-        // dd('verifyRecipient');
+       
         if(!Auth::user()){
             return redirect()->route('login');
         }
@@ -242,16 +242,12 @@ class TransferPropertyController extends Controller
             );
         }
         
-      
-
         $user = Auth::user();
 
         $sendWallet = Wallet::where('user_id', $user->id)->first();
         // Ensure sender has enough balance
         if ($sendWallet->balance < ($request->input('amount') / 100)) {
-
             return redirect()->back()->with(['error' => 'Insufficient wallet balance']);
-
         }
 
         $propertyId = $request->input('property_id');

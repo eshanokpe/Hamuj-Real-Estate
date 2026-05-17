@@ -75,17 +75,13 @@ class TransferPropertyController extends Controller
                 422                             
             );
         }
-        
-      
 
         $user = Auth::user();
 
         $sendWallet = Wallet::where('user_id', $user->id)->first();
         // Ensure sender has enough balance
         if ($sendWallet->balance < ($request->input('amount') / 100)) {
-
             return redirect()->back()->with(['error' => 'Insufficient wallet balance']);
-
         }
 
         $propertyId = $request->input('property_id');
@@ -133,8 +129,13 @@ class TransferPropertyController extends Controller
                 ->where('user_email', $user->email)
                 ->where('property_id', $propertyId)
                 ->sum('selected_size_land');
+            // Round both values to 4 decimal places (matching 0.0144 precision)
+            $roundedTotalLand = round($totalLand, 4);
+            $roundedLandSize = round($landSize, 4);
 
-            if ($totalLand < $landSize) {
+            Log::warning("totalLand: {$totalLand}, landSize: {$landSize}, roundedTotalLand: {$roundedTotalLand}, roundedLandSize: {$roundedLandSize}");
+
+            if ($roundedTotalLand < $roundedLandSize) {
                 return $this->sendResponse($request, 'error', 'Insufficient land size available for transfer.', false);
             }
 
