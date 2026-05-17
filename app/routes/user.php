@@ -59,12 +59,6 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     Route::get('/transfer/recipient', [TransferPropertyController::class, 'transferRecipient'])->name('transfer.recipient');
 
     Route::post('/transfer/recipient/initiate', [TransferPropertyController::class, 'checkRecipientTransfer'])->name('checkRecipient.transfer');
-      
-    // Route::post('/transfer/verify/recipient', [TransferPropertyController::class, 'verifyRecipient'])->name('transfer.checkRecipient');
-    
-    // Route::get('/transfer/verify/recipient', function () { 
-    //     return redirect()->back();
-    // }); 
     
     Route::match(['get', 'post'], '/transfer/verify/recipient', [TransferPropertyController::class, 'handleRecipientVerification'])->name('transfer.checkRecipient');
     

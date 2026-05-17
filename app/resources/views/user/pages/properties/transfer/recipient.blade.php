@@ -15,7 +15,7 @@
                     <div class="properties__table table-responsive">
                         <table class="properties__table--wrapper cart__table">
                             <thead>
-                                <tr>
+                                <tr> 
                                     <th>Product Image</th>
                                     <th>Price</th>
                                     <th>Acquired Size</th>

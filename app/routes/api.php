@@ -73,14 +73,14 @@ Route::middleware('auth:sanctum')->group(function () {
      
     Route::get('/properties', [PropertyController::class, 'index']);
     Route::get('/buy/assets', [PropertyController::class, 'buy']);
-    
+
     Route::get('/sell/assets', [SellPropertyController::class, 'index']); 
     Route::post('/sell/assets/request', [SellPropertyController::class, 'sellProperty']);
     Route::get('/sell/histories', [SellPropertyController::class, 'sellPropertyHistory']);
  
     Route::get('/transfer/assets', [TransferPropertyController::class, 'index']);
     Route::post('/transfer/initiate', [TransferPropertyController::class, 'transferRecipient']);
-    Route::post('/recipient/verify', [TransferPropertyController::class, 'verifyRecipient']);
+    Route::post('/transfer/recipient/verify', [TransferPropertyController::class, 'verifyRecipient']);
 
     Route::get('/transfer/assets/details/{id}', [APITransferPropertyController::class, 'transferDetails']);
     Route::post('/transfer/recipient/initiate', [APITransferPropertyController::class, 'checkRecipientTransfer']);
