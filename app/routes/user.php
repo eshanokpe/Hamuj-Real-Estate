@@ -23,7 +23,7 @@ use App\Http\Controllers\User\Wallet\WalletController;
 use App\Http\Controllers\User\Wallet\WalletTransferController;
 use App\Http\Controllers\User\Wallet\BeneficiaryController;
 
- 
+  
 
 /*
 |--------------------------------------------------------------------------

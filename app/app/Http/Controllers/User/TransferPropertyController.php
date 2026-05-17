@@ -62,7 +62,7 @@ class TransferPropertyController extends Controller
         if(!Auth::user()){
             return redirect()->route('login');
         }
-        dd($request);
+        // dd($request);
        
         $request->validate([
             'remaining_size' => 'required|numeric|min:0',
