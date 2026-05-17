@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="dashboard__page--wrapper">
+<div class="dashboard__page--wrapper"> 
     <!-- Dashboard sidebar -->
     <div class="page__body--wrapper" id="dashbody__page--body__wrapper">
         <main class="main__content_wrapper">

@@ -19,7 +19,7 @@ use Illuminate\Validation\ValidationException;
  
 class TransferPropertyController extends Controller
 {
-  
+   
 
     public function transferDetails($id){ 
         $user = Auth::user();  

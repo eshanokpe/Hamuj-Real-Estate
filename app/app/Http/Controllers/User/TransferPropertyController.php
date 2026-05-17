@@ -10,7 +10,7 @@ use App\Models\Transaction;
 use Illuminate\Validation\ValidationException; 
 use DB; 
 use Auth;
-use Log; 
+use Log;  
 use Hash;
 use App\Models\Transfer;
 use App\Models\Sell;
@@ -33,7 +33,7 @@ class TransferPropertyController extends Controller
     public function index(){ 
         if(!Auth::user()){
             return redirect()->route('login');
-        }
+        } 
         $user = Auth::user();
        
         $data['sellProperty'] = Buy::select(
@@ -62,7 +62,7 @@ class TransferPropertyController extends Controller
         if(!Auth::user()){
             return redirect()->route('login');
         }
-        
+        dd($request);
        
         $request->validate([
             'remaining_size' => 'required|numeric|min:0',
