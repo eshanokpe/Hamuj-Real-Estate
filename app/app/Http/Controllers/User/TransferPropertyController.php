@@ -139,6 +139,7 @@ class TransferPropertyController extends Controller
             return back()->with('error', 'Transfer failed: ' . $e->getMessage());
         }
     }
+      
 
     public function verifyRecipient(Request $request){
         // dd('verifyRecipient');
