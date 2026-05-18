@@ -337,8 +337,6 @@ class TransferPropertyController extends Controller
             $roundedTotalLand = round($totalLand, 4);
             $roundedLandSize = round($landSize, 4);
 
-            Log::warning("totalLand: {$totalLand}, landSize: {$landSize}, roundedTotalLand: {$roundedTotalLand}, roundedLandSize: {$roundedLandSize}");
-
             if ($roundedTotalLand < $roundedLandSize) {
                 return $this->sendResponse($request, 'error', 'Insufficient land size available for transfer.', false);
             }
