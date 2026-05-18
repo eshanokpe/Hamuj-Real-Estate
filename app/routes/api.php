@@ -76,7 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/sell/assets', [SellPropertyController::class, 'index']); 
     Route::post('/sell/assets/request', [SellPropertyController::class, 'sellProperty']);
-    Route::get('/sell/histories', [SellPropertyController::class, 'sellPropertyHistory']);
+    Route::get('/sell/history', [SellPropertyController::class, 'sellPropertyHistory']);
  
     Route::get('/transfer/assets', [TransferPropertyController::class, 'index']);
     Route::post('/transfer/initiate', [TransferPropertyController::class, 'transferRecipient']);
