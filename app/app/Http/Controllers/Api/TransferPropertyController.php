@@ -52,7 +52,7 @@ class TransferPropertyController extends Controller
                 'selected_size_land' => 'required',
                 'property_slug' => 'required',
                 'property_id' => 'required|integer',
-                'recipient_id' => 'required|integer',
+                'recipient_id' => 'required',
                 'amount' => 'required|numeric|min:0.01',
             ], [
                 // Custom error messages
@@ -61,7 +61,7 @@ class TransferPropertyController extends Controller
                 'property_id.required' => 'Property ID is required',
                 'property_id.integer' => 'Invalid property ID format',
                 'recipient_id.required' => 'Recipient ID is required',
-                'recipient_id.integer' => 'Invalid recipient ID format',
+                // 'recipient_id.integer' => 'Invalid recipient ID format',
                 'amount.required' => 'Amount is required',
                 'amount.numeric' => 'Amount must be a number',
                 'amount.min' => 'Amount must be at least 0.01',
