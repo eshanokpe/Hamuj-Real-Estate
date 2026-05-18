@@ -29,7 +29,8 @@ class SenderTransferNotification extends Notification implements ShouldQueue
         $formattedPrice = number_format($this->details['total_price']/100, 2);
         
         // FIXED: Add null check for recipient
-        $user = User::find($this->details['recipient_id']);
+        // $user = User::find($this->details['recipient_id']);
+        $user = User::where('recipient_id', $this->details['recipient_id'])->first();
         $recipientName = $user ? ($user->first_name . ' ' . $user->last_name) : 'the recipient';
 
         return (new MailMessage) 
