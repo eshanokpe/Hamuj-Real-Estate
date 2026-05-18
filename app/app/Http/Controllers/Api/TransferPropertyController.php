@@ -172,8 +172,16 @@ class TransferPropertyController extends Controller
             ];
 
             // Notify recipient and sender
-            $recipient->notify(new RecipientSubmittedNotification($transferDetails));
-            $user->notify(new SenderTransferNotification($transferDetails));
+            try {
+                // Notify recipient
+                $recipient->notify(new RecipientSubmittedNotification($transferDetails));
+                
+                // Notify sender
+                $user->notify(new SenderTransferNotification($transferDetails));
+            } catch (\Exception $e) {
+                Log::error('Notification error: ' . $e->getMessage());
+                // Continue even if notification fails
+            }
 
             return $this->sendResponse($request, 'success', 'We have received your request to transfer ₦' . number_format($amount) . ' worth of property. The recipient has been notified.', true, [
                 'redirect' => route('user.transfer.history'),

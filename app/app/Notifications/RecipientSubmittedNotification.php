@@ -13,43 +13,28 @@ class RecipientSubmittedNotification extends Notification implements ShouldQueue
     use Queueable;
 
     public $transferDetails;
-
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
+ 
     public function __construct($transferDetails)
     {
         $this->transferDetails = $transferDetails;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function via($notifiable)
     {
         return ['mail', 'database']; 
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     public function toMail($notifiable)
     {
         $formattedPrice = number_format($this->transferDetails['total_price']/100, 2);
+        
+        // FIXED: Add null check for sender
         $user = User::find($this->transferDetails['sender_id']);
-        $senderName = $user->first_name . ' ' . $user->last_name;
+        $senderName = $user ? ($user->first_name . ' ' . $user->last_name) : 'A Dohmayn User';
 
         return (new MailMessage)
             ->subject('Accept Your Asset Transfer')
-            ->greeting('Dear ' . $notifiable->full_name . ',')
+            ->greeting('Dear ' . ($notifiable->full_name ?? $notifiable->first_name ?? 'User') . ',')
             ->line('You have received an asset transfer of *₦' . $formattedPrice . '* from *' . $senderName . '* via Dohmayn. To complete the transaction, please follow the steps below to accept the transfer:')
             ->line('') 
             ->line('1. *Log in* to your Dohmayn account')
@@ -67,22 +52,25 @@ class RecipientSubmittedNotification extends Notification implements ShouldQueue
  
     public function toDatabase($notifiable)
     {
-        $senderName = User::find($this->transferDetails['sender_id'])->first_name . ' ' . User::find($this->transferDetails['sender_id'])->last_name;
+        // FIXED: Add null check for sender
+        $sender = User::find($this->transferDetails['sender_id']);
+        $senderName = $sender ? ($sender->first_name . ' ' . $sender->last_name) : 'A Dohmayn User';
+        
         $formattedPrice = number_format($this->transferDetails['total_price']/100, 2);
         
         return [
             'notification_status' => 'recipientSubmittedNotification',  
-            'property_id' => $this->transferDetails['property_id'],
-            'property_slug' => $this->transferDetails['property_slug'],
-            'property_name' => $this->transferDetails['property_name'],
-            'property_image' => $this->transferDetails['property_image'],
-            'land_size' => $this->transferDetails['land_size'],
-            'total_price' => $this->transferDetails['total_price'],
-            'status' => $this->transferDetails['status'],
+            'property_id' => $this->transferDetails['property_id'] ?? null,
+            'property_slug' => $this->transferDetails['property_slug'] ?? null,
+            'property_name' => $this->transferDetails['property_name'] ?? null,
+            'property_image' => $this->transferDetails['property_image'] ?? null,
+            'land_size' => $this->transferDetails['land_size'] ?? null,
+            'total_price' => $this->transferDetails['total_price'] ?? 0,
+            'status' => $this->transferDetails['status'] ?? 'pending',
             'created_date' => now(),
-            'reference' => $this->transferDetails['reference'],
-            'sender_id' => $this->transferDetails['sender_id'],
-            'recipient_id' => $this->transferDetails['recipient_id'],
+            'reference' => $this->transferDetails['reference'] ?? null,
+            'sender_id' => $this->transferDetails['sender_id'] ?? null,
+            'recipient_id' => $this->transferDetails['recipient_id'] ?? null,
             'property_mode' => 'transfer', 
             'message' => 'You have received ₦' . $formattedPrice . ' asset transfer from ' . $senderName . '. Please accept the transfer.',
         ];
@@ -90,18 +78,20 @@ class RecipientSubmittedNotification extends Notification implements ShouldQueue
 
     public function toArray($notifiable)
     {
-        $senderName = User::find($this->transferDetails['sender_id'])->name;
+        // FIXED: Add null check for sender
+        $sender = User::find($this->transferDetails['sender_id']);
+        $senderName = $sender ? $sender->name : 'A Dohmayn User';
         
         return [    
             'notification_status' => 'RecipientSubmittedNotification',
-            'property_id' => $this->transferDetails['property_id'],
-            'property_slug' => $this->transferDetails['property_slug'],
-            'property_name' => $this->transferDetails['property_name'],
-            'property_image' => $this->transferDetails['property_image'],
-            'land_size' => $this->transferDetails['land_size'],
-            'total_price' => $this->transferDetails['total_price'],
-            'reference' => $this->transferDetails['reference'],
-            'message' => 'You have received an asset transfer of ₦' . number_format($this->transferDetails['total_price']/100, 2) . ' from ' . $senderName . ' via Dohmayn. Please accept the transfer to complete the transaction.',
+            'property_id' => $this->transferDetails['property_id'] ?? null,
+            'property_slug' => $this->transferDetails['property_slug'] ?? null,
+            'property_name' => $this->transferDetails['property_name'] ?? null,
+            'property_image' => $this->transferDetails['property_image'] ?? null,
+            'land_size' => $this->transferDetails['land_size'] ?? null,
+            'total_price' => $this->transferDetails['total_price'] ?? 0,
+            'reference' => $this->transferDetails['reference'] ?? null,
+            'message' => 'You have received an asset transfer of ₦' . number_format(($this->transferDetails['total_price'] ?? 0)/100, 2) . ' from ' . $senderName . ' via Dohmayn. Please accept the transfer to complete the transaction.',
         ];
     }
 }
