@@ -99,7 +99,8 @@ class TransferPropertyController extends Controller
             $propertySlug = $request->input('property_slug');
             $landSize = $request->input('selected_size_land');
             // Check if recipient exists and isn't the user
-            $recipient = User::find($recipientId);
+            $recipient = User::where('recipient_id', $recipientId)->first();
+    
             if (!$recipient) {
                 return $this->errorResponse($propertyId, $request, 'This recipient does not exist.', 423);
             }
