@@ -9,7 +9,7 @@ use App\Notifications\TransactionOtpNotification;
 use Illuminate\Support\Str;
 
 class OtpService
-{
+{ 
     protected $expirationMinutes = 15;
     protected $maxAttempts = 3;
 

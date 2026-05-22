@@ -39,7 +39,7 @@ class User extends Authenticatable
         'hide_balance',
         'app_passcode', 
         'active', 
-        'is_active',
+        'is_active', 
         'registration_source',
         'biometric_types',
         'otp_verified_at',
