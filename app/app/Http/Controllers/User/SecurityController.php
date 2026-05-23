@@ -510,10 +510,18 @@ class SecurityController extends Controller
             ], $tokenExpiry);
 
             // Return success response with verification token
+            // Generate and send OTP
+            $otpData = $this->otpService->generateAndSendOtp($user);
+        
             return response()->json([
                 'success' => true,
                 'message' => 'Password verified successfully.',
                 'verification_token' => $verificationToken,
+                'otp_data' => [
+                    'expires_at' => Carbon::createFromTimestamp($otpData['expires_at'])->toDateTimeString(),
+                    'delivery_method' => $otpData['delivery_method'],
+                    'identifier' => $otpData['identifier'] // Add this line
+                ],
                 'expires_at' => $tokenExpiry->toDateTimeString()
             ], 200);
 
@@ -685,5 +693,5 @@ class SecurityController extends Controller
             ], 500);
         }
     }
-    
+
 }
