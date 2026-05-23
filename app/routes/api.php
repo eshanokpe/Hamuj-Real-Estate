@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\WalletController  as APIWalletController;
 use App\Http\Controllers\Auth\LoginController; 
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\User\ProfileController;
@@ -105,18 +107,22 @@ Route::middleware('auth:sanctum')->group(function () {
  
     Route::get('/notifications', [NotificationController::class, 'index']);
 
- 
-    Route::post('auth/verify-password', [SecurityController::class, 'verifyPassword']);
-    Route::post('auth/verify-user-password/{userId}', [SecurityController::class, 'verifyUserPassword']);
-    Route::put('auth/{id}/change-password', [SecurityController::class, 'changePasswordPost']);
-    
+    Route::prefix('auth')->group(function () {
+        Route::post('/verify-password', [SecurityController::class, 'verifyPassword']);
+        Route::post('/verify-user-password/{userId}', [SecurityController::class, 'verifyUserPassword']);
+        Route::put('ath/{id}/change-password', [SecurityController::class, 'changePasswordPost']);
+        // Password reset API routes
+        Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
+        Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
+        Route::get('/reset-password/validate/{token}', [ForgotPasswordController::class, 'validateToken']);
+    });
     Route::put('/{id}/transaction/pin', [SecurityController::class, 'createTransactionPin']);
     Route::get('/{userId}/transaction/get/pin', [SecurityController::class, 'getTransactionPin']);
     Route::put('/{id}/transaction/verify_pin', [SecurityController::class, 'verifyTransactionPin']);
     Route::put('/{id}/transaction/verify_otp_pin', [SecurityController::class, 'verifyOTP']);
     Route::put('/{id}/transaction/resend-otp', [SecurityController::class, 'resendOTP']);
     Route::post('/{id}/transaction/reset-pin', [SecurityController::class, 'resetTransactionPin']);
-   
+    
    
     Route::get('/get/bank', [APIWalletController::class, 'getBank']);
     Route::get('resolve/account', [WalletController::class, 'resolveAccount']);
@@ -195,6 +201,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/reviews/{review}', [ReviewController::class, 'update']);
         Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);
     });
+
+    
 });
 
  

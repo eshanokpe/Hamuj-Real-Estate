@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 /*  
 |--------------------------------------------------------------------------
@@ -100,3 +101,6 @@ Route::get('app/identity-verification', function() {
     } 
     abort(404, 'File not found'); 
 });
+
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'redirectToApp'])
+    ->name('password.reset');

@@ -6,6 +6,7 @@ namespace App\Models;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Notifications\ResetPasswordDeepLink;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
  
@@ -76,6 +77,11 @@ class User extends Authenticatable
         'bvn_verified_at' => 'datetime',
         'nin_verified_at' => 'datetime'
     ];
+
+    public function sendPasswordResetDeepLinkNotification($token)
+    {
+        $this->notify(new ResetPasswordDeepLink($token));
+    }
 
     public function buys()
     {
