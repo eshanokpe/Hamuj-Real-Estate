@@ -66,7 +66,6 @@ Route::get('/check/email', [RegisterController::class, 'checkEmail']);
 Route::post('login', [LoginController::class, 'login']);
 Route::post('deactivate-account', [AuthMethodController::class, 'deactivateAccount']);
  Route::prefix('auth')->group(function () {
-    // Password reset API routes
     Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
     Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
     Route::get('/reset-password/validate/{token}', [ForgotPasswordController::class, 'validateToken']);
