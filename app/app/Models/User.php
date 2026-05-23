@@ -81,7 +81,7 @@ class User extends Authenticatable
     public function sendPasswordResetDeepLinkNotification($token)
     {
         $this->notify(new ResetPasswordDeepLink($token));
-    }
+    } 
 
     public function buys()
     {
