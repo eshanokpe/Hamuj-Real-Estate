@@ -65,7 +65,12 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::get('/check/email', [RegisterController::class, 'checkEmail']);
 Route::post('login', [LoginController::class, 'login']);
 Route::post('deactivate-account', [AuthMethodController::class, 'deactivateAccount']);
-
+ Route::prefix('auth')->group(function () {
+    // Password reset API routes
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
+    Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
+    Route::get('/reset-password/validate/{token}', [ForgotPasswordController::class, 'validateToken']);
+});
  
  
  
@@ -111,10 +116,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/verify-password', [SecurityController::class, 'verifyPassword']);
         Route::post('/verify-user-password/{userId}', [SecurityController::class, 'verifyUserPassword']);
         Route::put('ath/{id}/change-password', [SecurityController::class, 'changePasswordPost']);
-        // Password reset API routes
-        Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
-        Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
-        Route::get('/reset-password/validate/{token}', [ForgotPasswordController::class, 'validateToken']);
     });
     Route::put('/{id}/transaction/pin', [SecurityController::class, 'createTransactionPin']);
     Route::get('/{userId}/transaction/get/pin', [SecurityController::class, 'getTransactionPin']);
