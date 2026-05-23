@@ -44,7 +44,7 @@ class SecurityController extends Controller
         // Validate the input
         $request->validate([
             'new_password' => 'required',
-            'new_password_confirmation' => 'required|min:8|confirmed', 
+            'new_password_confirmation' => 'required|min:8', 
         ]);
 
         $user = Auth::user();
