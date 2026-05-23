@@ -15,7 +15,7 @@ use App\Services\OtpService;
 use Illuminate\Support\Facades\Hash;
 
 class SecurityController extends Controller
-{
+{ 
     protected $otpService;
     protected $maxAttempts = 3;
 
@@ -79,7 +79,7 @@ class SecurityController extends Controller
         $data['referralsMade'] = $data['user']->referralsMade()->with('user', 'referrer')->take(6)->get();
         $data['hasMoreReferrals'] = $data['referralsMade']->count() > 6;
         return view('user.pages.security.transactionPin', $data); 
-    }
+    } 
     
     public function createTransactionPin(Request $request, $id)
     {
@@ -462,4 +462,228 @@ class SecurityController extends Controller
         }
             
     }
+
+    public function verifyPassword(Request $request)
+    {
+        try {
+            // Validate the request
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $user = Auth::user();
+
+            // Check if password is correct
+            if (!Hash::check($request->password, $user->password)) {
+                // Track failed attempts (optional - implement if needed)
+                $this->trackFailedPasswordAttempt($user);
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The provided password is incorrect.',
+                    'attempts_remaining' => $this->getRemainingPasswordAttempts($user)
+                ], 401);
+            }
+
+            // Reset failed attempts on successful verification
+            $this->resetFailedPasswordAttempts($user);
+
+            // Generate a temporary token for the verified session
+            $verificationToken = Str::random(64);
+            $tokenExpiry = now()->addMinutes(15);
+            
+            // Store verification token in cache
+            Cache::put("password_verification:{$verificationToken}", [
+                'user_id' => $user->id,
+                'verified_at' => now()->timestamp,
+                'expires_at' => $tokenExpiry->timestamp,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ], $tokenExpiry);
+
+            // Return success response with verification token
+            return response()->json([
+                'success' => true,
+                'message' => 'Password verified successfully.',
+                'verification_token' => $verificationToken,
+                'expires_at' => $tokenExpiry->toDateTimeString()
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Password Verification Error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred during password verification.',
+                'error' => env('APP_DEBUG') ? $e->getMessage() : null
+            ], 500);
+        }
+    }
+
+    /**
+     * Verify password for specific user (admin/support use)
+     * 
+     * @param Request $request
+     * @param int $userId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function verifyUserPassword(Request $request, $userId)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $authenticatedUser = Auth::user();
+            
+            // Check if authenticated user has permission to verify another user's password
+            // Only admin or the user themselves can verify
+            if ($authenticatedUser->id != $userId && !$authenticatedUser->is_admin) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized to verify password for this user.'
+                ], 403);
+            }
+
+            $user = User::findOrFail($userId);
+
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The provided password is incorrect.'
+                ], 401);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Password verified successfully.'
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('User Password Verification Error: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred during password verification.'
+            ], 500);
+        }
+    }
+
+    /**
+     * Track failed password verification attempts
+     * 
+     * @param User $user
+     * @return void
+     */
+    private function trackFailedPasswordAttempt($user)
+    {
+        $cacheKey = "password_attempts:{$user->id}";
+        $attempts = Cache::get($cacheKey, 0);
+        Cache::put($cacheKey, $attempts + 1, now()->addMinutes(30));
+        
+        // Lock account after 5 failed attempts
+        if ($attempts + 1 >= 5) {
+            $lockKey = "password_lock:{$user->id}";
+            Cache::put($lockKey, true, now()->addMinutes(15));
+        }
+    }
+
+    /**
+     * Get remaining password verification attempts
+     * 
+     * @param User $user
+     * @return int
+     */
+    private function getRemainingPasswordAttempts($user)
+    {
+        $lockKey = "password_lock:{$user->id}";
+        if (Cache::has($lockKey)) {
+            return 0;
+        }
+        
+        $attempts = Cache::get("password_attempts:{$user->id}", 0);
+        return max(0, 5 - $attempts);
+    }
+
+    /**
+     * Reset failed password attempts
+     * 
+     * @param User $user
+     * @return void
+     */
+    private function resetFailedPasswordAttempts($user)
+    {
+        Cache::forget("password_attempts:{$user->id}");
+        Cache::forget("password_lock:{$user->id}");
+    }
+
+    /**
+     * Validate verification token
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function validateVerificationToken(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'verification_token' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Verification token is required'
+                ], 422);
+            }
+
+            $cacheKey = "password_verification:{$request->verification_token}";
+            
+            if (!Cache::has($cacheKey)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Verification token has expired or is invalid'
+                ], 401);
+            }
+
+            $verificationData = Cache::get($cacheKey);
+            $user = Auth::user();
+
+            if ($verificationData['user_id'] != $user->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Verification token does not belong to this user'
+                ], 403);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Verification token is valid',
+                'verified_at' => Carbon::createFromTimestamp($verificationData['verified_at'])->toDateTimeString()
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred validating the token'
+            ], 500);
+        }
+    }
+    
 }

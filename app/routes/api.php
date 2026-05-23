@@ -106,6 +106,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
 
  
+    Route::post('auth/verify-password', [SecurityController::class, 'verifyPassword']);
+    Route::post('auth/verify-user-password/{userId}', [SecurityController::class, 'verifyUserPassword']);
 
     Route::put('/{id}/change-password', [SecurityController::class, 'changePasswordPost']);
     Route::put('/{id}/transaction/pin', [SecurityController::class, 'createTransactionPin']);
