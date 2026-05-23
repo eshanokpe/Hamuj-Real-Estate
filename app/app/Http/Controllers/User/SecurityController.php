@@ -49,18 +49,6 @@ class SecurityController extends Controller
 
         $user = Auth::user();
 
-        // Check if old password is correct
-        // if (!Hash::check($request->old_password, $user->password)) {
-        //     if ($request->wantsJson()) {
-        //         return response()->json([
-        //             'success' => false,
-        //             'message' => 'The old password is incorrect.',
-        //         ], 400); 
-        //     } else {
-        //         return back()->withErrors(['old_password' => 'The old password is incorrect.']);
-        //     }
-        // }
-
         // Update the password
         $user->password = Hash::make($request->new_password_confirmation);
         $user->save();
