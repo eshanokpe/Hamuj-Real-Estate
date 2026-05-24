@@ -712,7 +712,7 @@ class TransferPropertyController extends Controller
             $sender->notify(new TransferNotification($recipient, $amount, 'Sender', $propertyData));
             $recipient->notify(new TransferNotification($sender, $amount, 'Recipient', $propertyData));
 
-            DB::commit();
+            DB::commit(); 
 
             // Return appropriate response
             if ($request->wantsJson()) {

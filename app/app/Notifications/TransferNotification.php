@@ -11,7 +11,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 class TransferNotification extends Notification implements ShouldQueue
 {
     use Queueable;
- 
+  
     private $user; 
     private $amount;
     private $type; // "Sender" or "Recipient"

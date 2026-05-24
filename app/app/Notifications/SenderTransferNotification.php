@@ -57,7 +57,7 @@ class SenderTransferNotification extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         // FIXED: Add null check for recipient
-        $user = User::find($this->details['recipient_id'] ?? null);
+        $user = User::where('recipient_id', $this->details['recipient_id'] ?? null)->first();
         $recipientName = $user ? ($user->first_name . ' ' . $user->last_name) : 'Unknown Recipient';
         
         return [
