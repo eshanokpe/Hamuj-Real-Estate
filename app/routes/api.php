@@ -65,10 +65,11 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::get('/check/email', [RegisterController::class, 'checkEmail']);
 Route::post('login', [LoginController::class, 'login']);
 Route::post('deactivate-account', [AuthMethodController::class, 'deactivateAccount']);
- Route::prefix('auth')->group(function () {
+Route::prefix('auth')->group(function () {
     Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
     Route::post('/reset-password', [ResetPasswordController::class, 'reset']);
     Route::get('/reset-password/validate/{token}', [ForgotPasswordController::class, 'validateToken']);
+    Route::post('/reset-passcode', [PasscodeController::class, 'clearPasscodeAfterReset']);
 });
  
  
@@ -143,7 +144,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/status', [PasscodeController::class, 'checkStatus']);
         Route::post('/set', [PasscodeController::class, 'setPasscode']);
         Route::post('/verify', [PasscodeController::class, 'verifyPasscode']);
-        Route::post('/reset-clear', [PasscodeController::class, 'clearPasscodeAfterReset']);
         Route::put('/{id}/change-passcode', [PasscodeController::class, 'changePasscode']);
         Route::post('/{id}/nopasscode/verify/otp', [PasscodeController::class, 'NoPassCodeOTP']);
         Route::post('/{id}/verify/otp', [PasscodeController::class, 'verifyPassCodeOTP']);
