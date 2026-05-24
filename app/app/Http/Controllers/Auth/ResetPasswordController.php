@@ -83,10 +83,18 @@ class ResetPasswordController extends Controller
         DB::table('password_reset_tokens')
             ->where('email', $request->email)
             ->delete();
+        // ✅ Store a short-lived token so Flutter can clear the passcode
+        $clearToken = Str::random(64);
+        Cache::put("password_reset_verified:{$clearToken}", [
+            'user_id'    => $user->id,
+            'reset_at'   => now()->timestamp,
+        ], now()->addMinutes(5)); // 5 min — just enough for the app to call clear
+
 
         return response()->json([
             'success' => true,
-            'message' => 'Password reset successfully. You can now log in with your new password.',
+            'message' => 'Password reset successfully.',
+            'passcode_clear_token'   => $clearToken, // ✅ Flutter uses this
         ], 200);
     }
 

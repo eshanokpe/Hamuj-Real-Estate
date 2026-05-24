@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API;
-
+ 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,36 +99,57 @@ class PasscodeController extends Controller
     /**
      * Remove passcode
      */
-    public function removePasscode(Request $request)
+    public function clearPasscodeAfterReset(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'passcode' => 'required|digits:4',
-        ]);
+        try{
+            $validator = Validator::make($request->all(), [
+                'passcode' => 'required|digits:4',
+                'verification_token' => 'required|string',
+            ]);
 
-        if ($validator->fails()) {
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Validation failed',
+                        'errors' => $validator->errors()
+                    ], 422);
+                }
+                // Verify the reset token is valid and belongs to this user
+                $cacheKey = "password_reset_verified:{$request->verification_token}";
+
+                if (!Cache::has($cacheKey)) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Invalid or expired verification token',
+                    ], 400);
+                }
+                $tokenData = Cache::get($cacheKey);          
+                $user = Auth::user();
+
+                // Ensure token belongs to authenticated user
+                if ($tokenData['user_id'] !== $user->id) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Unauthorized.',
+                    ], 403);
+                }
+                // Clear the passcode
+                $user->app_passcode = null;
+                $user->save();
+
+                // Clear the verification token — single use
+                Cache::forget($cacheKey);
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Passcode removed successfully',
+                ]);
+            } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+                'message' => 'An error occurred.',
+            ], 500);
         }
-
-        $user = Auth::user();
-
-        if (!Hash::check($request->passcode, $user->app_passcode)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid passcode',
-            ], 401);
-        }
-
-        $user->app_passcode = null;
-        $user->save();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Passcode removed successfully',
-        ]);
     }
 
     public function verifyPassCodeOTP(Request $request)

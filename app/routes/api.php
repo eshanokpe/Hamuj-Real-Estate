@@ -143,7 +143,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/status', [PasscodeController::class, 'checkStatus']);
         Route::post('/set', [PasscodeController::class, 'setPasscode']);
         Route::post('/verify', [PasscodeController::class, 'verifyPasscode']);
-        Route::post('/remove', [PasscodeController::class, 'removePasscode']);
+        Route::post('/reset-clear', [PasscodeController::class, 'clearPasscodeAfterReset']);
         Route::put('/{id}/change-passcode', [PasscodeController::class, 'changePasscode']);
         Route::post('/{id}/nopasscode/verify/otp', [PasscodeController::class, 'NoPassCodeOTP']);
         Route::post('/{id}/verify/otp', [PasscodeController::class, 'verifyPassCodeOTP']);
