@@ -126,7 +126,7 @@ class SellPropertyController extends Controller
                 'amount' => $amount, // Negative amount to deduct from total assets
                 'reference' => $reference,
                 'status' => 'completed',
-                'transaction_type' => 'sale',
+                'transaction_type' => 'sellProperty',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
