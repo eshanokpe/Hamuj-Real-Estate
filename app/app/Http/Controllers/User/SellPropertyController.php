@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Notifications\SellPropertyUserNotification;
 use App\Notifications\SellPropertyAdminNotification;
 use Illuminate\Support\Facades\Notification;
-use DB;
+use DB; 
 use Auth;
 use Log;
 use App\Models\WalletTransaction;
@@ -190,11 +190,11 @@ class SellPropertyController extends Controller
             $contactDetials = ContactDetials::first();
             
             // Notify the user
-            $user->notify(new SellPropertyUserNotification($user, $propertyData, $sell, $contactDetials));
+            $user->notify(new SellPropertyUserNotification($user, $propertyData, $sell, $contactDetials, $amount));
             
             // Notify the admin (support email)
             Notification::route('mail', 'customersupport@dohmayn.com')
-                ->notify(new SellPropertyAdminNotification($user, $propertyData, $sell));
+                ->notify(new SellPropertyAdminNotification($user, $propertyData, $sell, $amount));
 
             if ($request->expectsJson()) {
                 return response()->json([

@@ -14,12 +14,14 @@ class SellPropertyAdminNotification extends Notification implements ShouldQueue
     protected $user;
     protected $sell;
     protected $property;
+    protected $amount;
 
     public function __construct($user, $property, $sell)
-    {
+    { 
         $this->user = $user;
         $this->sell = $sell;
         $this->property = $property;
+        $this->amount = $amount;
     }
 
     public function via($notifiable)
@@ -38,6 +40,7 @@ class SellPropertyAdminNotification extends Notification implements ShouldQueue
             ->line("• Name:  {$this->user->first_name} {$this->user->last_name}")
             ->line("• Email: {$this->user->email}")
             ->line("• Phone: {$phone}")
+            ->line("**Amount: ₦" . number_format($this->amount, 2) . "**")
             ->line("")
             ->line("**Property Details:**")
             ->line("• Address: {$this->property->location}")

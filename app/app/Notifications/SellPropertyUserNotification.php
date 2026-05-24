@@ -11,12 +11,13 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class SellPropertyUserNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
-
+    use Queueable; 
+ 
     protected $property;
     protected $user;
     protected $sell;
     protected $contactDetials;
+    protected $amount;
 
     public function __construct($user, $property, $sell, $contactDetials)
     {
@@ -24,6 +25,7 @@ class SellPropertyUserNotification extends Notification implements ShouldQueue
         $this->property = $property;
         $this->sell = $sell;
         $this->contactDetials = $contactDetials;
+        $this->amount = $amount;
     }
 
     public function via($notifiable)
@@ -42,6 +44,7 @@ class SellPropertyUserNotification extends Notification implements ShouldQueue
             ->line("• Address: {$this->property->location}")
             // ->line("• Listed Price: ₦" . number_format($this->property->price, 2))
             ->line("• Land Size: {$this->sell->selected_size_land} SQM")
+            ->line("• Total Amount: ₦" . number_format($this->amount, 2))
             ->line("") 
             ->line("Your asset is currently being reviewed, and payment will be done shortly.")
             ->line("If you have any questions or need assistance, feel free to contact our support team at {{$this->contactDetials->first_email}} or call us at {$this->contactDetials->first_phone} {$this->contactDetials->second_phone}.")
@@ -49,21 +52,19 @@ class SellPropertyUserNotification extends Notification implements ShouldQueue
     }
 
     public function toDatabase($notifiable)
-    {
+    { 
         return [
             'notification_status' => 'sellPropertyUserNotification',
             'title' => 'Property Sale Request Submitted',
             'message' => "You've submitted a request to sell {$this->property->name}. Our team will review it shortly.",
             'property_id' => $this->property->id,
             'user_id' => $this->user->id,
+            'amount' => $this->amount,
+            'land_size' => $this->sell->selected_size_land,
+            'reference' => $this->sell->reference,
         ];
     }
 
-    // public function toNexmo($notifiable)
-    // {
-    //     return (new NexmoMessage)
-    //         ->content("Hi {$this->user->name}, your property '{$this->property->name}' is being reviewed. Payment will be processed shortly. - Dohmayn");
-    // }
 }
 
 
