@@ -537,6 +537,13 @@ class TransferPropertyController extends Controller
             if (!$sender) {
                 throw new \Exception('Sender not found', 404);
             }
+            // Process wallet transactions
+            $propertyData = Property::where('id', $propertyId)
+                ->where('slug', $propertySlug)
+                ->first();
+            if (!$propertyData) {
+                throw new \Exception('Property not found', 404);
+            }
 
             // Validate amount
             if ($amount <= 0) {
@@ -622,11 +629,7 @@ class TransferPropertyController extends Controller
                 'status' => 'transfer',
             ]);
 
-            // Process wallet transactions
-            $propertyData = Property::find($propertyId);
-            if (!$propertyData) {
-                throw new \Exception('Property not found', 404);
-            }
+            
 
             // Update wallet balances
             $sendWallet->balance += $requiredAmountInNaira;
