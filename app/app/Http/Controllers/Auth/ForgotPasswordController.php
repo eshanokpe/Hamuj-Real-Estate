@@ -14,6 +14,15 @@ use App\Models\User;
 class ForgotPasswordController extends Controller
 {
     /**
+     * Show the password reset request form.
+     * GET /password/reset
+     */
+    public function showLinkRequestForm()
+    {
+        return view('auth.passwords.email');
+    }
+
+    /**
      * Send password reset link to email
      * POST /api/auth/forgot-password
      */
