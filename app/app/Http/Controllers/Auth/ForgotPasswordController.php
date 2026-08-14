@@ -29,7 +29,43 @@ class ForgotPasswordController extends Controller
      */
     public function sendResetLinkEmail(Request $request)
     {
-        return $this->sendResetLink($request);
+        if ($request->expectsJson() || $request->is('api/*')) {
+            return $this->sendResetLink($request);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $email = strtolower(trim($request->email));
+        $message = 'If an account exists with this email, you will receive a reset link shortly.';
+
+        $user = User::where('email', $email)->first();
+
+        if ($user) {
+            DB::table('password_reset_tokens')
+                ->where('email', $user->email)
+                ->delete();
+
+            $token = Str::random(64);
+
+            DB::table('password_reset_tokens')->insert([
+                'email'      => $user->email,
+                'token'      => hash('sha256', $token),
+                'created_at' => Carbon::now(),
+            ]);
+
+            $user->sendPasswordResetDeepLinkNotification($token);
+        }
+
+        return view('auth.passwords.email-success', [
+            'message' => $message,
+            'email' => $email,
+        ]);
     }
 
     /**
