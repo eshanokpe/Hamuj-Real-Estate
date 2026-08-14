@@ -23,6 +23,16 @@ class ForgotPasswordController extends Controller
     }
 
     /**
+     * Send password reset link to email.
+     * Laravel's default password reset route expects this method name.
+     * POST /password/email
+     */
+    public function sendResetLinkEmail(Request $request)
+    {
+        return $this->sendResetLink($request);
+    }
+
+    /**
      * Send password reset link to email
      * POST /api/auth/forgot-password
      */
