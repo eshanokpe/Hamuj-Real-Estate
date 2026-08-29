@@ -7,13 +7,15 @@
         "dev": "vite",
         "build": "vite build",
         "production": "npm run build",
-        "start": "npm run dev"
+        "start": "npm run dev",
+        "serve": "concurrently \"php artisan serve\" \"vite\""
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
         "@vitejs/plugin-react": "^4.2.0",
         "axios": "^1.1.2",
         "bootstrap": "^5.2.3",
+        "concurrently": "^10.0.5",
         "laravel-vite-plugin": "^1.0.0",
         "lodash": "^4.17.21",
         "postcss": "^8.4.21",

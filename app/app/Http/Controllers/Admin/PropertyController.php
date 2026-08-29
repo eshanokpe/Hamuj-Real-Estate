@@ -114,9 +114,10 @@ class PropertyController extends Controller
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'country' => 'required|string|max:255',
+            'percentage_increase' => 'required|string|max:255',
             'lunch_price' => 'numeric',
             'price' => 'numeric',
-            'size' => 'string|max:255',
+            'size' => 'string|max:255', 
             'gazette_number' => 'string|max:50',
             'tenure_free' => 'required|string|max:50',
             'property_images' => 'nullable|image|mimes:jpeg,png,jpg|max:5048',
@@ -128,7 +129,7 @@ class PropertyController extends Controller
             'google_map' => 'nullable|url',
             'status' => 'required|in:available,sold',
             'updated_year' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
-        ]);
+        ]); 
 
         $year = $request->input('updated_year', Carbon::now()->year);
         $lunchPrice = $request->input('lunch_price');
@@ -137,23 +138,23 @@ class PropertyController extends Controller
         $previousPercentageIncrease = $property->percentage_increase;
         $previousYear = $property->year;
 
-        $percentageIncrease = $lunchPrice > 0 ? (($newPrice - $lunchPrice) / $lunchPrice) * 100 : 0;
+        // $percentageIncrease = $lunchPrice > 0 ? (($newPrice - $lunchPrice) / $lunchPrice) * 100 : 0;
        
         // Calculate price ratio for updating transactions
-        $priceRatio = $previousPrice > 0 ? $newPrice / $previousPrice : 1;
+        // $priceRatio = $previousPrice > 0 ? $newPrice / $previousPrice : 1;
         
         // Log the price update (only if price changed)
-        if ($previousPrice != $newPrice) {
-            PropertyPriceUpdate::create([
-                'property_id' => $property->id,
-                'previous_price' => $previousPrice,
-                'previous_percentage_increase' => $previousPercentageIncrease,
-                'previous_year' => $previousYear,
-                'updated_price' => $newPrice,
-                'percentage_increase' => $percentageIncrease,
-                'updated_year' => $year
-            ]);
-         }
+        // if ($previousPrice != $newPrice) {
+        //     PropertyPriceUpdate::create([
+        //         'property_id' => $property->id,
+        //         'previous_price' => $previousPrice,
+        //         'previous_percentage_increase' => $previousPercentageIncrease,
+        //         'previous_year' => $previousYear,
+        //         'updated_price' => $newPrice,
+        //         'percentage_increase' => $percentageIncrease,
+        //         'updated_year' => $year
+        //     ]);
+        //  }
 
         // Prepare update data
         $updateData = [
@@ -165,7 +166,8 @@ class PropertyController extends Controller
             'country' => $request->input('country'),
             'lunch_price' => $lunchPrice,
             'price' => $newPrice,
-            'percentage_increase' => $percentageIncrease,
+            // 'percentage_increase' => $percentageIncrease,
+            'percentage_increase' =>  $request->input('percentage_increase'),
             'gazette_number' => $request->input('gazette_number'),
             'tenure_free' => $request->input('tenure_free'),
             'size' => $request->input('size'),

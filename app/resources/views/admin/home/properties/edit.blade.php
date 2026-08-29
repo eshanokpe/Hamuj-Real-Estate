@@ -38,8 +38,8 @@
                     @csrf
                     @method('PUT')
                     <div class="row">
-                        <div class="col-lg-1"></div>
-                        <div class="col-lg-5">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-8">
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1">Property Name</label>
@@ -132,7 +132,7 @@
                                 
                                 <div class="mb-3">
                                     <label for="priceIncrease">Percentage (%)</label>
-                                    <input type="number" class="form-control" name="percentage_increase" id="priceIncrease" placeholder="Percentage" >
+                                    <input type="number" class="form-control" name="percentage_increase" value="{{ $property->percentage_increase ?? '' }}" id="priceIncrease" placeholder="Percentage" >
                                 </div>
                                 
                                 <!-- <script>
@@ -216,10 +216,22 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div>           
+                                </div>      
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1">Property Status</label>
+                                    <select class="form-select" id="propertyStatus" name="status" required>
+                                        <option value="available" {{ $property->status == 'available' ? 'selected':''}}>Available</option>
+                                        <option value="sold" {{ $property->status == 'sold' ? 'selected': ''}}>Sold</option>
+                                    </select>
+                                    @error('status')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>     
                             </div><!--end card-body-->
                         </div><!--end col-->
-                        <div class="col-lg-5">
+                        <!-- <div class="col-lg-5"> -->
                             <!-- <div class="mb-3">
                                 <label for="exampleInputEmail1">Land Survey</label>
                                 <input onchange="previewLandSurvey(event)" type="file" class="form-control" name="land_survey">
@@ -264,21 +276,8 @@
                                     </div>
                                 @enderror
                             </div> -->
-                           
-                            <div class="mb-3">
-                                <label for="exampleInputEmail1">Property Status</label>
-                                <select class="form-select" id="propertyStatus" name="status" required>
-                                    <option value="available" {{ $property->status == 'available' ? 'selected':''}}>Available</option>
-                                    <option value="sold" {{ $property->status == 'sold' ? 'selected': ''}}>Sold</option>
-                                </select>
-                                @error('status')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-lg-1"></div>
+                        <!-- </div> -->
+                        <div class="col-lg-2"></div>
                     </div><!--end row-->
                     <div class="row mb-3">
                         <div class="col-lg-1"></div>

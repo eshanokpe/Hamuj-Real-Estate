@@ -454,11 +454,11 @@ const BuyProperties = () => {
                                     <thead>
                                         <tr>
                                             <th>Product Image</th>
-                                            <th>Price per SQM</th>
-                                            <th>Actual Land Size</th>
-                                            <th>Available Land Size</th>
+                                            {/* <th>Price per SQM</th> */}
+                                            {/* <th>Actual Land Size</th> */}
+                                            {/* <th>Available Land Size</th> */}
                                             <th>Enter Amount (₦)</th>
-                                            <th>Calculated Land Size</th>
+                                            {/* <th>Calculated Land Size</th> */}
                                             <th>Total to Pay</th>
                                         </tr>
                                     </thead>
@@ -497,9 +497,9 @@ const BuyProperties = () => {
                                                             </>
                                                         ) : (
                                                              <>
-                                                                <span className="properties__author--price">
+                                                                {/* <span className="properties__author--price">
                                                                     {formatCurrency(property.price)} per/sqm
-                                                                </span>
+                                                                </span> */}
                                                                 <p className="">
                                                                     ROI: {property.percentage_increase}%
                                                                 </p>
@@ -510,15 +510,15 @@ const BuyProperties = () => {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
+                                            {/* <td>
                                                 <span className="item-price"> 
                                                     {formatCurrency(pricePerSqm)} per/sqm
                                                 </span>
-                                            </td>
-                                            <td><span>{property.size} SQM</span></td>
+                                            </td> */}
+                                            {/* <td><span>{property.size} SQM</span></td>
                                             <td className="available-size">
                                                 {getDisplayRemainingSize()} SQM
-                                            </td>
+                                            </td> */}
                                             <td>
                                                 <div className="d-flex flex-column gap-2">
                                                     <input 
@@ -541,11 +541,11 @@ const BuyProperties = () => {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
+                                            {/* <td>
                                                 <span className="calculated-land-size" style={{ color: '#47008E', fontWeight: 'bold' }}>
                                                     {formatLandSize(calculatedLandSize)}
                                                 </span>
-                                            </td>
+                                            </td> */}
                                             <td>
                                                 <span className="total-price" style={{ color: '#47008E', fontWeight: 'bold' }}>
                                                     {formatCurrency(totalPrice)}
