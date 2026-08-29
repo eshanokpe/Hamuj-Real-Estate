@@ -17,7 +17,7 @@ use App\Models\PropertyValuationPrediction;
 use App\Notifications\PropertyValuationNotification;
 use App\Notifications\PropertyValuationPredictionNotification;
  
-  
+   
 class PropertyController extends Controller
 { 
      
@@ -114,10 +114,10 @@ class PropertyController extends Controller
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'country' => 'required|string|max:255',
-            'lunch_price' => 'required|numeric',
-            'price' => 'required|numeric',
-            'size' => 'required|string|max:255',
-            'gazette_number' => 'required|string|max:50',
+            'lunch_price' => 'numeric',
+            'price' => 'numeric',
+            'size' => 'string|max:255',
+            'gazette_number' => 'string|max:50',
             'tenure_free' => 'required|string|max:50',
             'property_images' => 'nullable|image|mimes:jpeg,png,jpg|max:5048',
             'payment_plan' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5048',

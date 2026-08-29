@@ -110,7 +110,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label for="launchPrice">Launch Price</label>
                                     <input type="text" class="form-control" id="launchPrice" name="lunch_price" placeholder="Enter Launch Price" value="{{ $property->lunch_price ?? '' }}" required>
                                     @error('lunch_price')
@@ -128,14 +128,14 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div>
+                                </div> -->
                                 
                                 <div class="mb-3">
-                                    <label for="priceIncrease">Price Increase (%)</label>
-                                    <input type="text" class="form-control" name="percentage_increase" id="priceIncrease" placeholder="Price Increase" readonly>
+                                    <label for="priceIncrease">Percentage (%)</label>
+                                    <input type="number" class="form-control" name="percentage_increase" id="priceIncrease" placeholder="Percentage" >
                                 </div>
                                 
-                                <script>
+                                <!-- <script>
                                     document.addEventListener('DOMContentLoaded', function () {
                                         const launchPriceInput = document.getElementById('launchPrice');
                                         const currentPriceInput = document.getElementById('currentPrice');
@@ -158,9 +158,9 @@
                                         // Trigger calculation on page load
                                         calculateIncrease();
                                     });
-                                </script>
+                                </script> -->
 
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label for="currentPrice">Gazette Number</label>
                                     <input type="text" class="form-control" id="gazetteNumber" name="gazette_number" placeholder="Enter Gazette Number" value="{{ $property->gazette_number ?? '' }}" required>
                                     @error('gazette_number')
@@ -168,7 +168,7 @@
                                             {{ $message }} 
                                         </div>
                                     @enderror
-                                </div>
+                                </div> -->
                                 <div class="mb-3">
                                     <label for="currentPrice">Tenure Free</label>
                                     <input type="text" class="form-control" id="tenureFree" name="tenure_free" placeholder="Enter Tenure Free" value="{{ $property->tenure_free ?? '' }}" required>
@@ -179,7 +179,7 @@
                                     @enderror
                                 </div>
                                 
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label for="exampleInputEmail1">Size(sqm)</label>
                                     <input type="text" class="form-control" name="size" placeholder="Enter Land Size" value="{{ $property->size}}" required>
                                     @error('size')
@@ -187,7 +187,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div>
+                                </div> -->
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1">Property Image</label>
                                     <input onchange="previewImage(event)" class="form-control" type="file" value="" name="property_images">
@@ -220,7 +220,7 @@
                             </div><!--end card-body-->
                         </div><!--end col-->
                         <div class="col-lg-5">
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label for="exampleInputEmail1">Land Survey</label>
                                 <input onchange="previewLandSurvey(event)" type="file" class="form-control" name="land_survey">
                                 @error('land_survey')
@@ -232,8 +232,8 @@
                                     <img src="{{ asset($property->land_survey) }}" alt="{{ $property->name }}" class="img-thumbnail mt-2" width="200">
                                 @endif
                                 <img id="image-LandSurvey" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
-                            </div>
-                            <div class="mb-3">
+                            </div> -->
+                            <!-- <div class="mb-3">
                                 <label for="exampleInputEmail1">Land Information Certificate</label>
                                 <input onchange="previewContractDeed(event)" type="file" class="form-control" name="contract_deed">
                                 @error('contract_deed')
@@ -245,8 +245,8 @@
                                     <img src="{{ asset($property->contract_deed) }}" alt="{{ $property->name }}" class="img-thumbnail mt-2" width="200">
                                 @endif
                                 <img id="image-contractDeed" src="" alt="Image Preview" class="img-thumbnail mt-2" style="display:none; max-width: 200px;">
-                            </div>
-                            <div class="mb-3">
+                            </div> -->
+                            <!-- <div class="mb-3">
                                 <label for="exampleInputEmail1">Video Link</label>
                                 <input type="text" class="form-control" name="video_link" value="{{ $property->video_link }}" placeholder="Video Link">
                                 @error('video_link')
@@ -254,8 +254,8 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
-                            </div>
-                            <div class="mb-3">
+                            </div> -->
+                            <!-- <div class="mb-3">
                                 <label for="exampleInputEmail1">Google map Link</label>
                                 <input type="text" class="form-control" name="google_map" value="{{ $property->google_map }}" placeholder="Google map Link">
                                 @error('google_map')
@@ -263,7 +263,7 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
-                            </div>
+                            </div> -->
                            
                             <div class="mb-3">
                                 <label for="exampleInputEmail1">Property Status</label>

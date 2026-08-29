@@ -6,7 +6,6 @@
 
     <!-- Page Content-->
     <div class="page-content-tab">
-
         <div class="container-fluid">
             <!-- Page-Title -->  
             <div class="row">
@@ -46,9 +45,9 @@
                                             <th>Image</th>
                                             <th>Amount</th>
                                             <th>Created date</th>
-                                            <th>Property History</th>
-                                            <th>Neighborhood</th>
-                                            <th>Valuation</th>
+                                            <!-- <th>Property History</th> -->
+                                            <!-- <th>Neighborhood</th> -->
+                                            <!-- <th>Valuation</th> -->
                                             <th class="text-end">Action</th>
                                         </tr>
                                     </thead>
@@ -67,21 +66,21 @@
                                                 <td>₦{{ number_format($property->price, 2) }}</td>
 
                                                 <td>{{ $property->created_at ? $property->created_at->format('d F Y') : 'N/A' }}</td>
-                                                <td>
+                                                <!-- <td>
                                                     <a href="{{ route('admin.properties.propertyHistory', encrypt($property->id)) }}" class="btn btn-sm btn-secondary" style="background-color: coral">
                                                         Property history 
                                                     </a>
-                                                </td>
-                                                <td>
+                                                </td> -->
+                                                <!-- <td>
                                                     <a href="{{ route('admin.properties.neighborhood', encrypt($property->id)) }}" class="btn btn-sm btn-primary">
                                                         Neighborhood
                                                     </a>
-                                                </td>
-                                                <td>
+                                                </td> -->
+                                                <!-- <td>
                                                     <a href="{{ route('admin.properties.evaluate', encrypt($property->id)) }}" class="btn btn-sm btn-warning">
                                                         <i class="las la-chart-bar"></i> Evaluate
                                                     </a>
-                                                </td>
+                                                </td> -->
                                                 <td class="text-end">
                                                     <a href="{{ route('admin.properties.edit', encrypt($property->id)) }}">
                                                         <i class="las la-pen text-secondary font-16"></i>
