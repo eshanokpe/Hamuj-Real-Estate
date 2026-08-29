@@ -496,9 +496,16 @@ const BuyProperties = () => {
                                                                 <p className="reviews__author--title">{property.valuation_summary.percentage_value}%</p>
                                                             </>
                                                         ) : (
-                                                            <span className="properties__author--price">
-                                                                {formatCurrency(property.price)} per/sqm
-                                                            </span>
+                                                             <>
+                                                                <span className="properties__author--price">
+                                                                    {formatCurrency(property.price)} per/sqm
+                                                                </span>
+                                                                <p className="">
+                                                                    ROI: {property.percentage_increase}%
+                                                                </p>
+                                                             </>
+                                                            
+                                                            
                                                         )}
                                                     </div>
                                                 </div>

@@ -1,9 +1,9 @@
-// Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
-
-
+// ✅ CORRECT - @use at the very top
 @use "sass:meta";
+@use "variables";
+@use "mixins";
 
-// Bootstrap
-@import 'bootstrap/scss/bootstrap';
- 
+// Then your CSS rules
+body {
+  font-family: sans-serif;
+}

@@ -145,10 +145,8 @@
                         <thead>
                             <tr>
                                 <th>Listing Title</th>
-                                {{-- More accurate header? --}}
                                 <th>Date Acquired</th>
                                 <th>Acquired Size (Sellable)</th>
-                                {{-- Combine action columns for cleaner header --}}
                                 <th colspan="2" class="text-center">Actions</th>
                             </tr>
                         </thead>

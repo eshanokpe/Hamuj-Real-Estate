@@ -27,7 +27,7 @@
         <ul class="list-unstyled topbar-nav float-end mb-0">
            
             <li class="dropdown notification-list me-3">
-                <a class="nav-link dropdown-toggle nav-icon" data-bs-toggle="dropdown" href="#" role="button"
+                <!-- <a class="nav-link dropdown-toggle nav-icon" data-bs-toggle="dropdown" href="#" role="button"
                     aria-haspopup="false" aria-expanded="false">
                     <div class="d-flex align-items-center text-success">
                         <i class="ti ti-layout-grid me-2"></i>
@@ -36,7 +36,7 @@
                             <span class="fw-bold font-12">{{ number_format( $remainingAvailableSize, 1) }} SQM</span>
                         </div>
                     </div>
-                </a>
+                </a> -->
                 <div class="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
                     <h6 class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
                         Property Statistics
@@ -156,8 +156,8 @@
                                         <small class="text-muted mb-0">{{ $notification->data['message'] ?? 'No message content available.' }}</small>
                                         <br>
                                         <small>{{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</small>
-                                    </div><!--end media-body-->
-                                </div><!--end media-->
+                                    </div>
+                                </div>
                             </a>
                             <!--end-item-->
                             <script>

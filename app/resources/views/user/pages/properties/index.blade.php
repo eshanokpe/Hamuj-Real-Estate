@@ -2,91 +2,91 @@
 
 @section('content')
 <style>
-/* Mobile-responsive table styles */
-@media screen and (max-width: 768px) {
-    .properties__table {
-        overflow-x: visible;
+    /* Mobile-responsive table styles */
+    @media screen and (max-width: 768px) {
+        .properties__table {
+            overflow-x: visible;
+        }
+        
+        .properties__table--wrapper {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .properties__table--wrapper thead {
+            display: none; /* Hide table headers on mobile */
+        }
+        
+        .properties__table--wrapper tbody tr {
+            display: block;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            background: white;
+        }
+        
+        .properties__table--wrapper tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: right;
+        }
+        
+        .properties__table--wrapper tbody td:last-child {
+            border-bottom: none;
+        }
+        
+        .properties__table--wrapper tbody td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            text-align: left;
+            margin-right: 1rem;
+            color: #475569;
+        }
+        
+        /* Special handling for the image column */
+        .properties__table--wrapper tbody td:first-child {
+            display: block;
+            padding: 0;
+            border-bottom: none;
+        }
+        
+        .properties__table--wrapper tbody td:first-child:before {
+            display: none;
+        }
+        
+        /* Ensure action buttons are properly displayed */
+        .properties__table--wrapper tbody td .status__btn,
+        .properties__table--wrapper tbody td .sales__report--status {
+            display: inline-block;
+            margin: 0.25rem 0;
+        }
     }
-    
-    .properties__table--wrapper {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    
-    .properties__table--wrapper thead {
-        display: none; /* Hide table headers on mobile */
-    }
-    
-    .properties__table--wrapper tbody tr {
-        display: block;
-        margin-bottom: 1.5rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 1rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        background: white;
-    }
-    
-    .properties__table--wrapper tbody td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem 0.5rem;
-        border-bottom: 1px solid #f1f5f9;
-        text-align: right;
-    }
-    
-    .properties__table--wrapper tbody td:last-child {
-        border-bottom: none;
-    }
-    
-    .properties__table--wrapper tbody td:before {
-        content: attr(data-label);
-        font-weight: 600;
-        text-align: left;
-        margin-right: 1rem;
-        color: #475569;
-    }
-    
-    /* Special handling for the image column */
-    .properties__table--wrapper tbody td:first-child {
-        display: block;
-        padding: 0;
-        border-bottom: none;
-    }
-    
-    .properties__table--wrapper tbody td:first-child:before {
-        display: none;
-    }
-    
-    /* Ensure action buttons are properly displayed */
-    .properties__table--wrapper tbody td .status__btn,
-    .properties__table--wrapper tbody td .sales__report--status {
-        display: inline-block;
-        margin: 0.25rem 0;
-    }
-}
 
-/* Ensure table cells have data labels for mobile */
-@media screen and (max-width: 768px) {
-    .properties__table--wrapper tbody td:nth-child(2):before { content: "Status"; }
-    .properties__table--wrapper tbody td:nth-child(3):before { content: "Size"; }
-    .properties__table--wrapper tbody td:nth-child(4):before { content: "Available Size"; }
-    .properties__table--wrapper tbody td:nth-child(5):before { content: "Action"; }
-    .properties__table--wrapper tbody td:nth-child(6):before { content: "Details"; }
-}
+    /* Ensure table cells have data labels for mobile */
+    @media screen and (max-width: 768px) {
+        .properties__table--wrapper tbody td:nth-child(2):before { content: "Status"; }
+        .properties__table--wrapper tbody td:nth-child(3):before { content: "Size"; }
+        .properties__table--wrapper tbody td:nth-child(4):before { content: "Available Size"; }
+        .properties__table--wrapper tbody td:nth-child(5):before { content: "Action"; }
+        .properties__table--wrapper tbody td:nth-child(6):before { content: "Details"; }
+    }
 
-/* Improve pagination for mobile */
-@media screen and (max-width: 768px) {
-    .pagination__menu {
-        flex-wrap: wrap;
-        gap: 0.5rem;
+    /* Improve pagination for mobile */
+    @media screen and (max-width: 768px) {
+        .pagination__menu {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .pagination__menu--items {
+            margin: 0;
+        }
     }
-    
-    .pagination__menu--items {
-        margin: 0;
-    }
-}
 </style>
  
 <div class="dashboard__page--wrapper">
@@ -109,8 +109,8 @@
                                     <th>
                                         <span class="min-w-100">Status</span>
                                     </th>
-                                    <th>Size</th>
-                                    <th>Available Size</th>
+                                    <!-- <th>Size</th> -->
+                                    <!-- <th>Available Size</th> -->
                                     <th>Action</th>
                                     <th>Details</th>
                                 </tr>
@@ -126,10 +126,16 @@
                                                 <div class="reviews__author--text">
                                                     <h3 class="reviews__author--title">{{$item->name}}</h3>
                                                     <p class="reviews__author--subtitle">{{$item->location}}</p>
+                                                    <!-- <span class="properties__author--price">₦{{ number_format($item->valuationSummary->current_value_sum, 2)}} per/sqm</span> -->
+                                                    <!-- <p class="reviews__author--title">{{$item->valuationSummary->percentage_value}}%</p> -->
+                                                  
+
                                                     @if($item->valuationSummary)
                                                         <span class="properties__author--price">₦{{ number_format($item->valuationSummary->current_value_sum, 2)}} per/sqm</span>
                                                         <p class="properties__author--price text-decoration-line-through text-muted">₦{{ number_format($item->valuationSummary->initial_value_sum, 2)}} per/sqm</p>
-                                                        <p class="reviews__author--title">{{$item->valuationSummary->percentage_value}}%</p>
+                                                        <!-- <p class="reviews__author--title">{{$item->valuationSummary->percentage_value}}%</p> -->
+                                                        <p class="reviews__author--title"><span style="font-weight:bold">ROI:</span>{{$item->percentage_increase}}%</p>
+
                                                     @else   
                                                         <span class="properties__author--price">₦{{ number_format($item->property->price, 2)}} per/sqm</span>
                                                         <p class="reviews__author--title">{{$item->percentage_increase}}%</p>
@@ -145,12 +151,12 @@
                                                 <span class="status__btn active" style="color: #008000">{{ ucFirst($item->status)}}</span>
                                             @endif
                                         </td>
-                                        <td data-label="Size">
+                                        <!-- <td data-label="Size">
                                             <span class="properties__views">{{ $item->size }} SQM </span>
                                         </td>
                                         <td data-label="Available Size">
                                             <span class="properties__views">{{ $item->available_size }} SQM </span> 
-                                        </td>
+                                        </td> -->
                                         <td data-label="Action">
                                             @if($item->status === 'sold out')
                                                 <span class="status__btn " style="color:#fff; background-color:#47008E ">

@@ -11,14 +11,14 @@
                 <div class="row add__property--heading mb-30">
                     <h2 class="add__property--heading__title text-start">Show Property</h2>
                     <div class="add__property--heading__title text-end">
-                        <a   
+                        <!-- <a   
                         style="max-width: 100%; width:200px; object-fit:contain"
                         href="{{ route('user.properties.history', encrypt($property->id)) }}"  class="mb-3 solid__btn add__property--btn ">
                             Property history
                         </a> 
                         <a href="{{ route('user.properties.valuation', encrypt($property->id)) }}"  class="mb-3 solid__btn add__property--btn">
                             Valuation
-                        </a>
+                        </a> -->
                         <a href="{{ route('user.properties') }}"  class="solid__btn add__property--btn">
                             Back
                         </a>
@@ -41,26 +41,26 @@
                                     
                                     <!-- YouTube Video Section -->
                                   
-@if($property->video_link)
-<div class="col-12 mt-4">
-    <div class="property-video-section">
-        <h4 class="property-video-title mb-3">Property Video</h4>
-        <div class="youtube-shorts-container">
-            <iframe 
-                src="https://www.youtube.com/embed/Dm53qtEoeRE"
-                title="Property Video"
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen
-                class="youtube-shorts-embed">
-            </iframe>
-        </div>
-        <div class="video-description mt-3">
-            <p class="text-muted">Watch this video to learn more about the features of the Dohmayn app and its surroundings.</p>
-        </div>
-    </div>
-</div>
-@endif
+                                    @if($property->video_link)
+                                    <div class="col-12 mt-4">
+                                        <div class="property-video-section">
+                                            <h4 class="property-video-title mb-3">Property Video</h4>
+                                            <div class="youtube-shorts-container">
+                                                <iframe 
+                                                    src="https://www.youtube.com/embed/Dm53qtEoeRE"
+                                                    title="Property Video"
+                                                    frameborder="0" 
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                    allowfullscreen
+                                                    class="youtube-shorts-embed">
+                                                </iframe>
+                                            </div>
+                                            <div class="video-description mt-3">
+                                                <p class="text-muted">Watch this video to learn more about the features of the Dohmayn app and its surroundings.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                             
@@ -80,7 +80,7 @@
                                             <p>{!! $property->description !!}</p>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <!-- <div class="col-lg-6">
                                         <div class="add__listing--input__box mb-20">
                                             <label class="add__listing--input__label">Launch Price</label>
                                             @if($property->valuationSummary)
@@ -89,8 +89,8 @@
                                                 <input disabled value="₦{{ number_format($property->lunch_price,2) }}" class="add__listing--input__field" id="input1" placeholder="Your Name" type="text">
                                             @endif
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6">
+                                    </div> -->
+                                    <!-- <div class="col-lg-6">
                                         <div class="add__listing--input__box mb-20">
                                             <label class="add__listing--input__label"> Current Price</label>
                                             @if($property->valuationSummary)
@@ -100,19 +100,19 @@
                                             @endif
                                            
                                         </div>
-                                    </div> 
+                                    </div>  -->
                                     <div class="col-lg-4">
                                         <div class="add__listing--input__box mb-20">
-                                            <label class="add__listing--input__label" for="input3">Price Increase (%)</label>
+                                            <label class="add__listing--input__label" for="input3">Percentage (%)</label>
                                             <input disabled value="{{ $property->percentage_increase }}%" class="add__listing--input__field" id="input3" placeholder="Price" type="text">
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <!-- <div class="col-lg-4">
                                         <div class="add__listing--input__box mb-20">
                                             <label class="add__listing--input__label" for="input4">Gazette Number</label>
                                             <textarea disabled value="" class="add__listing--input__field" id="input4" rows="2">{{ $property->gazette_number}}</textarea>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-4">
                                         <div class="add__listing--input__box mb-20">
                                             <label class="add__listing--input__label"> Tenure Free</label>
@@ -217,7 +217,7 @@
                                 </div>
                                 
                             </div>
-                            <div class="add__property--box">
+                            <!-- <div class="add__property--box">
                                 <h3 class="add__property--box__title mb-20">Property Document</h3>
                               
                                 <div class="row m-2">
@@ -225,15 +225,10 @@
                                         <div class="add__listing--input__box mb-20">
                                             <label class="add__listing--input__label" for="input5">Land Survey</label>
                                             @if(isset($property) && $property->land_survey)
-                                                
-                                                <!-- View and Download Links -->
                                                 <div class="mt-2">
-                                                    <!-- View Button -->
                                                     <a href="{{ asset($property->land_survey) }}" target="_blank" class="solid__btn add__property--btn">
                                                         View Land Survey
                                                     </a>
-                                    
-                                                    <!-- Download Button -->
                                                     <a href="{{ asset($property->land_survey) }}" download="{{ $property->name }}-land-survey" class="solid__btn add__property--btn">
                                                         Download Land Survey
                                                     </a>
@@ -244,19 +239,16 @@
                                         </div>
                                     </div>
                                     
-                                    {{-- <div class="col-6">
+                                    <div class="col-6">
                                         <div class="add__listing--input__box mb-20">
                                             <label class="add__listing--input__label" for="input5">Land Information certificate</label>
                                             @if(isset($property) && $property->contract_deed)
                                                 
-                                                <!-- View and Download Links -->
                                                 <div class="mt-2">
-                                                    <!-- View Button -->
                                                     <a href="{{ asset($property->contract_deed) }}" target="_blank" class="solid__btn add__property--btn">
                                                         View Contract deed
                                                     </a>
                                     
-                                                    <!-- Download Button -->
                                                     <a href="{{ asset($property->contract_deed) }}" download="{{ $property->name }}-land-survey" class="solid__btn add__property--btn">
                                                         Download Contract deed
                                                     </a>
@@ -265,12 +257,9 @@
                                                 <p class="text-muted mt-2">No Land Survey available.</p>
                                             @endif
                                         </div>
-                                    </div> --}}
-
-                                    
+                                    </div> 
                                 </div>
-                              
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                    
