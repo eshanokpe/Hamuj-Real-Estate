@@ -22,6 +22,7 @@ const parseNumericString = (value) => {
     if (value === null || value === undefined) return 0;
     if (typeof value === 'number') return value;
     if (typeof value === 'string') {
+        // Remove commas and convert to number
         const cleanedValue = value.replace(/,/g, '');
         const parsed = parseFloat(cleanedValue);
         return isNaN(parsed) ? 0 : parsed;
@@ -33,6 +34,7 @@ const parseNumericString = (value) => {
 const BuyProperties = () => {
     const navigate = useNavigate();
     const { slug } = useParams();
+    let url = window.location.origin
     
     // State management
     const [inputAmount, setInputAmount] = useState('');
@@ -49,10 +51,17 @@ const BuyProperties = () => {
     const [transactionPin, setTransactionPin] = useState('');
     const [paymentProcessing, setPaymentProcessing] = useState(false);
     const [amountError, setAmountError] = useState('');
-    const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const [paymentSuccess, setPaymentSuccess] = useState(false); // NEW STATE
     const revolutCheckoutRef = useRef(null);
 
     const MINIMUM_AMOUNT = 1000;
+
+    // Debug useEffect to track state changes
+    useEffect(() => {
+        console.log('remainingSize state:', remainingSize);
+        console.log('property available_size:', property?.available_size);
+        console.log('calculatedLandSize:', calculatedLandSize);
+    }, [remainingSize, property, calculatedLandSize]);
 
     // Fetch property details
     useEffect(() => {
@@ -72,6 +81,15 @@ const BuyProperties = () => {
                 setUser(response.data.user);
                 setProperty(response.data.property);
                 
+                // Debug logging
+                console.log('Property data:', response.data.property);
+                console.log('Valuation Summary:', response.data.property.valuationSummary);
+                console.log('Price:', response.data.property.price);
+                
+                const pricePerSqm = response.data.property.valuationSummary?.current_value_sum || response.data.property.price;
+                console.log('Calculated pricePerSqm:', pricePerSqm);
+                
+                // Parse available_size to handle comma-separated numbers
                 const availableSize = parseNumericString(response.data.property.available_size);
                 setRemainingSize(availableSize);
             } catch (err) {
@@ -88,54 +106,55 @@ const BuyProperties = () => {
     // Calculate land size and total price based on input amount
     useEffect(() => {
         if (!property) return;
-
-        const pricePerSqm = property.valuation_summary?.current_value_sum || property.price;
+        
+        const pricePerSqm = property.valuationSummary?.current_value_sum || property.price;
+        
+        // Add validation for pricePerSqm
+        if (!pricePerSqm || pricePerSqm <= 0) {
+            console.error('Invalid price per square meter:', pricePerSqm);
+            setCalculatedLandSize(0);
+            setTotalPrice(0);
+            return;
+        }
+        
         const amount = parseFloat(inputAmount) || 0;
-
-        // Validate minimum amount for error display
+        
+        // Validate minimum amount
         if (amount > 0 && amount < MINIMUM_AMOUNT) {
             setAmountError(`Minimum amount is ${formatCurrency(MINIMUM_AMOUNT)}`);
         } else {
             setAmountError('');
         }
-
+        
         if (amount <= 0) {
             setCalculatedLandSize(0);
             setTotalPrice(0);
-            setRemainingSize(parseNumericString(property.available_size));
             return;
         }
-
-        // 1. Calculate Land Size — isolated so a missing/invalid pricePerSqm
-        //    only zeroes the land size, not the total price below.
-        let landSize = 0;
-        if (pricePerSqm && pricePerSqm > 0) {
-            landSize = amount / pricePerSqm;
-            if (isNaN(landSize) || !isFinite(landSize)) {
-                landSize = 0;
-            }
+        
+        // Calculate land size: amount / price per sqm
+        const landSize = amount / pricePerSqm;
+        
+        // Ensure landSize is a valid number
+        if (isNaN(landSize) || !isFinite(landSize)) {
+            console.error('Invalid land size calculation:', { amount, pricePerSqm });
+            setCalculatedLandSize(0);
+            setTotalPrice(0);
+            return;
         }
+        
         setCalculatedLandSize(landSize);
-
-        // 2. Calculate ROI Amount
-        // Ensure percentage_increase is a valid number
-        const rawPercentage = property.percentage_increase;
-        const roiPercentage = typeof rawPercentage === 'string' ? parseFloat(rawPercentage.replace('%', '')) : parseFloat(rawPercentage);
-        const safeRoiPercentage = isNaN(roiPercentage) ? 0 : roiPercentage;
         
-        const roiAmount = amount * (safeRoiPercentage / 100);
+        // Calculate total price (with commission if applied)
+        let finalTotal = amount;
         
-        // 3. Calculate Final Total: Input Amount + ROI Amount
-        let finalTotal = amount + roiAmount; 
-        
-        // 4. Deduct commission if applied
         if (applyCommission && user?.commission_balance) {
-            finalTotal = Math.max(finalTotal - user.commission_balance, 0);
+            finalTotal = Math.max(amount - user.commission_balance, 0);
         }
         
         setTotalPrice(finalTotal);
         
-        // Update remaining size
+        // Parse available_size to handle comma-separated numbers and ensure it's a number
         const currentAvailableSize = parseNumericString(property.available_size);
         const newRemainingSize = Math.max(currentAvailableSize - landSize, 0);
         setRemainingSize(newRemainingSize);
@@ -145,24 +164,37 @@ const BuyProperties = () => {
     // Amount handlers
     const handleAmountChange = (e) => {
         const value = e.target.value;
+        
+        // Allow empty string or numeric values
         if (value === '' || /^\d*\.?\d*$/.test(value)) {
             setInputAmount(value);
         }
     };
 
+    // Handle input focus to clear the placeholder
     const handleInputFocus = (e) => {
         if (e.target.value === '0') {
             setInputAmount('');
         }
     };
 
+    // Handle input blur to validate minimum amount
     const handleInputBlur = (e) => {
         const amount = parseFloat(inputAmount) || 0;
+        
         if (inputAmount === '') {
             setInputAmount('0');
         } else if (amount > 0 && amount < MINIMUM_AMOUNT) {
             setAmountError(`Minimum amount is ${formatCurrency(MINIMUM_AMOUNT)}`);
         } else {
+            setAmountError('');
+        }
+    };
+
+    // Quick amount buttons
+    const setQuickAmount = (amount) => {
+        if (amount >= MINIMUM_AMOUNT) {
+            setInputAmount(amount.toString());
             setAmountError('');
         }
     };
@@ -176,16 +208,21 @@ const BuyProperties = () => {
         }).format(amount || 0);
     };
 
-    // Format land size
+    // Format land size (square meters)
     const formatLandSize = (size) => {
-        if (isNaN(size) || !isFinite(size)) return '0.0000 SQM';
+        if (isNaN(size) || !isFinite(size)) {
+            return '0.0000 SQM';
+        }
         return `${Math.max(0, size).toFixed(4)} SQM`;
     };
 
+    // Helper function to safely get remaining size for display
     const getDisplayRemainingSize = () => {
-        return parseNumericString(remainingSize).toFixed(4);
+        const value = parseNumericString(remainingSize);
+        return value.toFixed(4);
     };
 
+    // Helper function to get available size from property
     const getAvailableSize = () => {
         if (!property) return 0;
         return parseNumericString(property.available_size);
@@ -194,29 +231,27 @@ const BuyProperties = () => {
     // Payment handlers
     const handleMakePayment = (e) => {
         e.preventDefault();
-        const amount = parseFloat(totalPrice) || 0;
+        const amount = parseFloat(inputAmount) || 0;
         const availableSize = getAvailableSize();
-
+        
         if (amount < MINIMUM_AMOUNT) {
             alert(`Minimum amount required is ${formatCurrency(MINIMUM_AMOUNT)}`);
             return;
         }
-
+        
+        if (amount <= 0 || calculatedLandSize <= 0) { 
+            alert('Please enter a valid amount to proceed.');
+            return;
+        }
+        
         if (calculatedLandSize > availableSize) {
-            alert(`The calculated land size exceeds the available size.`);
+            alert(`The calculated land size (${formatLandSize(calculatedLandSize)}) exceeds the available size of ${availableSize.toFixed(4)} SQM. Please enter a smaller amount.`);
             return;
         }
-
-        if (isNaN(totalPrice) || !isFinite(totalPrice) || totalPrice <= 0) {
-            alert('Unable to calculate a valid total price. Please re-enter the amount.');
-            return;
-        }
-
-        setPaymentMethod(null);
-        setTransactionPin('');
-        setPaymentSuccess(false);
+        
         setShowPaymentModal(true);
     };
+
     const handlePaymentMethodSelect = (method) => {
         setPaymentMethod(method);
     };
@@ -226,27 +261,29 @@ const BuyProperties = () => {
             const revolutCheckout = await RevolutCheckout(publicId, {
                 mode: process.env.REACT_APP_REVOLUT_MODE || 'sandbox',
                 onSuccess: () => {
-                    setPaymentSuccess(true);
-                    setShowPaymentModal(true);
+                    navigate('/user/cart/buy/success');
                 },
                 onError: (error) => {
                     console.error('Payment error:', error);
                     alert('Payment failed. Please try again.');
                 },
-                onCancel: () => console.log('Payment cancelled')
+                onCancel: () => {
+                    console.log('Payment was cancelled by user');
+                }
             });
+
             revolutCheckoutRef.current = revolutCheckout;
             revolutCheckout.show();
         } catch (err) {
             console.error('Error initializing Revolut payment:', err);
-            alert('Failed to initialize payment gateway.');
+            alert('Failed to initialize payment gateway. Please try again.');
         }
     };
 
     const handleConfirmPayment = async (e) => {
         e.preventDefault();
-        const amount = parseFloat(inputAmount) || 0;
         
+        const amount = parseFloat(inputAmount) || 0;
         if (amount < MINIMUM_AMOUNT) {
             alert(`Minimum amount required is ${formatCurrency(MINIMUM_AMOUNT)}`);
             return;
@@ -257,32 +294,42 @@ const BuyProperties = () => {
             return;
         }
 
+        // Use parsed remaining size
+        const validRemainingSize = parseNumericString(remainingSize);
+
         setPaymentProcessing(true);
- 
+
         try { 
             const response = await axios.post('/user/payment/initiate', {
-                remaining_size: parseNumericString(remainingSize),
+                remaining_size: validRemainingSize,
                 property_slug: property.slug,
                 quantity: calculatedLandSize,
-                total_price: totalPrice, // This now includes Input + ROI
+                total_price: totalPrice,
                 commission_applied_amount: applyCommission ? user.commission_balance : 0,
                 transaction_pin: transactionPin,
                 commission_check: applyCommission ? 1 : 0,
                 payment_method: paymentMethod,
             }); 
             
+            console.log('Payment response:', response.data);
+            
             if (response.data.success) {
-                if (paymentMethod === 'card' && response.data.public_id) {
-                    // Close our modal and let the Revolut widget take over;
-                    // its onSuccess callback (above) reopens our modal in
-                    // the success view.
-                    setShowPaymentModal(false);
+                if (paymentMethod === 'wallet') {
+                    try {
+                        // Try to redirect to Laravel dashboard
+                        window.location.href = '/user/dashboard';
+                        // If redirect fails, fallback to showing success component
+                        setTimeout(() => {
+                            setPaymentSuccess(true);
+                        }, 1000);
+                    } catch (err) {
+                        console.error('Redirect failed:', err);
+                        setPaymentSuccess(true);
+                    }
+                } else if (paymentMethod === 'card' && response.data.public_id) {
                     await initializeRevolutPayment(response.data.public_id);
-                } else {
-                    // Wallet payments: switch the same modal into its
-                    // success view instead of closing it, so the user can
-                    // see confirmation and choose to go to the dashboard.
-                    setTransactionPin('');
+                } else { 
+                    // Fallback - show success component
                     setPaymentSuccess(true);
                 }
             } else {
@@ -291,25 +338,24 @@ const BuyProperties = () => {
         } catch (err) {
             console.error('Payment error:', err);
             alert(err.response?.data?.message || err.message || 'Payment failed');
-            setShowPaymentModal(false);
         } finally {
             setPaymentProcessing(false);
+            setShowPaymentModal(false);
         }
     };
 
+    // Loading and error states
     if (loading) return <div className="text-center py-5">Loading property details...</div>;
     if (error) return <div className="alert alert-danger">{error}</div>;
     if (!property) return <div className="alert alert-warning">No property found</div>;
 
-    const pricePerSqm = property.valuation_summary?.current_value_sum || property.price;
-    const amount = parseFloat(inputAmount) || 0;
-    
-    // Recalculate ROI for display consistency
-    const rawPercentage = property.percentage_increase;
-    const roiPercentage = typeof rawPercentage === 'string' ? parseFloat(rawPercentage.replace('%', '')) : parseFloat(rawPercentage);
-    const safeRoiPercentage = isNaN(roiPercentage) ? 0 : roiPercentage;
-    const roiAmount = amount * (safeRoiPercentage / 100);
+    // Show PaymentSuccess component if payment was successful
+    if (paymentSuccess) {
+        return <PaymentSuccess />;
+    }
 
+    const pricePerSqm = property.valuationSummary?.current_value_sum || property.price;
+    const amount = parseFloat(inputAmount) || 0;
     const isAmountValid = amount >= MINIMUM_AMOUNT;
     const availableSize = getAvailableSize();
 
@@ -330,14 +376,25 @@ const BuyProperties = () => {
                                     <div className="property-header">
                                         <div className="property-image">
                                             <img
-                                                src={property.property_images ? (property.property_images.startsWith('http') ? property.property_images : `/${property.property_images}`) : '/images/placeholder-property.jpg'}
+                                                src={
+                                                    property.property_images
+                                                        ? (property.property_images.startsWith('http') || property.property_images.startsWith('/'))
+                                                            ? property.property_images
+                                                            : `/${property.property_images.replace(/^\/+/, '')}`
+                                                        : '/images/placeholder-property.jpg'
+                                                }
                                                 alt={property.name}
-                                                onError={(e) => { e.target.src = '/images/placeholder-property.jpg'; }}
+                                                onError={(e) => {
+                                                    e.target.src = '/images/placeholder-property.jpg';
+                                                    e.target.onerror = null;
+                                                }}
                                             />
                                         </div>
                                         <div className="property-info">
                                             <h3>{property.name}</h3>
-                                            <div className="property-price">{formatCurrency(pricePerSqm)} per/sqm</div>
+                                            <div className="property-price">
+                                                {formatCurrency(pricePerSqm)} per/sqm
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -365,8 +422,12 @@ const BuyProperties = () => {
                                             min={MINIMUM_AMOUNT}
                                             step="100"
                                         />
-                                        {amountError && <div className="text-danger small mt-1">{amountError}</div>}
-                                        <div className="text-muted small mt-1">Minimum amount: {formatCurrency(MINIMUM_AMOUNT)}</div>
+                                        {amountError && (
+                                            <div className="text-danger small mt-1">{amountError}</div>
+                                        )}
+                                        <div className="text-muted small mt-1">
+                                            Minimum amount: {formatCurrency(MINIMUM_AMOUNT)}
+                                        </div>
                                     </div>
 
                                     <div className="calculation-results">
@@ -378,14 +439,6 @@ const BuyProperties = () => {
                                             <span className="label">Total to Pay:</span>
                                             <span className="value highlight">{formatCurrency(totalPrice)}</span>
                                         </div>
-                                        
-                                        {amount > 0 && safeRoiPercentage > 0 && (
-                                            <div className="result-item">
-                                                <span className="label">Projected ROI:</span>
-                                                <span className="value text-success">{formatCurrency(roiAmount)} ({safeRoiPercentage}%)</span>
-                                            </div>
-                                        )}
-
                                         {applyCommission && user?.commission_balance && (
                                             <div className="commission-applied text-success small">
                                                 Commission applied: -{formatCurrency(user.commission_balance)}
@@ -401,7 +454,11 @@ const BuyProperties = () => {
                                     <thead>
                                         <tr>
                                             <th>Product Image</th>
+                                            {/* <th>Price per SQM</th> */}
+                                            {/* <th>Actual Land Size</th> */}
+                                            {/* <th>Available Land Size</th> */}
                                             <th>Enter Amount (₦)</th>
+                                            {/* <th>Calculated Land Size</th> */}
                                             <th>Total to Pay</th>
                                         </tr>
                                     </thead>
@@ -411,26 +468,57 @@ const BuyProperties = () => {
                                                 <div className="properties__author d-flex align-items-center">
                                                     <div className="properties__author--thumb">
                                                         <img
-                                                            src={property.property_images ? (property.property_images.startsWith('http') ? property.property_images : `/${property.property_images}`) : '/images/placeholder-property.jpg'}
+                                                            src={
+                                                                property.property_images
+                                                                    ? (property.property_images.startsWith('http') || property.property_images.startsWith('/'))
+                                                                        ? property.property_images
+                                                                        : `/${property.property_images.replace(/^\/+/, '')}`
+                                                                    : '/images/placeholder-property.jpg'
+                                                            }
                                                             alt={property.name}
                                                             style={{ width: '64px', height: '64px', objectFit: 'cover' }}
-                                                            onError={(e) => { e.target.src = '/images/placeholder-property.jpg'; }}
+                                                            onError={(e) => {
+                                                                e.target.src = '/images/placeholder-property.jpg';
+                                                                e.target.onerror = null;
+                                                            }}
                                                         />
                                                     </div>
                                                     <div className="reviews__author--text">
                                                         <h3 className="reviews__author--title">{property.name}</h3>
                                                         {property.valuation_summary ? (
                                                             <>
-                                                                <span className="properties__author--price">{formatCurrency(property.valuation_summary.current_value_sum)} per/sqm</span>
-                                                                <p className="properties__author--price text-decoration-line-through text-muted">{formatCurrency(property.valuation_summary.initial_value_sum)} per/sqm</p>
+                                                                <span className="properties__author--price">
+                                                                    {formatCurrency(property.valuation_summary.current_value_sum)} per/sqm
+                                                                </span>
+                                                                <p className="properties__author--price text-decoration-line-through text-muted">
+                                                                    {formatCurrency(property.valuation_summary.initial_value_sum)} per/sqm
+                                                                </p>
                                                                 <p className="reviews__author--title">{property.valuation_summary.percentage_value}%</p>
                                                             </>
                                                         ) : (
-                                                            <p className="">ROI: {property.percentage_increase}%</p>
+                                                             <>
+                                                                {/* <span className="properties__author--price">
+                                                                    {formatCurrency(property.price)} per/sqm
+                                                                </span> */}
+                                                                <p className="">
+                                                                    ROI: {property.percentage_increase}%
+                                                                </p>
+                                                             </>
+                                                            
+                                                            
                                                         )}
                                                     </div>
                                                 </div>
                                             </td>
+                                            {/* <td>
+                                                <span className="item-price"> 
+                                                    {formatCurrency(pricePerSqm)} per/sqm
+                                                </span>
+                                            </td> */}
+                                            {/* <td><span>{property.size} SQM</span></td>
+                                            <td className="available-size">
+                                                {getDisplayRemainingSize()} SQM
+                                            </td> */}
                                             <td>
                                                 <div className="d-flex flex-column gap-2">
                                                     <input 
@@ -444,28 +532,29 @@ const BuyProperties = () => {
                                                         min={MINIMUM_AMOUNT}
                                                         step="100"
                                                     />
-                                                    {amountError && <div className="text-danger small">{amountError}</div>}
-                                                    <div className="text-muted small">Minimum amount: {formatCurrency(MINIMUM_AMOUNT)}</div>
+                                                    {amountError && (
+                                                        <div className="text-danger small">{amountError}</div>
+                                                    )}
+                                                    
+                                                    <div className="text-muted small">
+                                                        Minimum amount: {formatCurrency(MINIMUM_AMOUNT)}
+                                                    </div>
                                                 </div>
                                             </td>
+                                            {/* <td>
+                                                <span className="calculated-land-size" style={{ color: '#47008E', fontWeight: 'bold' }}>
+                                                    {formatLandSize(calculatedLandSize)}
+                                                </span>
+                                            </td> */}
                                             <td>
-                                                <div className="d-flex flex-column gap-1">
-                                                    <span className="total-price" style={{ color: '#47008E', fontWeight: 'bold' }}>
-                                                        {formatCurrency(totalPrice)}
-                                                    </span>
-                                                    
-                                                    {amount > 0 && safeRoiPercentage > 0 && (
-                                                        <div className="text-success small">
-                                                            Projected ROI: {formatCurrency(roiAmount)} ({safeRoiPercentage}%)
-                                                        </div>
-                                                    )}
-
-                                                    {applyCommission && user?.commission_balance && (
-                                                        <div className="text-success small mt-1">
-                                                            Commission applied: -{formatCurrency(user.commission_balance)}
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                <span className="total-price" style={{ color: '#47008E', fontWeight: 'bold' }}>
+                                                    {formatCurrency(totalPrice)}
+                                                </span>
+                                                {applyCommission && user?.commission_balance && (
+                                                    <div className="text-success small mt-1">
+                                                        Commission applied: -{formatCurrency(user.commission_balance)}
+                                                    </div>
+                                                )}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -473,6 +562,7 @@ const BuyProperties = () => {
                             </div>
                         </div>
 
+                        {/* Commission Toggle */}
                         <div className="form-check mt-3">
                             <input
                                 className="form-check-input"
@@ -488,12 +578,14 @@ const BuyProperties = () => {
                         </div>
 
                         <div className="cart__footer d-flex justify-content-between align-items-center mt-4">
-                            <a href="/user/buy" className="solid__btn" style={{ backgroundColor: '#CC9933' }}>View Properties</a>
+                            <a href="/user/buy" className="solid__btn" style={{ backgroundColor: '#CC9933' }}>
+                                View Properties
+                            </a>
                             <div>
                                 <button 
                                     className="solid__btn" 
                                     onClick={handleMakePayment}
-                                    // disabled={!isAmountValid || calculatedLandSize <= 0 || calculatedLandSize > availableSize || amountError}
+                                    disabled={!isAmountValid || calculatedLandSize <= 0 || calculatedLandSize > availableSize || amountError}
                                 >
                                     Make Payment
                                 </button>
@@ -507,30 +599,37 @@ const BuyProperties = () => {
                                     <div className="modal-content">
                                         <div className="modal-header">
                                             <h4 className="">Select Payment Method</h4>
-                                            <button type="button" className="btn-close" onClick={() => { setShowPaymentModal(false); setPaymentMethod(null); setPaymentSuccess(false); setTransactionPin(''); }}></button>
+                                            <button 
+                                                type="button" 
+                                                className="btn-close" 
+                                                onClick={() => {
+                                                    setShowPaymentModal(false);
+                                                    setPaymentMethod(null);
+                                                }}
+                                            ></button>
                                         </div>
                                         <div className="modal-body">
-                                            {paymentSuccess ? (
-                                                <div className="text-center py-3">
-                                                    <div className="mb-3" style={{ fontSize: '2.5rem', color: '#28a745' }}>&#10003;</div>
-                                                    <h5 className="mb-2">Payment Successful!</h5>
-                                                    <p className="text-muted mb-4">Your property purchase has been completed successfully.</p>
-                                                    <button
-                                                        type="button"
-                                                        className="solid__btn w-100"
-                                                        onClick={() => { window.location.href = '/user/dashboard'; }}
-                                                    >
-                                                        Go to Dashboard
-                                                    </button>
-                                                </div>
-                                            ) : !paymentMethod ? (
+                                            {!paymentMethod ? (
                                                 <div className="d-flex flex-column gap-3">
-                                                    <button className="solid__btn add__property--btn w-100" onClick={() => handlePaymentMethodSelect('wallet')}>Pay with Wallet</button>
+                                                    {/* <button 
+                                                        className="btn btn-primary"
+                                                        onClick={() => handlePaymentMethodSelect('card')}
+                                                    >
+                                                        Pay with Card
+                                                    </button> */}
+                                                    <button 
+                                                        className="solid__btn add__property--btn w-100" 
+                                                        onClick={() => handlePaymentMethodSelect('wallet')}
+                                                    >
+                                                        Pay with Wallet
+                                                    </button>
                                                 </div>
                                             ) : (
                                                 <div>
                                                     <div className="form-group mt-3">
-                                                        <label htmlFor="transaction_pin" className="form-label">Enter 4-digit Transaction PIN</label>
+                                                        <label htmlFor="transaction_pin" className="form-label">
+                                                            Enter 4-digit Transaction PIN
+                                                        </label>
                                                         <input
                                                             type="password"
                                                             style={{padding: '10px 10px'}}
@@ -546,8 +645,23 @@ const BuyProperties = () => {
                                                         />
                                                     </div>
                                                     <div className="d-flex justify-content-between mt-3">
-                                                        <button type="button" style={{backgroundColor:'white', color:'black', border: '1px solid gray'}} className="solid__btn" onClick={() => { setPaymentMethod(null); setTransactionPin(''); }}>Back</button>
-                                                        <button type="button" className="solid__btn " onClick={handleConfirmPayment} disabled={paymentProcessing}>
+                                                        <button 
+                                                            type="button" 
+                                                            style={{backgroundColor:'white', color:'black', border: '1px solid gray'}}
+                                                            className="solid__btn"
+                                                            onClick={() => {
+                                                                setPaymentMethod(null);
+                                                                setTransactionPin('');
+                                                            }}
+                                                        >
+                                                            Back
+                                                        </button>
+                                                        <button 
+                                                            type="button" 
+                                                            className="solid__btn "
+                                                            onClick={handleConfirmPayment}
+                                                            disabled={paymentProcessing}
+                                                        >
                                                             {paymentProcessing ? 'Processing...' : 'Confirm Payment'}
                                                         </button>
                                                     </div>
@@ -560,29 +674,130 @@ const BuyProperties = () => {
                         )}
                     </div>
 
+                    {/* Mobile-specific CSS */}
                     <style jsx>{`
-                        .mobile-property-card { background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 1rem; }
-                        .property-header { display: flex; align-items: center; margin-bottom: 1rem; }
-                        .property-image img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-right: 1rem; }
-                        .property-info h3 { margin: 0 0 0.5rem 0; font-size: 1.2rem; color: #333; }
-                        .property-price { color: #47008E; font-weight: bold; font-size: 0.9rem; }
-                        .property-details { margin-bottom: 1rem; }
-                        .detail-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0; }
-                        .detail-item .label { color: #666; font-weight: 500; }
-                        .detail-item .value { color: #333; font-weight: 600; }
-                        .amount-section { margin-bottom: 1rem; }
-                        .amount-section .form-control { padding: 0.75rem; font-size: 16px; border: 2px solid #e0e0e0; border-radius: 8px; }
-                        .calculation-results { background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
-                        .result-item { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; }
-                        .result-item .label { color: #666; font-weight: 500; }
-                        .result-item .value { font-weight: 600; }
-                        .result-item .value.highlight { color: #47008E; font-size: 1.1rem; }
-                        .commission-applied { text-align: center; margin-top: 0.5rem; padding: 0.25rem; background: #d4edda; border-radius: 4px; }
+                        .mobile-property-card {
+                            background: white;
+                            border-radius: 12px;
+                            padding: 1rem;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .property-header {
+                            display: flex;
+                            align-items: center;
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .property-image img {
+                            width: 80px;
+                            height: 80px;
+                            object-fit: cover;
+                            border-radius: 8px;
+                            margin-right: 1rem;
+                        }
+                        
+                        .property-info h3 {
+                            margin: 0 0 0.5rem 0;
+                            font-size: 1.2rem;
+                            color: #333;
+                        }
+                        
+                        .property-price {
+                            color: #47008E;
+                            font-weight: bold;
+                            font-size: 0.9rem;
+                        }
+                        
+                        .property-details {
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .detail-item {
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 0.5rem 0;
+                            border-bottom: 1px solid #f0f0f0;
+                        }
+                        
+                        .detail-item .label {
+                            color: #666;
+                            font-weight: 500;
+                        }
+                        
+                        .detail-item .value {
+                            color: #333;
+                            font-weight: 600;
+                        }
+                        
+                        .amount-section {
+                            margin-bottom: 1rem;
+                        }
+                        
+                        .amount-section .form-control {
+                            padding: 0.75rem;
+                            font-size: 16px; /* Prevents zoom on iOS */
+                            border: 2px solid #e0e0e0;
+                            border-radius: 8px;
+                        }
+                        
+                        .calculation-results {
+                            background: #f8f9fa;
+                            padding: 1rem;
+                            border-radius: 8px;
+                            margin-top: 1rem;
+                        }
+                        
+                        .result-item {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 0.5rem 0;
+                        }
+                        
+                        .result-item .label {
+                            color: #666;
+                            font-weight: 500;
+                        }
+                        
+                        .result-item .value {
+                            font-weight: 600;
+                        }
+                        
+                        .result-item .value.highlight {
+                            color: #47008E;
+                            font-size: 1.1rem;
+                        }
+                        
+                        .commission-applied {
+                            text-align: center;
+                            margin-top: 0.5rem;
+                            padding: 0.25rem;
+                            background: #d4edda;
+                            border-radius: 4px;
+                        }
+                        
                         @media (max-width: 480px) {
-                            .property-header { flex-direction: column; text-align: center; }
-                            .property-image img { margin-right: 0; margin-bottom: 0.5rem; }
-                            .cart__footer { flex-direction: column; gap: 1rem; }
-                            .cart__footer .solid__btn { width: 100%; text-align: center; }
+                            .property-header {
+                                flex-direction: column;
+                                text-align: center;
+                            }
+                            
+                            .property-image img {
+                                margin-right: 0;
+                                margin-bottom: 0.5rem;
+                            }
+                            
+                            .cart__footer {
+                                flex-direction: column;
+                                gap: 1rem;
+                            }
+                            
+                            .cart__footer .solid__btn {
+                                width: 100%;
+                                text-align: center;
+                            }
                         }
                     `}</style>
                 </main>
@@ -591,34 +806,47 @@ const BuyProperties = () => {
     );
 };
 
+// Index Page Component
 const IndexPage = () => {
     return (
         <div style={{ padding: '2rem', textAlign: 'center' }}>
             <h2>Buy Properties</h2>
-            <p>Please include a property slug in the URL.</p>
+            <p>Please include a property slug in the URL (e.g. `/user/cart/buy/my-slug`).</p>
         </div>
     );
 };
 
+// Dashboard Component (remove the old one since we're not using it in routes)
+const Dashboard = () => null;
+
+// Main App Component
 const App = () => (
     <BrowserRouter basename="/user/cart">
         <Routes>
             <Route index element={<IndexPage />} />
             <Route path=":slug" element={<BuyProperties />} />
             <Route path="success" element={<PaymentSuccess />} />
+            {/* You can keep or remove the dashboard route since we're handling it differently */}
+            {/* <Route path="dashboard" element={<Dashboard />} /> */}
         </Routes>
     </BrowserRouter>
 );
 
+// Mount to DOM
 const rootEl = document.getElementById('buyProperties');
 if (rootEl) {
     const root = ReactDOM.createRoot(rootEl);
     root.render(<App />);
 }
 
+// EXPORT STATEMENTS FOR REACT FAST REFRESH
+// Export individual components
 export { PaymentSuccess, IndexPage, App, BuyProperties };
+
+// Export BuyProperties as default (prevents Fast Refresh error)
 export default BuyProperties;
 
+// Add module hot accept for development
 if (import.meta.hot) {
     import.meta.hot.accept();
 }

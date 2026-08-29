@@ -145,11 +145,13 @@
                                             </div>
                                         </td>
                                         <td data-label="Status">
-                                            @if( $item->status == 'available')
+                                                <span class="status__btn processing">Available</span>
+
+                                            <!-- @if( $item->status == 'available')
                                                 <span class="status__btn processing">{{ ucFirst($item->status)}}</span>
-                                            @elseif($item->status === 'sold out')
-                                                <span class="status__btn active" style="color: #008000">{{ ucFirst($item->status)}}</span>
-                                            @endif
+                                            @elseif($item->status === 'sold out') -->
+                                                <!-- <span class="status__btn active" style="color: #008000">{{ ucFirst($item->status)}}</span> -->
+                                            <!-- @endif -->
                                         </td>
                                         <!-- <td data-label="Size">
                                             <span class="properties__views">{{ $item->size }} SQM </span>
@@ -158,21 +160,22 @@
                                             <span class="properties__views">{{ $item->available_size }} SQM </span> 
                                         </td> -->
                                         <td data-label="Action">
-                                            @if($item->status === 'sold out')
+                                            <span class="sales__report--status pending2"   style="background-color: #008000;">
+                                                <a  
+                                                style=" color: #fff; border: none;  cursor: pointer;"
+                                                href="{{ route('user.cart.index', $item->slug) }}"
+                                                >Buy</a>  
+                                            </span>
+                                            <!-- @if($item->status === 'sold out')
                                                 <span class="status__btn " style="color:#fff; background-color:#47008E ">
                                                     <a href="{{ route('user.offerPrice', encrypt($item->id))}}" 
                                                         style=" color: #fff; border: none;  cursor: pointer;">
                                                         Offer Price 
                                                     </a>
                                                 </span>
-                                            @elseif($item->status === 'available')
-                                                <span class="sales__report--status pending2"   style="background-color: #008000;">
-                                                    <a  
-                                                    style=" color: #fff; border: none;  cursor: pointer;"
-                                                    href="{{ route('user.cart.index', $item->slug) }}"
-                                                    >Buy</a>  
-                                                </span>
-                                            @endif
+                                            @elseif($item->status === 'available') -->
+                                                
+                                            <!-- @endif -->
                                         </td>
                                         <td data-label="Details">
                                             <span class="sales__report--status pending2"><a href="{{ route('user.properties.show', encrypt($item->id))}}">View</a></span>
