@@ -145,8 +145,8 @@
                         <thead>
                             <tr>
                                 <th>Listing Title</th>
-                                <th>Date Acquired</th>
-                                <th>Acquired Size (Sellable)</th>
+                                <!-- <th>Date Acquired</th> -->
+                                <!-- <th>Acquired Size (Sellable)</th> -->
                                 <th colspan="2" class="text-center">Actions</th>
                             </tr>
                         </thead>
@@ -171,7 +171,7 @@
                                             
                                             <h3 class="reviews__author--title mb-1 ">{{ optional($property->property)->name ?? 'N/A' }}</h3>
                                             <p class="reviews__author--subtitle text-muted  mb-1">{{ optional($property->property)->location ?? 'N/A' }}</p>
-                                            @if($property->valuationSummary)
+                                            <!-- @if($property->valuationSummary)
                                                 <span class="properties__author--price d-block small">₦{{ number_format($property->valuationSummary->current_value_sum, 2)}} <small class="text-muted">per/sqm</small></span>
                                                 <p class="properties__author--price text-decoration-line-through text-muted small mb-0">₦{{ number_format($property->valuationSummary->initial_value_sum, 2)}} <small class="text-muted">per/sqm</small></p>
                                             @elseif(optional($property->property)->price) {{-- Check property and price exist --}}
@@ -181,18 +181,18 @@
                                                 @endif
                                             @else
                                                 <span class="properties__author--price d-block text-muted small">Price unavailable</span>
-                                            @endif
+                                            @endif -->
                                         </div>
                                     </div>
                                 </td> 
-                                <td data-label="Date Acquired">
+                                <!-- <td data-label="Date Acquired">
                                     <span class="reviews__date">
                                         {{  \Carbon\Carbon::parse($property->latest_created_at)->format('d F, Y')  }} 
                                     </span>
-                                </td> 
-                                <td data-label="Acquired Size" class="text-nowrap align-middle fw-bold"> {{-- Align vertically, make bold --}}
+                                </td>  -->
+                                <!-- <td data-label="Acquired Size" class="text-nowrap align-middle fw-bold"> {{-- Align vertically, make bold --}}
                                     <span class="properties__views">{{ number_format($property->total_selected_size_land, 4) }} SQM</span>
-                                </td>  
+                                </td>   -->
                                 <td data-label="View Property">
                                     <span class="status__btn pending2"> 
                                         <a href="{{ route('user.properties.show', encrypt($property->property->id))}}">

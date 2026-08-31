@@ -17,10 +17,10 @@
                             <thead>
                                 <tr> 
                                     <th>Product Image</th>
-                                    <th>Price</th>
-                                    <th>Acquired Land Size</th>
+                                    <!-- <th>Price</th> -->
+                                    <!-- <th>Acquired Land Size</th> -->
                                     <th>Enter Amount (₦)</th>
-                                    <th>Calculated Land Size</th>
+                                    <!-- <th>Calculated Land Size</th> -->
                                     <th>Total</th>
                                 </tr>
                             </thead>
@@ -38,7 +38,7 @@
                                             </div>
                                         </div> 
                                     </td>
-                                    @if($property->valuationSummary) 
+                                    <!-- @if($property->valuationSummary) 
                                         <td>
                                             <span class="item-price" data-price="{{ $property->valuationSummary->current_value_sum }}">₦{{ number_format($property->valuationSummary->current_value_sum, 2) }} per/sqm</span>
                                         </td>
@@ -46,10 +46,10 @@
                                         <td>
                                             <span class="item-price" data-price="{{ $property->price }}">₦{{ number_format($property->price, 2) }} per/sqm</span>
                                         </td>
-                                    @endif
-                                    <td class="available-size" data-initial-size="{{ $property->buys->sum('selected_size_land')}}">
+                                    @endif -->
+                                    <!-- <td class="available-size" data-initial-size="{{ $property->buys->sum('selected_size_land')}}">
                                         {{ $property->buys->sum('selected_size_land') }} SQM 
-                                    </td>
+                                    </td> -->
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <input type="number" class="amount-input text-center mx-2"
@@ -57,9 +57,9 @@
                                         </div>
                                         <small class="text-muted">Minimum: ₦1,000</small>
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         <span class="calculated-size" style="color: #47008E; font-weight: bold">0.0000 SQM</span>
-                                    </td>
+                                    </td> -->
                                     <td>
                                         <span class="total-price" style="color: #47008E; font-weight: bold">₦0.00</span>
                                     </td>
