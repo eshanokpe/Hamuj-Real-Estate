@@ -22,35 +22,36 @@ use Illuminate\Support\Str;
  
 class SellPropertyController extends Controller
 {
-    
+ 
     public function index(){ 
         $user = Auth::user();
        
-        $data['sellProperty'] = Buy::select(
-            'property_id',  
-            DB::raw('SUM(selected_size_land) as total_selected_size_land'),
-            DB::raw('SUM(total_price) as total_amount_paid'), // <-- ADDED: Sums the total money spent
-            DB::raw('MAX(created_at) as latest_created_at') 
+        // Fetch individual records
+        $data['sellProperties'] = Buy::select(
+            'id', 'property_id', 'selected_size_land', 'total_price', 'created_at'
         )
         ->with('property') 
-        ->with('valuationSummary')
         ->where('user_id', $user->id)
         ->where('user_email', $user->email)
-        ->groupBy('property_id') 
+        // ->where('selected_size_land', '>', 0) // Only valid buys
+        ->orderBy('created_at', 'desc') 
         ->paginate(10);
 
-        // Note: If your column in the 'buys' table is named 'amount' instead of 'total_price', 
-        // change 'SUM(total_price)' to 'SUM(amount)' above.
-
-        if (request()->wantsJson()) {
-            return response()->json([
-                'success' => true,
-                'data' =>  $data['sellProperty']
-            ]);
-        }
+        // Calculate Grand Totals
+        $data['grandTotalSize'] = Buy::where('user_id', $user->id)
+                                     ->where('user_email', $user->email)
+                                     ->where('selected_size_land', '>', 0)
+                                     ->sum('selected_size_land');
+        
+        // THIS IS THE KEY LINE FOR YOUR REQUEST
+        $data['grandTotalAmount'] = Buy::where('user_id', $user->id)
+                                       ->where('user_email', $user->email)
+                                    //    ->where('selected_size_land', '>', 0)
+                                       ->sum('total_price'); // Change to 'amount' if your DB column is named 'amount'
 
         return view('user.pages.properties.sell.index', $data); 
     }
+
 
     public function sellProperty(Request $request)
     {

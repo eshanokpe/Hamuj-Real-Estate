@@ -56,20 +56,53 @@ class CartController extends Controller
         ]);
     } 
 
-    public function sell($id){ 
-        $user = Auth::user(); 
+    // public function sell($id){ 
+    //     $user = Auth::user(); 
        
-        $data['property'] = Property::with(['buys' => function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        }])
-        ->where('id', decrypt($id))
-        ->firstOrFail();
+    //     $data['property'] = Property::with(['buys' => function ($query) use ($user) {
+    //         $query->where('user_id', $user->id);
+    //     }])
+    //     ->where('id', decrypt($id))
+    //     ->firstOrFail();
 
-        // --- NEW: Calculate total amount paid by this user for this property ---
-        $data['property']->total_bought_amount = $data['property']->buys->sum('total_price');
+    //     // --- NEW: Calculate total amount paid by this user for this property ---
+    //     $data['property']->total_bought_amount = $data['property']->buys->sum('total_price');
         
-        return view('user.pages.cart.sell_cart', $data); 
+    //     return view('user.pages.cart.sell_cart', $data); 
+    // }
+
+    public function sell($id){ 
+    $user = Auth::user(); 
+    
+    // Decrypt the property ID from the URL
+    $propertyId = decrypt($id);
+    
+    // Get the specific Buy record using the 'buy_id' from the query string
+    $buyId = request()->query('buy_id');
+    
+    if (!$buyId) {
+        abort(404, 'No specific purchase record selected.');
     }
+
+    // Fetch the specific buy record ensuring it belongs to this user and property
+    $specificBuy = Buy::where('id', $buyId)
+                      ->where('user_id', $user->id)
+                      ->where('property_id', $propertyId)
+                      ->firstOrFail();
+
+    // Fetch the property details
+    $data['property'] = Property::findOrFail($propertyId);
+    
+    // Pass the specific buy record to the view
+    $data['specificBuy'] = $specificBuy;
+    
+    // Calculate total bought amount for display context (optional)
+    $data['property']->total_bought_amount = Buy::where('user_id', $user->id)
+                                                ->where('property_id', $propertyId)
+                                                ->sum('total_price');
+
+    return view('user.pages.cart.sell_cart', $data); 
+}
 
     public function transfer($id){   
         $user = Auth::user();  
