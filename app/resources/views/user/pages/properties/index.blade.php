@@ -128,19 +128,9 @@
                                                     <p class="reviews__author--subtitle">{{$item->location}}</p>
                                                     <!-- <span class="properties__author--price">₦{{ number_format($item->valuationSummary->current_value_sum, 2)}} per/sqm</span> -->
                                                     <!-- <p class="reviews__author--title">{{$item->valuationSummary->percentage_value}}%</p> -->
-                                                  
+                                                    <p class="mt-2 reviews__author--title"><span style="font-weight:bold">ROI:</span>{{$item->percentage_increase}}%</p>
 
-                                                    @if($item->valuationSummary)
-                                                        <!-- <span class="properties__author--price">₦{{ number_format($item->valuationSummary->current_value_sum, 2)}} per/sqm</span> -->
-                                                        <!-- <p class="properties__author--price text-decoration-line-through text-muted">₦{{ number_format($item->valuationSummary->initial_value_sum, 2)}} per/sqm</p> -->
-                                                        <!-- <p class="reviews__author--title">{{$item->valuationSummary->percentage_value}}%</p> -->
-                                                        <p class="mt-2 reviews__author--title"><span style="font-weight:bold">ROI:</span>{{$item->percentage_increase}}%</p>
-
-                                                    @else   
-                                                        <span class="properties__author--price">₦{{ number_format($item->property->price, 2)}} per/sqm</span>
-                                                        <p class="reviews__author--title">{{$item->percentage_increase}}%</p>
-
-                                                    @endif
+                  
                                                 </div>
                                             </div>
                                         </td>

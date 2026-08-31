@@ -185,13 +185,10 @@
                         <table class="properties__table--wrapper cart__table">
                             <thead>
                                 <tr>
-                                    <th>Product Image</th>
-                                    <!-- <th>Price</th> -->
-                                    <!-- <th>Actual Land Size</th> -->
-                                    <!-- <th>Acquired Land Size</th> -->
+                                   <th>Product Image</th>
+                                    <th>Total Amount Paid</th> {{-- UPDATED HEADER --}}
                                     <th>Enter Amount (₦)</th>
-                                    <th>Calculated Land Size</th>
-                                    <th>Total</th>
+                                    <th>Total to Sell</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -205,34 +202,25 @@
                                             <div class="reviews__author--text">
                                                 <h3 class="reviews__author--title">{{ $property->name }}</h3>
                                                 <p class="reviews__author--subtitle">{{ $property->location }}</p>
+                                                <p class="mt-2 reviews__author--title"><span style="font-weight:bold">ROI:</span> {{ optional($property)->percentage_increase}}%</p>
+
                                             </div>
                                         </div> 
                                     </td>
-                                    <!-- @if($property->valuationSummary) 
-                                        <td data-label="Price">
-                                            <span class="item-price" data-price="{{ $property->valuationSummary->current_value_sum }}">₦{{ number_format($property->valuationSummary->current_value_sum, 2) }} per/sqm</span>
-                                        </td>
-                                    @else
-                                        <td data-label="Price">
-                                            <span class="item-price" data-price="{{ $property->price }}">₦{{ number_format($property->price, 2) }} per/sqm</span>
-                                        </td>
-                                    @endif  -->
-                                    <!-- <td data-label="Actual Size">
-                                        <span class="actual-size" data-size="{{ $property->size }}">{{ $property->size }} SQM</span>
-                                    </td> -->
+                                   
                                     
-                                    <!-- <td data-label="Your Size" class="available-size" data-initial-size="{{ $property->buys->sum('selected_size_land') }}">
-                                        {{ number_format($property->buys->sum('selected_size_land'), 4) }} SQM
-                                    </td>  -->
+                                    {{-- UPDATED: Displays Total Amount Paid --}}
+                                    <td data-label="Total Amount Paid" class="available-size">
+                                         <span style="color: #47008E; font-weight: 800;">
+                                            ₦{{ number_format($property->total_bought_amount, 2) }}
+                                         </span>
+                                    </td> 
                                     <td data-label="Enter Amount">
                                         <div class="d-flex align-items-center justify-content-start">
                                             <input type="number" class="amount-input text-left "
                                                  min="1000" step="100" placeholder="Enter amount">
                                         </div>
                                         <small class="text-muted">Minimum: ₦1,000</small>
-                                    </td>
-                                    <td data-label="Calculated Size">
-                                        <span class="calculated-size" style="color: #47008E; font-weight: bold">0.0000 SQM</span>
                                     </td>
                                     <td data-label="Total Value">
                                         <span class="total-price" style="color: #47008E; font-weight: bold">₦0.00</span>

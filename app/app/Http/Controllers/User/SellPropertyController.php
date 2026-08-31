@@ -8,7 +8,7 @@ use App\Notifications\SellPropertyUserNotification;
 use App\Notifications\SellPropertyAdminNotification;
 use Illuminate\Support\Facades\Notification;
 use DB; 
-use Auth;
+use Auth; 
 use Log;
 use App\Models\WalletTransaction;
 use App\Models\ContactDetials;
@@ -29,6 +29,7 @@ class SellPropertyController extends Controller
         $data['sellProperty'] = Buy::select(
             'property_id',  
             DB::raw('SUM(selected_size_land) as total_selected_size_land'),
+            DB::raw('SUM(total_price) as total_amount_paid'), // <-- ADDED: Sums the total money spent
             DB::raw('MAX(created_at) as latest_created_at') 
         )
         ->with('property') 
@@ -37,6 +38,9 @@ class SellPropertyController extends Controller
         ->where('user_email', $user->email)
         ->groupBy('property_id') 
         ->paginate(10);
+
+        // Note: If your column in the 'buys' table is named 'amount' instead of 'total_price', 
+        // change 'SUM(total_price)' to 'SUM(amount)' above.
 
         if (request()->wantsJson()) {
             return response()->json([

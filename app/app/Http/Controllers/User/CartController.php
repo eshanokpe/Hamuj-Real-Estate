@@ -65,8 +65,11 @@ class CartController extends Controller
         ->where('id', decrypt($id))
         ->firstOrFail();
 
+        // --- NEW: Calculate total amount paid by this user for this property ---
+        $data['property']->total_bought_amount = $data['property']->buys->sum('total_price');
+        
         return view('user.pages.cart.sell_cart', $data); 
-    } 
+    }
 
     public function transfer($id){   
         $user = Auth::user();  
