@@ -50,6 +50,7 @@ const BuyProperties = () => {
     const [paymentProcessing, setPaymentProcessing] = useState(false);
     const [amountError, setAmountError] = useState('');
     const [paymentSuccess, setPaymentSuccess] = useState(false);
+    const [paymentError, setPaymentError] = useState('');
     const revolutCheckoutRef = useRef(null);
 
     const MINIMUM_AMOUNT = 1000;
@@ -142,6 +143,16 @@ const BuyProperties = () => {
 
     }, [inputAmount, applyCommission, property, user]);
 
+     // 👇 add it here
+    useEffect(() => {
+        if (!paymentSuccess) return;
+        const timer = setTimeout(() => {
+            window.location.href = '/user/dashboard';
+        }, 2000);
+        return () => clearTimeout(timer);
+    }, [paymentSuccess]);
+
+
     // Amount handlers
     const handleAmountChange = (e) => {
         const value = e.target.value;
@@ -198,26 +209,29 @@ const BuyProperties = () => {
         const availableSize = getAvailableSize();
 
         if (amount < MINIMUM_AMOUNT) {
-            alert(`Minimum amount required is ${formatCurrency(MINIMUM_AMOUNT)}`);
+            setPaymentError(`Minimum amount required is ${formatCurrency(MINIMUM_AMOUNT)}`);
             return;
         }
 
         if (calculatedLandSize > availableSize) {
-            alert(`The calculated land size exceeds the available size.`);
+            setPaymentError('The calculated land size exceeds the available size.');
             return;
         }
 
         if (isNaN(totalROI) || !isFinite(totalROI) || totalROI <= 0) {
-            alert('Unable to calculate a valid total price. Please re-enter the amount.');
+            setPaymentError('Unable to calculate a valid total price. Please re-enter the amount.');
             return;
         }
 
         setPaymentMethod(null);
         setTransactionPin('');
         setPaymentSuccess(false);
+        setPaymentError('');
         setShowPaymentModal(true);
     };
+
     const handlePaymentMethodSelect = (method) => {
+        setPaymentError('');
         setPaymentMethod(method);
     };
 
@@ -231,7 +245,8 @@ const BuyProperties = () => {
                 },
                 onError: (error) => {
                     console.error('Payment error:', error);
-                    alert('Payment failed. Please try again.');
+                    setPaymentError('Payment failed. Please try again.');
+                    setShowPaymentModal(true);
                 },
                 onCancel: () => console.log('Payment cancelled')
             });
@@ -239,7 +254,8 @@ const BuyProperties = () => {
             revolutCheckout.show();
         } catch (err) {
             console.error('Error initializing Revolut payment:', err);
-            alert('Failed to initialize payment gateway.');
+            setPaymentError('Failed to initialize payment gateway.');
+            setShowPaymentModal(true);
         }
     };
 
@@ -248,15 +264,16 @@ const BuyProperties = () => {
         const amount = parseFloat(inputAmount) || 0;
         
         if (amount < MINIMUM_AMOUNT) {
-            alert(`Minimum amount required is ${formatCurrency(MINIMUM_AMOUNT)}`);
+            setPaymentError(`Minimum amount required is ${formatCurrency(MINIMUM_AMOUNT)}`);
             return;
         }
         
         if (!transactionPin || transactionPin.length !== 4 || !/^\d{4}$/.test(transactionPin)) {
-            alert('Please enter a valid 4-digit PIN.');
+            setPaymentError('Please enter a valid 4-digit PIN.');
             return;
         }
 
+        setPaymentError('');
         setPaymentProcessing(true);
  
         try { 
@@ -264,35 +281,25 @@ const BuyProperties = () => {
                 remaining_size: parseNumericString(remainingSize),
                 property_slug: property.slug,
                 quantity: calculatedLandSize,
-                totalROI: totalROI, // This now includes Input + ROI
+                totalROI: totalROI,
                 total_price: amount, 
+                roi_percentage: property.percentage_increase,
                 commission_applied_amount: applyCommission ? user.commission_balance : 0,
                 transaction_pin: transactionPin,
                 commission_check: applyCommission ? 1 : 0,
                 payment_method: paymentMethod,
             }); 
             
-            if (response.data.success) {
-                if (paymentMethod === 'card' && response.data.public_id) {
-                    // Close our modal and let the Revolut widget take over;
-                    // its onSuccess callback (above) reopens our modal in
-                    // the success view.
-                    setShowPaymentModal(false);
-                    await initializeRevolutPayment(response.data.public_id);
-                } else {
-                    // Wallet payments: switch the same modal into its
-                    // success view instead of closing it, so the user can
-                    // see confirmation and choose to go to the dashboard.
-                    setTransactionPin('');
-                    setPaymentSuccess(true);
-                }
+            if (paymentMethod === 'card' && response.data.public_id) {
+                setShowPaymentModal(false);
+                await initializeRevolutPayment(response.data.public_id);
             } else {
-                throw new Error(response.data.message || 'Payment failed');
+                setTransactionPin('');
+                setPaymentSuccess(true);
             }
         } catch (err) {
             console.error('Payment error:', err);
-            alert(err.response?.data?.message || err.message || 'Payment failed');
-            setShowPaymentModal(false);
+            setPaymentError(err.response?.data?.message || err.message || 'Payment failed');
         } finally {
             setPaymentProcessing(false);
         }
@@ -508,7 +515,7 @@ const BuyProperties = () => {
                                     <div className="modal-content">
                                         <div className="modal-header">
                                             <h4 className="">Select Payment Method</h4>
-                                            <button type="button" className="btn-close" onClick={() => { setShowPaymentModal(false); setPaymentMethod(null); setPaymentSuccess(false); setTransactionPin(''); }}></button>
+                                            <button type="button" className="btn-close" onClick={() => { setShowPaymentModal(false); setPaymentMethod(null); setPaymentSuccess(false); setTransactionPin(''); setPaymentError(''); }}></button>
                                         </div>
                                         <div className="modal-body">
                                             {paymentSuccess ? (
@@ -526,28 +533,41 @@ const BuyProperties = () => {
                                                 </div>
                                             ) : !paymentMethod ? (
                                                 <div className="d-flex flex-column gap-3">
+                                                    {paymentError && (
+                                                        <div className="alert alert-danger mb-0" role="alert">{paymentError}</div>
+                                                    )}
                                                     <button className="solid__btn add__property--btn w-100" onClick={() => handlePaymentMethodSelect('wallet')}>Pay with Wallet</button>
                                                 </div>
                                             ) : (
                                                 <div>
+                                                    {paymentError && (
+                                                        <div className="alert alert-danger" role="alert">{paymentError}</div>
+                                                    )}
                                                     <div className="form-group mt-3">
                                                         <label htmlFor="transaction_pin" className="form-label">Enter 4-digit Transaction PIN</label>
                                                         <input
-                                                            type="password"
-                                                            style={{padding: '10px 10px'}}
+                                                            type="text"
+                                                            inputMode="numeric"
+                                                            pattern="\d{4}"
+                                                            autoComplete="off"
+                                                            autoCorrect="off"
+                                                            spellCheck="false"
+                                                            name="pinCode"
+                                                            style={{ padding: '10px 10px', WebkitTextSecurity: 'disc', letterSpacing: '4px' }}
                                                             className="form-control"
                                                             id="transaction_pin"
                                                             maxLength="4"
-                                                            inputMode="numeric"
-                                                            pattern="\d{4}"
                                                             placeholder="****"
                                                             value={transactionPin}
-                                                            onChange={(e) => setTransactionPin(e.target.value)}
+                                                            onChange={(e) => {
+                                                                const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 4);
+                                                                setTransactionPin(digitsOnly);
+                                                            }}
                                                             required
                                                         />
                                                     </div>
                                                     <div className="d-flex justify-content-between mt-3">
-                                                        <button type="button" style={{backgroundColor:'white', color:'black', border: '1px solid gray'}} className="solid__btn" onClick={() => { setPaymentMethod(null); setTransactionPin(''); }}>Back</button>
+                                                        <button type="button" style={{backgroundColor:'white', color:'black', border: '1px solid gray'}} className="solid__btn" onClick={() => { setPaymentMethod(null); setTransactionPin(''); setPaymentError(''); }}>Back</button>
                                                         <button type="button" className="solid__btn " onClick={handleConfirmPayment} disabled={paymentProcessing}>
                                                             {paymentProcessing ? 'Processing...' : 'Confirm Payment'}
                                                         </button>

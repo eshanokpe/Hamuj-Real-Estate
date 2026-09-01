@@ -19,6 +19,7 @@ class Buy extends Model
         'remaining_size',
         'totalROI',
         'total_price',
+        'roi_percentage',
         'use_referral',      
         'referral_amount', 
         'final_amount',

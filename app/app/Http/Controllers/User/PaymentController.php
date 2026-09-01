@@ -146,6 +146,7 @@ class PaymentController extends Controller
             'size' => $selectedSizeLand,
             'totalROI' => $totalROIRequest,
             'total_price' => $finalAmountPayable,
+            'roi_percentage' => $property->percentage_increase,
             'transaction_id' => $transaction->id,
             'selected_size_land' => $selectedSizeLand,
             'remaining_size' => $newRemainingSize,
