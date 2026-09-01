@@ -188,7 +188,7 @@
                                             <small class="text-danger fw-bold">Matured</small>
                                         @endif
                                     </div>
-                                </td>
+                                </td> 
 
                                 {{-- UPDATED: ROI Review with Annual and Monthly breakdown --}}
                                 <td data-label="ROI Review" class="text-nowrap align-middle">
