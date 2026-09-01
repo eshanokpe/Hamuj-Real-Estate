@@ -194,7 +194,7 @@
                                 <td data-label="ROI Review" class="text-nowrap align-middle">
                                     <div class="d-flex flex-column">
                                         <span class="fw-bold" style="color: #28a745;">
-                                            ₦{{ number_format($buy->totalROI ?? 0, 2) }} 
+                                            ₦{{ number_format($buy->total_price ?? 0, 2) }} 
                                             <small class="text-muted fw-normal" style="font-size: 0.75rem;">(Annual)</small>
                                         </span>
                                         <span class="text-muted small">
