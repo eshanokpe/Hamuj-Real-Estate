@@ -124,9 +124,9 @@
                                 <th>S/N</th>
                                 <th>Listing Title</th>
                                 <th>Date Acquired</th>
-                                <th>Amount Paid</th>
+                                <th>Amount to Earn</th>
                                 <th>ROI Due Date</th>
-                                <th>ROI Review</th>
+                                <th>Total Assets</th>
                                 <th colspan="2" class="text-center">Actions</th>
                             </tr>
                         </thead> 
