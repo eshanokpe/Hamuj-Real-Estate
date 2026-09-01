@@ -170,7 +170,7 @@
                                 
                                 <td data-label="Amount Paid" class="text-nowrap align-middle fw-bold">
                                     <span class="properties__views" style="color: #47008E; font-weight: 800;">
-                                        ₦{{ number_format($buy->total_price, 2) }}
+                                        ₦{{ number_format($buy->totalROI, 2) }}
                                     </span>
                                 </td>  
 
