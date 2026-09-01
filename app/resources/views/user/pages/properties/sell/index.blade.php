@@ -171,6 +171,8 @@
                                 <td data-label="Amount Paid" class="text-nowrap align-middle fw-bold">
                                     <span class="properties__views" style="color: #47008E; font-weight: 800;">
                                         ₦{{ number_format($buy->totalROI, 2) }}
+                                        <small class="text-muted fw-normal" style="font-size: 0.75rem;">(Annual)</small>
+                                        
                                     </span>
                                 </td>  
 
@@ -195,7 +197,6 @@
                                     <div class="d-flex flex-column">
                                         <span class="fw-bold" style="color: #28a745;">
                                             ₦{{ number_format($buy->total_price ?? 0, 2) }} 
-                                            <small class="text-muted fw-normal" style="font-size: 0.75rem;">(Annual)</small>
                                         </span>
                                         <span class="text-muted small">
                                             ≈ ₦{{ number_format($monthlyROI, 2) }} / month
