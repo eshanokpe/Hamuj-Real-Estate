@@ -73,13 +73,15 @@
         }
     }
 
+    /* UPDATED: Mobile labels adjusted for the 8-column layout */
     @media screen and (max-width: 768px) {
         .properties__table--wrapper tbody td:nth-child(2):before { content: "Listing Title"; }
         .properties__table--wrapper tbody td:nth-child(3):before { content: "Date Acquired"; }
-        .properties__table--wrapper tbody td:nth-child(4):before { content: "Total Amount Paid"; }
+        .properties__table--wrapper tbody td:nth-child(4):before { content: "Amount Paid"; }
         .properties__table--wrapper tbody td:nth-child(5):before { content: "ROI Due Date"; }
-        .properties__table--wrapper tbody td:nth-child(6):before { content: "View Property"; }
-        .properties__table--wrapper tbody td:nth-child(7):before { content: "Sell Property"; }
+        .properties__table--wrapper tbody td:nth-child(6):before { content: "ROI Review"; }
+        .properties__table--wrapper tbody td:nth-child(7):before { content: "View Property"; }
+        .properties__table--wrapper tbody td:nth-child(8):before { content: "Sell Property"; }
     }
 
     @media screen and (max-width: 768px) {
@@ -110,7 +112,6 @@
                                 ₦{{ number_format($grandTotalAmount ?? 0, 2) }}
                             </span>
                         </div>
-                      
                     </div>
                 </div>
             </div>
@@ -123,8 +124,9 @@
                                 <th>S/N</th>
                                 <th>Listing Title</th>
                                 <th>Date Acquired</th>
-                                <th>Total Amount Paid</th>
+                                <th>Amount Paid</th>
                                 <th>ROI Due Date</th>
+                                <th>ROI Review</th>
                                 <th colspan="2" class="text-center">Actions</th>
                             </tr>
                         </thead> 
@@ -136,6 +138,9 @@
                                 $roiDueDate = $purchaseDate->copy()->addDays(365);
                                 $today = \Carbon\Carbon::today();
                                 $daysRemaining = $today->diffInDays($roiDueDate, false);
+                                
+                                // Calculate Monthly ROI (Annual ROI / 12)
+                                $monthlyROI = ($buy->totalROI ?? 0) / 12;
                             @endphp
                             <tr>
                                 <td data-label="S/N" class="fw-bold text-center">
@@ -163,13 +168,13 @@
                                     </span>
                                 </td> 
                                 
-                                <td data-label="Total Amount Paid" class="text-nowrap align-middle fw-bold">
+                                <td data-label="Amount Paid" class="text-nowrap align-middle fw-bold">
                                     <span class="properties__views" style="color: #47008E; font-weight: 800;">
                                         ₦{{ number_format($buy->total_price, 2) }}
                                     </span>
                                 </td>  
 
-                                {{-- UPDATED: ROI Due Date calculated as exactly 365 days --}}
+                                {{-- ROI Due Date --}}
                                 <td data-label="ROI Due Date" class="text-nowrap align-middle">
                                     <div class="d-flex flex-column">
                                         <span class="text-success fw-bold">
@@ -185,16 +190,30 @@
                                     </div>
                                 </td>
 
+                                {{-- UPDATED: ROI Review with Annual and Monthly breakdown --}}
+                                <td data-label="ROI Review" class="text-nowrap align-middle">
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-bold" style="color: #28a745;">
+                                            ₦{{ number_format($buy->totalROI ?? 0, 2) }} 
+                                            <small class="text-muted fw-normal" style="font-size: 0.75rem;">(Annual)</small>
+                                        </span>
+                                        <span class="text-muted small">
+                                            ≈ ₦{{ number_format($monthlyROI, 2) }} / month
+                                        </span>
+                                    </div>
+                                </td>
                                
                                 <td data-label="Sell Property"> 
                                     <span class="status__btn pending2" style="background-color: #47008E;">
-                                        <a class="text-white" href="{{ route('user.cart.sell.index', encrypt($buy->property->id)) }}">Sell</a>
+                                        <a class="text-white" href="{{ route('user.cart.sell.index', ['property_id' => encrypt($buy->property->id), 'buy_id' => $buy->id]) }}">Sell</a>
                                     </span>
                                 </td>
+                                
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="7">
+                                {{-- UPDATED: colspan changed to 8 to match the 8 columns in thead --}}
+                                <td colspan="8">
                                     <div class="text-center p-5 border-top">
                                         <i class="fas fa-store-slash fa-3x text-muted mb-3"></i>
                                         <h4 class="text-muted fw-normal">No Assets Currently Available to Sell</h4>

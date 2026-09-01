@@ -17,6 +17,7 @@ class Buy extends Model
         'transaction_id',
         'selected_size_land', 
         'remaining_size',
+        'totalROI',
         'total_price',
         'use_referral',      
         'referral_amount', 

@@ -27,9 +27,7 @@ class SellPropertyController extends Controller
         $user = Auth::user();
        
         // Fetch individual records
-        $data['sellProperties'] = Buy::select(
-            'id', 'property_id', 'selected_size_land', 'total_price', 'created_at'
-        )
+        $data['sellProperties'] = Buy::select('*')
         ->with('property') 
         ->where('user_id', $user->id)
         ->where('user_email', $user->email)

@@ -28,7 +28,7 @@ class PaymentController extends Controller
 
 
     public function initializePayment(Request $request)
-    {
+    { 
         // Debug-only trace — kept, but no longer logs the raw transaction PIN.
         Log::debug('Payment initiation payload', $request->except('transaction_pin'));
 
@@ -38,6 +38,7 @@ class PaymentController extends Controller
         $request->validate([
             'remaining_size' => 'required|numeric|min:0',
             'property_slug' => 'required|string',
+            'totalROI' => 'required|numeric|min:1',
             'total_price' => 'required|numeric|min:1',
             'commission_applied_amount' => 'required|numeric|min:0',
             'transaction_pin' => 'required|digits:4',
@@ -46,12 +47,11 @@ class PaymentController extends Controller
 
         $user = Auth::user();
         $commissionAppliedFromRequest = $request->commission_applied_amount;
+        $totalROIRequest = $request->totalROI;
         $finalAmountFromRequest = $request->total_price;
         $commissionAvailable = $user->commission_balance;
         $isCommissionApplied = $request->boolean('commission_check');
 
-        // The frontend already nets the commission balance out of total_price
-        // when commission is applied, so total_price is used as-is here.
         $finalAmountPayable = $finalAmountFromRequest;
 
         // 1. Transaction PIN verification — only enforced when the feature is enabled.
@@ -144,6 +144,7 @@ class PaymentController extends Controller
             'user_email' => $user->email,
             'property_id' => $property->id,
             'size' => $selectedSizeLand,
+            'totalROI' => $totalROIRequest,
             'total_price' => $finalAmountPayable,
             'transaction_id' => $transaction->id,
             'selected_size_land' => $selectedSizeLand,

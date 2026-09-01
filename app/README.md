@@ -80,3 +80,12 @@ $2y$10$K1c/HEI5PVVjLZMLdyHwZ.t/572wqaPbwrnbBCJnBZBKAQOIFuYvG
 
 
 Hamuj6061@
+
+
+
+2500/20 = 500 (per annual) 
+
+
+
+200/12 = 16 (every month) = 1016, 
+

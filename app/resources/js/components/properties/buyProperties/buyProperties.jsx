@@ -37,7 +37,7 @@ const BuyProperties = () => {
     // State management
     const [inputAmount, setInputAmount] = useState('');
     const [calculatedLandSize, setCalculatedLandSize] = useState(0);
-    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalROI, settotalROI] = useState(0);
     const [applyCommission, setApplyCommission] = useState(false);
     const [property, setProperty] = useState(null);
     const [user, setUser] = useState(null);
@@ -101,7 +101,7 @@ const BuyProperties = () => {
 
         if (amount <= 0) {
             setCalculatedLandSize(0);
-            setTotalPrice(0);
+            settotalROI(0);
             setRemainingSize(parseNumericString(property.available_size));
             return;
         }
@@ -133,7 +133,7 @@ const BuyProperties = () => {
             finalTotal = Math.max(finalTotal - user.commission_balance, 0);
         }
         
-        setTotalPrice(finalTotal);
+        settotalROI(finalTotal);
         
         // Update remaining size
         const currentAvailableSize = parseNumericString(property.available_size);
@@ -194,7 +194,7 @@ const BuyProperties = () => {
     // Payment handlers
     const handleMakePayment = (e) => {
         e.preventDefault();
-        const amount = parseFloat(totalPrice) || 0;
+        const amount = parseFloat(totalROI) || 0;
         const availableSize = getAvailableSize();
 
         if (amount < MINIMUM_AMOUNT) {
@@ -207,7 +207,7 @@ const BuyProperties = () => {
             return;
         }
 
-        if (isNaN(totalPrice) || !isFinite(totalPrice) || totalPrice <= 0) {
+        if (isNaN(totalROI) || !isFinite(totalROI) || totalROI <= 0) {
             alert('Unable to calculate a valid total price. Please re-enter the amount.');
             return;
         }
@@ -264,7 +264,8 @@ const BuyProperties = () => {
                 remaining_size: parseNumericString(remainingSize),
                 property_slug: property.slug,
                 quantity: calculatedLandSize,
-                total_price: totalPrice, // This now includes Input + ROI
+                totalROI: totalROI, // This now includes Input + ROI
+                total_price: amount, 
                 commission_applied_amount: applyCommission ? user.commission_balance : 0,
                 transaction_pin: transactionPin,
                 commission_check: applyCommission ? 1 : 0,
@@ -376,7 +377,7 @@ const BuyProperties = () => {
                                         </div>
                                         <div className="result-item">
                                             <span className="label">Total to Pay:</span>
-                                            <span className="value highlight">{formatCurrency(totalPrice)}</span>
+                                            <span className="value highlight">{formatCurrency(totalROI)}</span>
                                         </div>
                                         
                                         {amount > 0 && safeRoiPercentage > 0 && (
@@ -451,7 +452,7 @@ const BuyProperties = () => {
                                             <td>
                                                 <div className="d-flex flex-column gap-1">
                                                     <span className="total-price" style={{ color: '#47008E', fontWeight: 'bold' }}>
-                                                        {formatCurrency(totalPrice)}
+                                                        {formatCurrency(totalROI)}
                                                     </span>
                                                     
                                                     {amount > 0 && safeRoiPercentage > 0 && (
