@@ -18,6 +18,8 @@ use App\Models\Sell;
 use App\Models\Buy; 
 use App\Models\User;
 use App\Models\Property;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
  
 class SellPropertyController extends Controller
@@ -50,8 +52,130 @@ class SellPropertyController extends Controller
         return view('user.pages.properties.sell.index', $data); 
     }
 
-
     public function sellProperty(Request $request)
+    {
+        $validated = $request->validate([
+            'property_id' => 'required|string',
+            'buy_id'      => 'required|integer',
+        ]);
+
+        try {
+            $propertyId = Crypt::decrypt($validated['property_id']);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            return back()->with('error', 'Invalid property reference.');
+        }
+
+        $user = Auth::user();
+
+        $buy = Buy::where('id', $validated['buy_id'])
+            ->where('user_id', $user->id)
+            ->where('user_email', $user->email)
+            ->whereHas('property', fn ($q) => $q->where('id', $propertyId))
+            ->with('property')
+            ->first();
+
+        if (! $buy) {
+            return back()->with('error', 'Property record not found or does not belong to you.');
+        }
+
+        // Prevent double-selling the same buy record
+        if ($buy->status === 'sold') {
+            return back()->with('error', 'This property has already been sold.');
+        }
+
+        $property = $buy->property;
+
+        $roiDueDate = Carbon::parse($buy->created_at)->addDays(365);
+
+        if (Carbon::today()->lessThan($roiDueDate)) {
+            return back()->with('error', 'This property is not yet eligible for sale. Available on ' . $roiDueDate->format('d F, Y') . '.');
+        }
+
+        $amount = $buy->total_price;
+        $reference = 'SELLDOHREF-' . time() . '-' . strtoupper(Str::random(8));
+
+        try {
+            $sell = DB::transaction(function () use ($user, $buy, $property, $amount, $reference) {
+
+                $transaction = Transaction::create([
+                    'user_id'          => $user->id,
+                    'email'            => $user->email,
+                    'property_id'      => $property->id,
+                    'amount'           => $amount,
+                    'reference'        => $reference,
+                    'status'           => 'completed',
+                    'transaction_type' => 'sellProperty',
+                    'created_at'       => now(),
+                    'updated_at'       => now(),
+                ]);
+
+                $sell = Sell::create([
+                    'property_id'        => $property->id,
+                    'property_name'      => $property->name,
+                    'transaction_id'     => $transaction->id,
+                    'selected_size_land' => $buy->selected_size_land,
+                    'user_id'            => $user->id,
+                    'remaining_size'     => 0,
+                    'user_email'         => $user->email,
+                    'reference'          => $reference,
+                    'total_price'        => $amount,
+                    'status'             => 'completed',
+                ]);
+
+                $wallet = Wallet::firstOrCreate(
+                    ['user_id' => $user->id],
+                    ['balance' => 0]
+                );
+
+                $balanceBefore = $wallet->balance;
+                $wallet->increment('balance', $amount);
+
+                WalletTransaction::create([
+                    'user_id'        => $user->id,
+                    'wallet_id'      => $wallet->id,
+                    'type'           => 'credit',
+                    'amount'         => $amount,
+                    'balance_before' => $balanceBefore,
+                    'balance_after'  => $wallet->balance,
+                    'description'    => 'Property sale: ' . $property->name . ' - ' . $buy->selected_size_land . ' SQM',
+                    'reference'      => $reference,
+                    'status'         => 'completed',
+                ]);
+
+                // Mark this buy as sold so it can't be sold again
+                // and so the UI can flip "Sell" -> "Sold"
+                $buy->update(['status' => 'sold']);
+
+                return $sell;
+            });
+
+            $contactDetials = ContactDetials::first();
+
+            $user->notify(new SellPropertyUserNotification($user, $property, $sell, $contactDetials, $amount));
+
+            Notification::route('mail', 'customersupport@dohmayn.com')
+                ->notify(new SellPropertyAdminNotification($user, $property, $sell, $amount));
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'We have received your request to sell the property.',
+                    'data'    => $sell,
+                ], 201);
+            }
+
+            return redirect()->route('user.sell.history')
+                ->with('success', 'We have received your request to sell the Property, your income has been transferred to your wallet.');
+
+        } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
+            }
+            return back()->with('error', 'Something went wrong: ' . $e->getMessage());
+        }
+    }
+
+    public function sellProperty22(Request $request)
     {
          // Log all request data
         \Log::info('Request Data:', $request->all());
@@ -104,23 +228,11 @@ class SellPropertyController extends Controller
             ->orderBy('created_at', 'asc') // Sell from oldest purchases first (FIFO)
             ->get();
 
-        // Calculate total available land from user's buys
-        $totalAvailableLand = $userBuys->sum('remaining_size');
-        
-        // Check if user has enough land to sell
-        if ($totalAvailableLand < $selectedSizeLand) {
-            return back()->with('error', 'Insufficient land available for sale. You only have ' . $totalAvailableLand . ' SQM available.');
-        }
+       
 
         // Prepare the data to send to Paystack
         try { 
-            // Calculate new available size for the property
-            $acquiredSizeLand = $request->input('acquired_size_land');
-            $result = $property->available_size - $acquiredSizeLand;
-            // Update the property's available_size
-            $property->update([
-                'available_size' => $result
-            ]);
+            
             // Create a transaction record for the sale (use negative amount for deduction)
             $transaction = Transaction::create([
                 'user_id' => $user->id,
@@ -149,24 +261,6 @@ class SellPropertyController extends Controller
                 'status' => 'completed',
             ]);  
             
-            
-            
-            // Deduct the sold land size from user's Buy records (FIFO)
-            $landToDeduct = $selectedSizeLand;
-            
-            foreach ($userBuys as $buy) {
-                if ($landToDeduct <= 0) break;
-                
-                $deductibleAmount = min($buy->remaining_size, $landToDeduct);
-                
-                // Update the buy record's remaining size
-                $buy->update([
-                    'remaining_size' => $buy->remaining_size - $deductibleAmount,
-                    'selected_size_land' => $buy->selected_size_land - $deductibleAmount
-                ]);
-                
-                $landToDeduct -= $deductibleAmount;
-            } 
             
             // Top up user's wallet
             $wallet = Wallet::firstOrCreate(
@@ -216,6 +310,21 @@ class SellPropertyController extends Controller
             return back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
+
+    // public function sell($id){ 
+    //     $user = Auth::user(); 
+       
+    //     $data['property'] = Property::with(['buys' => function ($query) use ($user) {
+    //         $query->where('user_id', $user->id);
+    //     }])
+    //     ->where('id', decrypt($id))
+    //     ->firstOrFail();
+
+    //     // --- NEW: Calculate total amount paid by this user for this property ---
+    //     $data['property']->total_bought_amount = $data['property']->buys->sum('total_price');
+        
+    //     return view('user.pages.cart.sell_cart', $data); 
+    // }
 
     public function sellPropertyHistory(Request $request)
     {

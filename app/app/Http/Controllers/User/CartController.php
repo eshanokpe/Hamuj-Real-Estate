@@ -55,7 +55,7 @@ class CartController extends Controller
             'data' => $property,
         ]);
     } 
-
+ 
     // public function sell($id){ 
     //     $user = Auth::user(); 
        

@@ -38,22 +38,25 @@ class DashboardController extends Controller
                                             ->where('transaction_type', 'wallet')
                                             ->sum('amount');
 
-        // Calculate gross property purchases
+        // Calculate gross property purchases (completed only)
         $totalPropertyPurchases = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
                                             ->where('transaction_type', 'buy')
-                                            ->whereNotNull('property_id')  
+                                            ->where('status', 'completed')
+                                            ->whereNotNull('property_id')
                                             ->sum('amount');
-        
-        // Calculate property sales (negative amounts)
+
+        // Calculate property sales (completed only)
         $totalPropertySales = Transaction::where('user_id', $user->id)
                                         ->where('email', $user->email)
-                                        ->where('transaction_type', 'sale')
-                                        ->whereNotNull('property_id')  
+                                        ->where('transaction_type', 'sellProperty')
+                                        ->where('status', 'completed')
+                                        ->whereNotNull('property_id')
                                         ->sum('amount');
-        // Net property amount (purchases - sales)
-        $data['totalAssetsAmount'] = $totalPropertyPurchases - $totalPropertySales; // sales are negative, so we add
-   
+
+        // Net asset value = purchases minus properties already sold off
+        $data['totalAssetsAmount'] = $totalPropertyPurchases - $totalPropertySales;
+        
         $data['totalTransactionsAssets'] = Transaction::where('user_id', $user->id)
                                             ->where('email', $user->email)
                                             ->where('transaction_type', 'buy')

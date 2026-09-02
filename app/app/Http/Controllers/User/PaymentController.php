@@ -25,8 +25,6 @@ class PaymentController extends Controller
 
 
 
-
-
     public function initializePayment(Request $request)
     { 
         // Debug-only trace — kept, but no longer logs the raw transaction PIN.
@@ -182,6 +180,8 @@ class PaymentController extends Controller
             'new_available_size' => $property->available_size,
         ]);
     }
+
+    
 
     // Helper methods for PIN attempt tracking
     private function getRemainingAttempts($user)

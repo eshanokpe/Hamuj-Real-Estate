@@ -10,13 +10,13 @@ use Illuminate\Notifications\Messages\MailMessage;
 class SellPropertyAdminNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-
+ 
     protected $user;
     protected $sell;
     protected $property;
     protected $amount;
-
-    public function __construct($user, $property, $sell)
+ 
+    public function __construct($user, $property, $sell, $amount)
     { 
         $this->user = $user;
         $this->sell = $sell;

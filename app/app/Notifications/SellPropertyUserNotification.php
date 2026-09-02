@@ -10,16 +10,16 @@ use Illuminate\Notifications\Messages\MailMessage;
 // use Illuminate\Notifications\Messages\NexmoMessage;
 
 class SellPropertyUserNotification extends Notification implements ShouldQueue
-{
+{ 
     use Queueable; 
- 
+  
     protected $property;
     protected $user;
     protected $sell;
     protected $contactDetials;
     protected $amount;
 
-    public function __construct($user, $property, $sell, $contactDetials)
+    public function __construct($user, $property, $sell, $contactDetials, $amount)
     {
         $this->user = $user;
         $this->property = $property;
