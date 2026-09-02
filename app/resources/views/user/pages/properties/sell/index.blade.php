@@ -117,7 +117,7 @@
                                 <td data-label="Amount to Earn" class="text-nowrap align-middle fw-bold">
                                     <span class="properties__views" style="color: #47008E; font-weight: 800;">
                                         ₦{{ number_format($totalROI, 2) }}
-                                        <small class="text-muted fw-normal" style="font-size: 0.75rem; display:block;">(Annual)</small>
+                                        <small class="text-muted fw-normal" style="font-size: 0.75rem; display:block;">(1 year)</small>
                                     </span>
                                 </td>
 
@@ -160,7 +160,7 @@
                                         <span class="status__btn" style="background-color: #6c757d; color: #fff; cursor: default;">
                                             Sold
                                         </span>
-                                    @elseif(!$isMatured)
+                                    @elseif($isMatured)
                                         <button type="button"
                                                 class="status__btn pending2 text-white border-0"
                                                 style="background-color: #47008E;"

@@ -85,11 +85,11 @@ class SellPropertyController extends Controller
 
         $property = $buy->property;
 
-        // $roiDueDate = Carbon::parse($buy->created_at)->addDays(365);
+        $roiDueDate = Carbon::parse($buy->created_at)->addDays(365);
 
-        // if (Carbon::today()->lessThan($roiDueDate)) {
-        //     return back()->with('error', 'This property is not yet eligible for sale. Available on ' . $roiDueDate->format('d F, Y') . '.');
-        // }
+        if (Carbon::today()->lessThan($roiDueDate)) {
+            return back()->with('error', 'This property is not yet eligible for sale. Available on ' . $roiDueDate->format('d F, Y') . '.');
+        }
 
         $amount = $buy->total_price;
         $reference = 'SELLDOHREF-' . time() . '-' . strtoupper(Str::random(8));
