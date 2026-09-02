@@ -330,19 +330,13 @@ class SellPropertyController extends Controller
     {
         $user = Auth::user();
 
-        $sellProperties = Sell::select(
-            'property_id', 'status',
-            DB::raw('SUM(selected_size_land) as total_selected_size_land'),
-            DB::raw('MAX(created_at) as latest_created_at') 
-        )
-        ->with('property')
-        ->with('valuationSummary')
-        ->where('user_id', $user->id)
-        ->where('user_email', $user->email)
-        ->groupBy('property_id', 'status') 
-        ->paginate(10);
+        $sellProperties = Sell::with('property')
+            ->with('valuationSummary')
+            ->where('user_id', $user->id)
+            ->where('user_email', $user->email)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
-        // Check if request expects JSON (API/mobile)
         if ($request->wantsJson()) {
             return response()->json([
                 'success' => true,
@@ -351,7 +345,6 @@ class SellPropertyController extends Controller
             ]);
         }
 
-        // Otherwise, return the web view
         return view('user.pages.properties.sell.history', ['sellProperties' => $sellProperties]);
     }
 

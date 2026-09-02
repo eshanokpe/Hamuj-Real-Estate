@@ -32,8 +32,9 @@
                     <table class="properties__table--wrapper">
                         <thead>
                             <tr>
+                                <th>S/N</th>
                                 <th>Listing Title</th>
-                               <th>Acquired Size</th>
+                               <th>Amount </th>
                                <th>Status</th>
                                 <th colspan="2">Action</th>
                             </tr>
@@ -42,6 +43,9 @@
                             @forelse ($sellProperties as $property)
                             <tr>
                                 <td>
+                                    {{ $sellProperties->firstItem() + $loop->index }}
+                                </td>
+                                <td>
                                     <div class="properties__author d-flex align-items-center">
                                         <div class="properties__author--thumb">
                                             <img src="{{ asset($property->property->property_images) }}" alt="img" style="max-height: 100%; max-width:100%; width:70px; height:70px; object-fit:cover">
@@ -49,16 +53,16 @@
                                         <div class="reviews__author--text">
                                             <h3 class="reviews__author--title">{{$property->property->name}}</h3>
                                             <p class="reviews__author--subtitle">{{$property->property->location}}</p>
-                                            @if($property->valuationSummary) 
+                                            <!-- @if($property->valuationSummary) 
                                                 <span class="properties__author--price">₦{{ number_format($property->valuationSummary->current_value_sum, 2)}} per/sqm</span>
                                             @else  
                                                 <span class="properties__author--price">₦{{ number_format($property->property->price, 2)}} per/sqm</span>
-                                            @endif
+                                            @endif -->
                                         </div> 
                                     </div>
                                 </td>
                                 <td> 
-                                    <span class="properties__views">{{ $property->total_selected_size_land }} SQM</span>
+                                    <span class="properties__views">{{ number_format($property->total_price, 2)  }}</span>
                                 </td>
                                 <td>
                                     
