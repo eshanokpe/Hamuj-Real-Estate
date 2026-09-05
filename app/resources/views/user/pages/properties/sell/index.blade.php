@@ -63,7 +63,7 @@
                                 <th class="text-center">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody> 
                             @forelse ($sellProperties as $buy)
                             @php
                                 $purchaseDate = \Carbon\Carbon::parse($buy->created_at);
@@ -156,9 +156,14 @@
 
                                 {{-- Sell Property: sold / sellable (opens confirm modal) / locked --}}
                                 <td data-label="Sell Property">
+                                    {{ $buy->status }}
                                     @if($buy->status === 'sold')
                                         <span class="status__btn" style="background-color: #6c757d; color: #fff; cursor: default;">
                                             Sold
+                                        </span>
+                                    @elseif($buy->status === 'transfer_accepted' || $buy->status === 'transfer_here') 
+                                        <span class="status__btn transfer-accepted" style="background-color: #6c757d; color: #fff; cursor: default;" title="Recipient accepted this transfer">
+                                            Sold 
                                         </span>
                                     @elseif($isMatured)
                                         <button type="button"
