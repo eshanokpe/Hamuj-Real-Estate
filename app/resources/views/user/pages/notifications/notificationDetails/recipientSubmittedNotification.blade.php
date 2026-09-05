@@ -67,7 +67,7 @@
             <form action="{{ route('user.confirm.transfer.submit', $notification->id) }}" method="POST" class="mt-4">
                 @csrf
                 <input type="hidden" name="property_slug" value="{{ $notification->data['property_slug'] }}">
-                <input type="hidden" name="land_size" value="{{ $notification->data['land_size'] }}">
+                <!-- <input type="hidden" name="land_size" value="{{ $notification->data['land_size'] }}"> -->
                 <input type="hidden" name="sender_id" value="{{ $notification->data['sender_id'] }}">
                 <input type="hidden" name="property_id" value="{{ $notification->data['property_id'] }}">
                 <input type="hidden" name="amount" value="{{ $notification->data['total_price'] }}">
