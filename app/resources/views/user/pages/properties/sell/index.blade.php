@@ -156,7 +156,6 @@
 
                                 {{-- Sell Property: sold / sellable (opens confirm modal) / locked --}}
                                 <td data-label="Sell Property">
-                                    {{ $buy->status }}
                                     @if($buy->status === 'sold')
                                         <span class="status__btn" style="background-color: #6c757d; color: #fff; cursor: default;">
                                             Sold
