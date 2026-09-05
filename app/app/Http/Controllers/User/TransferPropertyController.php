@@ -694,7 +694,7 @@ class TransferPropertyController extends Controller
                 'total_amount' => $requiredAmountInNaira,
                 'roi_percentage' => $notificationData['roi_percentage'] ?? $transfer->roi_percentage,
                 'totalROI' =>  $notificationData['total_roi'] ?? $transfer->total_roi,
-                'status' => 'transfer_here',
+                'status' => 'transfer',
             ]);
 
             
