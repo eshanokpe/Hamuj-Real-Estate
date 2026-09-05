@@ -171,6 +171,10 @@
                                         <span class="status__btn" style="background-color: #6c757d; color: #fff; cursor: default;">
                                             Sold
                                         </span>
+                                    @elseif($buy->status === 'transfer_here') 
+                                        <span class="status__btn transfer-accepted" style="background-color: #6c757d; color: #fff; cursor: default;" title="Recipient accepted this transfer">
+                                            Transfer Here 
+                                        </span>
                                     @elseif($buy->status === 'transfer_accepted') 
                                         <span class="status__btn transfer-accepted" style="background-color: #6c757d; color: #fff; cursor: default;" title="Recipient accepted this transfer">
                                             Transfer Accepted 
@@ -178,7 +182,7 @@
                                     @elseif($buy->status === 'transfer_pending')
                                         <span class="status__btn transfer-pending" style="background-color: #ffc107; color: #212529; cursor: not-allowed;" title="Waiting on recipient to accept this transfer">
                                             Pending Recipient Acceptance
-                                        </span>
+                                        </span> 
                                     @elseif(!$isMatured)
                                         <button type="button"
                                                 class="status__btn pending2 text-white border-0"
