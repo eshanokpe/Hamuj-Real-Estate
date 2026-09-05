@@ -27,13 +27,12 @@ class SellPropertyController extends Controller
  
     public function index(){ 
         $user = Auth::user();
-       
+        
         // Fetch individual records
         $data['sellProperties'] = Buy::select('*')
         ->with('property') 
         ->where('user_id', $user->id)
         ->where('user_email', $user->email)
-        // ->where('selected_size_land', '>', 0) // Only valid buys
         ->orderBy('created_at', 'desc') 
         ->paginate(10);
 

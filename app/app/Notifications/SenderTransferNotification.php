@@ -10,18 +10,20 @@ use Illuminate\Notifications\Notification;
 
 class SenderTransferNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable; 
 
     public $details;
+    protected $channels;
 
-    public function __construct($details)
+    public function __construct($details, array $channels = ['mail', 'database'])
     {
         $this->details = $details;
+        $this->channels = $channels;
     }
 
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return $this->channels;
     }
 
     public function toMail($notifiable)
@@ -62,11 +64,16 @@ class SenderTransferNotification extends Notification implements ShouldQueue
         
         return [
             'notification_status' => 'senderTransferNotification',
+            'transfer_id' => $this->details['transfer_id'] ?? null,
+            'property_id' => $this->details['property_id'] ?? null,
+            'property_slug' => $this->details['property_slug'] ?? null,
             'property_name' => $this->details['property_name'] ?? null,
             'land_size' => $this->details['land_size'] ?? null,
             'total_price' => ($this->details['total_price'] ?? 0) / 100,
             'reference' => $this->details['reference'] ?? null,
             'status' => $this->details['status'] ?? 'pending',
+            'sender_id' => $this->details['sender_id'] ?? null,
+            'recipient_id' => $this->details['recipient_id'] ?? null,
             'recipientName' => $recipientName, 
             'message' => 'You have initiated a property transfer. Please wait for recipient to accept.',
         ];

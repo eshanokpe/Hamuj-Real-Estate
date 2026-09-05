@@ -17,9 +17,9 @@
                     <table class="properties__table--wrapper">
                         <thead> 
                             <tr>
+                                <th>S/N</th>
                                 <th>Listing Title</th>
-                                <th>Date published</th>
-                                <th>Size Land</th>
+                                <th>Amount</th>
                                 <th>View </th>
                                 <th>Status</th>
                             </tr>
@@ -27,6 +27,7 @@
                         <tbody> 
                             @forelse ($transferProperty as $transfer)
                             <tr>
+                                <td>{{ $transferProperty->firstItem() + $loop->index }}</td>
                                 <td>
                                     <div class="properties__author d-flex align-items-center">
                                         <div class="properties__author--thumb">
@@ -35,19 +36,18 @@
                                         <div class="reviews__author--text">
                                             <h3 class="reviews__author--title">{{$transfer->property->name}}</h3> 
                                             <p class="reviews__author--subtitle">{{$transfer->property->location}}</p>  
-                                            <span class="properties__author--price">₦{{ number_format($transfer->valuationSummary->current_value_sum, 2)}} per/sqm</span>
-                                            <p class="properties__author--price text-decoration-line-through text-muted">₦{{ number_format($transfer->valuationSummary->initial_value_sum, 2)}} per/sqm</p>
+                                            <!-- <span class="properties__author--price">₦{{ number_format($transfer->valuationSummary->current_value_sum, 2)}} per/sqm</span> -->
+                                            <p class="d-flex align-items-center gap-2 mt-2 mb-0 text-muted" style="font-size: 1.2rem;">
+                                                <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                                                <span>
+                                                    Transferred {{ \Carbon\Carbon::parse($transfer->latest_created_at)->format('d M Y') }}
+                                                </span>
+                                            </p>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <span class="reviews__date">
-                                        {{  \Carbon\Carbon::parse($transfer->latest_created_at)->format('d F, Y')  }} 
-                                    </span>
-                                </td>
-                              
                                 <td>  
-                                    <span class="properties__views">{{ $transfer->land_size }} SQM</span>
+                                    <span class="properties__views">₦{{ number_format($transfer->total_price, 2) }} </span>
                                 </td>
                                 <td> 
                                     <span class="status__btn pending2">
@@ -74,13 +74,12 @@
                                             <a class="text-white" >{{ ucfirst($transfer->status) }}</a>
                                         </span>
                                     @endif
-                                   
                                 </td>
                               
                             </tr>
                             @empty
                                 <tr>
-                                    <td> No Transfer Property available </td>
+                                    <td colspan="6"> No Transfer Property available </td>
                                     <a href="{{ route('user.transfer.add') }}" class="btn btn-success btn-lg">Transfer</a>
                                 </tr>
                             @endforelse

@@ -1,5 +1,9 @@
 <div class="card-body">
     @if ($notification->data['notification_status'] === 'recipientSubmittedNotification' || $notification['data']['notification_status'] == 'Recipient Submitted Notification')
+        @php
+            $sender = \App\Models\User::find($notification->data['sender_id'] ?? null);
+            $senderName = $sender ? trim($sender->first_name . ' ' . $sender->last_name) : "Sender's Name";
+        @endphp
 
         <h3 class="card-title mb-3">Accept Your Asset Transfer</h3>
  
@@ -8,7 +12,7 @@
         <p>
             You have received an asset transfer of 
             <strong>&#x20A6;{{ number_format($notification->data['total_price']/100, 2) }}</strong> from 
-            <strong>{{ \App\Models\User::find($notification->data['sender_id'])->first_name .' '. \App\Models\User::find($notification->data['sender_id'])->last_name   ?? 'Sender\'s Name' }}</strong> via 
+            <strong>{{ $senderName }}</strong> via
             <strong>{{ config('app.name') }}</strong>. 
             To complete the transaction, please follow the steps below to accept the transfer:
         </p>
@@ -33,8 +37,27 @@
                 <div class="col-md-8">
                     <p><strong>Property Name:</strong> {{ $notification->data['property_name'] }}</p>
                     <p><strong>Property Mode:</strong> {{ ucfirst($notification->data['property_mode']) }}</p>
-                    <p><strong>Land Size:</strong> {{ $notification->data['land_size'] }} SQM</p>
                     <p><strong>Total Price:</strong> &#x20A6;{{ number_format($notification->data['total_price']/100, 2) }}</p>
+
+                    @if(!empty($notification->data['purchase_date']))
+                        <hr>
+                        <p><strong>Date Acquired:</strong> {{ \Carbon\Carbon::parse($notification->data['purchase_date'])->format('d F, Y') }}</p>
+                        <p><strong>ROI:</strong> {{ number_format($notification->data['roi_percentage'] ?? 0, 2) }}% <small class="text-muted">(locked)</small></p>
+                        <p><strong>Amount to Earn (1yr):</strong> &#x20A6;{{ number_format($notification->data['total_roi'] ?? 0, 2) }}</p>
+                        <p><strong>Monthly ROI:</strong> &#x20A6;{{ number_format($notification->data['monthly_roi'] ?? 0, 2) }} / month</p>
+                        <p><strong>ROI Due Date:</strong> {{ \Carbon\Carbon::parse($notification->data['roi_due_date'])->format('d F, Y') }}</p>
+                        <p>
+                            <strong>Status:</strong>
+                            @if($notification->data['is_matured'] ?? false)
+                                <span class="badge bg-danger">Matured (12/12 Months)</span>
+                            @else
+                                <span class="badge bg-primary">
+                                    Month {{ $notification->data['months_elapsed'] ?? 0 }} of 12
+                                    ({{ $notification->data['days_into_month'] ?? 0 }}d into this month)
+                                </span>
+                            @endif
+                        </p>
+                    @endif
                 </div>
             </div> 
         </div> 

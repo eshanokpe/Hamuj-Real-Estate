@@ -10,10 +10,10 @@
                 <div class="reviews__heading mb-30">
                     <h2 class="reviews__heading--title">Notification</h2>
                 </div>
-                
+                  
                 <div class="properties__wrapper">
                     <div class="properties__table table-responsive p-3">
-                        
+                         
                         @forelse ($notifications as $notification)
                         <div class="card notification-card mb-3">
                             <div class=" d-flex flex-column flex-md-row">
@@ -168,7 +168,7 @@
                                      
                                                 @if($notification['data']['status'] === 'pending' && isset($notification['data']['property_mode'], $notification['data']['property_slug']))
                                                     <div class="col-3">
-                                                        <div class="text-end">
+                                                        <div class="text-end"> 
                                                             <a href="{{ route('user.notifications.show', encrypt($notification->id)) }}" class="btn btn-warning btn-md">
                                                                 Click here to confirm your transfer
                                                             </a>
@@ -246,7 +246,7 @@
                                                                 <div  class="btn btn-success btn-md">
                                                                     Accept
                                                                 </div>
-                                                            @endforelse
+                                                            @endif
                                                         </div>
                                                     </div>
                                             

@@ -67,16 +67,9 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 Test BVN = 54651333604
 Test -NIN = 12345678901
-Real Bvn = 54651333604
-Real Bvn = 22261960293
-Real NIN = 22219825220
-Real NIN = 17335778953
 
 ${verifiedData.dob ? buildDetailRow('Date of Birth', formatDobDisplay(verifiedData.dob)) : ''}
 ${verifiedData.phone ? buildDetailRow('Phone Number', formatPhoneDisplay(verifiedData.phone)) : ''}
-
-TransactionPIN:
-$2y$10$K1c/HEI5PVVjLZMLdyHwZ.t/572wqaPbwrnbBCJnBZBKAQOIFuYvG
 
 
 Hamuj6061@

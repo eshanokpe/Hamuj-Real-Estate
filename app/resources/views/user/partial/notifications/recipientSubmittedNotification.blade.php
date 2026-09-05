@@ -1,12 +1,12 @@
-
+@php
+    $sender = \App\Models\User::find($notification['data']['sender_id'] ?? null);
+    $senderName = $sender ? trim($sender->first_name . ' ' . $sender->last_name) : 'A user';
+@endphp
 <div class="p-2 notification__type--wallet">
-    <h4> Accept Your Asset Transfer</h4>
+    <h4>Accept Your Asset Transfer</h4>
     <p>
-        You have received an asset transfer 
-        of ₦{{ number_format($notification['data']['total_price']/100 ?? '', 2) }} from
-        {{\App\Models\User::find( $notification['data']['sender_id'] ?? '' )->first_name }} {{\App\Models\User::find( $notification['data']['sender_id'] ?? '' )->last_name }}. 
-        To complete the transaction.
+        {{ $senderName }} sent you an asset transfer of
+        ₦{{ number_format(($notification['data']['total_price'] ?? 0) / 100, 2) }}.
+        Review it to complete the transfer.
     </p>
-
-    {{-- <p>{{ $notification['data']['message'] ?? '' }}</p> --}}
 </div>

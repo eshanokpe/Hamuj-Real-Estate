@@ -13,7 +13,7 @@ use App\Models\User;
 use App\Models\GuestUser;
 use App\Models\Faqs;
 use App\Models\Post;
-use App\Models\About;
+use App\Models\About; 
 use App\Models\Terms;
 use App\Models\Privacy;
 use App\Models\Property;

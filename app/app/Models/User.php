@@ -39,7 +39,7 @@ class User extends Authenticatable
         'commission_balance',
         'hide_balance',
         'app_passcode', 
-        'active', 
+        'active',  
         'is_active', 
         'registration_source',
         'biometric_types',

@@ -136,7 +136,7 @@
     <div class="dashboard__page--wrapper">
         @include('user.partial.sidebar')
         @include('user.partial.navbar')
-       
+        
         @yield('content') 
     
         @include('user.partial.footer')

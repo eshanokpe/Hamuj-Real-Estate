@@ -252,6 +252,106 @@
             font-weight: 500;
             margin-right: 4px;
         }
+        .header__apps--menu .dropdown__related--apps {
+            left: auto;
+            right: 0;
+            width: min(38rem, calc(100vw - 2rem));
+            max-width: calc(100vw - 2rem);
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            background: #fff;
+            box-shadow: 0 1.25rem 3rem rgba(15, 23, 42, 0.18);
+            transform: none;
+        }
+        .header__apps--menu .dropdown__apps--title {
+            margin: 0;
+            padding: 1.5rem 1.75rem;
+            color: #1f2937;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+        .header__apps--menu .notification__list {
+            max-height: min(60vh, 48rem);
+            padding: 0.75rem !important;
+            overflow-x: hidden;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+        .header__apps--menu .notification__item {
+            margin-bottom: 0.65rem;
+            overflow: hidden;
+            border: 1px solid #edf0f4;
+            border-radius: 0.8rem;
+            background: #fff;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .header__apps--menu .notification__item:last-child { margin-bottom: 0; }
+        .header__apps--menu .notification__item.unread {
+            border-left: 4px solid #47008E;
+            background: #faf8ff;
+        }
+        .header__apps--menu .notification__item:hover {
+            border-color: #d8cbea;
+            background: #f8f5fc;
+        }
+        .header__apps--menu .notification__link,
+        .header__apps--menu .notification__content {
+            display: block;
+            width: 100%;
+            min-width: 0;
+        }
+        .header__apps--menu .notification__link {
+            padding: 0.9rem 1rem;
+            color: inherit;
+            text-decoration: none;
+        }
+        .header__apps--menu .notification__content h4 {
+            margin: 0 0 0.35rem;
+            color: #1f2937;
+            font-size: 1.4rem;
+            line-height: 1.35;
+        }
+        .header__apps--menu .notification__content p {
+            margin: 0;
+            overflow-wrap: anywhere;
+            color: #64748b;
+            font-size: 1.25rem;
+            line-height: 1.5;
+        }
+        .header__apps--menu .notification__content .p-2 { padding: 0 !important; }
+        .header__apps--menu .notification__meta {
+            display: block;
+            margin-top: 0.55rem;
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+        .header__apps--menu .notification__empty {
+            padding: 3rem 1rem;
+            text-align: center;
+            color: #64748b;
+        }
+        .header__apps--menu .dropdown__apps__footer { padding: 1rem; }
+        .header__apps--menu .dropdown__apps--view__all {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.7rem;
+        }
+        @media screen and (max-width: 575px) {
+            .header__apps--menu .dropdown__related--apps {
+                position: fixed;
+                top: 6.5rem;
+                right: 1rem;
+                left: 1rem;
+                width: auto;
+                max-width: none;
+                margin-top: 0;
+            }
+            .header__apps--menu .notification__list {
+                max-height: calc(100vh - 19rem);
+            }
+        }
         /* .amount {
             font-family: monospace;
         } */
@@ -278,10 +378,9 @@
                 <div class="notification__list p-3">
                     @forelse ($notificationsBar as $notification)
                     {{-- {{$notification['data']['notification_status']}} --}}
-                        <div class="notification__item {{ $notification->read_at ? 'unread' : '' }}">
+                        <div class="notification__item {{ $notification->read_at ? '' : 'unread' }}">
                             <a href="{{ route('user.notifications.show', encrypt($notification->id)) }}" 
-                                class="notification__link mark-as-read" 
-                                onclick="markNotificationAsRead(event, this)"
+                                class="notification__link"
                                 data-notification-id="{{ $notification->id }}"
                                 data-property-mode="{{ $notification->data['property_mode'] ?? '' }}">
 
@@ -320,10 +419,14 @@
                                             </p>
                                         </div>
                                     @else
-                                        
+                                        <div class="notification__type--general">
+                                            <h4>Notification</h4>
+                                            <p>{{ $notification['data']['message'] ?? 'You have a new account update.' }}</p>
+                                        </div>
                                     @endif
                                     
                                     <div class="notification__meta">
+                                        {{ $notification->created_at->diffForHumans() }}
                                     </div>
                                 </div>
                                 
@@ -558,4 +661,3 @@
         </div>
     </div>
 </div>
-
