@@ -692,6 +692,9 @@ class TransferPropertyController extends Controller
                 'user_id' => $recipient->id,
                 'user_email' => $recipient->email,
                 'total_price' => $requiredAmountInNaira,
+                'total_amount' => $requiredAmountInNaira,
+                'roi_percentage' => $notificationData['roi_percentage'] ?? $transfer->roi_percentage,
+                'totalROI' =>  $notificationData['total_roi'] ?? $transfer->total_roi,
                 'status' => 'transfer',
             ]);
 
