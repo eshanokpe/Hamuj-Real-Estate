@@ -162,7 +162,7 @@
                                         </span>
                                     @elseif($buy->status === 'transfer_accepted' || $buy->status === 'transfer_here') 
                                         <span class="status__btn transfer-accepted" style="background-color: #6c757d; color: #fff; cursor: default;" title="Recipient accepted this transfer">
-                                            Sold 
+                                            Sold (Transfer) 
                                         </span>
                                     @elseif($isMatured)
                                         <button type="button"
