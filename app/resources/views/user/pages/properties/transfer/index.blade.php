@@ -42,6 +42,19 @@
         line-height: 1.3;
         white-space: normal;
     }
+    .status__btn.transfer-accepted {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 11.2rem;
+        max-width: 100%;
+        min-height: 3.5rem;
+        padding: 0.65rem 1rem;
+        line-height: 1.3;
+        text-align: center;
+        white-space: normal;
+        overflow-wrap: break-word;
+    }
 </style>
 
 <div class="page__body--wrapper" id="dashbody__page--body__wrapper">
@@ -159,7 +172,7 @@
                                             Sold
                                         </span>
                                     @elseif($buy->status === 'transfer_accepted')
-                                        <span class="status__btn" style="background-color: #6c757d; color: #fff; cursor: default;" title="Recipient accepted this transfer">
+                                        <span class="status__btn transfer-accepted" style="background-color: #198754; color: #fff; cursor: default;" title="Recipient accepted this transfer">
                                             Transfer Accepted
                                         </span>
                                     @elseif($buy->status === 'transfer_pending')
