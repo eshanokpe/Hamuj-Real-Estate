@@ -61,7 +61,7 @@ class RecipientSubmittedNotification extends Notification implements ShouldQueue
             'property_mode'  => 'transfer',
 
             // ── Asset details ─────────────────────────────────────
-            'land_size'      => $this->transferDetails['land_size']    ?? null,
+            // 'land_size'      => $this->transferDetails['land_size']    ?? null,
             'total_price'    => $this->transferDetails['total_price']  ?? 0,  // stored in kobo
             'purchase_date'  => $this->transferDetails['purchase_date'] ?? null,
             'roi_percentage' => $this->transferDetails['roi_percentage'] ?? 0,
@@ -113,7 +113,7 @@ class RecipientSubmittedNotification extends Notification implements ShouldQueue
             ->greeting('Dear ' . $recipientName . ',')
             ->line('You have received an asset transfer of **₦' . $formattedPrice . '** from **' . $senderName . '** via ' . config('app.name') . '.')
             ->line('**Property:** ' . ($this->transferDetails['property_name'] ?? 'N/A'))
-            ->line('**Land Size:** ' . ($this->transferDetails['land_size'] ?? 'N/A') . ' SQM')
+            // ->line('**Land Size:** ' . ($this->transferDetails['land_size'] ?? 'N/A') . ' SQM')
             ->line('**Reference:** ' . ($this->transferDetails['reference'] ?? 'N/A'))
             ->line('To complete the transaction, log in to your account and accept the transfer from your notifications.')
             ->line('If you do not accept within **48 hours**, the asset will be returned to the sender.')
