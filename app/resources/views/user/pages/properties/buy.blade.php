@@ -150,13 +150,14 @@
                                         <div class="reviews__author--text">
                                             <h3 class="reviews__author--title">{{$property->property->name}}</h3>
                                             <p class="reviews__author--subtitle">{{$property->property->location}}</p>
-                                           
-                                            @if($property->valuationSummary)  
+                                            <p class="mt-2 reviews__author--title"><span style="font-weight:bold">ROI:</span>{{$property->property->percentage_increase}}%</p>
+
+                                            <!-- @if($property->valuationSummary)  
                                                 <span class="properties__author--price">₦{{ number_format($property->valuationSummary->current_value_sum, 2)}} per/sqm</span>
                                                 <p class="properties__author--price text-decoration-line-through text-muted">₦{{ number_format($property->valuationSummary->initial_value_sum, 2)}} per/sqm</p>
                                             @else    
                                                 <span class="properties__author--price">₦{{ number_format($property->property->price, 2)}} per/sqm</span>
-                                            @endif
+                                            @endif -->
                                         </div> 
                                     </div>
                                 </td>
