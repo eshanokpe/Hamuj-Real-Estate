@@ -43,7 +43,6 @@ class TransferPropertyController extends Controller
         ->where('user_email', $user->email)
         ->orderBy('created_at', 'desc') 
         ->paginate(10);
-
         if (request()->wantsJson()) {
             return response()->json([
                 'success' => true,
@@ -695,7 +694,7 @@ class TransferPropertyController extends Controller
                 'total_amount' => $requiredAmountInNaira,
                 'roi_percentage' => $notificationData['roi_percentage'] ?? $transfer->roi_percentage,
                 'totalROI' =>  $notificationData['total_roi'] ?? $transfer->total_roi,
-                'status' => 'transfer',
+                'status' => 'transfer_accepted',
             ]);
 
             
@@ -716,7 +715,7 @@ class TransferPropertyController extends Controller
                 'transaction_type' => 'buy',
                 'property_id' => $propertyId,
                 'property_name' => $propertyData->name,
-                'status' => 'success',
+                'status' => 'completed',
                 'payment_method' => 'wallet',
                 'amount' => -$requiredAmountInNaira,
                 'description' => 'Transfer to ' . $recipient->email,
@@ -730,7 +729,7 @@ class TransferPropertyController extends Controller
                 'transaction_type' => 'buy',
                 'property_id' => $propertyId,
                 'property_name' => $propertyData->name,
-                'status' => 'success',
+                'status' => 'completed',
                 'payment_method' => 'card',
                 'amount' => $requiredAmountInNaira,
                 'description' => 'Received from ' . $sender->email,
@@ -761,6 +760,10 @@ class TransferPropertyController extends Controller
                 'confirmation_date' => now(),
                 'confirmed_by' => auth()->id(),
             ]);
+
+            Buy::where('id', $transfer->buy_id)
+                ->where('user_id', $sender->id)
+                ->update(['status' => 'transfer_accepted']);
 
             DB::commit(); 
 
